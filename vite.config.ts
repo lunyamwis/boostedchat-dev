@@ -10,6 +10,10 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: "./src/Test/setup.ts",
+    coverage: {
+      provider: "istanbul",
+      reporter: ["text", "json", "html"],
+    },
   },
   // build: {
   //   rollupOptions: {
