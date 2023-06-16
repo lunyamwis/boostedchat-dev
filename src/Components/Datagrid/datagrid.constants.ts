@@ -1,0 +1,3 @@
+export const DATAGRID_HEIGHT = 600;
+export const DATAGRID_FOOTER_HEIGHT = 56;
+export const DATAGRID_HEADER_HEIGHT = 96;
