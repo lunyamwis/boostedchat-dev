@@ -4,7 +4,7 @@ import React, { SetStateAction } from "react";
 import { SIDENAV_WIDTH } from "../../Constants/GeneralConstants";
 import { pageData, TPageData } from "../../Pages";
 import { GroupTitle } from "../../Components/SideNav/GroupTitle";
-import { MenuItem } from "../../Components/SideNav/MenuItem";
+import { MenuItem, ParentMenuItem } from "../../Components/SideNav/MenuItem";
 
 type Props = {
   opened: boolean;
@@ -30,20 +30,39 @@ function SideNavItems() {
   const [navKeys, navValues] = navStructure();
   return (
     <>
-      <Box sx={{ display: "flex", justifyContent: "center" }} mb={8} mt={8}>
+      <Box
+        sx={{ display: "flex", justifyContent: "center" }}
+        py={64}
+        mb={8}
+        mt={8}
+      >
         {"logo"}
       </Box>
       {navKeys.map((navKey, idx) => (
         <Box key={idx}>
           <GroupTitle title={navKey as string} />
-          {navValues[idx].map((navValue, index) => (
-            <MenuItem
-              key={index}
-              url={navValue.url}
-              title={navValue.title}
-              Icon={navValue.icon}
-            />
-          ))}
+          {navValues[idx].map((navValue, index) => {
+            if (navValue.level === "1" && !navValue.hasChildren) {
+              return (
+                <MenuItem
+                  key={index}
+                  url={navValue.url}
+                  title={navValue.title}
+                  Icon={navValue.icon}
+                />
+              );
+            }
+            if (navValue.level === "1" && navValue.hasChildren) {
+              return (
+                <ParentMenuItem
+                  Icon={navValue.icon}
+                  key={index}
+                  title={navValue.title}
+                  childrenKeys={navValue.children}
+                />
+              );
+            }
+          })}
           {idx !== navKeys.length - 1 && (
             <Divider mt={{ base: 1, sm: 24 }} mb={32} color="#eeeeee" />
           )}

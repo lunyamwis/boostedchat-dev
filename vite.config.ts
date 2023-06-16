@@ -15,9 +15,7 @@ export default defineConfig({
       reporter: ["text", "json", "html"],
     },
   },
-  // build: {
-  //   rollupOptions: {
-  //     external: ['@emotion/cache','@emotion/serialize','@emotion/utils'],
-  //   },
-  // },
+  server: {
+    port: 8080,
+  },
 });

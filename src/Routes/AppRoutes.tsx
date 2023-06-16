@@ -7,8 +7,21 @@ import AppShell from "../Layouts/AppShell/AppShell";
 import { NotFound } from "../Pages/Default/404";
 import { RequireAuth } from "./RequireAuth";
 import { Home } from "../Pages/Default/Home";
+import { componentData, pageData, PrimaryPageData } from "../Pages";
 
 export function AppRoutes() {
+  const [permittedPageKeys, setPermittedPageKeys] = React.useState<
+    Record<string, boolean>
+  >({});
+
+  React.useEffect(() => {
+    const mPermittedPageKeys: Record<string, boolean> = {};
+    for (let i = 0; i < Object.values(pageData).length; i += 1) {
+      mPermittedPageKeys[Object.keys(pageData)[i]] = true;
+    }
+    setPermittedPageKeys(mPermittedPageKeys);
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -21,6 +34,25 @@ export function AppRoutes() {
           }
         >
           <Route path={"/"} element={<Home />} />
+          {componentData.map((component) => {
+            if (permittedPageKeys[component.key]) {
+              const mPageData = pageData[component.key] as PrimaryPageData & {
+                level: "2";
+                url: string;
+              };
+              return (
+                <Route
+                  key={component.key}
+                  path={mPageData.url}
+                  element={
+                    <React.Suspense fallback={<Loader />}>
+                      <component.component />
+                    </React.Suspense>
+                  }
+                />
+              );
+            }
+          })}
         </Route>
 
         <Route element={<AuthLayout />}>

@@ -6,6 +6,7 @@ import {
   PasswordInput,
   Stack,
   TextInput,
+  Tooltip,
   useMantineTheme,
 } from "@mantine/core";
 import { useMutation } from "@tanstack/react-query";
@@ -139,7 +140,7 @@ export function Register() {
 
   return (
     <Box component="form" autoComplete="false" onSubmit={handleRegister}>
-      <Stack px={80}>
+      <Stack>
         <CollapsingAlert
           alertInfo={alertInfo}
           onClose={() => setShowAlert(false)}
@@ -180,16 +181,18 @@ export function Register() {
           Register
         </Button>
         <Group position="center">
-          <ActionIcon
-            disabled={register.isLoading}
-            variant="subtle"
-            radius="xl"
-            size="xl"
-            onClick={() => navigate(`${authPageData.login.url}`)}
-            color={theme.primaryColor}
-          >
-            <ArrowLeft />
-          </ActionIcon>
+          <Tooltip label="Back to Login">
+            <ActionIcon
+              disabled={register.isLoading}
+              variant="subtle"
+              radius="xl"
+              size="xl"
+              onClick={() => navigate(`${authPageData.login.url}`)}
+              color={theme.primaryColor}
+            >
+              <ArrowLeft />
+            </ActionIcon>
+          </Tooltip>
         </Group>
       </Stack>
     </Box>

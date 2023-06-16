@@ -2,6 +2,7 @@ import {
   Anchor,
   Box,
   Button,
+  Divider,
   PasswordInput,
   Stack,
   TextInput,
@@ -16,6 +17,9 @@ import { useAlert } from "../../Hooks/useAlert";
 import { isValidEmail } from "../../Utils/validator.util";
 import { axiosError, LoginState } from "../../Interfaces/general.interface";
 import { useAuth } from "../../Context/AuthContext/AuthProvider";
+import { Google } from "../../Assets/Google";
+import { Facebook } from "../../Assets/Facebook";
+import { Twitter } from "../../Assets/Twitter";
 
 export function Login() {
   const navigate = useNavigate();
@@ -89,7 +93,7 @@ export function Login() {
 
   return (
     <Box component="form" autoComplete="false" onSubmit={handleLogin}>
-      <Stack px={80}>
+      <Stack>
         <CollapsingAlert
           alertInfo={alertInfo}
           onClose={() => setShowAlert(false)}
@@ -125,6 +129,45 @@ export function Login() {
         >
           Don't have an account? Register
         </Anchor>
+        <Box sx={{ mb: 2, px: 10, width: "100%" }}>
+          <Divider my="xs" label="OR" labelPosition="center" />
+        </Box>
+        <Button
+          type="submit"
+          variant="default"
+          leftIcon={
+            <Box h={25} w={25}>
+              <Google />
+            </Box>
+          }
+          loading={login.isLoading}
+        >
+          Continue with Google
+        </Button>
+        <Button
+          leftIcon={
+            <Box h={25} w={25}>
+              <Facebook />
+            </Box>
+          }
+          type="submit"
+          variant="default"
+          loading={login.isLoading}
+        >
+          Continue with Facebook
+        </Button>
+        <Button
+          leftIcon={
+            <Box h={25} w={25}>
+              <Twitter />
+            </Box>
+          }
+          type="submit"
+          variant="default"
+          loading={login.isLoading}
+        >
+          Continue with Twitter
+        </Button>
       </Stack>
     </Box>
   );

@@ -3,11 +3,11 @@ import React from "react";
 
 type Props = {
   title: string;
-  required: boolean;
+  required?: boolean;
   children: React.ReactNode;
 };
 
-export function InputRow({ title, required, children }: Props) {
+export function InputRow({ title, required = false, children }: Props) {
   return (
     <Grid
       align="center"

@@ -5,6 +5,7 @@ import {
   Group,
   Stack,
   TextInput,
+  Tooltip,
   useMantineTheme,
 } from "@mantine/core";
 import React, { useState } from "react";
@@ -77,7 +78,7 @@ export function ForgotPassword() {
 
   return (
     <Box component="form" autoComplete="false" onSubmit={handleForgotPassword}>
-      <Stack px={80}>
+      <Stack>
         <CollapsingAlert
           alertInfo={alertInfo}
           onClose={() => setShowAlert(false)}
@@ -92,15 +93,17 @@ export function ForgotPassword() {
           Get Password reset link
         </Button>
         <Group position="center">
-          <ActionIcon
-            variant="subtle"
-            radius="xl"
-            size="xl"
-            onClick={() => navigate(`${authPageData.login.url}`)}
-            color={theme.primaryColor}
-          >
-            <ArrowLeft />
-          </ActionIcon>
+          <Tooltip label="Back to Login">
+            <ActionIcon
+              variant="subtle"
+              radius="xl"
+              size="xl"
+              onClick={() => navigate(`${authPageData.login.url}`)}
+              color={theme.primaryColor}
+            >
+              <ArrowLeft />
+            </ActionIcon>
+          </Tooltip>
         </Group>
       </Stack>
     </Box>

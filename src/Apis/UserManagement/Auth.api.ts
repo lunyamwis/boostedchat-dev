@@ -9,7 +9,7 @@ import { handleRestError, handleRestResponse } from "../response";
 import { API_URL } from "../../Constants/ApiConstants";
 
 const axiosInstance = axios.create({
-  baseURL: `${API_URL}/auth`,
+  baseURL: `${API_URL}/authentication`,
 });
 
 export const AuthAPI = {

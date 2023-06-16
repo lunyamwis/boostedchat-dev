@@ -1,5 +1,5 @@
-import { Text } from '@mantine/core';
-import React from 'react';
+import { Text } from "@mantine/core";
+import React from "react";
 
 type Props = {
   title: string;
@@ -11,9 +11,9 @@ export function GroupTitle({ title }: Props) {
       ml="lg"
       mb="sm"
       sx={{
-        fontSize: '14px',
+        fontSize: "15px",
         fontWeight: 500,
-        color: '#212121',
+        color: "#212121",
       }}
     >
       {title}
