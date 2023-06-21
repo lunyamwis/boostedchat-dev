@@ -4,6 +4,7 @@ import {
   CreateStory,
   GetStory,
 } from "../../Interfaces/Instagram/story.interface";
+import { Lead } from "../../Interfaces/general.interface";
 
 export const useStoriesApi = () => {
   const axiosInstance = useGlobalAxios("instagram/story");
@@ -14,6 +15,11 @@ export const useStoriesApi = () => {
     getOne: (id: string): Promise<GetStory> =>
       axiosInstance
         .get(`/${id}`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    getViewers: (id: string): Promise<Lead> =>
+      axiosInstance
+        .get(`/${id}/retrieve-viewers`)
         .then(handleRestResponse)
         .catch(handleRestError),
     create: (params: CreateStory) =>

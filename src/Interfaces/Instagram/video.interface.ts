@@ -6,4 +6,6 @@ interface VideoPrimary {
 
 export interface CreateVideo extends VideoPrimary {}
 
-export interface GetVideo extends VideoPrimary {}
+export interface GetVideo extends VideoPrimary {
+  id: string;
+}

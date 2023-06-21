@@ -1,25 +1,12 @@
 import { handleRestError, handleRestResponse } from "../response";
 import { useGlobalAxios } from "../../Hooks/useAxios";
-import { CreateReel, GetReel } from "../../Interfaces/Instagram/reel.interface";
-import { Lead } from "../../Interfaces/general.interface";
+import { CreateGoogleMapScrapper } from "../../Interfaces/Scrapper/googlemaps.interface";
 
-export const useReelsApi = () => {
-  const axiosInstance = useGlobalAxios("instagram/reel");
+export const useGoogleMapsApi = () => {
+  const axiosInstance = useGlobalAxios("scrapper/gmaps/");
 
   return {
-    getAll: (): Promise<GetReel[]> =>
-      axiosInstance.get("/").then(handleRestResponse).catch(handleRestError),
-    getOne: (id: string): Promise<GetReel> =>
-      axiosInstance
-        .get(`/${id}`)
-        .then(handleRestResponse)
-        .catch(handleRestError),
-    getLikers: (id: string): Promise<Lead> =>
-      axiosInstance
-        .get(`/${id}/retrieve-likers`)
-        .then(handleRestResponse)
-        .catch(handleRestError),
-    create: (params: CreateReel) =>
+    create: (params: CreateGoogleMapScrapper) =>
       axiosInstance
         .post("/", params)
         .then(handleRestResponse)

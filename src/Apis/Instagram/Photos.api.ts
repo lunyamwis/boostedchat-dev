@@ -4,6 +4,7 @@ import {
   CreatePhoto,
   GetPhoto,
 } from "../../Interfaces/Instagram/photo.interface";
+import { Lead } from "../../Interfaces/general.interface";
 
 export const usePhotosApi = () => {
   const axiosInstance = useGlobalAxios("instagram/photo");
@@ -14,6 +15,11 @@ export const usePhotosApi = () => {
     getOne: (id: string): Promise<GetPhoto> =>
       axiosInstance
         .get(`/${id}`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    getLikers: (id: string): Promise<Lead> =>
+      axiosInstance
+        .get(`/${id}/retrieve-likers`)
         .then(handleRestResponse)
         .catch(handleRestError),
     create: (params: CreatePhoto) =>

@@ -4,15 +4,36 @@ import { useAccountsApi } from "../../../../Apis/Instagram/Accounts.api";
 import { CreateAccount } from "../../../../Interfaces/Instagram/account.interface";
 
 export const useAccountsWrapperApi = () => {
-  const { getAll, create } = useAccountsApi();
-  const accountsQR = useQuery([queryKeys.instagram.accounts.getAccounts], () =>
-    getAll()
-  );
+  const { create } = useAccountsApi();
 
   const createAccount = useMutation((params: CreateAccount) => create(params));
 
   return {
-    accountsQR,
     createAccount,
   };
+};
+
+export const useGetAccounts = () => {
+  const { getAll } = useAccountsApi();
+  return useQuery([queryKeys.instagram.accounts.getAccounts], () => getAll());
+};
+
+export const useGetAccountFollower = (id: string) => {
+  const { getFollowers } = useAccountsApi();
+  return useQuery(
+    [queryKeys.instagram.accounts.getFollowers, id],
+    () => getFollowers(id),
+    {
+      enabled: id !== "",
+      select: (data) => {
+        return Object.values(data).map((account) => {
+          return {
+            username: account[1][1],
+            full_name: account[2][1],
+            prof_pic: account[3][1],
+          };
+        });
+      },
+    }
+  );
 };

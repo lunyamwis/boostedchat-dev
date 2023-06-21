@@ -4,6 +4,7 @@ import {
   CreateAccount,
   GetAccount,
 } from "../../Interfaces/Instagram/account.interface";
+import { Lead } from "../../Interfaces/general.interface";
 
 export const useAccountsApi = () => {
   const axiosInstance = useGlobalAxios("instagram/account");
@@ -14,6 +15,11 @@ export const useAccountsApi = () => {
     getOne: (id: string): Promise<GetAccount> =>
       axiosInstance
         .get(`/${id}`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    getFollowers: (id: string): Promise<Lead> =>
+      axiosInstance
+        .get(`/${id}/extract-followers`)
         .then(handleRestResponse)
         .catch(handleRestError),
     create: (params: CreateAccount) =>

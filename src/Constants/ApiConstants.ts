@@ -7,6 +7,7 @@ export const queryKeys = {
     accounts: {
       getAccounts: "get-all-accounts",
       getById: "get-account-by-id",
+      getFollowers: "get-account-followers",
     },
     comments: {
       getComments: "get-all-comments",
@@ -19,18 +20,22 @@ export const queryKeys = {
     photos: {
       getPhotos: "get-all-photos",
       getById: "get-photo-by-id",
+      getLikers: "get-photo-likers",
     },
     reels: {
       getReels: "get-all-reels",
       getById: "get-reel-by-id",
+      getLikers: "get-reel-likers",
     },
     stories: {
       getStories: "get-all-stories",
       getById: "get-story-by-id",
+      getViewers: "get-story-viewers",
     },
     videos: {
       getVideos: "get-all-videos",
       getById: "get-video-by-id",
+      getLikers: "get-video-likers",
     },
   },
 };

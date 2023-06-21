@@ -4,6 +4,7 @@ import {
   CreateVideo,
   GetVideo,
 } from "../../Interfaces/Instagram/video.interface";
+import { Lead } from "../../Interfaces/general.interface";
 
 export const useVideosApi = () => {
   const axiosInstance = useGlobalAxios("instagram/video");
@@ -14,6 +15,11 @@ export const useVideosApi = () => {
     getOne: (id: string): Promise<GetVideo> =>
       axiosInstance
         .get(`/${id}`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    getLikers: (id: string): Promise<Lead> =>
+      axiosInstance
+        .get(`/${id}/retrieve-likers`)
         .then(handleRestResponse)
         .catch(handleRestError),
     create: (params: CreateVideo) =>

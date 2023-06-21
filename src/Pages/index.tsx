@@ -1,7 +1,9 @@
 import React from "react";
 import {
+  Clipboard,
   Hash,
   Icon,
+  Location,
   Message2,
   Phone,
   Photo,
@@ -14,7 +16,9 @@ export type PrimaryPageData = {
   group: EGroup;
   title: string;
   isNavItem: boolean;
+  url?: string;
 };
+
 type Level1 =
   | {
       hasChildren: true;
@@ -26,6 +30,7 @@ type Level1 =
       url: string;
       icon: Icon;
     };
+
 export type TPageData = PrimaryPageData &
   (({ level: "1" } & Level1) | { level: "2"; url: string });
 
@@ -41,23 +46,31 @@ export type ParentKeys =
 export type ChildKeys =
   | "CreateAccount"
   | "AccountsList"
+  | "AccountFollowers"
   | "CreatePhoto"
   | "PhotosList"
+  | "PhotoLikers"
   | "CreateVideo"
   | "VideosList"
+  | "VideoLikers"
   | "CreateReel"
   | "ReelsList"
+  | "ReelLikers"
   | "CreateStory"
   | "StoriesList"
+  | "StoryViewers"
   | "CreateHashtag"
   | "HashtagsList"
   | "CreateComment"
-  | "CommentsList";
+  | "CommentsList"
+  | "Scrapper"
+  | "GoogleMapsScrapper";
 
 type TMPageData = Record<ParentKeys | ChildKeys, TPageData>;
 
 export enum EGroup {
   instagram = "Instagram",
+  scrapper = "Scrapper",
 }
 
 export const componentData: {
@@ -81,6 +94,16 @@ export const componentData: {
     ),
   },
   {
+    key: "AccountFollowers",
+    component: React.lazy(() =>
+      import("./Instagram/Account/AccountFollowers").then(
+        ({ AccountFollowers }) => ({
+          default: AccountFollowers,
+        })
+      )
+    ),
+  },
+  {
     key: "CreatePhoto",
     component: React.lazy(() =>
       import("./Instagram/Photo/CreatePhoto").then(({ CreatePhoto }) => ({
@@ -93,6 +116,14 @@ export const componentData: {
     component: React.lazy(() =>
       import("./Instagram/Photo/Photos").then(({ Photos }) => ({
         default: Photos,
+      }))
+    ),
+  },
+  {
+    key: "PhotoLikers",
+    component: React.lazy(() =>
+      import("./Instagram/Photo/PhotoLikers").then(({ PhotoLikers }) => ({
+        default: PhotoLikers,
       }))
     ),
   },
@@ -113,6 +144,14 @@ export const componentData: {
     ),
   },
   {
+    key: "VideoLikers",
+    component: React.lazy(() =>
+      import("./Instagram/Video/VideoLikers").then(({ VideoLikers }) => ({
+        default: VideoLikers,
+      }))
+    ),
+  },
+  {
     key: "CreateReel",
     component: React.lazy(() =>
       import("./Instagram/Reel/CreateReel").then(({ CreateReel }) => ({
@@ -129,6 +168,14 @@ export const componentData: {
     ),
   },
   {
+    key: "ReelLikers",
+    component: React.lazy(() =>
+      import("./Instagram/Reel/ReelLikers").then(({ ReelLikers }) => ({
+        default: ReelLikers,
+      }))
+    ),
+  },
+  {
     key: "CreateStory",
     component: React.lazy(() =>
       import("./Instagram/Story/CreateStory").then(({ CreateStory }) => ({
@@ -141,6 +188,14 @@ export const componentData: {
     component: React.lazy(() =>
       import("./Instagram/Story/Stories").then(({ Stories }) => ({
         default: Stories,
+      }))
+    ),
+  },
+  {
+    key: "StoryViewers",
+    component: React.lazy(() =>
+      import("./Instagram/Story/StoryViewers").then(({ StoryViewers }) => ({
+        default: StoryViewers,
       }))
     ),
   },
@@ -178,6 +233,14 @@ export const componentData: {
       }))
     ),
   },
+  {
+    key: "GoogleMapsScrapper",
+    component: React.lazy(() =>
+      import("./Scrapper/GoogleMaps/Form").then(({ StartGMapsScrapper }) => ({
+        default: StartGMapsScrapper,
+      }))
+    ),
+  },
 ];
 
 export const pageData: TMPageData = {
@@ -202,7 +265,14 @@ export const pageData: TMPageData = {
     group: EGroup.instagram,
     title: "Accounts List",
     isNavItem: true,
-    url: "/accounts-list",
+    url: "/accounts",
+  },
+  AccountFollowers: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Followers",
+    isNavItem: false,
+    url: "accounts/:id/followers/",
   },
   Photos: {
     level: "1",
@@ -225,7 +295,14 @@ export const pageData: TMPageData = {
     group: EGroup.instagram,
     title: "Photos List",
     isNavItem: true,
-    url: "/photos-list",
+    url: "/photos",
+  },
+  PhotoLikers: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Photo likers",
+    isNavItem: false,
+    url: "photos/:id/likers",
   },
   Videos: {
     level: "1",
@@ -248,7 +325,14 @@ export const pageData: TMPageData = {
     group: EGroup.instagram,
     title: "Videos List",
     isNavItem: true,
-    url: "/videos-list",
+    url: "/videos",
+  },
+  VideoLikers: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Video likers",
+    isNavItem: false,
+    url: "videos/:id/likers",
   },
   Reels: {
     level: "1",
@@ -271,7 +355,14 @@ export const pageData: TMPageData = {
     group: EGroup.instagram,
     title: "Reels List",
     isNavItem: true,
-    url: "/reels-list",
+    url: "/reels",
+  },
+  ReelLikers: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Reel likers",
+    isNavItem: false,
+    url: "reels/:id/likers",
   },
   Stories: {
     level: "1",
@@ -294,7 +385,14 @@ export const pageData: TMPageData = {
     group: EGroup.instagram,
     title: "Stories List",
     isNavItem: true,
-    url: "/stories-list",
+    url: "/stories",
+  },
+  StoryViewers: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Story viewers",
+    isNavItem: false,
+    url: "stories/:id/viewers",
   },
   Comments: {
     level: "1",
@@ -341,5 +439,21 @@ export const pageData: TMPageData = {
     title: "Hashtags List",
     isNavItem: true,
     url: "/hashtags-list",
+  },
+  Scrapper: {
+    level: "1",
+    group: EGroup.scrapper,
+    hasChildren: true,
+    title: "Google Maps Scrapper",
+    isNavItem: true,
+    children: ["GoogleMapsScrapper"],
+    icon: Location,
+  },
+  GoogleMapsScrapper: {
+    level: "2",
+    group: EGroup.scrapper,
+    title: "Scrap",
+    isNavItem: true,
+    url: "/google-maps/scrap",
   },
 };
