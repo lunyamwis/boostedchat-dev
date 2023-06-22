@@ -1,9 +1,9 @@
 import React from "react";
 import {
-  Clipboard,
+  Basket,
   Hash,
   Icon,
-  Location,
+  MapPin,
   Message2,
   Phone,
   Photo,
@@ -41,7 +41,9 @@ export type ParentKeys =
   | "Reels"
   | "Stories"
   | "Comments"
-  | "Hashtags";
+  | "Hashtags"
+  | "GoogleMapsScrapper"
+  | "StyleSeatScrapper";
 
 export type ChildKeys =
   | "CreateAccount"
@@ -63,8 +65,8 @@ export type ChildKeys =
   | "HashtagsList"
   | "CreateComment"
   | "CommentsList"
-  | "Scrapper"
-  | "GoogleMapsScrapper";
+  | "ScrapStyleseat"
+  | "ScrapGoogleMaps";
 
 type TMPageData = Record<ParentKeys | ChildKeys, TPageData>;
 
@@ -234,10 +236,18 @@ export const componentData: {
     ),
   },
   {
-    key: "GoogleMapsScrapper",
+    key: "ScrapGoogleMaps",
     component: React.lazy(() =>
       import("./Scrapper/GoogleMaps/Form").then(({ StartGMapsScrapper }) => ({
         default: StartGMapsScrapper,
+      }))
+    ),
+  },
+  {
+    key: "ScrapStyleseat",
+    component: React.lazy(() =>
+      import("./Scrapper/StyleSeat/Form").then(({ ScrapStyleSeat }) => ({
+        default: ScrapStyleSeat,
       }))
     ),
   },
@@ -440,20 +450,36 @@ export const pageData: TMPageData = {
     isNavItem: true,
     url: "/hashtags-list",
   },
-  Scrapper: {
+  GoogleMapsScrapper: {
     level: "1",
     group: EGroup.scrapper,
     hasChildren: true,
     title: "Google Maps Scrapper",
     isNavItem: true,
-    children: ["GoogleMapsScrapper"],
-    icon: Location,
+    children: ["ScrapGoogleMaps"],
+    icon: MapPin,
   },
-  GoogleMapsScrapper: {
+  StyleSeatScrapper: {
+    level: "1",
+    group: EGroup.scrapper,
+    hasChildren: true,
+    title: "Styleseat Scrapper",
+    isNavItem: true,
+    children: ["ScrapStyleseat"],
+    icon: Basket,
+  },
+  ScrapGoogleMaps: {
     level: "2",
     group: EGroup.scrapper,
     title: "Scrap",
     isNavItem: true,
     url: "/google-maps/scrap",
+  },
+  ScrapStyleseat: {
+    level: "2",
+    group: EGroup.scrapper,
+    title: "Scrap",
+    isNavItem: true,
+    url: "/styleseat/scrap",
   },
 };
