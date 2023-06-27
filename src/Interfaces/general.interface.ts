@@ -56,3 +56,12 @@ export interface LoginState {
   message: string;
   title: string;
 }
+
+export interface Lead {
+  [key: string]: [
+    ["pk", string],
+    ["username", string],
+    ["full_name", string],
+    ["prof_pic", string]
+  ];
+}

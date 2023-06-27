@@ -4,6 +4,8 @@ import {
   CreateAccount,
   GetAccount,
 } from "../../Interfaces/Instagram/account.interface";
+import { Lead } from "../../Interfaces/general.interface";
+import { UploadCSV } from "../../Interfaces/Instagram/upload.interface";
 
 export const useAccountsApi = () => {
   const axiosInstance = useGlobalAxios("instagram/account");
@@ -16,9 +18,23 @@ export const useAccountsApi = () => {
         .get(`/${id}`)
         .then(handleRestResponse)
         .catch(handleRestError),
+    getFollowers: (id: string): Promise<Lead> =>
+      axiosInstance
+        .get(`/${id}/extract-followers`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
     create: (params: CreateAccount) =>
       axiosInstance
         .post("/", params)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    upload: (params: UploadCSV) =>
+      axiosInstance
+        .post("/batch-uploads/", params.formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then(handleRestResponse)
         .catch(handleRestError),
     softRemove: (id: string) =>

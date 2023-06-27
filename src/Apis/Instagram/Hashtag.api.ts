@@ -4,6 +4,7 @@ import {
   CreateHashtag,
   GetHashtag,
 } from "../../Interfaces/Instagram/hashtag.interface";
+import { UploadCSV } from "../../Interfaces/Instagram/upload.interface";
 
 export const useHashtagApi = () => {
   const axiosInstance = useGlobalAxios("instagram/hashtag");
@@ -19,6 +20,15 @@ export const useHashtagApi = () => {
     create: (params: CreateHashtag) =>
       axiosInstance
         .post("/", params)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    upload: (params: UploadCSV) =>
+      axiosInstance
+        .post("/batch-uploads/", params.formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then(handleRestResponse)
         .catch(handleRestError),
     softRemove: (id: string) =>

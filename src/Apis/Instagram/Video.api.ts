@@ -4,6 +4,8 @@ import {
   CreateVideo,
   GetVideo,
 } from "../../Interfaces/Instagram/video.interface";
+import { Lead } from "../../Interfaces/general.interface";
+import { UploadCSV } from "../../Interfaces/Instagram/upload.interface";
 
 export const useVideosApi = () => {
   const axiosInstance = useGlobalAxios("instagram/video");
@@ -16,9 +18,23 @@ export const useVideosApi = () => {
         .get(`/${id}`)
         .then(handleRestResponse)
         .catch(handleRestError),
+    getLikers: (id: string): Promise<Lead> =>
+      axiosInstance
+        .get(`/${id}/retrieve-likers`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
     create: (params: CreateVideo) =>
       axiosInstance
         .post("/", params)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    upload: (params: UploadCSV) =>
+      axiosInstance
+        .post("/batch-uploads/", params.formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then(handleRestResponse)
         .catch(handleRestError),
     softRemove: (id: string) =>

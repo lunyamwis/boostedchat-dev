@@ -1,7 +1,9 @@
 import React from "react";
 import {
+  Basket,
   Hash,
   Icon,
+  MapPin,
   Message2,
   Phone,
   Photo,
@@ -14,7 +16,9 @@ export type PrimaryPageData = {
   group: EGroup;
   title: string;
   isNavItem: boolean;
+  url?: string;
 };
+
 type Level1 =
   | {
       hasChildren: true;
@@ -26,6 +30,7 @@ type Level1 =
       url: string;
       icon: Icon;
     };
+
 export type TPageData = PrimaryPageData &
   (({ level: "1" } & Level1) | { level: "2"; url: string });
 
@@ -36,28 +41,44 @@ export type ParentKeys =
   | "Reels"
   | "Stories"
   | "Comments"
-  | "Hashtags";
+  | "Hashtags"
+  | "GoogleMapsScrapper"
+  | "StyleSeatScrapper";
 
 export type ChildKeys =
   | "CreateAccount"
   | "AccountsList"
+  | "AccountFollowers"
+  | "BulkUploadAccounts"
   | "CreatePhoto"
   | "PhotosList"
+  | "PhotoLikers"
+  | "BulkUploadPhotos"
   | "CreateVideo"
   | "VideosList"
+  | "VideoLikers"
+  | "BulkUploadVideos"
   | "CreateReel"
   | "ReelsList"
+  | "ReelLikers"
+  | "BulkUploadReels"
   | "CreateStory"
   | "StoriesList"
+  | "StoryViewers"
+  | "BulkUploadStories"
   | "CreateHashtag"
   | "HashtagsList"
+  | "BulkUploadHashtags"
   | "CreateComment"
-  | "CommentsList";
+  | "CommentsList"
+  | "ScrapStyleseat"
+  | "ScrapGoogleMaps";
 
 type TMPageData = Record<ParentKeys | ChildKeys, TPageData>;
 
 export enum EGroup {
   instagram = "Instagram",
+  scrapper = "Scrapper",
 }
 
 export const componentData: {
@@ -81,6 +102,26 @@ export const componentData: {
     ),
   },
   {
+    key: "BulkUploadAccounts",
+    component: React.lazy(() =>
+      import("./Instagram/Account/BulkUploadAccounts").then(
+        ({ BulkUploadAccounts }) => ({
+          default: BulkUploadAccounts,
+        })
+      )
+    ),
+  },
+  {
+    key: "AccountFollowers",
+    component: React.lazy(() =>
+      import("./Instagram/Account/AccountFollowers").then(
+        ({ AccountFollowers }) => ({
+          default: AccountFollowers,
+        })
+      )
+    ),
+  },
+  {
     key: "CreatePhoto",
     component: React.lazy(() =>
       import("./Instagram/Photo/CreatePhoto").then(({ CreatePhoto }) => ({
@@ -94,6 +135,24 @@ export const componentData: {
       import("./Instagram/Photo/Photos").then(({ Photos }) => ({
         default: Photos,
       }))
+    ),
+  },
+  {
+    key: "PhotoLikers",
+    component: React.lazy(() =>
+      import("./Instagram/Photo/PhotoLikers").then(({ PhotoLikers }) => ({
+        default: PhotoLikers,
+      }))
+    ),
+  },
+  {
+    key: "BulkUploadPhotos",
+    component: React.lazy(() =>
+      import("./Instagram/Photo/BulkUploadPhotos").then(
+        ({ BulkUploadPhotos }) => ({
+          default: BulkUploadPhotos,
+        })
+      )
     ),
   },
   {
@@ -113,6 +172,24 @@ export const componentData: {
     ),
   },
   {
+    key: "VideoLikers",
+    component: React.lazy(() =>
+      import("./Instagram/Video/VideoLikers").then(({ VideoLikers }) => ({
+        default: VideoLikers,
+      }))
+    ),
+  },
+  {
+    key: "BulkUploadVideos",
+    component: React.lazy(() =>
+      import("./Instagram/Video/BulkUploadVideos").then(
+        ({ BulkUploadVideos }) => ({
+          default: BulkUploadVideos,
+        })
+      )
+    ),
+  },
+  {
     key: "CreateReel",
     component: React.lazy(() =>
       import("./Instagram/Reel/CreateReel").then(({ CreateReel }) => ({
@@ -129,6 +206,24 @@ export const componentData: {
     ),
   },
   {
+    key: "ReelLikers",
+    component: React.lazy(() =>
+      import("./Instagram/Reel/ReelLikers").then(({ ReelLikers }) => ({
+        default: ReelLikers,
+      }))
+    ),
+  },
+  {
+    key: "BulkUploadReels",
+    component: React.lazy(() =>
+      import("./Instagram/Reel/BulkUploadReels").then(
+        ({ BulkUploadReels }) => ({
+          default: BulkUploadReels,
+        })
+      )
+    ),
+  },
+  {
     key: "CreateStory",
     component: React.lazy(() =>
       import("./Instagram/Story/CreateStory").then(({ CreateStory }) => ({
@@ -142,6 +237,24 @@ export const componentData: {
       import("./Instagram/Story/Stories").then(({ Stories }) => ({
         default: Stories,
       }))
+    ),
+  },
+  {
+    key: "StoryViewers",
+    component: React.lazy(() =>
+      import("./Instagram/Story/StoryViewers").then(({ StoryViewers }) => ({
+        default: StoryViewers,
+      }))
+    ),
+  },
+  {
+    key: "BulkUploadStories",
+    component: React.lazy(() =>
+      import("./Instagram/Story/BulkUploadStories").then(
+        ({ BulkUploadStories }) => ({
+          default: BulkUploadStories,
+        })
+      )
     ),
   },
   {
@@ -178,6 +291,32 @@ export const componentData: {
       }))
     ),
   },
+  {
+    key: "BulkUploadHashtags",
+    component: React.lazy(() =>
+      import("./Instagram/Hashtag/BulkUploadHashtags").then(
+        ({ BulkUploadHashtags }) => ({
+          default: BulkUploadHashtags,
+        })
+      )
+    ),
+  },
+  {
+    key: "ScrapGoogleMaps",
+    component: React.lazy(() =>
+      import("./Scrapper/GoogleMaps/Form").then(({ StartGMapsScrapper }) => ({
+        default: StartGMapsScrapper,
+      }))
+    ),
+  },
+  {
+    key: "ScrapStyleseat",
+    component: React.lazy(() =>
+      import("./Scrapper/StyleSeat/Form").then(({ ScrapStyleSeat }) => ({
+        default: ScrapStyleSeat,
+      }))
+    ),
+  },
 ];
 
 export const pageData: TMPageData = {
@@ -187,7 +326,7 @@ export const pageData: TMPageData = {
     hasChildren: true,
     title: "Accounts",
     isNavItem: true,
-    children: ["AccountsList", "CreateAccount"],
+    children: ["AccountsList", "CreateAccount", "BulkUploadAccounts"],
     icon: Users,
   },
   CreateAccount: {
@@ -202,7 +341,21 @@ export const pageData: TMPageData = {
     group: EGroup.instagram,
     title: "Accounts List",
     isNavItem: true,
-    url: "/accounts-list",
+    url: "/accounts",
+  },
+  BulkUploadAccounts: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Bulk Upload",
+    isNavItem: true,
+    url: "/upload-accounts",
+  },
+  AccountFollowers: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Followers",
+    isNavItem: false,
+    url: "accounts/:id/followers/",
   },
   Photos: {
     level: "1",
@@ -210,7 +363,7 @@ export const pageData: TMPageData = {
     hasChildren: true,
     title: "Photos",
     isNavItem: true,
-    children: ["CreatePhoto", "PhotosList"],
+    children: ["CreatePhoto", "PhotosList", "BulkUploadPhotos"],
     icon: Photo,
   },
   CreatePhoto: {
@@ -225,7 +378,21 @@ export const pageData: TMPageData = {
     group: EGroup.instagram,
     title: "Photos List",
     isNavItem: true,
-    url: "/photos-list",
+    url: "/photos",
+  },
+  BulkUploadPhotos: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Bulk Upload",
+    isNavItem: true,
+    url: "/upload-photos",
+  },
+  PhotoLikers: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Photo likers",
+    isNavItem: false,
+    url: "photos/:id/likers",
   },
   Videos: {
     level: "1",
@@ -233,7 +400,7 @@ export const pageData: TMPageData = {
     hasChildren: true,
     title: "Videos",
     isNavItem: true,
-    children: ["CreateVideo", "VideosList"],
+    children: ["CreateVideo", "VideosList", "BulkUploadVideos"],
     icon: Video,
   },
   CreateVideo: {
@@ -248,7 +415,21 @@ export const pageData: TMPageData = {
     group: EGroup.instagram,
     title: "Videos List",
     isNavItem: true,
-    url: "/videos-list",
+    url: "/videos",
+  },
+  VideoLikers: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Video likers",
+    isNavItem: false,
+    url: "videos/:id/likers",
+  },
+  BulkUploadVideos: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Bulk Upload",
+    isNavItem: true,
+    url: "/upload-videos",
   },
   Reels: {
     level: "1",
@@ -256,7 +437,7 @@ export const pageData: TMPageData = {
     hasChildren: true,
     title: "Reels",
     isNavItem: true,
-    children: ["CreateReel", "ReelsList"],
+    children: ["CreateReel", "ReelsList", "BulkUploadReels"],
     icon: VideoPlus,
   },
   CreateReel: {
@@ -271,7 +452,21 @@ export const pageData: TMPageData = {
     group: EGroup.instagram,
     title: "Reels List",
     isNavItem: true,
-    url: "/reels-list",
+    url: "/reels",
+  },
+  BulkUploadReels: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Bulk Upload",
+    isNavItem: true,
+    url: "/upload-Reels",
+  },
+  ReelLikers: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Reel likers",
+    isNavItem: false,
+    url: "reels/:id/likers",
   },
   Stories: {
     level: "1",
@@ -279,7 +474,7 @@ export const pageData: TMPageData = {
     hasChildren: true,
     title: "Stories",
     isNavItem: true,
-    children: ["CreateStory", "StoriesList"],
+    children: ["CreateStory", "StoriesList", "BulkUploadStories"],
     icon: Phone,
   },
   CreateStory: {
@@ -294,7 +489,21 @@ export const pageData: TMPageData = {
     group: EGroup.instagram,
     title: "Stories List",
     isNavItem: true,
-    url: "/stories-list",
+    url: "/stories",
+  },
+  StoryViewers: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Story viewers",
+    isNavItem: false,
+    url: "stories/:id/viewers",
+  },
+  BulkUploadStories: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Bulk Upload",
+    isNavItem: true,
+    url: "/upload-stories",
   },
   Comments: {
     level: "1",
@@ -325,7 +534,7 @@ export const pageData: TMPageData = {
     hasChildren: true,
     title: "Hashtags",
     isNavItem: true,
-    children: ["CreateHashtag", "HashtagsList"],
+    children: ["CreateHashtag", "HashtagsList", "BulkUploadHashtags"],
     icon: Hash,
   },
   CreateHashtag: {
@@ -335,11 +544,50 @@ export const pageData: TMPageData = {
     isNavItem: true,
     url: "/create-hashtag",
   },
+  BulkUploadHashtags: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Bulk Upload",
+    isNavItem: true,
+    url: "/upload-hashtags",
+  },
   HashtagsList: {
     level: "2",
     group: EGroup.instagram,
     title: "Hashtags List",
     isNavItem: true,
     url: "/hashtags-list",
+  },
+  GoogleMapsScrapper: {
+    level: "1",
+    group: EGroup.scrapper,
+    hasChildren: true,
+    title: "Google Maps Scrapper",
+    isNavItem: true,
+    children: ["ScrapGoogleMaps"],
+    icon: MapPin,
+  },
+  StyleSeatScrapper: {
+    level: "1",
+    group: EGroup.scrapper,
+    hasChildren: true,
+    title: "Styleseat Scrapper",
+    isNavItem: true,
+    children: ["ScrapStyleseat"],
+    icon: Basket,
+  },
+  ScrapGoogleMaps: {
+    level: "2",
+    group: EGroup.scrapper,
+    title: "Scrap",
+    isNavItem: true,
+    url: "/google-maps/scrap",
+  },
+  ScrapStyleseat: {
+    level: "2",
+    group: EGroup.scrapper,
+    title: "Scrap",
+    isNavItem: true,
+    url: "/styleseat/scrap",
   },
 };

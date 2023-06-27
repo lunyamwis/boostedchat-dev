@@ -6,4 +6,6 @@ interface ReelPrimary {
 
 export interface CreateReel extends ReelPrimary {}
 
-export interface GetReel extends ReelPrimary {}
+export interface GetReel extends ReelPrimary {
+  id: string;
+}

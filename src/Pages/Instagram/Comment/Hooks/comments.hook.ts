@@ -4,14 +4,15 @@ import { useCommentsApi } from "../../../../Apis/Instagram/Comments.api";
 import { CreateComment } from "../../../../Interfaces/Instagram/comment.interface";
 
 export const useCommentsWrapperApi = () => {
-  const { getAll, create } = useCommentsApi();
-  const commentsQR = useQuery([queryKeys.instagram.comments.getComments], () =>
-    getAll()
-  );
+  const { create } = useCommentsApi();
   const createComment = useMutation((params: CreateComment) => create(params));
 
   return {
-    commentsQR,
     createComment,
   };
+};
+
+export const useGetComments = () => {
+  const { getAll } = useCommentsApi();
+  return useQuery([queryKeys.instagram.comments.getComments], () => getAll());
 };

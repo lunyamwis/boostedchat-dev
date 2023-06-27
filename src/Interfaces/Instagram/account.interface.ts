@@ -6,4 +6,6 @@ interface AccountPrimary {
 
 export interface CreateAccount extends AccountPrimary {}
 
-export interface GetAccount extends AccountPrimary {}
+export interface GetAccount extends AccountPrimary {
+  id: string;
+}

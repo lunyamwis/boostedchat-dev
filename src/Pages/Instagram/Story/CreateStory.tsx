@@ -11,10 +11,10 @@ import { axiosError } from "../../../Interfaces/general.interface";
 
 export function CreateStory() {
   const { createStory } = useStorysWrapperApi();
-  const [hashTag, setHashtag] = React.useState("");
+  const [storyLink, setStoryLink] = React.useState("");
 
   const handleCreateStory = () => {
-    if (hashTag === "") {
+    if (storyLink === "") {
       showNotification({
         color: "orange",
         message: "Please enter the hashtag",
@@ -25,7 +25,7 @@ export function CreateStory() {
 
     createStory.mutate(
       {
-        hashtag: hashTag,
+        link: storyLink,
       },
       {
         onSuccess: () => {
@@ -34,7 +34,7 @@ export function CreateStory() {
             message: "Story created successfully",
             icon: <Check />,
           });
-          setHashtag("");
+          setStoryLink("");
         },
         onError: (err) => {
           const errorMessage = apiErrorMessage(err as axiosError);
@@ -50,10 +50,10 @@ export function CreateStory() {
 
   return (
     <FormLayout span={7} title="Create Story">
-      <InputRow title="Hashtag">
+      <InputRow title="Link">
         <TextInput
-          value={hashTag}
-          onChange={(e) => setHashtag(e.target.value)}
+          value={storyLink}
+          onChange={(e) => setStoryLink(e.target.value)}
         />
       </InputRow>
       <ButtonRow>

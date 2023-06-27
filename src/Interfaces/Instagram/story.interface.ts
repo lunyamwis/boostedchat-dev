@@ -1,7 +1,9 @@
 interface StoryPrimary {
-  hashtag: string;
+  link: string;
 }
 
 export interface CreateStory extends StoryPrimary {}
 
-export interface GetStory extends StoryPrimary {}
+export interface GetStory extends StoryPrimary {
+  id: string;
+}

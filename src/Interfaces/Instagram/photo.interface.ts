@@ -6,4 +6,6 @@ interface PhotoPrimary {
 
 export interface CreatePhoto extends PhotoPrimary {}
 
-export interface GetPhoto extends PhotoPrimary {}
+export interface GetPhoto extends PhotoPrimary {
+  id: string;
+}

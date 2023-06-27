@@ -4,6 +4,8 @@ import {
   CreateStory,
   GetStory,
 } from "../../Interfaces/Instagram/story.interface";
+import { Lead } from "../../Interfaces/general.interface";
+import { UploadCSV } from "../../Interfaces/Instagram/upload.interface";
 
 export const useStoriesApi = () => {
   const axiosInstance = useGlobalAxios("instagram/story");
@@ -16,9 +18,23 @@ export const useStoriesApi = () => {
         .get(`/${id}`)
         .then(handleRestResponse)
         .catch(handleRestError),
+    getViewers: (id: string): Promise<Lead> =>
+      axiosInstance
+        .get(`/${id}/retrieve-viewers`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
     create: (params: CreateStory) =>
       axiosInstance
         .post("/", params)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    upload: (params: UploadCSV) =>
+      axiosInstance
+        .post("/batch-uploads/", params.formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then(handleRestResponse)
         .catch(handleRestError),
     softRemove: (id: string) =>
