@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../../../../Constants/ApiConstants";
 import { usePhotosApi } from "../../../../Apis/Instagram/Photos.api";
 import { CreatePhoto } from "../../../../Interfaces/Instagram/photo.interface";
+import { UploadCSV } from "../../../../Interfaces/Instagram/upload.interface";
 
 export const usePhotosWrapperApi = () => {
   const { create } = usePhotosApi();
@@ -10,6 +11,11 @@ export const usePhotosWrapperApi = () => {
   return {
     createPhoto,
   };
+};
+
+export const useBulkUploadPhotos = () => {
+  const { upload } = usePhotosApi();
+  return useMutation((params: UploadCSV) => upload(params));
 };
 
 export const useGetPhotos = () => {

@@ -5,6 +5,7 @@ import {
   GetPhoto,
 } from "../../Interfaces/Instagram/photo.interface";
 import { Lead } from "../../Interfaces/general.interface";
+import { UploadCSV } from "../../Interfaces/Instagram/upload.interface";
 
 export const usePhotosApi = () => {
   const axiosInstance = useGlobalAxios("instagram/photo");
@@ -25,6 +26,15 @@ export const usePhotosApi = () => {
     create: (params: CreatePhoto) =>
       axiosInstance
         .post("/", params)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    upload: (params: UploadCSV) =>
+      axiosInstance
+        .post("/batch-uploads/", params.formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then(handleRestResponse)
         .catch(handleRestError),
     softRemove: (id: string) =>

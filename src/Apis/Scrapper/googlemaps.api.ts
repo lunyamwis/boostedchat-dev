@@ -1,12 +1,17 @@
 import { handleRestError, handleRestResponse } from "../response";
 import { useGlobalAxios } from "../../Hooks/useAxios";
-import { GoogleMapsScrapperInput } from "../../Interfaces/Scrapper/scrapper.interface";
+import {
+  GoogleMapsScrapperInput,
+  GoogleMapsScrapperResult,
+} from "../../Interfaces/Scrapper/scrapper.interface";
 
 export const useGoogleMapsApi = () => {
   const axiosInstance = useGlobalAxios("scrapper/gmaps/");
 
   return {
-    create: (params: GoogleMapsScrapperInput) =>
+    create: (
+      params: GoogleMapsScrapperInput
+    ): Promise<GoogleMapsScrapperResult> =>
       axiosInstance
         .post("/", params)
         .then(handleRestResponse)

@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../../../../Constants/ApiConstants";
 import { useReelsApi } from "../../../../Apis/Instagram/Reels.api";
 import { CreateReel } from "../../../../Interfaces/Instagram/reel.interface";
+import { UploadCSV } from "../../../../Interfaces/Instagram/upload.interface";
 
 export const useReelsWrapperApi = () => {
   const { create } = useReelsApi();
@@ -15,6 +16,11 @@ export const useReelsWrapperApi = () => {
 export const useGetReels = () => {
   const { getAll } = useReelsApi();
   return useQuery([queryKeys.instagram.reels.getReels], () => getAll());
+};
+
+export const useBulkUploadReels = () => {
+  const { upload } = useReelsApi();
+  return useMutation((params: UploadCSV) => upload(params));
 };
 
 export const useGetReelLikers = (id: string) => {

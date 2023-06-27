@@ -7,51 +7,28 @@ import {
   Stack,
   TextInput,
 } from "@mantine/core";
-import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { AuthAPI } from "../../Apis/UserManagement/Auth.api";
-import { ILogIn } from "../../Interfaces/UserManagement/auth.interface";
 import { CollapsingAlert } from "../../Components/Widgets/CollapsingAlert";
 import { useAlert } from "../../Hooks/useAlert";
 import { isValidEmail } from "../../Utils/validator.util";
 import { axiosError, LoginState } from "../../Interfaces/general.interface";
-import { useAuth } from "../../Context/AuthContext/AuthProvider";
 import { Google } from "../../Assets/Google";
 import { Facebook } from "../../Assets/Facebook";
 import { Twitter } from "../../Assets/Twitter";
+import { useLogin } from "./Hooks/login.hooks";
+import { useAuth } from "../../Context/AuthContext/AuthProvider";
 
 export function Login() {
+  const { dispatch } = useAuth();
   const navigate = useNavigate();
+
+  const login = useLogin();
   const location = useLocation();
   const { showAlert, setShowAlert, alertInfo, setAlertInfo } = useAlert();
-  const { dispatch } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const login = useMutation((params: ILogIn) => AuthAPI.login(params), {
-    onSuccess: (data) => {
-      dispatch({
-        type: "LOGIN",
-        payload: {
-          access: data.access,
-          refresh: data.refresh,
-          authenticatedUser: data.authenticatedUser,
-        },
-      });
-      navigate("/", { replace: true });
-    },
-    onError: (error: axiosError) => {
-      const errMessage = error.data;
-      setShowAlert(true);
-      setAlertInfo({
-        color: "red",
-        title: "Error",
-        message: errMessage,
-      });
-    },
-  });
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -76,7 +53,32 @@ export function Login() {
       return;
     }
 
-    login.mutate({ email, password });
+    login.mutate(
+      { email, password },
+      {
+        onSuccess: (data) => {
+          dispatch({
+            type: "LOGIN",
+            payload: {
+              access: data.access,
+              refresh: data.refresh,
+              authenticatedUser: data.authenticatedUser,
+            },
+          });
+          navigate("/", { replace: true });
+        },
+        onError: (error) => {
+          const err = error as axiosError;
+          const errMessage = err.data;
+          setShowAlert(true);
+          setAlertInfo({
+            color: "red",
+            title: "Error",
+            message: errMessage,
+          });
+        },
+      }
+    );
   };
 
   React.useEffect(() => {

@@ -2,15 +2,19 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../../../../Constants/ApiConstants";
 import { useAccountsApi } from "../../../../Apis/Instagram/Accounts.api";
 import { CreateAccount } from "../../../../Interfaces/Instagram/account.interface";
+import { UploadCSV } from "../../../../Interfaces/Instagram/upload.interface";
 
 export const useAccountsWrapperApi = () => {
   const { create } = useAccountsApi();
-
   const createAccount = useMutation((params: CreateAccount) => create(params));
-
   return {
     createAccount,
   };
+};
+
+export const useBulkUploadAccounts = () => {
+  const { upload } = useAccountsApi();
+  return useMutation((params: UploadCSV) => upload(params));
 };
 
 export const useGetAccounts = () => {

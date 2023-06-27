@@ -49,20 +49,26 @@ export type ChildKeys =
   | "CreateAccount"
   | "AccountsList"
   | "AccountFollowers"
+  | "BulkUploadAccounts"
   | "CreatePhoto"
   | "PhotosList"
   | "PhotoLikers"
+  | "BulkUploadPhotos"
   | "CreateVideo"
   | "VideosList"
   | "VideoLikers"
+  | "BulkUploadVideos"
   | "CreateReel"
   | "ReelsList"
   | "ReelLikers"
+  | "BulkUploadReels"
   | "CreateStory"
   | "StoriesList"
   | "StoryViewers"
+  | "BulkUploadStories"
   | "CreateHashtag"
   | "HashtagsList"
+  | "BulkUploadHashtags"
   | "CreateComment"
   | "CommentsList"
   | "ScrapStyleseat"
@@ -93,6 +99,16 @@ export const componentData: {
       import("./Instagram/Account/Accounts").then(({ Accounts }) => ({
         default: Accounts,
       }))
+    ),
+  },
+  {
+    key: "BulkUploadAccounts",
+    component: React.lazy(() =>
+      import("./Instagram/Account/BulkUploadAccounts").then(
+        ({ BulkUploadAccounts }) => ({
+          default: BulkUploadAccounts,
+        })
+      )
     ),
   },
   {
@@ -130,6 +146,16 @@ export const componentData: {
     ),
   },
   {
+    key: "BulkUploadPhotos",
+    component: React.lazy(() =>
+      import("./Instagram/Photo/BulkUploadPhotos").then(
+        ({ BulkUploadPhotos }) => ({
+          default: BulkUploadPhotos,
+        })
+      )
+    ),
+  },
+  {
     key: "CreateVideo",
     component: React.lazy(() =>
       import("./Instagram/Video/CreateVideo").then(({ CreateVideo }) => ({
@@ -151,6 +177,16 @@ export const componentData: {
       import("./Instagram/Video/VideoLikers").then(({ VideoLikers }) => ({
         default: VideoLikers,
       }))
+    ),
+  },
+  {
+    key: "BulkUploadVideos",
+    component: React.lazy(() =>
+      import("./Instagram/Video/BulkUploadVideos").then(
+        ({ BulkUploadVideos }) => ({
+          default: BulkUploadVideos,
+        })
+      )
     ),
   },
   {
@@ -178,6 +214,16 @@ export const componentData: {
     ),
   },
   {
+    key: "BulkUploadReels",
+    component: React.lazy(() =>
+      import("./Instagram/Reel/BulkUploadReels").then(
+        ({ BulkUploadReels }) => ({
+          default: BulkUploadReels,
+        })
+      )
+    ),
+  },
+  {
     key: "CreateStory",
     component: React.lazy(() =>
       import("./Instagram/Story/CreateStory").then(({ CreateStory }) => ({
@@ -199,6 +245,16 @@ export const componentData: {
       import("./Instagram/Story/StoryViewers").then(({ StoryViewers }) => ({
         default: StoryViewers,
       }))
+    ),
+  },
+  {
+    key: "BulkUploadStories",
+    component: React.lazy(() =>
+      import("./Instagram/Story/BulkUploadStories").then(
+        ({ BulkUploadStories }) => ({
+          default: BulkUploadStories,
+        })
+      )
     ),
   },
   {
@@ -236,6 +292,16 @@ export const componentData: {
     ),
   },
   {
+    key: "BulkUploadHashtags",
+    component: React.lazy(() =>
+      import("./Instagram/Hashtag/BulkUploadHashtags").then(
+        ({ BulkUploadHashtags }) => ({
+          default: BulkUploadHashtags,
+        })
+      )
+    ),
+  },
+  {
     key: "ScrapGoogleMaps",
     component: React.lazy(() =>
       import("./Scrapper/GoogleMaps/Form").then(({ StartGMapsScrapper }) => ({
@@ -260,7 +326,7 @@ export const pageData: TMPageData = {
     hasChildren: true,
     title: "Accounts",
     isNavItem: true,
-    children: ["AccountsList", "CreateAccount"],
+    children: ["AccountsList", "CreateAccount", "BulkUploadAccounts"],
     icon: Users,
   },
   CreateAccount: {
@@ -277,6 +343,13 @@ export const pageData: TMPageData = {
     isNavItem: true,
     url: "/accounts",
   },
+  BulkUploadAccounts: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Bulk Upload",
+    isNavItem: true,
+    url: "/upload-accounts",
+  },
   AccountFollowers: {
     level: "2",
     group: EGroup.instagram,
@@ -290,7 +363,7 @@ export const pageData: TMPageData = {
     hasChildren: true,
     title: "Photos",
     isNavItem: true,
-    children: ["CreatePhoto", "PhotosList"],
+    children: ["CreatePhoto", "PhotosList", "BulkUploadPhotos"],
     icon: Photo,
   },
   CreatePhoto: {
@@ -307,6 +380,13 @@ export const pageData: TMPageData = {
     isNavItem: true,
     url: "/photos",
   },
+  BulkUploadPhotos: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Bulk Upload",
+    isNavItem: true,
+    url: "/upload-photos",
+  },
   PhotoLikers: {
     level: "2",
     group: EGroup.instagram,
@@ -320,7 +400,7 @@ export const pageData: TMPageData = {
     hasChildren: true,
     title: "Videos",
     isNavItem: true,
-    children: ["CreateVideo", "VideosList"],
+    children: ["CreateVideo", "VideosList", "BulkUploadVideos"],
     icon: Video,
   },
   CreateVideo: {
@@ -344,13 +424,20 @@ export const pageData: TMPageData = {
     isNavItem: false,
     url: "videos/:id/likers",
   },
+  BulkUploadVideos: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Bulk Upload",
+    isNavItem: true,
+    url: "/upload-videos",
+  },
   Reels: {
     level: "1",
     group: EGroup.instagram,
     hasChildren: true,
     title: "Reels",
     isNavItem: true,
-    children: ["CreateReel", "ReelsList"],
+    children: ["CreateReel", "ReelsList", "BulkUploadReels"],
     icon: VideoPlus,
   },
   CreateReel: {
@@ -367,6 +454,13 @@ export const pageData: TMPageData = {
     isNavItem: true,
     url: "/reels",
   },
+  BulkUploadReels: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Bulk Upload",
+    isNavItem: true,
+    url: "/upload-Reels",
+  },
   ReelLikers: {
     level: "2",
     group: EGroup.instagram,
@@ -380,7 +474,7 @@ export const pageData: TMPageData = {
     hasChildren: true,
     title: "Stories",
     isNavItem: true,
-    children: ["CreateStory", "StoriesList"],
+    children: ["CreateStory", "StoriesList", "BulkUploadStories"],
     icon: Phone,
   },
   CreateStory: {
@@ -403,6 +497,13 @@ export const pageData: TMPageData = {
     title: "Story viewers",
     isNavItem: false,
     url: "stories/:id/viewers",
+  },
+  BulkUploadStories: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Bulk Upload",
+    isNavItem: true,
+    url: "/upload-stories",
   },
   Comments: {
     level: "1",
@@ -433,7 +534,7 @@ export const pageData: TMPageData = {
     hasChildren: true,
     title: "Hashtags",
     isNavItem: true,
-    children: ["CreateHashtag", "HashtagsList"],
+    children: ["CreateHashtag", "HashtagsList", "BulkUploadHashtags"],
     icon: Hash,
   },
   CreateHashtag: {
@@ -442,6 +543,13 @@ export const pageData: TMPageData = {
     title: "Create Hashtag",
     isNavItem: true,
     url: "/create-hashtag",
+  },
+  BulkUploadHashtags: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Bulk Upload",
+    isNavItem: true,
+    url: "/upload-hashtags",
   },
   HashtagsList: {
     level: "2",
