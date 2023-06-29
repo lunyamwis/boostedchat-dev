@@ -1,8 +1,5 @@
 export interface GoogleMapsScrapperInput {
-  specific_element: string;
-  css_selector_search_box: string;
   area_of_search: string;
-  search_button: string;
   delay: number;
 }
 
@@ -12,13 +9,12 @@ export interface GoogleMapsScrapperResult {
   results: string[];
 }
 
+export interface GoogleMapsSearchUsersResult {
+  statusCode: number;
+  links: string[];
+}
+
 export interface StyleSeatScrapperInput {
-  css_selector_service_box: string;
-  css_selector_area_box: string;
-  css_selector_submit_btn: string;
-  css_selector_seats: string;
-  xpath_name: string;
-  xpath_popup: string;
   service: string;
   area: string;
   delay: number;

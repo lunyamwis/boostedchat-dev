@@ -28,45 +28,11 @@ type ScrapperPageProps = {
 function ScrapperPage({ setPage, setResults }: ScrapperPageProps) {
   const scrapStyleSeat = useScrapStyleSeat();
 
-  const [serviceBoxCssSelector, setServiceBoxCssSelector] = React.useState(
-    "//*[@id='react-root']/div/div/div/div/div/div[1]/div[1]/div[2]/div[2]/div/section[1]/div/header/section/input"
-  );
-  const [areaBoxCssSelector, setAreaBoxCssSelector] = React.useState(
-    "//*[@id='react-root']/div/div/div/div/div/div[1]/div[1]/div[2]/div[2]/div/section[2]/div/header/section/input"
-  );
-  const [submitButtonCssSelector, setSubmitButtonCssSelector] = React.useState(
-    "//*[@id='react-root']/div/div/div/div/div/div[1]/div[1]/div[2]/div[2]/div/button"
-  );
-  const [seatsCssSelector, setSeatsCssSelector] = React.useState(
-    "//*[@id='react-root']/div/div/div/div/div/div[2]/div/section/div[1]/div[2]/div[1]/ol"
-  );
-  const [xPathName, setXPathName] = React.useState(
-    "//*[@id='react-root']/div/div/div/div/div/div[2]/div/section/div[1]/div[2]/div[1]/ol/li[1]/div/div/div[1]/div/div/div[3]/h3"
-  );
-  const [xPathPopup, setXPathPopup] = React.useState(
-    "/html/body/div/div/button"
-  );
   const [service, setService] = React.useState("");
   const [searchArea, setSearchArea] = React.useState("");
   const [delay, setDelay] = React.useState<number | "">("");
 
   const handleScrap = () => {
-    if (serviceBoxCssSelector == "") {
-      showNotification({
-        color: "orange",
-        message: "Please enter the specific element",
-        icon: <AlertTriangle />,
-      });
-      return;
-    }
-    if (areaBoxCssSelector == "") {
-      showNotification({
-        color: "orange",
-        message: "Please enter the css selector search box",
-        icon: <AlertTriangle />,
-      });
-      return;
-    }
     if (searchArea == "") {
       showNotification({
         color: "orange",
@@ -85,12 +51,6 @@ function ScrapperPage({ setPage, setResults }: ScrapperPageProps) {
     }
     scrapStyleSeat.mutate(
       {
-        css_selector_service_box: serviceBoxCssSelector,
-        css_selector_area_box: areaBoxCssSelector,
-        css_selector_submit_btn: submitButtonCssSelector,
-        css_selector_seats: seatsCssSelector,
-        xpath_name: xPathName,
-        xpath_popup: xPathPopup,
         area: searchArea,
         service,
         delay,
@@ -106,42 +66,6 @@ function ScrapperPage({ setPage, setResults }: ScrapperPageProps) {
 
   return (
     <>
-      <InputRow title="Service Box CSS Selector">
-        <TextInput
-          value={serviceBoxCssSelector}
-          onChange={(e) => setServiceBoxCssSelector(e.target.value)}
-        />
-      </InputRow>
-      <InputRow title="Area Box CSS Selector">
-        <TextInput
-          value={areaBoxCssSelector}
-          onChange={(e) => setAreaBoxCssSelector(e.target.value)}
-        />
-      </InputRow>
-      <InputRow title="Submit Button CSS Selector">
-        <TextInput
-          value={submitButtonCssSelector}
-          onChange={(e) => setSubmitButtonCssSelector(e.target.value)}
-        />
-      </InputRow>
-      <InputRow title="Seats CSS Selector">
-        <TextInput
-          value={seatsCssSelector}
-          onChange={(e) => setSeatsCssSelector(e.target.value)}
-        />
-      </InputRow>
-      <InputRow title="Name XPath">
-        <TextInput
-          value={xPathName}
-          onChange={(e) => setXPathName(e.target.value)}
-        />
-      </InputRow>
-      <InputRow title="Popup XPath">
-        <TextInput
-          value={xPathPopup}
-          onChange={(e) => setXPathPopup(e.target.value)}
-        />
-      </InputRow>
       <InputRow title="Service">
         <TextInput
           value={service}

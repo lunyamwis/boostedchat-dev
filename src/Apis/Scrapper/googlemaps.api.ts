@@ -33,3 +33,17 @@ export const useGoogleMapsApi = () => {
         .catch(handleRestError),
   };
 };
+
+export const useGoogleMapsSearchUsersApi = () => {
+  const axiosInstance = useGlobalAxios("scrapper/instagram/search");
+
+  return {
+    search: (m: null): Promise<GoogleMapsScrapperResult> => {
+      console.log(m);
+      return axiosInstance
+        .get("/")
+        .then(handleRestResponse)
+        .catch(handleRestError);
+    },
+  };
+};

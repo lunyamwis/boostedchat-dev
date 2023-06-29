@@ -9,11 +9,13 @@ export const useProfileExtractorApi = () => {
   const axiosInstance = useGlobalAxios("scrapper/profiles/");
 
   return {
-    extractGoogleMapsProfiles: (params: GoogleMapsProfileExtractInput) =>
-      axiosInstance
-        .post("/gmaps/", params)
+    extractGoogleMapsProfiles: (params: GoogleMapsProfileExtractInput) => {
+      console.log(params);
+      return axiosInstance
+        .get("/gmaps/")
         .then(handleRestResponse)
-        .catch(handleRestError),
+        .catch(handleRestError);
+    },
     extractStyleseatProfiles: (params: StyleseatProfileExtractInput) =>
       axiosInstance
         .post("/styleseat/", params)
