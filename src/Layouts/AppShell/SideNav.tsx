@@ -1,4 +1,11 @@
-import { Box, Divider, Navbar, Overlay, Transition } from "@mantine/core";
+import {
+  Box,
+  Divider,
+  Navbar,
+  Overlay,
+  ScrollArea,
+  Transition,
+} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import React, { SetStateAction } from "react";
 import { SIDENAV_WIDTH } from "../../Constants/GeneralConstants";
@@ -30,14 +37,6 @@ function SideNavItems() {
   const [navKeys, navValues] = navStructure();
   return (
     <>
-      <Box
-        sx={{ display: "flex", justifyContent: "center" }}
-        py={64}
-        mb={8}
-        mt={8}
-      >
-        {"logo"}
-      </Box>
       {navKeys.map((navKey, idx) => (
         <Box key={idx}>
           <GroupTitle title={navKey as string} />
@@ -121,7 +120,19 @@ export function SideNav({ opened, setOpened }: Props) {
           height="100vh"
           position={{ top: 1, left: 0 }}
         >
-          <SideNavItems />
+          <Navbar.Section>
+            <Box
+              sx={{ display: "flex", justifyContent: "center" }}
+              py={64}
+              mb={8}
+              mt={8}
+            >
+              {"logo"}
+            </Box>
+          </Navbar.Section>
+          <Navbar.Section grow component={ScrollArea}>
+            <SideNavItems />
+          </Navbar.Section>
         </Navbar>
       )}
     </>

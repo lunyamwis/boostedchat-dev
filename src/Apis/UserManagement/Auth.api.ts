@@ -27,6 +27,21 @@ export const AuthAPI = {
       .post("/login", data)
       .then(handleRestResponse)
       .catch(handleRestError),
+  googleLogin: () =>
+    axiosInstance
+      .post("/auth/google/")
+      .then(handleRestResponse)
+      .catch(handleRestError),
+  facebookLogin: () =>
+    axiosInstance
+      .post("/auth/facebook/connect/")
+      .then(handleRestResponse)
+      .catch(handleRestError),
+  twitterLogin: () =>
+    axiosInstance
+      .post("/auth/twitter/connect/")
+      .then(handleRestResponse)
+      .catch(handleRestError),
   register: (
     data: RegisterParams
   ): Promise<{
