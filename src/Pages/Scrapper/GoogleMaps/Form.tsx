@@ -15,6 +15,7 @@ import { AlertTriangle, Users } from "tabler-icons-react";
 import {
   useExtractGoogleMapsProfiles,
   useScrapGoogleMapsData,
+  useSearchGoogleMapsProfiles,
 } from "./Hooks/googlemaps_scrapper.hooks";
 import { useNavigate } from "react-router-dom";
 import { pageData } from "../..";
@@ -27,34 +28,18 @@ type ScrapperPageProps = {
 
 function ScrapperPage({ setPage, setResults }: ScrapperPageProps) {
   const scrapGoogleMaps = useScrapGoogleMapsData();
-  const [specificElement, setSpecificElement] = React.useState(
-    "//*[@id='QA0Szd']/div/div/div[1]/div[2]/div/div[1]/div/div/div[3]/div[1]/div[5]/div/div[2]/div[4]/div[1]/div/div/div[2]/div[1]/div[2]"
-  );
-  const [selectorSearchBox, setSelectorSearchBox] =
-    React.useState("#searchboxinput");
-  const [searchButton, setSearchButton] = React.useState(
-    "//*[@id='searchbox-searchbutton']"
-  );
+  // const [specificElement, setSpecificElement] = React.useState(
+  //   "//*[@id='QA0Szd']/div/div/div[1]/div[2]/div/div[1]/div/div/div[3]/div[1]/div[5]/div/div[2]/div[4]/div[1]/div/div/div[2]/div[1]/div[2]"
+  // );
+  // const [selectorSearchBox, setSelectorSearchBox] =
+  //   React.useState("#searchboxinput");
+  // const [searchButton, setSearchButton] = React.useState(
+  //   "//*[@id='searchbox-searchbutton']"
+  // );
   const [searchArea, setSearchArea] = React.useState("");
   const [delay, setDelay] = React.useState<number | "">("");
 
   const handleScrap = () => {
-    if (specificElement == "") {
-      showNotification({
-        color: "orange",
-        message: "Please enter the specific element",
-        icon: <AlertTriangle />,
-      });
-      return;
-    }
-    if (selectorSearchBox == "") {
-      showNotification({
-        color: "orange",
-        message: "Please enter the css selector search box",
-        icon: <AlertTriangle />,
-      });
-      return;
-    }
     if (searchArea == "") {
       showNotification({
         color: "orange",
@@ -73,10 +58,7 @@ function ScrapperPage({ setPage, setResults }: ScrapperPageProps) {
     }
     scrapGoogleMaps.mutate(
       {
-        specific_element: specificElement,
-        css_selector_search_box: selectorSearchBox,
         area_of_search: searchArea,
-        search_button: searchButton,
         delay,
       },
       {
@@ -90,24 +72,6 @@ function ScrapperPage({ setPage, setResults }: ScrapperPageProps) {
 
   return (
     <>
-      <InputRow title="Specific Element">
-        <TextInput
-          value={specificElement}
-          onChange={(e) => setSpecificElement(e.target.value)}
-        />
-      </InputRow>
-      <InputRow title="CSS Selector Search Box">
-        <TextInput
-          value={selectorSearchBox}
-          onChange={(e) => setSelectorSearchBox(e.target.value)}
-        />
-      </InputRow>
-      <InputRow title="Search Button">
-        <TextInput
-          value={searchButton}
-          onChange={(e) => setSearchButton(e.target.value)}
-        />
-      </InputRow>
       <InputRow title="Search Area">
         <TextInput
           placeholder="e.g Hotels, New York"
@@ -134,6 +98,7 @@ type ProfileExtractorProps = {
 
 function ProfileExtractor({ results, setPage }: ProfileExtractorProps) {
   const extractProfiles = useExtractGoogleMapsProfiles();
+  const search = useSearchGoogleMapsProfiles();
 
   const handleExtractGoogleMapsProfiles = () => {
     extractProfiles.mutate(
@@ -145,7 +110,11 @@ function ProfileExtractor({ results, setPage }: ProfileExtractorProps) {
       },
       {
         onSuccess: () => {
-          setPage(3);
+          search.mutate(null, {
+            onSuccess: () => {
+              setPage(3);
+            },
+          });
         },
       }
     );

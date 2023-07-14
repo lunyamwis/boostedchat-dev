@@ -16,7 +16,12 @@ import { axiosError, LoginState } from "../../Interfaces/general.interface";
 import { Google } from "../../Assets/Google";
 import { Facebook } from "../../Assets/Facebook";
 import { Twitter } from "../../Assets/Twitter";
-import { useLogin } from "./Hooks/login.hooks";
+import {
+  useFacebookLogin,
+  useGoogleLogin,
+  useLogin,
+  useTwitterLogin,
+} from "./Hooks/login.hooks";
 import { useAuth } from "../../Context/AuthContext/AuthProvider";
 
 export function Login() {
@@ -24,12 +29,26 @@ export function Login() {
   const navigate = useNavigate();
 
   const login = useLogin();
+  const googleLogin = useGoogleLogin();
+  const facebookLogin = useFacebookLogin();
+  const twitterLogin = useTwitterLogin();
   const location = useLocation();
   const { showAlert, setShowAlert, alertInfo, setAlertInfo } = useAlert();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const handleGoogleLogin = () => {
+    googleLogin.mutate();
+  };
+
+  const handleFacebookLogin = () => {
+    facebookLogin.mutate();
+  };
+
+  const handleTwitterLogin = () => {
+    twitterLogin.mutate();
+  };
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setShowAlert(false);
@@ -135,38 +154,38 @@ export function Login() {
           <Divider my="xs" label="OR" labelPosition="center" />
         </Box>
         <Button
-          type="submit"
           variant="default"
+          onClick={handleGoogleLogin}
           leftIcon={
             <Box h={25} w={25}>
               <Google />
             </Box>
           }
-          loading={login.isLoading}
+          loading={googleLogin.isLoading}
         >
           Continue with Google
         </Button>
         <Button
+          onClick={handleFacebookLogin}
           leftIcon={
             <Box h={25} w={25}>
               <Facebook />
             </Box>
           }
-          type="submit"
           variant="default"
-          loading={login.isLoading}
+          loading={facebookLogin.isLoading}
         >
           Continue with Facebook
         </Button>
         <Button
+          onClick={handleTwitterLogin}
           leftIcon={
             <Box h={25} w={25}>
               <Twitter />
             </Box>
           }
-          type="submit"
           variant="default"
-          loading={login.isLoading}
+          loading={twitterLogin.isLoading}
         >
           Continue with Twitter
         </Button>

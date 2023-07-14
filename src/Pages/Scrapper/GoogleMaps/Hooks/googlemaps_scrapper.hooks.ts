@@ -1,5 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import { useGoogleMapsApi } from "../../../../Apis/Scrapper/googlemaps.api";
+import {
+  useGoogleMapsApi,
+  useGoogleMapsSearchUsersApi,
+} from "../../../../Apis/Scrapper/googlemaps.api";
 import {
   GoogleMapsProfileExtractInput,
   GoogleMapsScrapperInput,
@@ -16,4 +19,9 @@ export const useExtractGoogleMapsProfiles = () => {
   return useMutation((params: GoogleMapsProfileExtractInput) =>
     extractGoogleMapsProfiles(params)
   );
+};
+
+export const useSearchGoogleMapsProfiles = () => {
+  const { search } = useGoogleMapsSearchUsersApi();
+  return useMutation((m: null) => search(m));
 };

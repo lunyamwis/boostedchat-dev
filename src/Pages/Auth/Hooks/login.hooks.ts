@@ -6,4 +6,16 @@ const useLogin = () => {
   return useMutation((params: ILogIn) => AuthAPI.login(params), {});
 };
 
-export { useLogin };
+const useGoogleLogin = () => {
+  return useMutation(() => AuthAPI.googleLogin(), {});
+};
+
+const useFacebookLogin = () => {
+  return useMutation(() => AuthAPI.facebookLogin(), {});
+};
+
+const useTwitterLogin = () => {
+  return useMutation(() => AuthAPI.twitterLogin(), {});
+};
+
+export { useFacebookLogin, useGoogleLogin, useLogin, useTwitterLogin };
