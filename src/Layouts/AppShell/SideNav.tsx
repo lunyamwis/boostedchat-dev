@@ -127,7 +127,7 @@ export function SideNav({ opened, setOpened }: Props) {
               mb={8}
               mt={8}
             >
-              {"logo"}
+              {"Boosted Chat"}
             </Box>
           </Navbar.Section>
           <Navbar.Section grow component={ScrollArea}>
