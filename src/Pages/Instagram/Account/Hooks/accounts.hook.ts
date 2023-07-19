@@ -41,3 +41,25 @@ export const useGetAccountFollower = (id: string) => {
     }
   );
 };
+
+export const useGetPotentialToBuy = (id: string) => {
+  const { potentialToBuy } = useAccountsApi();
+  return useQuery(
+    [queryKeys.instagram.accounts.potentiaToBuy, id],
+    () => potentialToBuy(id),
+    {
+      enabled: id !== "",
+    }
+  );
+};
+
+export const useGetPotentialToPromote = (id: string) => {
+  const { potentialToPromote } = useAccountsApi();
+  return useQuery(
+    [queryKeys.instagram.accounts.potentialToPromote, id],
+    () => potentialToPromote(id),
+    {
+      enabled: id !== "",
+    }
+  );
+};
