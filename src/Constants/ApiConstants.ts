@@ -1,5 +1,5 @@
 export const API_URL = import.meta.env.PROD
-  ? "http://34.123.119.131/"
+  ? "http://34.123.119.131/api/v1"
   : "http://localhost:8000/api/v1";
 
 export const queryKeys = {
