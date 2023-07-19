@@ -2,11 +2,33 @@ import React from "react";
 import { ColDef } from "../../../Components/Datagrid/datagrid.interface";
 import { GetAccount } from "../../../Interfaces/Instagram/account.interface";
 import { Row } from "@tanstack/react-table";
-import { ActionIcon, Tooltip } from "@mantine/core";
+import { ActionIcon, Skeleton, Text, Tooltip } from "@mantine/core";
 import { Users } from "tabler-icons-react";
 import { useNavigate } from "react-router-dom";
 import { DataGrid } from "../../../Components/Datagrid";
-import { useGetAccounts } from "./Hooks/accounts.hook";
+import {
+  useGetAccounts,
+  useGetPotentialToBuy,
+  useGetPotentialToPromote,
+} from "./Hooks/accounts.hook";
+
+const PotentialToBuyColumn = (props: { row: Row<GetAccount> }) => {
+  const potentialToBuyQR = useGetPotentialToBuy(props.row.original.id);
+  return (
+    <Skeleton visible={potentialToBuyQR.isLoading}>
+      <Text>{potentialToBuyQR.data?.potential_buy}</Text>
+    </Skeleton>
+  );
+};
+
+const PotentialToPromoteColumn = (props: { row: Row<GetAccount> }) => {
+  const potentialToPromoteQR = useGetPotentialToPromote(props.row.original.id);
+  return (
+    <Skeleton visible={potentialToPromoteQR.isLoading}>
+      <Text>{potentialToPromoteQR.data?.potential_promote}</Text>
+    </Skeleton>
+  );
+};
 
 export function Accounts() {
   const navigate = useNavigate();
@@ -53,6 +75,18 @@ export function Accounts() {
         id: "emailAddress",
         header: "Email Address",
         visible: true,
+      },
+      {
+        id: "potentialToBuy",
+        header: "Potential To Buy",
+        visible: true,
+        cell: PotentialToBuyColumn,
+      },
+      {
+        id: "potentialToPromote",
+        header: "Potential To Promote",
+        visible: true,
+        cell: PotentialToPromoteColumn,
       },
       {
         id: "expander",

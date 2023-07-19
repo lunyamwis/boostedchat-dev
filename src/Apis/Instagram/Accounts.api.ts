@@ -52,5 +52,19 @@ export const useAccountsApi = () => {
         .delete(`/remove/${id}`)
         .then(handleRestResponse)
         .catch(handleRestError),
+    potentialToBuy: (
+      id: string
+    ): Promise<{ status_code: number; potential_buy: number }> =>
+      axiosInstance
+        .get(`/${id}/potential-buy`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    potentialToPromote: (
+      id: string
+    ): Promise<{ status_code: number; potential_promote: number }> =>
+      axiosInstance
+        .get(`/${id}/potential-promote`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
   };
 };

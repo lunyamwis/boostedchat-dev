@@ -7,6 +7,8 @@ import {
   Message2,
   Phone,
   Photo,
+  UserCheck,
+  UserPlus,
   Users,
   Video,
   VideoPlus,
@@ -35,6 +37,9 @@ export type TPageData = PrimaryPageData &
   (({ level: "1" } & Level1) | { level: "2"; url: string });
 
 export type ParentKeys =
+  | "SystemAccounts"
+  | "SalesRepresentatives"
+  | "Leads"
   | "Accounts"
   | "Photos"
   | "Videos"
@@ -79,6 +84,7 @@ type TMPageData = Record<ParentKeys | ChildKeys, TPageData>;
 export enum EGroup {
   instagram = "Instagram",
   scrapper = "Scrapper",
+  userManagement = "User Management",
 }
 
 export const componentData: {
@@ -317,9 +323,62 @@ export const componentData: {
       }))
     ),
   },
+  {
+    key: "SystemAccounts",
+    component: React.lazy(() =>
+      import("./UserManagement/Users").then(({ Users }) => ({
+        default: Users,
+      }))
+    ),
+  },
+  {
+    key: "SalesRepresentatives",
+    component: React.lazy(() =>
+      import("./UserManagement/SalesRepresentatives/SalesRepresentatives").then(
+        ({ SalesRepresentatives }) => ({
+          default: SalesRepresentatives,
+        })
+      )
+    ),
+  },
+  {
+    key: "Leads",
+    component: React.lazy(() =>
+      import("./Leads/Leads").then(({ Leads }) => ({
+        default: Leads,
+      }))
+    ),
+  },
 ];
 
 export const pageData: TMPageData = {
+  SystemAccounts: {
+    level: "1",
+    group: EGroup.userManagement,
+    hasChildren: false,
+    title: "User Accounts",
+    url: "/user-management/system-users",
+    isNavItem: true,
+    icon: Users,
+  },
+  SalesRepresentatives: {
+    level: "1",
+    group: EGroup.userManagement,
+    hasChildren: false,
+    title: "Sales Representatives",
+    url: "/user-management/sales-representatives",
+    isNavItem: true,
+    icon: UserPlus,
+  },
+  Leads: {
+    level: "1",
+    group: EGroup.userManagement,
+    hasChildren: false,
+    title: "Leads",
+    url: "/user-management/leads",
+    isNavItem: true,
+    icon: UserCheck,
+  },
   Accounts: {
     level: "1",
     group: EGroup.instagram,
