@@ -1,13 +1,24 @@
 export const API_URL = import.meta.env.PROD
-  ? "https://app.boostedchat.com/api/v1"
+  ? "http://34.123.119.131/"
   : "http://localhost:8000/api/v1";
 
 export const queryKeys = {
+  users: {
+    getAll: "get-all-users",
+  },
+  salesReps: {
+    getAll: "get-all-sales-representatives",
+  },
+  leads: {
+    getAll: "get-all-leads",
+  },
   instagram: {
     accounts: {
       getAccounts: "get-all-accounts",
       getById: "get-account-by-id",
       getFollowers: "get-account-followers",
+      potentiaToBuy: "potential-to-buy",
+      potentialToPromote: "potential-to-promote",
     },
     comments: {
       getComments: "get-all-comments",
