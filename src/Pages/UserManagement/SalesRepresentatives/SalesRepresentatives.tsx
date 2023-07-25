@@ -20,7 +20,7 @@ export function SalesRepresentatives() {
   const [isCreateUserModalOpen, setIsCreateUserModalOpen] =
     React.useState(false);
 
-  const queryKey = [queryKeys.users.getAll];
+  const queryKey = [queryKeys.salesReps.getAll];
 
   const userQR = useGetSalesReps();
 
