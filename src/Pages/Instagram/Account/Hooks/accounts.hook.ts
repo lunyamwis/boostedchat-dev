@@ -48,7 +48,7 @@ export const useGetPotentialToBuy = (id: string) => {
     [queryKeys.instagram.accounts.potentiaToBuy, id],
     () => potentialToBuy(id),
     {
-      enabled: id !== "",
+      retry: false,
     }
   );
 };
@@ -59,7 +59,8 @@ export const useGetPotentialToPromote = (id: string) => {
     [queryKeys.instagram.accounts.potentialToPromote, id],
     () => potentialToPromote(id),
     {
-      enabled: id !== "",
+      enabled: false,
+      retry: false,
     }
   );
 };

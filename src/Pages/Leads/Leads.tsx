@@ -12,7 +12,7 @@ export function Leads() {
   const [isCreateUserModalOpen, setIsCreateUserModalOpen] =
     React.useState(false);
 
-  const queryKey = [queryKeys.users.getAll];
+  const queryKey = [queryKeys.leads.getAll];
 
   const leadsQR = useGetLeads();
 
