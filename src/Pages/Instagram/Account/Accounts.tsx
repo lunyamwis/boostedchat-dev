@@ -15,8 +15,10 @@ import {
 const PotentialToBuyColumn = (props: { row: Row<GetAccount> }) => {
   const potentialToBuyQR = useGetPotentialToBuy(props.row.original.id);
   return (
-    <Skeleton visible={potentialToBuyQR.isLoading}>
-      <Text>{potentialToBuyQR.data?.potential_buy}</Text>
+    <Skeleton visible={!potentialToBuyQR.isLoading}>
+      <Text>
+        {props.row.index === 0 ? potentialToBuyQR.data?.potential_buy : "-"}
+      </Text>
     </Skeleton>
   );
 };

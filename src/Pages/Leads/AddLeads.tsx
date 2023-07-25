@@ -100,7 +100,7 @@ export function AddLead({ isOpened, setIsOpened, queryKey }: Props) {
   };
 
   return (
-    <Modal opened={isOpened} title="New lead" size="xl" onClose={onDialogClose}>
+    <Modal opened={isOpened} title="New lead" onClose={onDialogClose}>
       <Stack>
         <Collapse
           in={showAlert}
@@ -119,7 +119,7 @@ export function AddLead({ isOpened, setIsOpened, queryKey }: Props) {
         </Collapse>
         <Stack p={20}>
           <Select
-            label="User"
+            label="Instagram Account"
             data={userAccounts}
             value={userId}
             placeholder="Select an instagram account"
