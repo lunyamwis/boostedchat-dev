@@ -1,18 +1,14 @@
 import {
-  Avatar,
   Burger,
   Group,
   Header,
   MediaQuery,
-  Menu,
   Text,
   useMantineTheme,
 } from "@mantine/core";
 import React from "react";
-import { Settings } from "tabler-icons-react";
 import { useMediaQuery } from "@mantine/hooks";
 import { HEADER_HEIGHT, SIDENAV_WIDTH } from "../../Constants/GeneralConstants";
-import { useAuth } from "../../Context/AuthContext/AuthProvider";
 
 type Props = {
   opened: boolean;
@@ -20,7 +16,6 @@ type Props = {
 };
 
 export function AppHeader({ opened, setOpened }: Props) {
-  const { dispatch } = useAuth();
   const theme = useMantineTheme();
   const smallScreen = useMediaQuery("(max-width: 768px)");
 
@@ -42,24 +37,8 @@ export function AppHeader({ opened, setOpened }: Props) {
           />
         </MediaQuery>
         <Group position="apart" sx={{ width: "100%" }}>
-          <Text id="app-header">App Title</Text>
-          <Group>
-            <Menu shadow="md" width={200}>
-              <Menu.Target>
-                <Avatar color="brand" src={null} size="md" />
-              </Menu.Target>
-
-              <Menu.Dropdown>
-                <Menu.Label>Application</Menu.Label>
-                <Menu.Item
-                  onClick={() => dispatch({ type: "LOGOUT" })}
-                  icon={<Settings size={14} />}
-                >
-                  Logout
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
-          </Group>
+          <Text id="app-header">Boosted Chat</Text>
+          <Group></Group>
         </Group>
       </div>
     </Header>

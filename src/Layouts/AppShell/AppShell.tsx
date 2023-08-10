@@ -17,9 +17,8 @@ export default function AppShell() {
       styles={{
         main: {
           position: "relative",
-          background: theme.colorScheme === "dark"
-            ? theme.colors.dark[8]
-            : theme.colors.gray[0],
+          background:
+            theme.colorScheme === "dark" ? theme.colors.dark[8] : "#f8fafc",
         },
       }}
       navbarOffsetBreakpoint="sm"
