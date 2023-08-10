@@ -46,9 +46,10 @@ export function MenuItem({ title, Icon, url }: Props) {
         },
         root: {
           "&:hover": {
-            borderTopRightRadius: "16px",
-            borderBottomRightRadius: "16px",
-            backgroundColor: theme.fn.lighten("#00D0FF", 0.9),
+            backgroundColor:
+              pathname === url
+                ? "transparent"
+                : theme.fn.lighten(theme.colors.brand[6], 0.9),
           },
         },
       }}

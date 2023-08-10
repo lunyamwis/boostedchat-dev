@@ -1,6 +1,7 @@
 import React from "react";
 import {
   Basket,
+  BrandInstagram,
   Hash,
   Icon,
   MapPin,
@@ -86,6 +87,12 @@ export enum EGroup {
   scrapper = "Scrapper",
   userManagement = "User Management",
 }
+
+export const GroupIcons: Record<EGroup, Icon> = {
+  Instagram: BrandInstagram,
+  Scrapper: Basket,
+  "User Management": Users,
+};
 
 export const componentData: {
   key: keyof TMPageData;
