@@ -1,11 +1,16 @@
 import { handleRestError, handleRestResponse } from "../response";
 import { useGlobalAxios } from "../../Hooks/useAxios";
 import {
+  AddComment,
+  AddedCommentRespose,
   CreatePhoto,
+  GenerateComment,
+  GeneratedComment,
   GetPhoto,
 } from "../../Interfaces/Instagram/photo.interface";
 import { Lead } from "../../Interfaces/general.interface";
 import { UploadCSV } from "../../Interfaces/Instagram/upload.interface";
+import { MediaCommentResponse } from "../../Interfaces/Instagram/comment.interface";
 
 export const usePhotosApi = () => {
   const axiosInstance = useGlobalAxios("instagram/photo");
@@ -18,9 +23,24 @@ export const usePhotosApi = () => {
         .get(`/${id}`)
         .then(handleRestResponse)
         .catch(handleRestError),
+    getComments: (id: string): Promise<MediaCommentResponse> =>
+      axiosInstance
+        .get(`/${id}/fetch-comments/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
     getLikers: (id: string): Promise<Lead> =>
       axiosInstance
-        .get(`/${id}/retrieve-likers`)
+        .get(`/${id}/retrieve-likers/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    addComment: (params: AddComment): Promise<AddedCommentRespose> =>
+      axiosInstance
+        .post(`/${params.id}/add-comment/`, params.data)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    generateComment: (params: GenerateComment): Promise<GeneratedComment> =>
+      axiosInstance
+        .post(`/${params.id}/generate-comment/`, params.data)
         .then(handleRestResponse)
         .catch(handleRestError),
     create: (params: CreatePhoto) =>

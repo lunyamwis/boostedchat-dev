@@ -6,6 +6,12 @@ import {
 } from "../../Interfaces/Instagram/video.interface";
 import { Lead } from "../../Interfaces/general.interface";
 import { UploadCSV } from "../../Interfaces/Instagram/upload.interface";
+import { MediaCommentResponse } from "../../Interfaces/Instagram/comment.interface";
+import {
+  AddComment,
+  GenerateComment,
+  GeneratedComment,
+} from "../../Interfaces/Instagram/photo.interface";
 
 export const useVideosApi = () => {
   const axiosInstance = useGlobalAxios("instagram/video");
@@ -21,6 +27,21 @@ export const useVideosApi = () => {
     getLikers: (id: string): Promise<Lead> =>
       axiosInstance
         .get(`/${id}/retrieve-likers`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    getComments: (id: string): Promise<MediaCommentResponse> =>
+      axiosInstance
+        .get(`/${id}/fetch-comments/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    generateComment: (params: GenerateComment): Promise<GeneratedComment> =>
+      axiosInstance
+        .post(`/${params.id}/generate-comment/`, params.data)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    addComment: (params: AddComment) =>
+      axiosInstance
+        .post(`/${params.id}/add-comment/`, params.data)
         .then(handleRestResponse)
         .catch(handleRestError),
     create: (params: CreateVideo) =>
