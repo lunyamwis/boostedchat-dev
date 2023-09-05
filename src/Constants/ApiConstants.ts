@@ -1,6 +1,6 @@
 export const API_URL = import.meta.env.PROD
   ? "http://34.123.119.131/api/v1"
-  : "http://localhost:8000/api/v1";
+  : "http://localhost:8001/api/v1";
 
 export const queryKeys = {
   users: {
@@ -13,6 +13,10 @@ export const queryKeys = {
     getAll: "get-all-leads",
   },
   instagram: {
+    media: {
+      getAll: "get-all-media",
+      getComments: "media-comments",
+    },
     accounts: {
       getAccounts: "get-all-accounts",
       getById: "get-account-by-id",
@@ -32,6 +36,7 @@ export const queryKeys = {
       getPhotos: "get-all-photos",
       getById: "get-photo-by-id",
       getLikers: "get-photo-likers",
+      getComments: "get-comments",
     },
     reels: {
       getReels: "get-all-reels",
