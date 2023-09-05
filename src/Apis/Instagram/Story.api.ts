@@ -6,6 +6,7 @@ import {
 } from "../../Interfaces/Instagram/story.interface";
 import { Lead } from "../../Interfaces/general.interface";
 import { UploadCSV } from "../../Interfaces/Instagram/upload.interface";
+import { MediaCommentResponse } from "../../Interfaces/Instagram/comment.interface";
 
 export const useStoriesApi = () => {
   const axiosInstance = useGlobalAxios("instagram/story");
@@ -21,6 +22,11 @@ export const useStoriesApi = () => {
     getViewers: (id: string): Promise<Lead> =>
       axiosInstance
         .get(`/${id}/retrieve-viewers`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    getComments: (id: string): Promise<MediaCommentResponse> =>
+      axiosInstance
+        .get(`/${id}/fetch-comments/`)
         .then(handleRestResponse)
         .catch(handleRestError),
     create: (params: CreateStory) =>

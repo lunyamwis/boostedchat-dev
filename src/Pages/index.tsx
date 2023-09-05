@@ -1,11 +1,8 @@
 import React from "react";
 import {
-  Basket,
   BrandInstagram,
   Hash,
   Icon,
-  MapPin,
-  Message2,
   Phone,
   Photo,
   UserCheck,
@@ -46,10 +43,7 @@ export type ParentKeys =
   | "Videos"
   | "Reels"
   | "Stories"
-  | "Comments"
-  | "Hashtags"
-  | "GoogleMapsScrapper"
-  | "StyleSeatScrapper";
+  | "Hashtags";
 
 export type ChildKeys =
   | "CreateAccount"
@@ -74,23 +68,17 @@ export type ChildKeys =
   | "BulkUploadStories"
   | "CreateHashtag"
   | "HashtagsList"
-  | "BulkUploadHashtags"
-  | "CreateComment"
-  | "CommentsList"
-  | "ScrapStyleseat"
-  | "ScrapGoogleMaps";
+  | "BulkUploadHashtags";
 
 type TMPageData = Record<ParentKeys | ChildKeys, TPageData>;
 
 export enum EGroup {
   instagram = "Instagram",
-  scrapper = "Scrapper",
   userManagement = "User Management",
 }
 
 export const GroupIcons: Record<EGroup, Icon> = {
   Instagram: BrandInstagram,
-  Scrapper: Basket,
   "User Management": Users,
 };
 
@@ -271,22 +259,6 @@ export const componentData: {
     ),
   },
   {
-    key: "CreateComment",
-    component: React.lazy(() =>
-      import("./Instagram/Comment/CreateComment").then(({ CreateComment }) => ({
-        default: CreateComment,
-      }))
-    ),
-  },
-  {
-    key: "CommentsList",
-    component: React.lazy(() =>
-      import("./Instagram/Comment/Comments").then(({ Comments }) => ({
-        default: Comments,
-      }))
-    ),
-  },
-  {
     key: "CreateHashtag",
     component: React.lazy(() =>
       import("./Instagram/Hashtag/CreateHashtags").then(
@@ -312,22 +284,6 @@ export const componentData: {
           default: BulkUploadHashtags,
         })
       )
-    ),
-  },
-  {
-    key: "ScrapGoogleMaps",
-    component: React.lazy(() =>
-      import("./Scrapper/GoogleMaps/Form").then(({ StartGMapsScrapper }) => ({
-        default: StartGMapsScrapper,
-      }))
-    ),
-  },
-  {
-    key: "ScrapStyleseat",
-    component: React.lazy(() =>
-      import("./Scrapper/StyleSeat/Form").then(({ ScrapStyleSeat }) => ({
-        default: ScrapStyleSeat,
-      }))
     ),
   },
   {
@@ -571,29 +527,6 @@ export const pageData: TMPageData = {
     isNavItem: true,
     url: "/upload-stories",
   },
-  Comments: {
-    level: "1",
-    group: EGroup.instagram,
-    hasChildren: true,
-    title: "Comments",
-    isNavItem: true,
-    children: ["CommentsList", "CreateComment"],
-    icon: Message2,
-  },
-  CreateComment: {
-    level: "2",
-    group: EGroup.instagram,
-    title: "Create Comment",
-    isNavItem: true,
-    url: "/create-comment",
-  },
-  CommentsList: {
-    level: "2",
-    group: EGroup.instagram,
-    title: "Comments List",
-    isNavItem: true,
-    url: "/comments-list",
-  },
   Hashtags: {
     level: "1",
     group: EGroup.instagram,
@@ -623,37 +556,5 @@ export const pageData: TMPageData = {
     title: "Hashtags List",
     isNavItem: true,
     url: "/hashtags-list",
-  },
-  GoogleMapsScrapper: {
-    level: "1",
-    group: EGroup.scrapper,
-    hasChildren: true,
-    title: "Google Maps Scrapper",
-    isNavItem: true,
-    children: ["ScrapGoogleMaps"],
-    icon: MapPin,
-  },
-  StyleSeatScrapper: {
-    level: "1",
-    group: EGroup.scrapper,
-    hasChildren: true,
-    title: "Styleseat Scrapper",
-    isNavItem: true,
-    children: ["ScrapStyleseat"],
-    icon: Basket,
-  },
-  ScrapGoogleMaps: {
-    level: "2",
-    group: EGroup.scrapper,
-    title: "Scrap",
-    isNavItem: true,
-    url: "/google-maps/scrap",
-  },
-  ScrapStyleseat: {
-    level: "2",
-    group: EGroup.scrapper,
-    title: "Scrap",
-    isNavItem: true,
-    url: "/styleseat/scrap",
   },
 };
