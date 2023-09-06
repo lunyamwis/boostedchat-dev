@@ -31,7 +31,6 @@ import {
 import { GeneratedCommentModal } from "./GeneratedCommentModal";
 import { LogItem } from "./LogItem";
 import { AuditChange } from "../../../Interfaces/Logs/logs.interface";
-import { formatISODate } from "../../../Utils/dates.util";
 
 type Props = {
   mediaType: MediaType;
@@ -155,7 +154,6 @@ export function Comments({
     let logIndex = 0;
     for (let i = 0; i < mediaCommentsQR.data.comments.length; i++) {
       const currComment = mediaCommentsQR.data.comments[i];
-      console.log(logIndex);
       const commentDate = formatChatDate(currComment[3][1], true, true);
       const formattedCommentBody: FormattedCommentBody = {
         type: "comment",
@@ -175,7 +173,6 @@ export function Comments({
           isAfter(parseISO(currLog.timestamp), parseISO(currComment[3][1])) &&
           isBefore(parseISO(currLog.timestamp), parseISO(nextComment[3][1]))
         ) {
-          console.log("Should works");
           const exisitingLogDate = formatChatDate(
             currLog.timestamp,
             true,
@@ -205,7 +202,6 @@ export function Comments({
               }
               mFormattedComments[commentDate].push();
               logIndex = logIndex + 1;
-              console.log("newLogIndex", logIndex);
             } else {
               break;
             }
@@ -218,7 +214,6 @@ export function Comments({
         mFormattedComments[commentDate] = [formattedCommentBody];
       }
 
-      console.log(logIndex);
       if (
         i >= mediaCommentsQR.data.comments.length - 1 &&
         logIndex !== auditLogsQR.data.length - 1
