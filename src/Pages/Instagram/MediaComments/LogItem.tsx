@@ -35,7 +35,7 @@ export function LogItem({ actor, date, action }: Props) {
       labelPosition="center"
       label={`${actor} ${formatLogAction(action)} at ${format(
         parseISO(date),
-        "hh:mm aaa"
+        "h:mm aaa"
       )}`}
     />
   );

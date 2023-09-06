@@ -155,7 +155,7 @@ export function Comments({
     let logIndex = 0;
     for (let i = 0; i < mediaCommentsQR.data.comments.length; i++) {
       const currComment = mediaCommentsQR.data.comments[i];
-      const currLog = auditLogsQR.data[logIndex];
+      console.log(logIndex);
       const commentDate = formatChatDate(currComment[3][1], true, true);
       const formattedCommentBody: FormattedCommentBody = {
         type: "comment",
@@ -165,15 +165,12 @@ export function Comments({
         comment: currComment[1][1],
         date: currComment[3][1],
       };
-      if (i < mediaCommentsQR.data.comments.length - 1) {
+      if (
+        i < mediaCommentsQR.data.comments.length - 1 &&
+        logIndex < auditLogsQR.data.length
+      ) {
         const nextComment = mediaCommentsQR.data.comments[i + 1];
-        console.log(
-          formatISODate(currLog.timestamp),
-          formatISODate(currComment[3][1]),
-          formatISODate(nextComment[3][1]),
-          isAfter(parseISO(currLog.timestamp), parseISO(currComment[3][1])) &&
-            isBefore(parseISO(currLog.timestamp), parseISO(nextComment[3][1]))
-        );
+        const currLog = auditLogsQR.data[logIndex];
         if (
           isAfter(parseISO(currLog.timestamp), parseISO(currComment[3][1])) &&
           isBefore(parseISO(currLog.timestamp), parseISO(nextComment[3][1]))
@@ -184,20 +181,35 @@ export function Comments({
             true,
             true
           );
-          const mLog = {
-            type: "log",
-            change: currLog.changes,
-            actor: currLog.actor === " " ? currLog.actor_email : currLog.actor,
-            date: currLog.timestamp,
-          } as FormattedCommentBody;
-          if (mFormattedComments[exisitingLogDate]) {
-            mFormattedComments[exisitingLogDate].push(mLog);
-          } else {
-            mFormattedComments[exisitingLogDate] = [mLog];
+          for (let q = logIndex; q < auditLogsQR.data.length; q++) {
+            const newCurrLog = auditLogsQR.data[q];
+            if (
+              isBefore(
+                parseISO(newCurrLog.timestamp),
+                parseISO(nextComment[3][1])
+              )
+            ) {
+              const mLog = {
+                type: "log",
+                change: newCurrLog.changes,
+                actor:
+                  newCurrLog.actor === " "
+                    ? newCurrLog.actor_email
+                    : newCurrLog.actor,
+                date: newCurrLog.timestamp,
+              } as FormattedCommentBody;
+              if (mFormattedComments[exisitingLogDate]) {
+                mFormattedComments[exisitingLogDate].push(mLog);
+              } else {
+                mFormattedComments[exisitingLogDate] = [mLog];
+              }
+              mFormattedComments[commentDate].push();
+              logIndex = logIndex + 1;
+              console.log("newLogIndex", logIndex);
+            } else {
+              break;
+            }
           }
-          mFormattedComments[commentDate].push();
-          logIndex = logIndex + 1;
-          console.log("newLogIndex", logIndex);
         }
       }
       if (mFormattedComments[commentDate]) {
