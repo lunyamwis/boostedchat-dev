@@ -57,7 +57,9 @@ export function CreateHashtag() {
         />
       </InputRow>
       <ButtonRow>
-        <Button onClick={handleCreateHashtag}>Create Hashtag</Button>
+        <Button loading={createHashtag.isLoading} onClick={handleCreateHashtag}>
+          Create Hashtag
+        </Button>
       </ButtonRow>
     </FormLayout>
   );

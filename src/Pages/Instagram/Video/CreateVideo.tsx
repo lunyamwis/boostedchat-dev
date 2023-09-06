@@ -91,7 +91,9 @@ export function CreateVideo() {
         />
       </InputRow>
       <ButtonRow>
-        <Button onClick={handleCreateVideo}>Create Video</Button>
+        <Button loading={createVideo.isLoading} onClick={handleCreateVideo}>
+          Create Video
+        </Button>
       </ButtonRow>
     </FormLayout>
   );

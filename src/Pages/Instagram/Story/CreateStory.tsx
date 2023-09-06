@@ -57,7 +57,9 @@ export function CreateStory() {
         />
       </InputRow>
       <ButtonRow>
-        <Button onClick={handleCreateStory}>Create Story</Button>
+        <Button loading={createStory.isLoading} onClick={handleCreateStory}>
+          Create Story
+        </Button>
       </ButtonRow>
     </FormLayout>
   );

@@ -12,7 +12,7 @@ import {
   Text,
   useMantineTheme,
 } from "@mantine/core";
-import { format, parseISO } from "date-fns";
+import { format, isAfter, isBefore, parseISO } from "date-fns";
 import { Loading } from "../../../Components/UIState/Loading";
 import { Error } from "../../../Components/UIState/Error";
 import { formatChatDate } from "../../../Utils/validator.util";
@@ -25,9 +25,13 @@ import { Link } from "react-router-dom";
 import {
   MediaType,
   useGenerateMediaComment,
+  useGetAuditLogs,
   useGetMediaComments,
 } from "./Hooks/mediaComments.hooks";
 import { GeneratedCommentModal } from "./GeneratedCommentModal";
+import { LogItem } from "./LogItem";
+import { AuditChange } from "../../../Interfaces/Logs/logs.interface";
+import { formatISODate } from "../../../Utils/dates.util";
 
 type Props = {
   mediaType: MediaType;
@@ -37,13 +41,21 @@ type Props = {
   avatarColor: string;
 };
 
-type FormattedCommentBody = {
-  profilePicture: string;
-  comment: string;
-  username: string;
-  fullName: string;
-  date: string;
-};
+type FormattedCommentBody =
+  | {
+      type: "comment";
+      profilePicture: string;
+      comment: string;
+      username: string;
+      fullName: string;
+      date: string;
+    }
+  | {
+      type: "log";
+      change: string;
+      actor: string;
+      date: string;
+    };
 
 type FormattedComments = {
   [key: string]: FormattedCommentBody[];
@@ -91,6 +103,7 @@ export function Comments({
   const prevCommentCommentCount = React.useRef(0);
 
   const mediaCommentsQR = useGetMediaComments(mediaId, mediaType);
+  const auditLogsQR = useGetAuditLogs();
   const generateMediaComment = useGenerateMediaComment(mediaType);
 
   React.useEffect(() => {
@@ -135,28 +148,109 @@ export function Comments({
   }, [mediaCommentsQR.data, mediaCommentsQR.data?.length]);
 
   React.useEffect(() => {
-    if (mediaCommentsQR.data == null) {
+    if (mediaCommentsQR.data == null || auditLogsQR.data == null) {
       return;
     }
     const mFormattedComments: FormattedComments = {};
+    let logIndex = 0;
     for (let i = 0; i < mediaCommentsQR.data.comments.length; i++) {
       const currComment = mediaCommentsQR.data.comments[i];
+      const currLog = auditLogsQR.data[logIndex];
       const commentDate = formatChatDate(currComment[3][1], true, true);
-      const formattedCommentBody = {
+      const formattedCommentBody: FormattedCommentBody = {
+        type: "comment",
         profilePicture: currComment[2][1][3][1],
         fullName: currComment[2][1][2][1],
         username: currComment[2][1][1][1],
         comment: currComment[1][1],
         date: currComment[3][1],
       };
+      if (i < mediaCommentsQR.data.comments.length - 1) {
+        const nextComment = mediaCommentsQR.data.comments[i + 1];
+        console.log(
+          formatISODate(currLog.timestamp),
+          formatISODate(currComment[3][1]),
+          formatISODate(nextComment[3][1]),
+          isAfter(parseISO(currLog.timestamp), parseISO(currComment[3][1])) &&
+            isBefore(parseISO(currLog.timestamp), parseISO(nextComment[3][1]))
+        );
+        if (
+          isAfter(parseISO(currLog.timestamp), parseISO(currComment[3][1])) &&
+          isBefore(parseISO(currLog.timestamp), parseISO(nextComment[3][1]))
+        ) {
+          console.log("Should works");
+          const exisitingLogDate = formatChatDate(
+            currLog.timestamp,
+            true,
+            true
+          );
+          const mLog = {
+            type: "log",
+            change: currLog.changes,
+            actor: currLog.actor === " " ? currLog.actor_email : currLog.actor,
+            date: currLog.timestamp,
+          } as FormattedCommentBody;
+          if (mFormattedComments[exisitingLogDate]) {
+            mFormattedComments[exisitingLogDate].push(mLog);
+          } else {
+            mFormattedComments[exisitingLogDate] = [mLog];
+          }
+          mFormattedComments[commentDate].push();
+          logIndex = logIndex + 1;
+          console.log("newLogIndex", logIndex);
+        }
+      }
       if (mFormattedComments[commentDate]) {
         mFormattedComments[commentDate].push(formattedCommentBody);
       } else {
         mFormattedComments[commentDate] = [formattedCommentBody];
       }
+
+      console.log(logIndex);
+      if (
+        i >= mediaCommentsQR.data.comments.length - 1 &&
+        logIndex !== auditLogsQR.data.length - 1
+      ) {
+        for (let k = logIndex; k < auditLogsQR.data.length; k++) {
+          const parsedAction: AuditChange = JSON.parse(
+            auditLogsQR.data[k].changes
+          );
+          const mLogDate = formatChatDate(
+            auditLogsQR.data[k].timestamp,
+            true,
+            true
+          );
+
+          if (parsedAction["status"]) {
+            if (mFormattedComments[mLogDate]) {
+              mFormattedComments[mLogDate].push({
+                type: "log",
+                change: auditLogsQR.data[k].changes,
+                actor:
+                  auditLogsQR.data[k].actor === " "
+                    ? auditLogsQR.data[k].actor_email
+                    : auditLogsQR.data[k].actor,
+                date: auditLogsQR.data[k].timestamp,
+              });
+            } else {
+              mFormattedComments[mLogDate] = [
+                {
+                  type: "log",
+                  change: auditLogsQR.data[k].changes,
+                  actor:
+                    auditLogsQR.data[k].actor === " "
+                      ? auditLogsQR.data[k].actor_email
+                      : auditLogsQR.data[k].actor,
+                  date: auditLogsQR.data[k].timestamp,
+                } as FormattedCommentBody,
+              ];
+            }
+          }
+        }
+      }
     }
     setFormattedComments(mFormattedComments);
-  }, [mediaCommentsQR.data]);
+  }, [mediaCommentsQR.data, auditLogsQR.data]);
 
   React.useEffect(() => {
     if (mediaCommentsQR.data != null && viewport.current != null) {
@@ -238,33 +332,45 @@ export function Comments({
           {Object.keys(formattedComments).map((commentDate) => (
             <Stack>
               <DateHolder isoDate={commentDate} />
-              {formattedComments[commentDate].map((formattedCommentBody) => (
-                <Group
-                  position={
-                    formattedCommentBody.username === DEFAULT_IG_USER
-                      ? "right"
-                      : "left"
-                  }
-                >
-                  <Box
-                    sx={{
-                      width: "60%",
-                    }}
-                  >
-                    <ChatItem
-                      avatarColor={avatarColor}
-                      profilePicture={formattedCommentBody.profilePicture}
-                      content={formattedCommentBody.comment}
-                      userInitials={formattedCommentBody.username.charAt(0)}
-                      userNames={formattedCommentBody.username}
-                      date={format(
-                        parseISO(formattedCommentBody.date),
-                        EDateFormats.time
-                      )}
+              {formattedComments[commentDate].map((formattedCommentBody) => {
+                if (formattedCommentBody.type === "comment") {
+                  return (
+                    <Group
+                      position={
+                        formattedCommentBody.username === DEFAULT_IG_USER
+                          ? "right"
+                          : "left"
+                      }
+                    >
+                      <Box
+                        sx={{
+                          width: "60%",
+                        }}
+                      >
+                        <ChatItem
+                          avatarColor={avatarColor}
+                          profilePicture={formattedCommentBody.profilePicture}
+                          content={formattedCommentBody.comment}
+                          userInitials={formattedCommentBody.username.charAt(0)}
+                          userNames={formattedCommentBody.username}
+                          date={format(
+                            parseISO(formattedCommentBody.date),
+                            EDateFormats.time
+                          )}
+                        />
+                      </Box>
+                    </Group>
+                  );
+                } else {
+                  return (
+                    <LogItem
+                      date={formattedCommentBody.date}
+                      actor={formattedCommentBody.actor}
+                      action={formattedCommentBody.change}
                     />
-                  </Box>
-                </Group>
-              ))}
+                  );
+                }
+              })}
             </Stack>
           ))}
         </Stack>
