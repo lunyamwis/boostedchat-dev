@@ -88,7 +88,9 @@ export function CreateReel() {
         <TextInput value={reelId} onChange={(e) => setReelId(e.target.value)} />
       </InputRow>
       <ButtonRow>
-        <Button onClick={handleCreateReel}>Create Reel</Button>
+        <Button loading={createReel.isLoading} onClick={handleCreateReel}>
+          Create Reel
+        </Button>
       </ButtonRow>
     </FormLayout>
   );
