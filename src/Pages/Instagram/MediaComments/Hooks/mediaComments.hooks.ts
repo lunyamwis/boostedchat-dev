@@ -11,6 +11,11 @@ import {
 } from "../../../../Interfaces/Instagram/photo.interface";
 import { GetVideo } from "../../../../Interfaces/Instagram/video.interface";
 import { GetReel } from "../../../../Interfaces/Instagram/reel.interface";
+import { useAuditLogsApi } from "../../../../Apis/Logs/Logs.api";
+import {
+  AuditChange,
+  AuditLog,
+} from "../../../../Interfaces/Logs/logs.interface";
 
 export type MediaType = "photo" | "video" | "reel" | "story";
 
@@ -38,7 +43,7 @@ export const useGetMediaComments = (id: string, mediaType: MediaType) => {
       enabled: id !== "",
       refetchOnMount: false,
       refetchOnWindowFocus: false,
-      refetchInterval: 60000,
+      // refetchInterval: 12000,
       select: (data) => {
         return { ...data, comments: data.comments.reverse() };
       },
@@ -94,5 +99,22 @@ export const useAddMediaComment = (mediaType: MediaType) => {
       return addVideoComment(params);
     }
     return addReelComment(params);
+  });
+};
+
+export const useGetAuditLogs = () => {
+  const { getAll } = useAuditLogsApi();
+
+  return useQuery([queryKeys.auditLogs.getAll], () => getAll(), {
+    select: (data) => {
+      const mData: AuditLog[] = [];
+      for (let i = data.length - 1; i >= 0; i--) {
+        const parsedAction: AuditChange = JSON.parse(data[i].changes);
+        if (parsedAction["status"]) {
+          mData.push(data[i]);
+        }
+      }
+      return mData;
+    },
   });
 };

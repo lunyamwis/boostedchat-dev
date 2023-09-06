@@ -54,4 +54,7 @@ export const queryKeys = {
       getLikers: "get-video-likers",
     },
   },
+  auditLogs: {
+    getAll: "all-audit-logs",
+  },
 };

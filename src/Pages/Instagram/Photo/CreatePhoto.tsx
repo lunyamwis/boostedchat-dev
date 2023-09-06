@@ -91,7 +91,9 @@ export function CreatePhoto() {
         />
       </InputRow>
       <ButtonRow>
-        <Button onClick={handleCreatePhoto}>Create Photo</Button>
+        <Button loading={createPhoto.isLoading} onClick={handleCreatePhoto}>
+          Create Photo
+        </Button>
       </ButtonRow>
     </FormLayout>
   );
