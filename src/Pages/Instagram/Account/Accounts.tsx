@@ -104,7 +104,7 @@ export function Accounts() {
     <DataGrid
       loading={accountsQR.isLoading}
       tableName="Accounts"
-      data={accountsQR.data ?? []}
+      data={accountsQR.data?.accounts ?? []}
       columns={columns}
     />
   );

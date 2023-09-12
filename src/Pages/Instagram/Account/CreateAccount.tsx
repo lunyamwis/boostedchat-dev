@@ -25,23 +25,7 @@ export function CreateAccount() {
       });
       return;
     }
-    if (email === "") {
-      showNotification({
-        color: "orange",
-        message: "Please enter the email",
-        icon: <AlertTriangle />,
-      });
-      return;
-    }
-    if (phoneNumber === "") {
-      showNotification({
-        color: "orange",
-        message: "Please enter the phone number",
-        icon: <AlertTriangle />,
-      });
-      return;
-    }
-    if (!isValidEmail(email)) {
+    if (email !== "" && !isValidEmail(email)) {
       showNotification({
         color: "orange",
         message: "Please enter a valid email",
@@ -81,8 +65,12 @@ export function CreateAccount() {
 
   return (
     <FormLayout span={7} title="Create Account">
-      <InputRow title="Instagram Name">
-        <TextInput value={igName} onChange={(e) => setIgName(e.target.value)} />
+      <InputRow title="Instagram username">
+        <TextInput
+          required
+          value={igName}
+          onChange={(e) => setIgName(e.target.value)}
+        />
       </InputRow>
       <InputRow title="Email">
         <TextInput value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -94,7 +82,9 @@ export function CreateAccount() {
         />
       </InputRow>
       <ButtonRow>
-        <Button onClick={handleCreateAccount}>Create Account</Button>
+        <Button loading={createAccount.isLoading} onClick={handleCreateAccount}>
+          Create Account
+        </Button>
       </ButtonRow>
     </FormLayout>
   );

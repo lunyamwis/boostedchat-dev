@@ -1,6 +1,7 @@
 import React from "react";
 import {
   BrandInstagram,
+  BrandMessenger,
   Hash,
   Icon,
   Phone,
@@ -43,6 +44,7 @@ export type ParentKeys =
   | "Videos"
   | "Reels"
   | "Stories"
+  | "Threads"
   | "Hashtags";
 
 export type ChildKeys =
@@ -68,7 +70,8 @@ export type ChildKeys =
   | "BulkUploadStories"
   | "CreateHashtag"
   | "HashtagsList"
-  | "BulkUploadHashtags";
+  | "BulkUploadHashtags"
+  | "ThreadsList";
 
 type TMPageData = Record<ParentKeys | ChildKeys, TPageData>;
 
@@ -309,6 +312,14 @@ export const componentData: {
     component: React.lazy(() =>
       import("./Leads/Leads").then(({ Leads }) => ({
         default: Leads,
+      }))
+    ),
+  },
+  {
+    key: "ThreadsList",
+    component: React.lazy(() =>
+      import("./Instagram/Threads").then(({ Threads }) => ({
+        default: Threads,
       }))
     ),
   },
@@ -556,5 +567,21 @@ export const pageData: TMPageData = {
     title: "Hashtags List",
     isNavItem: true,
     url: "/hashtags-list",
+  },
+  Threads: {
+    level: "1",
+    group: EGroup.instagram,
+    hasChildren: true,
+    title: "Threads",
+    isNavItem: true,
+    children: ["ThreadsList"],
+    icon: BrandMessenger,
+  },
+  ThreadsList: {
+    level: "2",
+    group: EGroup.instagram,
+    title: "Threads",
+    isNavItem: true,
+    url: "/threads",
   },
 };
