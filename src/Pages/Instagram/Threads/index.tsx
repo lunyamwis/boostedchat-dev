@@ -1,5 +1,5 @@
 import React from "react";
-import { useCheckResponse, useGetThreads } from "./Hooks/thread.hooks";
+import { useGetThreads } from "./Hooks/thread.hooks";
 import { Box, Divider, Grid, ScrollArea, Stack, Text } from "@mantine/core";
 import { Loading } from "../../../Components/UIState/Loading";
 import { Error } from "../../../Components/UIState/Error";
@@ -21,7 +21,6 @@ export function Threads() {
     React.useState<ThreadDetails | null>(null);
 
   const threadsQR = useGetThreads();
-  const checkResponseQR = useCheckResponse();
 
   if (threadsQR.isLoading) {
     return <Loading />;

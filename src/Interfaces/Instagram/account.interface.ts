@@ -7,7 +7,10 @@ interface AccountPrimary {
   status_id: null | string;
 }
 
-export interface CreateAccount extends AccountPrimary {}
+export type CreateAccount = Pick<
+  AccountPrimary,
+  "email" | "igname" | "phone_number"
+>;
 
 export interface GetAccount extends AccountPrimary {
   id: string;
