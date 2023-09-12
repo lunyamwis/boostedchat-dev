@@ -22,9 +22,9 @@ export const useSalesRepApi = () => {
         .post("/rep/", params)
         .then(handleRestResponse)
         .catch(handleRestError),
-    assignSalesRep: () =>
+    assignSalesRep: (reaction: number) =>
       axiosInstance
-        .get("/rep/assign-accounts/")
+        .post("/rep/assign-accounts/", { reaction })
         .then(handleRestResponse)
         .catch(handleRestError),
     softRemove: (id: string) =>

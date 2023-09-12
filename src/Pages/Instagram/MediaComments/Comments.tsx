@@ -60,7 +60,7 @@ type FormattedComments = {
   [key: string]: FormattedCommentBody[];
 };
 
-function DateHolder({ isoDate }: { isoDate: string }) {
+export function DateHolder({ isoDate }: { isoDate: string }) {
   const theme = useMantineTheme();
   return (
     <Group position="center">
@@ -99,7 +99,7 @@ export function Comments({
     React.useState(false);
   const [generatedComment, setGeneratedComment] = React.useState("");
 
-  const prevCommentCommentCount = React.useRef(0);
+  const prevComment = React.useRef("");
 
   const mediaCommentsQR = useGetMediaComments(mediaId, mediaType);
   const auditLogsQR = useGetAuditLogs();
@@ -112,12 +112,13 @@ export function Comments({
     if (mediaCommentsQR.data.length === 0) {
       return;
     }
-    if (prevCommentCommentCount.current === 0) {
+    if (prevComment.current === "") {
       return;
     }
-    if (prevCommentCommentCount.current === mediaCommentsQR.data.length) {
+    if (prevComment.current === mediaCommentsQR.data.comments[0][1][1]) {
       return;
     }
+    console.log("Something");
     generateMediaComment.mutate(
       {
         id: mediaId,
@@ -129,6 +130,7 @@ export function Comments({
       },
       {
         onSuccess: (data) => {
+          console.log("Something on success");
           setGeneratedComment(data.generated_comment);
           setIsGeneratedCommentModalOpen(true);
         },
@@ -143,7 +145,7 @@ export function Comments({
     if (mediaCommentsQR.data.length === 0) {
       return;
     }
-    prevCommentCommentCount.current = mediaCommentsQR.data.length;
+    prevComment.current = mediaCommentsQR.data.comments[0][1][1];
   }, [mediaCommentsQR.data, mediaCommentsQR.data?.length]);
 
   React.useEffect(() => {
@@ -257,7 +259,7 @@ export function Comments({
       }
     }
     setFormattedComments(mFormattedComments);
-  }, [mediaCommentsQR.data, auditLogsQR.data]);
+  }, [mediaCommentsQR.data]);
 
   React.useEffect(() => {
     if (mediaCommentsQR.data != null && viewport.current != null) {

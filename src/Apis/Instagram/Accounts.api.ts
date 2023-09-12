@@ -11,7 +11,7 @@ export const useAccountsApi = () => {
   const axiosInstance = useGlobalAxios("instagram/account");
 
   return {
-    getAll: (): Promise<GetAccount[]> =>
+    getAll: (): Promise<{ accounts: GetAccount[] }> =>
       axiosInstance.get("/").then(handleRestResponse).catch(handleRestError),
     getOne: (id: string): Promise<GetAccount> =>
       axiosInstance

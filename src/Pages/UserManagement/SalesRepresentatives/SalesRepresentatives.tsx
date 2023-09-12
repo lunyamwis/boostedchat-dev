@@ -9,12 +9,10 @@ import { DataGrid } from "../../../Components/Datagrid";
 import { Affix } from "../../../Components/Widgets/Affix";
 import { AddSalesRepModal } from "./AddSalesRep";
 import { axiosError } from "../../../Interfaces/general.interface";
-import {
-  useAssignSalseRep,
-  useGetSalesReps,
-} from "../Hooks/salesRepresentatives.hook";
+import { useGetSalesReps } from "../Hooks/salesRepresentatives.hook";
 import { SalesRepObj } from "../../../Interfaces/UserManagement/salesRep.interface";
-import { Button, Group, Stack } from "@mantine/core";
+import { Stack } from "@mantine/core";
+import { AssignSalesRepresentatives } from "./AssignSalesRep";
 
 export function SalesRepresentatives() {
   const [isCreateUserModalOpen, setIsCreateUserModalOpen] =
@@ -95,19 +93,5 @@ export function SalesRepresentatives() {
         onClickAction={() => setIsCreateUserModalOpen(true)}
       />
     </>
-  );
-}
-
-function AssignSalesRepresentatives() {
-  const assignSales = useAssignSalseRep();
-  return (
-    <Group position="right">
-      <Button
-        loading={assignSales.isLoading}
-        onClick={() => assignSales.mutate()}
-      >
-        Assign Sales Representatives
-      </Button>
-    </Group>
   );
 }

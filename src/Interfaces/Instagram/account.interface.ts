@@ -1,7 +1,10 @@
 interface AccountPrimary {
   igname: string;
-  email: string;
-  phone_number: string;
+  email: null | string;
+  outsourced_id: null | string;
+  phone_number: null | string;
+  profile_url: null | string;
+  status_id: null | string;
 }
 
 export interface CreateAccount extends AccountPrimary {}

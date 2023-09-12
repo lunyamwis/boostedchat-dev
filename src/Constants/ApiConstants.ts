@@ -48,6 +48,11 @@ export const queryKeys = {
       getById: "get-story-by-id",
       getViewers: "get-story-viewers",
     },
+    threads: {
+      getAll: "get-all-threads",
+      getMessages: "get-direct-messages",
+      checkResponse: "check-response",
+    },
     videos: {
       getVideos: "get-all-videos",
       getById: "get-video-by-id",
