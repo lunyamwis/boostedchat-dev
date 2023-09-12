@@ -15,5 +15,5 @@ export const useCreateSalesRep = () => {
 
 export const useAssignSalseRep = () => {
   const { assignSalesRep } = useSalesRepApi();
-  return useMutation(() => assignSalesRep());
+  return useMutation((reaction: number) => assignSalesRep(reaction));
 };

@@ -43,7 +43,6 @@ export const useGetMediaComments = (id: string, mediaType: MediaType) => {
       enabled: id !== "",
       refetchOnMount: false,
       refetchOnWindowFocus: false,
-      // refetchInterval: 12000,
       select: (data) => {
         return { ...data, comments: data.comments.reverse() };
       },

@@ -39,10 +39,10 @@ export function AddLead({ isOpened, setIsOpened, queryKey }: Props) {
     if (userQR.data == null) return;
 
     const mUserAccounts: SelectItem[] = [];
-    for (let i = 0; i < userQR.data.length; i++) {
+    for (let i = 0; i < userQR.data.accounts.length; i++) {
       mUserAccounts.push({
-        label: userQR.data[i].igname,
-        value: userQR.data[i].id,
+        label: userQR.data.accounts[i].igname,
+        value: userQR.data.accounts[i].id,
       });
     }
     setUserAccounts(mUserAccounts);
