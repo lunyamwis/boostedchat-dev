@@ -150,45 +150,6 @@ export function Login() {
         >
           Don't have an account? Register
         </Anchor>
-        <Box sx={{ mb: 2, px: 10, width: "100%" }}>
-          <Divider my="xs" label="OR" labelPosition="center" />
-        </Box>
-        <Button
-          variant="default"
-          onClick={handleGoogleLogin}
-          leftIcon={
-            <Box h={25} w={25}>
-              <Google />
-            </Box>
-          }
-          loading={googleLogin.isLoading}
-        >
-          Continue with Google
-        </Button>
-        <Button
-          onClick={handleFacebookLogin}
-          leftIcon={
-            <Box h={25} w={25}>
-              <Facebook />
-            </Box>
-          }
-          variant="default"
-          loading={facebookLogin.isLoading}
-        >
-          Continue with Facebook
-        </Button>
-        <Button
-          onClick={handleTwitterLogin}
-          leftIcon={
-            <Box h={25} w={25}>
-              <Twitter />
-            </Box>
-          }
-          variant="default"
-          loading={twitterLogin.isLoading}
-        >
-          Continue with Twitter
-        </Button>
       </Stack>
     </Box>
   );
