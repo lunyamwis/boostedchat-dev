@@ -69,6 +69,7 @@ export function Threads() {
             <Stack spacing={0}>
               {threadsQR.data.map((thread) => (
                 <ThreadListItem
+                  key={thread.id}
                   threadDetails={{
                     threadId: thread.id,
                     replied: thread.replied,

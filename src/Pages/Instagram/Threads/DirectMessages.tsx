@@ -225,10 +225,11 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
               sx={{ height: "100%", backgroundColor: "#F9F8Fa" }}
             >
               {Object.keys(formattedThreads).map((threadDate) => (
-                <Stack>
+                <Stack key={threadDate}>
                   <DateHolder isoDate={threadDate} />
                   {formattedThreads[threadDate].map((formattedThreadBody) => (
                     <Group
+                      key={formattedThreadBody.date}
                       position={
                         formattedThreadBody.username === DEFAULT_IG_USER
                           ? "right"
