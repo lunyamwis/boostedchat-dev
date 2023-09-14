@@ -2,7 +2,6 @@ import {
   Anchor,
   Box,
   Button,
-  Divider,
   PasswordInput,
   Stack,
   TextInput,
@@ -13,15 +12,7 @@ import { CollapsingAlert } from "../../Components/Widgets/CollapsingAlert";
 import { useAlert } from "../../Hooks/useAlert";
 import { isValidEmail } from "../../Utils/validator.util";
 import { axiosError, LoginState } from "../../Interfaces/general.interface";
-import { Google } from "../../Assets/Google";
-import { Facebook } from "../../Assets/Facebook";
-import { Twitter } from "../../Assets/Twitter";
-import {
-  useFacebookLogin,
-  useGoogleLogin,
-  useLogin,
-  useTwitterLogin,
-} from "./Hooks/login.hooks";
+import { useLogin } from "./Hooks/login.hooks";
 import { useAuth } from "../../Context/AuthContext/AuthProvider";
 
 export function Login() {
@@ -29,15 +20,16 @@ export function Login() {
   const navigate = useNavigate();
 
   const login = useLogin();
-  const googleLogin = useGoogleLogin();
-  const facebookLogin = useFacebookLogin();
-  const twitterLogin = useTwitterLogin();
   const location = useLocation();
   const { showAlert, setShowAlert, alertInfo, setAlertInfo } = useAlert();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  /*
+  const googleLogin = useGoogleLogin();
+  const facebookLogin = useFacebookLogin();
+  const twitterLogin = useTwitterLogin();
   const handleGoogleLogin = () => {
     googleLogin.mutate();
   };
@@ -49,6 +41,7 @@ export function Login() {
   const handleTwitterLogin = () => {
     twitterLogin.mutate();
   };
+  */
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setShowAlert(false);
