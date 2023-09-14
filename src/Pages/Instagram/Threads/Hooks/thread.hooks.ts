@@ -43,6 +43,7 @@ export const useCheckResponse = () => {
     [queryKeys.instagram.threads.getMessages],
     () => checkResponses(),
     {
+      refetchInterval: 60000,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
     }

@@ -12,6 +12,7 @@ import { DateHolder } from "../MediaComments/Comments";
 import { MessageBox } from "./MessageBox";
 import { GeneratedMessageModal } from "./GeneratedDMModal";
 import { ThreadDetails } from ".";
+import { last } from "lodash";
 
 type Props = {
   threadDetails: ThreadDetails;
@@ -61,16 +62,19 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
       return;
     }
 
-    if (
-      prevTimestamp.current ===
-      messagesQR.data[messagesQR.data.length - 1].timestamp
-    ) {
+    const lastLeadMessageFn = () => {
+      for (let i = messagesQR.data.length - 1; i >= 0; i--) {
+        if (messagesQR.data[i].username === threadDetails.username) {
+          return messagesQR.data[i];
+        }
+      }
+    };
+    const lastLeadMessage = lastLeadMessageFn();
+    if (lastLeadMessage == null) {
       return;
     }
-    if (
-      messagesQR.data[messagesQR.data.length - 1].username !==
-      threadDetails.username
-    ) {
+
+    if (prevTimestamp.current === lastLeadMessage.timestamp) {
       return;
     }
 
@@ -80,7 +84,7 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
       {
         id: threadDetails.threadId,
         data: {
-          text: messagesQR.data[messagesQR.data.length - 1].text,
+          text: lastLeadMessage.text,
         },
       },
       {
