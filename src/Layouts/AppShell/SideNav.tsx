@@ -162,7 +162,6 @@ const useStyles = createStyles((theme) => ({
 const Links = ({ navKey }: { navKey: string }) => {
   const [navKeys, navValues] = navStructure();
   const idx = navKeys.indexOf(navKey);
-  console.log(navKey, navKeys, idx);
   return (
     <>
       {navValues[idx].map((navValue, index) => {
