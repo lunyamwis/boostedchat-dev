@@ -12,7 +12,6 @@ import { DateHolder } from "../MediaComments/Comments";
 import { MessageBox } from "./MessageBox";
 import { GeneratedMessageModal } from "./GeneratedDMModal";
 import { ThreadDetails } from ".";
-import { last } from "lodash";
 
 type Props = {
   threadDetails: ThreadDetails;

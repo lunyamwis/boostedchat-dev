@@ -21,7 +21,7 @@ export function Threads() {
     React.useState<ThreadDetails | null>(null);
 
   const threadsQR = useGetThreads();
-  const checkResponseQR = useCheckResponse();
+  useCheckResponse();
 
   if (threadsQR.isLoading) {
     return <Loading />;
