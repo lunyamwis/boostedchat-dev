@@ -30,7 +30,7 @@ export const useGetDirectMessages = (threadId: string) => {
     () => getMessages(threadId),
     {
       select: (data) => data.reverse(),
-      refetchInterval: 45000,
+      //refetchInterval: 45000,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
     }
@@ -43,7 +43,8 @@ export const useCheckResponse = () => {
     [queryKeys.instagram.threads.getMessages],
     () => checkResponses(),
     {
-      refetchInterval: 60000,
+      enabled: false,
+      // refetchInterval: 20000,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
     }
