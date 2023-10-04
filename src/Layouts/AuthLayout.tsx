@@ -1,8 +1,9 @@
-import { Box, Divider, Grid, Stack, Text } from "@mantine/core";
+import { Box, Divider, Grid, Group, Image, Stack } from "@mantine/core";
 import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { authPageData } from "../Pages/Auth";
 import { useMediaQuery } from "../Hooks/useMediaQuery";
+import Logo from "../Assets/logo.png";
 
 export function AuthLayout() {
   const pages = Object.values(authPageData);
@@ -28,20 +29,9 @@ export function AuthLayout() {
             boxShadow: "0 12px 40px rgb(0 0 0 / 12%)",
           }}
         >
-          <Text
-            sx={(theme) => ({
-              color: theme.colors.brand[6],
-              fontSize: "2rem",
-              lineHeight: 1.235,
-              letterSpacing: 2.5,
-              fontWeight: 500,
-              marginBottom: 32,
-              textAlign: "center",
-              textTransform: "uppercase",
-            })}
-          >
-            Boosted Chat
-          </Text>
+          <Group position="center">
+            <Image width={80} src={Logo} />
+          </Group>
           <Box sx={{ mb: 2, px: 10, width: "100%" }}>
             <Divider
               my="xs"

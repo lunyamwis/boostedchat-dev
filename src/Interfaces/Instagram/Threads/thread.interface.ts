@@ -24,6 +24,12 @@ export interface GetDirectMessage {
   timestamp: string;
 }
 
+export interface GetThreadMessage {
+  sent_by: "Client" | "Robot";
+  content: string;
+  sent_on: string;
+}
+
 export interface GenerateResponseParams {
   id: string;
   data: {
