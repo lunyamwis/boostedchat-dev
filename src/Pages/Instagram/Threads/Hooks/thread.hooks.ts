@@ -44,9 +44,9 @@ export const useGetThreadMessages = (threadId: string) => {
     [queryKeys.instagram.threads.getMessages, threadId],
     () => getThreadMessages(threadId),
     {
-      //refetchInterval: 45000,
+      refetchInterval: 45000,
       refetchOnMount: false,
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
     }
   );
 };
