@@ -17,6 +17,18 @@ const theme: MantineThemeOverride = {
   defaultRadius: "12px",
   colors: {
     brand: [
+      "#f6eeff",
+      "#e7daf7",
+      "#cab1ea",
+      "#ad86dd",
+      "#9562d2",
+      "#854bcb",
+      "#7d3ec9",
+      "#6b31b2",
+      "#5f2aa0",
+      "#52228d",
+    ],
+    brand2: [
       "#E3FAFF",
       "#4DE0FF",
       "#00D0FF",

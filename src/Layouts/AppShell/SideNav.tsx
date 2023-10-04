@@ -2,6 +2,7 @@ import {
   Avatar,
   Box,
   createStyles,
+  Image,
   Menu,
   Navbar,
   Overlay,
@@ -19,6 +20,7 @@ import { EGroup, GroupIcons, pageData, TPageData } from "../../Pages";
 import { MenuItem, ParentMenuItem } from "../../Components/SideNav/MenuItem";
 import { Settings } from "tabler-icons-react";
 import { useAuth } from "../../Context/AuthContext/AuthProvider";
+import Logo from "../../Assets/logo.png";
 
 type Props = {
   opened: boolean;
@@ -275,7 +277,7 @@ export function SideNav({ opened, setOpened }: Props) {
               <Stack h="100%" justify="space-between">
                 <Box>
                   <div className={classes.logo}>
-                    <>B</>
+                    <Image width={40} src={Logo} />
                   </div>
                   {navKeys.map((navKey, idx) => (
                     <Box key={idx}>

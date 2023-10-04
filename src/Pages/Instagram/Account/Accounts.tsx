@@ -2,52 +2,56 @@ import React from "react";
 import { ColDef } from "../../../Components/Datagrid/datagrid.interface";
 import { GetAccount } from "../../../Interfaces/Instagram/account.interface";
 import { Row } from "@tanstack/react-table";
-import { ActionIcon, Skeleton, Text, Tooltip } from "@mantine/core";
-import { Users } from "tabler-icons-react";
+import { ActionIcon, Group, Loader, Text, Tooltip } from "@mantine/core";
+import { Trash, Users } from "tabler-icons-react";
 import { useNavigate } from "react-router-dom";
 import { DataGrid } from "../../../Components/Datagrid";
-import {
-  useGetAccounts,
-  useGetPotentialToBuy,
-  useGetPotentialToPromote,
-} from "./Hooks/accounts.hook";
-
-const PotentialToBuyColumn = (props: { row: Row<GetAccount> }) => {
-  const potentialToBuyQR = useGetPotentialToBuy(props.row.original.id);
-  return (
-    <Skeleton visible={potentialToBuyQR.isLoading}>
-      <Text>
-        {props.row.index === 0 ? potentialToBuyQR.data?.potential_buy : "-"}
-      </Text>
-    </Skeleton>
-  );
-};
-
-const PotentialToPromoteColumn = (props: { row: Row<GetAccount> }) => {
-  const potentialToPromoteQR = useGetPotentialToPromote(props.row.original.id);
-  return (
-    <Skeleton visible={potentialToPromoteQR.isLoading}>
-      <Text>{potentialToPromoteQR.data?.potential_promote}</Text>
-    </Skeleton>
-  );
-};
+import { useGetAccounts, useResetAccount } from "./Hooks/accounts.hook";
+import { openConfirmModal } from "@mantine/modals";
 
 export function Accounts() {
   const navigate = useNavigate();
   const accountsQR = useGetAccounts();
+  const resetAccount = useResetAccount();
 
   const ActionColumn = React.useCallback(
     (props: { row: Row<GetAccount> }) => (
-      <Tooltip label="Extract Followers">
-        <ActionIcon
-          color="brand"
-          onClick={() => {
-            navigate(`/accounts/${props.row.original.id}/followers`);
-          }}
-        >
-          <Users size={17} strokeWidth={1.2} />
-        </ActionIcon>
-      </Tooltip>
+      <Group>
+        <Tooltip label="Extract Followers">
+          <ActionIcon
+            color="brand"
+            onClick={() => {
+              navigate(`/accounts/${props.row.original.id}/followers`);
+            }}
+          >
+            <Users size={17} strokeWidth={1.2} />
+          </ActionIcon>
+        </Tooltip>
+        {resetAccount.isLoading ? (
+          <Loader size="xs" />
+        ) : (
+          <Tooltip label="Reset Account">
+            <ActionIcon
+              color="red"
+              onClick={() => {
+                openConfirmModal({
+                  title: "Alert",
+                  children: (
+                    <Text size="sm">
+                      Resetting the account will delete its thread, messages and
+                      status. Are you sure you want to proceed?
+                    </Text>
+                  ),
+                  labels: { confirm: "Confirm", cancel: "Cancel" },
+                  onConfirm: () => resetAccount.mutate(props.row.original.id),
+                });
+              }}
+            >
+              <Trash size={17} strokeWidth={1.4} />
+            </ActionIcon>
+          </Tooltip>
+        )}
+      </Group>
     ),
     [navigate]
   );
@@ -77,18 +81,6 @@ export function Accounts() {
         id: "emailAddress",
         header: "Email Address",
         visible: true,
-      },
-      {
-        id: "potentialToBuy",
-        header: "Potential To Buy",
-        visible: true,
-        cell: PotentialToBuyColumn,
-      },
-      {
-        id: "potentialToPromote",
-        header: "Potential To Promote",
-        visible: true,
-        cell: PotentialToPromoteColumn,
       },
       {
         id: "expander",

@@ -1,17 +1,27 @@
 import React from "react";
-import { Avatar, Box, Group, ScrollArea, Stack, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Avatar,
+  Box,
+  Group,
+  Menu,
+  ScrollArea,
+  Stack,
+  Text,
+} from "@mantine/core";
 import { format, parseISO } from "date-fns";
 import { Loading } from "../../../Components/UIState/Loading";
 import { Error } from "../../../Components/UIState/Error";
 import { EDateFormats } from "../../../Interfaces/general.interface";
 import { DEFAULT_IG_USER } from "../../../Constants/GeneralConstants";
-import { useGenerateMessage, useGetDirectMessages } from "./Hooks/thread.hooks";
+import { useClearThread, useGetThreadMessages } from "./Hooks/thread.hooks";
 import { formatChatDate } from "../../../Utils/validator.util";
 import { ChatItem } from "../MediaComments/ChatItem";
 import { DateHolder } from "../MediaComments/Comments";
 import { MessageBox } from "./MessageBox";
-import { GeneratedMessageModal } from "./GeneratedDMModal";
 import { ThreadDetails } from ".";
+import { DotsVertical } from "tabler-icons-react";
+import { openConfirmModal } from "@mantine/modals";
 
 type Props = {
   threadDetails: ThreadDetails;
@@ -28,15 +38,8 @@ type FormattedThreads = {
   [key: string]: FormattedThreadsBody[];
 };
 export function DirectMessages({ threadDetails, avatarColor }: Props) {
-  const [isGeneratedCommentModalOpen, setIsGeneratedCommentModalOpen] =
-    React.useState(false);
-  const [generatedResponse, setGeneratedComment] = React.useState("");
   const [formattedThreads, setFormattedThreads] =
     React.useState<FormattedThreads | null>(null);
-
-  const prevTimestamp = React.useRef("");
-
-  const hasNewMessage = React.useRef(false);
 
   const viewport = React.useRef<HTMLDivElement>(null);
 
@@ -46,72 +49,22 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
       behavior: "smooth",
     });
 
-  const messagesQR = useGetDirectMessages(threadDetails.threadId);
-  const generateMessage = useGenerateMessage();
+  const messagesQR = useGetThreadMessages(threadDetails.threadId);
+  const clearThread = useClearThread();
 
-  React.useEffect(() => {
-    if (!messagesQR.data) {
-      return;
-    }
-    if (messagesQR.data.length === 0) {
-      return;
-    }
-
-    if (prevTimestamp.current === "") {
-      return;
-    }
-
-    const lastLeadMessageFn = () => {
-      for (let i = messagesQR.data.length - 1; i >= 0; i--) {
-        if (messagesQR.data[i].username === threadDetails.username) {
-          return messagesQR.data[i];
-        }
-      }
-    };
-    const lastLeadMessage = lastLeadMessageFn();
-    if (lastLeadMessage == null) {
-      return;
-    }
-
-    if (prevTimestamp.current === lastLeadMessage.timestamp) {
-      return;
-    }
-
-    hasNewMessage.current = true;
-
-    generateMessage.mutate(
-      {
-        id: threadDetails.threadId,
-        data: {
-          text: lastLeadMessage.text,
-        },
-      },
-      {
-        onSuccess: (data) => {
-          // NOTE: This logic is repeated in another effect
-          if (typeof data.generated_comment === "string") {
-            setGeneratedComment(data.generated_comment);
-          } else {
-            setGeneratedComment(
-              `There was an error: ${data.generated_comment.error}. Please refresh the page and try again`
-            );
-          }
-          setIsGeneratedCommentModalOpen(true);
-        },
-      }
-    );
-  }, [messagesQR.data, messagesQR.data?.length, threadDetails.threadId]);
-
-  React.useEffect(() => {
-    if (!messagesQR.data) {
-      return;
-    }
-    if (messagesQR.data.length === 0) {
-      return;
-    }
-    prevTimestamp.current =
-      messagesQR.data[messagesQR.data.length - 1].timestamp;
-  }, [messagesQR.data, messagesQR.data?.length]);
+  const handleClearChat = () => {
+    openConfirmModal({
+      title: "Alert",
+      children: (
+        <Text size="sm">
+          Are you sure you want to clear this thread? This action cannot be
+          undone.
+        </Text>
+      ),
+      labels: { confirm: "Confirm", cancel: "Cancel" },
+      onConfirm: () => clearThread.mutate(threadDetails.threadId),
+    });
+  };
 
   React.useEffect(() => {
     if (messagesQR.data == null) {
@@ -121,11 +74,12 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
 
     for (let i = 0; i < messagesQR.data.length; i++) {
       const currThread = messagesQR.data[i];
-      const commentDate = formatChatDate(currThread.timestamp, true, true);
+      const commentDate = formatChatDate(currThread.sent_on, true, true);
       const formattedThreadBody: FormattedThreadsBody = {
-        username: currThread.username,
-        text: currThread.text,
-        date: currThread.timestamp,
+        username:
+          currThread.sent_by === "Client" ? threadDetails.username : "Me",
+        text: currThread.content,
+        date: currThread.sent_on,
       };
       if (mFormattedThreads[commentDate]) {
         mFormattedThreads[commentDate].push(formattedThreadBody);
@@ -141,47 +95,6 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
       scrollToBottom();
     }
   }, [messagesQR.data]);
-
-  React.useEffect(() => {
-    if (messagesQR.data == null) {
-      return;
-    }
-    if (threadDetails.replied) {
-      return;
-    }
-    if (hasNewMessage.current === true) {
-      return;
-    }
-
-    if (
-      messagesQR.data[messagesQR.data.length - 1].username !==
-      threadDetails.username
-    ) {
-      return;
-    }
-
-    generateMessage.mutate(
-      {
-        id: threadDetails.threadId,
-        data: {
-          text: messagesQR.data[messagesQR.data.length - 1].text,
-        },
-      },
-      {
-        onSuccess: (data) => {
-          // NOTE: This logic is repeated in another effect
-          if (typeof data.generated_comment === "string") {
-            setGeneratedComment(data.generated_comment);
-          } else {
-            setGeneratedComment(
-              `There was an error: ${data.generated_comment.error}. Please refresh the page and try again`
-            );
-          }
-          setIsGeneratedCommentModalOpen(true);
-        },
-      }
-    );
-  }, [threadDetails.replied, messagesQR.data, threadDetails.threadId]);
 
   return (
     <Stack justify="space-between" spacing={0} sx={{ height: "100%" }}>
@@ -200,6 +113,17 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
             <Text>{threadDetails.username}</Text>
           </Stack>
         </Group>
+        <Menu position="bottom-end" shadow="md" width={200}>
+          <Menu.Target>
+            <ActionIcon>
+              <DotsVertical />
+            </ActionIcon>
+          </Menu.Target>
+
+          <Menu.Dropdown>
+            <Menu.Item onClick={handleClearChat}>Clear Chat</Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
       </Group>
       {messagesQR.isLoading ? (
         <Box sx={{ height: "100%", backgroundColor: "#F8f9fa" }}>
@@ -260,12 +184,6 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
             </Stack>
           </Box>
           <MessageBox threadId={threadDetails.threadId} />
-          <GeneratedMessageModal
-            threadId={threadDetails.threadId}
-            isOpen={isGeneratedCommentModalOpen}
-            setIsOpen={setIsGeneratedCommentModalOpen}
-            generatedResponse={generatedResponse}
-          />
         </>
       )}
     </Stack>

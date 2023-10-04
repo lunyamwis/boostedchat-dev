@@ -17,6 +17,11 @@ export const useBulkUploadAccounts = () => {
   return useMutation((params: UploadCSV) => upload(params));
 };
 
+export const useResetAccount = () => {
+  const { resetAccount } = useAccountsApi();
+  return useMutation((id: string) => resetAccount(id));
+};
+
 export const useGetAccounts = () => {
   const { getAll } = useAccountsApi();
   return useQuery([queryKeys.instagram.accounts.getAccounts], () => getAll());

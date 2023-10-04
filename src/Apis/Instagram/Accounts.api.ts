@@ -37,6 +37,11 @@ export const useAccountsApi = () => {
         })
         .then(handleRestResponse)
         .catch(handleRestError),
+    resetAccount: (id: string) =>
+      axiosInstance
+        .post(`/${id}/reset-account/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
     softRemove: (id: string) =>
       axiosInstance
         .delete(`/soft-remove/${id}`)
