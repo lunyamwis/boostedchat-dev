@@ -13,7 +13,6 @@ import { format, parseISO } from "date-fns";
 import { Loading } from "../../../Components/UIState/Loading";
 import { Error } from "../../../Components/UIState/Error";
 import { EDateFormats } from "../../../Interfaces/general.interface";
-import { DEFAULT_IG_USER } from "../../../Constants/GeneralConstants";
 import { useClearThread, useGetThreadMessages } from "./Hooks/thread.hooks";
 import { formatChatDate } from "../../../Utils/validator.util";
 import { ChatItem } from "../MediaComments/ChatItem";
@@ -155,9 +154,7 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
                     <Group
                       key={formattedThreadBody.date}
                       position={
-                        formattedThreadBody.username === DEFAULT_IG_USER
-                          ? "right"
-                          : "left"
+                        formattedThreadBody.username === "Me" ? "right" : "left"
                       }
                     >
                       <Box
