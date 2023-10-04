@@ -6,6 +6,7 @@ import {
   GenerateResponseParams,
   GetDirectMessage,
   GetThread,
+  GetThreadMessage,
 } from "../../Interfaces/Instagram/Threads/thread.interface";
 import {
   AddComment,
@@ -28,14 +29,14 @@ export const useThreadsApi = () => {
         .post("/", params)
         .then(handleRestResponse)
         .catch(handleRestError),
+    getThreadMessages: (threadId: string): Promise<GetThreadMessage[]> =>
+      axiosInstance
+        .get(`/${threadId}/get-thread-messages`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
     getMessages: (threadId: string): Promise<GetDirectMessage[]> =>
       axiosInstance
         .get(`/${threadId}/fetch-messages/`)
-        .then(handleRestResponse)
-        .catch(handleRestError),
-    sendDirectMessage: (params: AddComment) =>
-      axiosInstance
-        .post(`/${params.id}/send-message/`, params.data)
         .then(handleRestResponse)
         .catch(handleRestError),
     addComment: (params: AddComment): Promise<AddedCommentRespose> =>
@@ -43,16 +44,26 @@ export const useThreadsApi = () => {
         .post(`/${params.id}/add-comment/`, params.data)
         .then(handleRestResponse)
         .catch(handleRestError),
+    clearThread: (threadId: string) =>
+      axiosInstance
+        .delete(`/${threadId}/delete-all-thread-messages`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    sendDirectMessage: (params: AddComment) =>
+      axiosInstance
+        .post(`/${params.id}/send-message/`, params.data)
+        .then(handleRestResponse)
+        .catch(handleRestError),
     generateResponse: (
       params: GenerateResponseParams
     ): Promise<GeneratedResponse> =>
       axiosInstance
-        .post(`/${params.id}/generate-response/`, params.data)
+        .post(`/${params.id}/generate-respons/`, params.data)
         .then(handleRestResponse)
         .catch(handleRestError),
     checkResponses: () =>
       axiosInstance
-        .get(`/check-response/`)
+        .get(`/check-respons/`)
         .then(handleRestResponse)
         .catch(handleRestError),
   };

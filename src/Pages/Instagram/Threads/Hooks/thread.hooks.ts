@@ -31,6 +31,20 @@ export const useGetDirectMessages = (threadId: string) => {
     {
       select: (data) => data.reverse(),
       //refetchInterval: 45000,
+      enabled: false,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+};
+
+export const useGetThreadMessages = (threadId: string) => {
+  const { getThreadMessages } = useThreadsApi();
+  return useQuery(
+    [queryKeys.instagram.threads.getMessages, threadId],
+    () => getThreadMessages(threadId),
+    {
+      //refetchInterval: 45000,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
     }
@@ -70,4 +84,9 @@ export const useGenerateMessage = () => {
   return useMutation((params: GenerateResponseParams) => {
     return generateResponse(params);
   });
+};
+
+export const useClearThread = () => {
+  const { clearThread } = useThreadsApi();
+  return useMutation((threadId: string) => clearThread(threadId));
 };
