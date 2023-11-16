@@ -19,7 +19,7 @@ import { useAlert } from "../../Hooks/useAlert";
 import { isValidEmail } from "../../Utils/validator.util";
 import { axiosError, LoginState } from "../../Interfaces/general.interface";
 import { authPageData } from ".";
-import { ArrowLeft } from "tabler-icons-react";
+import { IconArrowLeft } from "@tabler/icons-react";
 
 export function Register() {
   const theme = useMantineTheme();
@@ -190,7 +190,7 @@ export function Register() {
               onClick={() => navigate(`${authPageData.login.url}`)}
               color={theme.primaryColor}
             >
-              <ArrowLeft />
+              <IconArrowLeft />
             </ActionIcon>
           </Tooltip>
         </Group>

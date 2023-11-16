@@ -23,11 +23,11 @@ export function DetailsRow({ title, iconColor, icon, children }: RowProps) {
           {icon}
         </ThemeIcon>
         <Text
-          sx={{
-            color: "black",
+          sx={(theme) => ({
+            color: theme.black,
             fontSize: "16px",
             fontWeight: 500,
-          }}
+          })}
         >
           {title}
         </Text>

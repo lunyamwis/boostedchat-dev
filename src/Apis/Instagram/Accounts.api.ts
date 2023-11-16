@@ -3,17 +3,20 @@ import { useGlobalAxios } from "../../Hooks/useAxios";
 import {
   CreateAccount,
   GetAccount,
+  GetSingleAccount,
+  UpdateAccountParams,
 } from "../../Interfaces/Instagram/account.interface";
 import { Lead } from "../../Interfaces/general.interface";
 import { UploadCSV } from "../../Interfaces/Instagram/upload.interface";
+import { AssignOperator } from "../../Interfaces/Instagram/Threads/thread.interface";
 
 export const useAccountsApi = () => {
   const axiosInstance = useGlobalAxios("instagram/account");
 
   return {
-    getAll: (): Promise<{ accounts: GetAccount[] }> =>
+    getAll: (): Promise<GetAccount[]> =>
       axiosInstance.get("/").then(handleRestResponse).catch(handleRestError),
-    getOne: (id: string): Promise<GetAccount> =>
+    getOne: (id: string): Promise<GetSingleAccount> =>
       axiosInstance
         .get(`/${id}`)
         .then(handleRestResponse)
@@ -35,6 +38,11 @@ export const useAccountsApi = () => {
             "Content-Type": "multipart/form-data",
           },
         })
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    update: (params: UpdateAccountParams) =>
+      axiosInstance
+        .put(`/${params.id}/`, params.data)
         .then(handleRestResponse)
         .catch(handleRestError),
     resetAccount: (id: string) =>
@@ -69,6 +77,11 @@ export const useAccountsApi = () => {
     ): Promise<{ status_code: number; potential_promote: number }> =>
       axiosInstance
         .get(`/${id}/potential-promote`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    assignOperator: (params: AssignOperator) =>
+      axiosInstance
+        .patch(`/${params.accountId}/assign-operator/`, params.data)
         .then(handleRestResponse)
         .catch(handleRestError),
   };

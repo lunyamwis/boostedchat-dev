@@ -13,7 +13,7 @@ export function ButtonRow({
       position={position}
       align="center"
       sx={{
-        backgroundColor: "#ebecfa5e",
+        backgroundColor: "#fffbfb",
         borderRadius: "12px",
         paddingTop: 20,
         paddingBottom: 30,

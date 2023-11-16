@@ -1,6 +1,6 @@
 import { ActionIcon, Group, Loader, Textarea } from "@mantine/core";
 import React from "react";
-import { Send } from "tabler-icons-react";
+import { IconSend } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { MediaType, useAddMediaComment } from "./Hooks/mediaComments.hooks";
 
@@ -59,7 +59,7 @@ export function MessageBox({ mediaId, mediaType }: Props) {
             color="brand"
             onClick={handleMakeComment}
           >
-            <Send strokeWidth={1.4} />
+            <IconSend strokeWidth={1.4} />
           </ActionIcon>
         )}
       </Group>

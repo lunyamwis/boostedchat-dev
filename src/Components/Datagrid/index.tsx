@@ -11,7 +11,7 @@ import {
   GroupingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { Settings } from "tabler-icons-react";
+import { IconSettings } from "@tabler/icons-react";
 import { useDidUpdate } from "@mantine/hooks";
 import React, { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -57,6 +57,7 @@ function MDataGrid<T>({
     startDate,
     tableColumns: actualTableColumns,
     filters: pFilters,
+    currentTableRows,
   } = useDataGrid();
   const [grouping, setGrouping] = React.useState<GroupingState>([]);
   const [rowSelection, setRowSelection] = React.useState({});
@@ -69,7 +70,7 @@ function MDataGrid<T>({
   const [columnVisibility, setColumnVisibility] = React.useState({});
 
   const table = useReactTable({
-    data,
+    data: currentTableRows,
     columns: tableColumns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -133,6 +134,17 @@ function MDataGrid<T>({
   ]);
 
   useEffect(() => {
+    dispatch({
+      type: "SET_CURRENT_TABLE_ROWS",
+      payload: { currentTableRows: data },
+    });
+    dispatch({
+      type: "SET_ORIGINAL_TABLE_ROWS",
+      payload: { originalTableRows: data },
+    });
+  }, [data]);
+
+  useEffect(() => {
     const colParams = searchParams.get("c");
     const limitParam = searchParams.get("l");
     const offsetParam = searchParams.get("o");
@@ -148,8 +160,8 @@ function MDataGrid<T>({
     let selectColumns: string[] = [];
     let generatedColumns: string[] = [];
     let relationColumns: string[] = [];
-    let mOffset: number = 0;
-    let mLimit: number = 50;
+    let mOffset = 0;
+    let mLimit = 50;
     const flattenedColIdsMap: Record<string, boolean> = {};
     if (colParams && limitParam && offsetParam) {
       const cols: { s: string[]; r: string[]; g: string[] } =
@@ -314,7 +326,7 @@ function MDataGrid<T>({
                   columns={actualTableColumns}
                 />
                 <ActionIcon onClick={() => setIsSettingsOpen(!isSettingsOpen)}>
-                  <Settings />
+                  <IconSettings />
                 </ActionIcon>
               </Group>
             </Group>

@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 import { RowData } from "@tanstack/react-table";
 import React from "react";
-import { Search } from "tabler-icons-react";
+import { IconSearch } from "@tabler/icons-react";
 import { ColDef } from "./datagrid.interface";
 
 type Props<T extends RowData> = {
@@ -40,7 +40,7 @@ export function LoadingTable<T extends RowData>({
           </Group>
           <Group position="left">
             <TextInput
-              icon={<Search size={16} />}
+              icon={<IconSearch size={16} />}
               placeholder="Search all columns"
               readOnly
             />

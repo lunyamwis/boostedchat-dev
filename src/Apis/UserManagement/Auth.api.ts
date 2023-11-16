@@ -42,15 +42,9 @@ export const AuthAPI = {
       .post("/auth/twitter/connect/")
       .then(handleRestResponse)
       .catch(handleRestError),
-  register: (
-    data: RegisterParams
-  ): Promise<{
-    access_token: string;
-    refresh_token: string;
-    id_token: string;
-  }> =>
+  register: (data: RegisterParams) =>
     axiosInstance
-      .post("/register", data)
+      .post("/account-request/create/", data)
       .then(handleRestResponse)
       .catch(handleRestError),
   refresh: (

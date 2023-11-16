@@ -2,6 +2,8 @@ import { ColumnDefResolved } from "@tanstack/react-table";
 
 export interface IDGProvider {
   dateRangeType: TDataGridDateRangeTypes;
+  originalTableRows: any;
+  currentTableRows: any;
   visibleColumns: IVisibleColumns;
   status: string | null;
   startDate: string | null;
@@ -38,31 +40,31 @@ export type TColumnTypeKey =
 
 export type TDataGridActions =
   | {
-    type: "ADD_VISIBLE_COLUMN";
-    payload: {
-      columnType: TColumnType;
-      columnId: string;
-    };
-  }
+      type: "ADD_VISIBLE_COLUMN";
+      payload: {
+        columnType: TColumnType;
+        columnId: string;
+      };
+    }
   | {
-    type: "REMOVE_VISIBLE_COLUMN";
-    payload: {
-      columnType: TColumnType;
-      columnId: string;
-    };
-  }
+      type: "REMOVE_VISIBLE_COLUMN";
+      payload: {
+        columnType: TColumnType;
+        columnId: string;
+      };
+    }
   | { type: "SET_VISIBLE_COLUMNS"; payload: { columns: IVisibleColumns } }
   | { type: "STATUS_CHANGE"; payload: { status: string } }
   | { type: "START_DATE_CHANGE"; payload: { startDate: string } }
   | { type: "END_DATE_CHANGE"; payload: { endDate: string } }
   | {
-    type: "ADD_FILTER";
-    payload: { columnType: TColumnType; filter: IDGFilter };
-  }
+      type: "ADD_FILTER";
+      payload: { columnType: TColumnType; filter: IDGFilter };
+    }
   | {
-    type: "REMOVE_FILTER";
-    payload: { columnType: TColumnType; columnId: string };
-  }
+      type: "REMOVE_FILTER";
+      payload: { columnType: TColumnType; columnId: string };
+    }
   | { type: "SET_FILTERS"; payload: { filters: IFilteredColumns } }
   | { type: "SEARCH_CHANGE"; payload: { val: string } }
   | { type: "REPORT_MODE_CHANGE"; payload: boolean }
@@ -71,19 +73,20 @@ export type TDataGridActions =
   | { type: "ADD_SORT"; payload: { sort: IDGSort } }
   | { type: "SET_OFFSET_LIMIT"; payload: { pageIndex: number; limit: number } }
   | { type: "SET_TABLE_COLS"; payload: { tableColumns: ColDef<any>[] } }
+  | { type: "SET_CURRENT_TABLE_ROWS"; payload: { currentTableRows: any[] } }
+  | { type: "SET_ORIGINAL_TABLE_ROWS"; payload: { originalTableRows: any[] } }
   | { type: "SET_STATUS"; payload: { status: string | null | "All" } }
   | {
-    type: "SET_DATE_RANGE";
-    payload: {
-      dateRangeType: TDataGridDateRangeTypes;
-      startDate: null | Date | "All";
-      endDate: Date | null | "All";
+      type: "SET_DATE_RANGE";
+      payload: {
+        dateRangeType: TDataGridDateRangeTypes;
+        startDate: null | Date | "All";
+        endDate: Date | null | "All";
+      };
     };
-  };
 
-export type ColDef<T> =
-  & ColumnDefResolved<T>
-  & (SingleSelectColDef | PrimitiveColDef);
+export type ColDef<T> = ColumnDefResolved<T> &
+  (SingleSelectColDef | PrimitiveColDef);
 export type TValueOptions = { value: string | boolean | number; label: string };
 
 type SingleSelectColDef = {

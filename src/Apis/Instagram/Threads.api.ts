@@ -7,6 +7,7 @@ import {
   GetDirectMessage,
   GetThread,
   GetThreadMessage,
+  SendDirectMessageManually,
 } from "../../Interfaces/Instagram/Threads/thread.interface";
 import {
   AddComment,
@@ -49,9 +50,9 @@ export const useThreadsApi = () => {
         .delete(`/${threadId}/delete-all-thread-messages`)
         .then(handleRestResponse)
         .catch(handleRestError),
-    sendDirectMessage: (params: AddComment) =>
+    sendDirectMessage: (params: SendDirectMessageManually) =>
       axiosInstance
-        .post(`/${params.id}/send-message/`, params.data)
+        .post(`/${params.id}/send-message-manually/`, params.data)
         .then(handleRestResponse)
         .catch(handleRestError),
     generateResponse: (

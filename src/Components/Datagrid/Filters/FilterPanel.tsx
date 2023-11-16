@@ -1,6 +1,6 @@
 import { Button, Group, Stack } from "@mantine/core";
 import React from "react";
-import { Plus } from "tabler-icons-react";
+import { IconPlus } from "@tabler/icons-react";
 import { ColumnFilter } from ".";
 import { ColDef, IDGFilter } from "../datagrid.interface";
 
@@ -31,7 +31,7 @@ export function FilterPanel({ filteredVisibleColumns }: Props) {
       )}
       <Group position="left">
         <Button
-          leftIcon={<Plus />}
+          leftIcon={<IconPlus />}
           disabled={isCreating}
           onClick={() => setIsCreating(true)}
           variant="subtle"

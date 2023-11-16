@@ -1,13 +1,17 @@
 import React from "react";
 import { ColDef } from "../../../Components/Datagrid/datagrid.interface";
-import { GetAccount } from "../../../Interfaces/Instagram/account.interface";
+import {
+  AccountStatus,
+  GetAccount,
+} from "../../../Interfaces/Instagram/account.interface";
 import { Row } from "@tanstack/react-table";
 import { ActionIcon, Group, Loader, Text, Tooltip } from "@mantine/core";
-import { Trash, Users } from "tabler-icons-react";
+import { IconPencil, IconX } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { DataGrid } from "../../../Components/Datagrid";
 import { useGetAccounts, useResetAccount } from "./Hooks/accounts.hook";
 import { openConfirmModal } from "@mantine/modals";
+import { Badge } from "../../../Components/MantineWrappers/Badge";
 
 export function Accounts() {
   const navigate = useNavigate();
@@ -17,14 +21,15 @@ export function Accounts() {
   const ActionColumn = React.useCallback(
     (props: { row: Row<GetAccount> }) => (
       <Group>
-        <Tooltip label="Extract Followers">
+        <Tooltip label="View Details">
           <ActionIcon
             color="brand"
+            variant="light"
             onClick={() => {
-              navigate(`/accounts/${props.row.original.id}/followers`);
+              navigate(`${props.row.original.id}`);
             }}
           >
-            <Users size={17} strokeWidth={1.2} />
+            <IconPencil size={17} strokeWidth={1.4} />
           </ActionIcon>
         </Tooltip>
         {resetAccount.isLoading ? (
@@ -47,7 +52,7 @@ export function Accounts() {
                 });
               }}
             >
-              <Trash size={17} strokeWidth={1.4} />
+              <IconX size={17} strokeWidth={1.4} />
             </ActionIcon>
           </Tooltip>
         )}
@@ -59,28 +64,85 @@ export function Accounts() {
   const columns: ColDef<GetAccount>[] = React.useMemo(
     () => [
       {
+        accessorFn: (row) => row.id,
+        id: "accountId",
+        header: "Id",
+        visible: false,
+      },
+      {
         accessorFn: (_, idx) => idx + 1,
         id: "accountNo",
         header: "#",
         visible: true,
       },
       {
+        accessorFn: (row) => row.full_name,
+        id: "full_name",
+        header: "Full name",
+        visible: true,
+        type: "string",
+      },
+      {
         accessorFn: (row) => row.igname,
-        id: "igName",
+        id: "igname",
         header: "Instagram Name",
         visible: true,
+        type: "string",
       },
       {
-        accessorFn: (row) => row.phone_number,
-        id: "phoneNumber",
-        header: "Phone number",
+        accessorFn: (row) => row.outsourced_data?.[0]?.results.category ?? "-",
+        id: "category",
+        header: "Category",
+        visible: true,
+        type: "string",
+      },
+      {
+        accessorFn: (row) => row.status,
+        id: "status",
+        header: "Status",
+        visible: true,
+        cell: (params) => {
+          const status = params.row.original.status;
+          switch (status) {
+            case null:
+              return <Badge color="orange" text="awaiting engagement" />;
+            case AccountStatus.onHold:
+              return <Badge color="yellow" text="on hold" />;
+            case AccountStatus.sentCompliment:
+              return <Badge color="brand2" text="engaging" />;
+            case AccountStatus.sentFirstQuestion:
+              return <Badge color="teal" text="Sent Question" />;
+            default:
+              return <Badge color="yellow" text={status} />;
+          }
+        },
+      },
+      {
+        accessorFn: (row) => (row.assigned_to === "Robot" ? "Bot" : "Human"),
+        id: "robot",
+        header: "Assigned to",
         visible: true,
       },
       {
-        accessorFn: (row) => row.email,
-        id: "emailAddress",
-        header: "Email Address",
-        visible: true,
+        accessorFn: (row) => row.outsourced_data?.[0]?.results.media_count,
+        id: "media_count",
+        header: "Posts",
+        visible: false,
+        type: "number",
+      },
+      {
+        accessorFn: (row) => row.outsourced_data?.[0]?.results.follower_count,
+        id: "followers",
+        header: "Followers",
+        visible: false,
+        type: "number",
+      },
+      {
+        accessorFn: (row) => row.outsourced_data?.[0]?.results.following_count,
+        id: "following",
+        header: "Following",
+        visible: false,
+        type: "number",
       },
       {
         id: "expander",
@@ -96,7 +158,7 @@ export function Accounts() {
     <DataGrid
       loading={accountsQR.isLoading}
       tableName="Accounts"
-      data={accountsQR.data?.accounts ?? []}
+      data={accountsQR.data ?? []}
       columns={columns}
     />
   );

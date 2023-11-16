@@ -5,7 +5,7 @@ import {
   Tooltip,
   useMantineTheme,
 } from "@mantine/core";
-import { Plus } from "tabler-icons-react";
+import { IconPlus } from "@tabler/icons-react";
 
 type Props = {
   tooltipLabel: string;
@@ -18,7 +18,7 @@ export function Affix({
   tooltipLabel,
   onClickAction,
   id,
-  icon = <Plus size={18} />,
+  icon = <IconPlus size={18} />,
 }: Props) {
   const theme = useMantineTheme();
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { AlertTriangle, Check, X } from "tabler-icons-react";
+import { IconAlertTriangle, IconCheck, IconX } from "@tabler/icons-react";
 import {
   Alert,
   Button,
@@ -71,7 +71,7 @@ export function AddSalesRepModal({ isOpened, setIsOpened, queryKey }: Props) {
         onSuccess: () => {
           showNotification({
             color: "teal",
-            icon: <Check />,
+            icon: <IconCheck />,
             autoClose: 15000,
             title: "Success",
             message:
@@ -88,7 +88,7 @@ export function AddSalesRepModal({ isOpened, setIsOpened, queryKey }: Props) {
           setShowAlert(true);
           setAlertInfo({
             color: "red",
-            icon: <X />,
+            icon: <IconX />,
             title: "Error",
             message: msg,
           });
@@ -119,7 +119,7 @@ export function AddSalesRepModal({ isOpened, setIsOpened, queryKey }: Props) {
           }}
         >
           <Alert
-            icon={<AlertTriangle />}
+            icon={<IconAlertTriangle />}
             color="orange"
             title={alertInfo.title}
           >

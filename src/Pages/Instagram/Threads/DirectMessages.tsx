@@ -19,19 +19,30 @@ import { ChatItem } from "../MediaComments/ChatItem";
 import { DateHolder } from "../MediaComments/Comments";
 import { MessageBox } from "./MessageBox";
 import { ThreadDetails } from ".";
-import { DotsVertical } from "tabler-icons-react";
+import { IconDotsVertical } from "@tabler/icons-react";
 import { openConfirmModal } from "@mantine/modals";
+import { AssignedToSwitch } from "./AssignedToSwitch";
+import { useGetAccount } from "../Account/Hooks/accounts.hook";
+import { LogItem } from "./LogItem";
 
 type Props = {
   threadDetails: ThreadDetails;
   avatarColor: string;
 };
 
-type FormattedThreadsBody = {
-  text: string;
-  username: string;
-  date: string;
-};
+type FormattedThreadsBody =
+  | {
+      type: "message";
+      text: string;
+      username: string;
+      date: string;
+    }
+  | {
+      type: "log";
+      change: string;
+      username: string;
+      date: string;
+    };
 
 type FormattedThreads = {
   [key: string]: FormattedThreadsBody[];
@@ -39,6 +50,8 @@ type FormattedThreads = {
 export function DirectMessages({ threadDetails, avatarColor }: Props) {
   const [formattedThreads, setFormattedThreads] =
     React.useState<FormattedThreads | null>(null);
+
+  const [menuOpened, setMenuOpened] = React.useState(false);
 
   const viewport = React.useRef<HTMLDivElement>(null);
 
@@ -49,9 +62,16 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
     });
 
   const messagesQR = useGetThreadMessages(threadDetails.threadId);
+  const accountQR = useGetAccount(threadDetails.account_id);
+  /*
+  const statusChangeLogsQR = useGetAccountStatusAuditLogs(
+    threadDetails.account_id
+  );
+  */
   const clearThread = useClearThread();
 
   const handleClearChat = () => {
+    setMenuOpened(false);
     openConfirmModal({
       title: "Alert",
       children: (
@@ -66,20 +86,112 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
   };
 
   React.useEffect(() => {
-    if (messagesQR.data == null) {
+    if (messagesQR.data == null /* || statusChangeLogsQR.data == null*/) {
       return;
     }
     const mFormattedThreads: FormattedThreads = {};
 
+    // let logIndex = 0;
     for (let i = 0; i < messagesQR.data.length; i++) {
       const currThread = messagesQR.data[i];
       const commentDate = formatChatDate(currThread.sent_on, true, true);
       const formattedThreadBody: FormattedThreadsBody = {
+        type: "message",
         username:
           currThread.sent_by === "Client" ? threadDetails.username : "Me",
         text: currThread.content,
         date: currThread.sent_on,
       };
+      /*
+      if (
+        i < messagesQR.data.length - 1 &&
+        logIndex < statusChangeLogsQR.data.length
+      ) {
+        const nextThread = messagesQR.data[i + 1];
+        const currLog = statusChangeLogsQR.data[logIndex];
+        if (
+          isAfter(parseISO(currLog.timestamp), parseISO(currThread.sent_on)) &&
+          isBefore(parseISO(currLog.timestamp), parseISO(nextThread.sent_on))
+        ) {
+          const exisitingLogDate = formatChatDate(
+            currLog.timestamp,
+            true,
+            true
+          );
+          for (let q = logIndex; q < statusChangeLogsQR.data.length; q++) {
+            const newCurrLog = statusChangeLogsQR.data[q];
+            if (
+              isBefore(
+                parseISO(newCurrLog.timestamp),
+                parseISO(nextThread.sent_on)
+              )
+            ) {
+              const mLog = {
+                type: "log",
+
+                change: newCurrLog.changes,
+                username:
+                  newCurrLog.actor === " "
+                    ? newCurrLog.actor_email
+                    : newCurrLog.actor,
+                date: newCurrLog.timestamp,
+              } as FormattedThreadsBody;
+              if (mFormattedThreads[exisitingLogDate]) {
+                mFormattedThreads[exisitingLogDate].push(mLog);
+              } else {
+                mFormattedThreads[exisitingLogDate] = [mLog];
+              }
+              mFormattedThreads[commentDate].push();
+              logIndex = logIndex + 1;
+            } else {
+              break;
+            }
+          }
+        }
+      }
+      if (mFormattedThreads[commentDate]) {
+        mFormattedThreads[commentDate].push(formattedThreadBody);
+      } else {
+        mFormattedThreads[commentDate] = [formattedThreadBody];
+      }
+
+      if (
+        i >= messagesQR.data.length - 1 &&
+        logIndex !== statusChangeLogsQR.data.length - 1
+      ) {
+        for (let k = logIndex; k < statusChangeLogsQR.data.length; k++) {
+          const mLogDate = formatChatDate(
+            statusChangeLogsQR.data[k].timestamp,
+            true,
+            true
+          );
+
+          if (mFormattedThreads[mLogDate]) {
+            mFormattedThreads[mLogDate].push({
+              type: "log",
+              change: statusChangeLogsQR.data[k].changes,
+              username:
+                statusChangeLogsQR.data[k].actor === " "
+                  ? statusChangeLogsQR.data[k].actor_email
+                  : statusChangeLogsQR.data[k].actor,
+              date: statusChangeLogsQR.data[k].timestamp,
+            });
+          } else {
+            mFormattedThreads[mLogDate] = [
+              {
+                type: "log",
+                change: statusChangeLogsQR.data[k].changes,
+                username:
+                  statusChangeLogsQR.data[k].actor === " "
+                    ? statusChangeLogsQR.data[k].actor_email
+                    : statusChangeLogsQR.data[k].actor,
+                date: statusChangeLogsQR.data[k].timestamp,
+              } as FormattedThreadsBody,
+            ];
+          }
+        }
+      }
+      */
       if (mFormattedThreads[commentDate]) {
         mFormattedThreads[commentDate].push(formattedThreadBody);
       } else {
@@ -110,16 +222,36 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
           </Avatar>
           <Stack spacing={1}>
             <Text>{threadDetails.username}</Text>
+            <Text fz={13} color="dimmed">
+              Assigned to{" "}
+              <Text component="span" color="dimmed">
+                {accountQR.data?.assigned_to === "Robot" ? "Bot" : "me"}
+              </Text>
+            </Text>
           </Stack>
         </Group>
-        <Menu position="bottom-end" shadow="md" width={200}>
+        <Menu
+          position="bottom-end"
+          shadow="md"
+          opened={menuOpened}
+          onChange={setMenuOpened}
+          width={200}
+          closeOnItemClick={false}
+        >
           <Menu.Target>
             <ActionIcon>
-              <DotsVertical />
+              <IconDotsVertical />
             </ActionIcon>
           </Menu.Target>
 
           <Menu.Dropdown>
+            <Menu.Item>
+              <AssignedToSwitch
+                setMenuOpened={setMenuOpened}
+                accountId={threadDetails.account_id}
+                assignedTo={accountQR.data?.assigned_to ?? "Robot"}
+              />
+            </Menu.Item>
             <Menu.Item onClick={handleClearChat}>Clear Chat</Menu.Item>
           </Menu.Dropdown>
         </Menu>
@@ -151,36 +283,58 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
                 <Stack key={threadDate}>
                   <DateHolder isoDate={threadDate} />
                   {formattedThreads[threadDate].map((formattedThreadBody) => (
-                    <Group
-                      key={formattedThreadBody.date}
-                      position={
-                        formattedThreadBody.username === "Me" ? "right" : "left"
-                      }
-                    >
-                      <Box
-                        sx={{
-                          width: "60%",
-                        }}
-                      >
-                        <ChatItem
-                          avatarColor={avatarColor}
-                          profilePicture={null}
-                          content={formattedThreadBody.text}
-                          userInitials={formattedThreadBody.username.charAt(0)}
-                          userNames={formattedThreadBody.username}
-                          date={format(
-                            parseISO(formattedThreadBody.date),
-                            EDateFormats.time
-                          )}
+                    <>
+                      {formattedThreadBody.type === "message" ? (
+                        <Group
+                          key={formattedThreadBody.date}
+                          position={
+                            formattedThreadBody.username === "Me"
+                              ? "right"
+                              : "left"
+                          }
+                        >
+                          <Group
+                            position={
+                              formattedThreadBody.username === "Me"
+                                ? "right"
+                                : "left"
+                            }
+                            sx={{
+                              width: "60%",
+                            }}
+                          >
+                            <ChatItem
+                              avatarColor={avatarColor}
+                              profilePicture={null}
+                              content={formattedThreadBody.text}
+                              userInitials={formattedThreadBody.username.charAt(
+                                0
+                              )}
+                              userNames={formattedThreadBody.username}
+                              date={format(
+                                parseISO(formattedThreadBody.date),
+                                EDateFormats.time
+                              )}
+                            />
+                          </Group>
+                        </Group>
+                      ) : (
+                        <LogItem
+                          date={formattedThreadBody.date}
+                          actor={formattedThreadBody.username}
+                          action={formattedThreadBody.change}
                         />
-                      </Box>
-                    </Group>
+                      )}
+                    </>
                   ))}
                 </Stack>
               ))}
             </Stack>
           </Box>
-          <MessageBox threadId={threadDetails.threadId} />
+          <MessageBox
+            assignedTo={accountQR.data?.assigned_to ?? "Robot"}
+            threadId={threadDetails.threadId}
+          />
         </>
       )}
     </Stack>
