@@ -24,6 +24,7 @@ export function AppHeader({ opened, setOpened }: Props) {
       // sx={{ width: `calc(100% - ${SIDENAV_WIDTH}px)` }}
       height={{ base: 50, md: HEADER_HEIGHT }}
       p="md"
+      bg="#ffffff"
       ml={smallScreen ? 0 : SIDENAV_WIDTH}
     >
       <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
@@ -37,7 +38,7 @@ export function AppHeader({ opened, setOpened }: Props) {
           />
         </MediaQuery>
         <Group position="apart" sx={{ width: "100%" }}>
-          <Text id="app-header">Boosted Chat</Text>
+          <Text id="app-header">Booksy</Text>
           <Group></Group>
         </Group>
       </div>

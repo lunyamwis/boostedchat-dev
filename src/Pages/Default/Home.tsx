@@ -1,6 +1,11 @@
 import React from "react";
-import { Threads } from "../Instagram/Threads";
+import { useNavigate } from "react-router-dom";
+import { pageData } from "..";
 
 export function Home() {
-  return <Threads />;
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    navigate(pageData.Threads.url ?? "/threads");
+  }, [navigate]);
+  return <></>;
 }

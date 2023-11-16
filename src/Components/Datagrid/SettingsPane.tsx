@@ -29,6 +29,7 @@ import {
 } from "./datagrid.constants";
 import { FilterPanel } from "./Filters/FilterPanel";
 import { DataGridDatePicker } from "./DateRange";
+import { rowMatchesFilter } from "./datagrid.util";
 
 interface Props {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -48,10 +49,11 @@ export function DataGridSettings({ setIsOpen, statusProps }: Props) {
     startDate: pStartDate,
     endDate: pEndDate,
     dateRangeType: pDateRangeType,
+    originalTableRows,
   } = useDataGrid();
   const [mTableColumns, setMTableColumns] = React.useState(pTableColumnsDef);
   const [statusValue, setStatusValue] = React.useState<string | null>(
-    pStatus ?? null,
+    pStatus ?? null
   );
 
   const handleColumnVisibilityCheck = (
@@ -59,7 +61,7 @@ export function DataGridSettings({ setIsOpen, statusProps }: Props) {
     colId: string,
     e: React.ChangeEvent<HTMLInputElement>,
     isGenerated: boolean | undefined,
-    isRelation: boolean | undefined,
+    isRelation: boolean | undefined
   ) => {
     let colType: TColumnType = "select";
     if (isGenerated) {
@@ -86,6 +88,51 @@ export function DataGridSettings({ setIsOpen, statusProps }: Props) {
   };
 
   const handleApplySettings = () => {
+    const appliedFilters = Object.values(pFilters).flat() as IDGFilter[];
+
+    const rows = [...originalTableRows];
+    const filteredRows = [];
+
+    for (let i = 0; i < rows.length; i++) {
+      const currRow = rows[i];
+      let matchesCriteria = false;
+      for (let p = 0; p < appliedFilters.length; p++) {
+        const currCol = mTableColumns.find(
+          (col) => col.id === appliedFilters[p].columnId
+        );
+        if (currCol?.accessorFn == null) {
+          continue;
+        }
+        const rowValueToCheck = currCol.accessorFn(currRow, i);
+        console.log(rowValueToCheck);
+        if (rowValueToCheck == null) {
+          continue;
+        }
+        if (
+          rowMatchesFilter(
+            appliedFilters[p],
+            rowValueToCheck as string | number
+          )
+        ) {
+          matchesCriteria = true;
+        } else {
+          matchesCriteria = false;
+          break;
+        }
+      }
+      if (matchesCriteria === true) {
+        filteredRows.push(currRow);
+      }
+    }
+
+    dispatch({
+      type: "SET_CURRENT_TABLE_ROWS",
+      payload: {
+        currentTableRows:
+          appliedFilters.length === 0 ? originalTableRows : filteredRows,
+      },
+    });
+
     dispatch({
       type: "SET_TABLE_COLS",
       payload: { tableColumns: mTableColumns },
@@ -121,7 +168,7 @@ export function DataGridSettings({ setIsOpen, statusProps }: Props) {
 
   const filteredVisibleColumns = React.useMemo(() => {
     const flattenedFilteredColumns = pFilters.generatedColumns.concat(
-      pFilters.selectColumns.concat(pFilters.relationColumns),
+      pFilters.selectColumns.concat(pFilters.relationColumns)
     );
 
     const colIdMap: {
@@ -142,9 +189,8 @@ export function DataGridSettings({ setIsOpen, statusProps }: Props) {
         const foundFilteredCol = colIdMap[tableCol.id];
         mFilteredColumns.push(Object.assign(tableCol, foundFilteredCol));
       } else {
-        const colLabel = typeof tableCol.header === "string"
-          ? tableCol.header
-          : tableCol.id;
+        const colLabel =
+          typeof tableCol.header === "string" ? tableCol.header : tableCol.id;
         const temp = { label: colLabel, value: tableCol.id };
         mVisibleTableColumns.push(temp);
       }
@@ -164,7 +210,7 @@ export function DataGridSettings({ setIsOpen, statusProps }: Props) {
   const statusColumnDef = React.useMemo(() => {
     if (statusProps == null) return null;
     const mStatusCol = pTableColumnsDef.find(
-      (col) => col.id === statusProps.columnId,
+      (col) => col.id === statusProps.columnId
     );
     if (mStatusCol == null) {
       return null;
@@ -179,8 +225,8 @@ export function DataGridSettings({ setIsOpen, statusProps }: Props) {
         borderRadius: "4px",
         height: "100%",
         border: "1px solid #dee2e6",
-        maxHeight: DATAGRID_HEIGHT + DATAGRID_FOOTER_HEIGHT +
-          DATAGRID_HEADER_HEIGHT,
+        maxHeight:
+          DATAGRID_HEIGHT + DATAGRID_FOOTER_HEIGHT + DATAGRID_HEADER_HEIGHT,
       }}
     >
       <Stack sx={{ height: "100%", justifyContent: "space-between" }}>
@@ -201,8 +247,7 @@ export function DataGridSettings({ setIsOpen, statusProps }: Props) {
                 <DataGridDatePicker />
               </Accordion.Panel>
             </Accordion.Item>
-            {statusColumnDef &&
-              statusColumnDef.type === "singleSelect" && (
+            {statusColumnDef && statusColumnDef.type === "singleSelect" && (
               <Accordion.Item value="status">
                 <Accordion.Control>Status</Accordion.Control>
                 <Accordion.Panel>
@@ -249,9 +294,9 @@ export function DataGridSettings({ setIsOpen, statusProps }: Props) {
                       {mTableColumns.map((col, idx) => (
                         <Checkbox
                           key={Math.random().toString()}
-                          label={typeof col.header === "string"
-                            ? col.header
-                            : col.id}
+                          label={
+                            typeof col.header === "string" ? col.header : col.id
+                          }
                           value={col.id}
                           checked={col.visible}
                           onChange={(e) =>
@@ -260,8 +305,9 @@ export function DataGridSettings({ setIsOpen, statusProps }: Props) {
                               col.id as string,
                               e,
                               col.isGenerated,
-                              col.isRelation,
-                            )}
+                              col.isRelation
+                            )
+                          }
                         />
                       ))}
                     </Stack>
@@ -275,15 +321,13 @@ export function DataGridSettings({ setIsOpen, statusProps }: Props) {
                 <FilterPanel filteredVisibleColumns={filteredVisibleColumns} />
               </Accordion.Panel>
             </Accordion.Item>
-            {
-              /*            <Accordion.Item value="sort">
+            {/*            <Accordion.Item value="sort">
               <Accordion.Control>Sort</Accordion.Control>
               <Accordion.Panel>
                 <DataGridDatePicker />
               </Accordion.Panel>
             </Accordion.Item>
-            */
-            }
+            */}
           </Accordion>
         </Box>
         <Box>

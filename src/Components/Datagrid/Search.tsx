@@ -1,6 +1,6 @@
 import { TextInput, TextInputProps } from "@mantine/core";
 import React from "react";
-import { Search } from "tabler-icons-react";
+import { IconSearch } from "@tabler/icons-react";
 
 type Props = {
   value: string | number;
@@ -36,7 +36,7 @@ export function DataGridSearch({
       {...props}
       value={value}
       onChange={handleInputChange}
-      icon={<Search size={16} />}
+      icon={<IconSearch size={16} />}
     />
   );
 }

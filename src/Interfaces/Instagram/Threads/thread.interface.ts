@@ -3,14 +3,13 @@ import { GetAccount } from "../account.interface";
 export interface Thread {
   id: string;
   account: string | GetAccount;
-  replied: boolean;
-  replied_at: string | null;
   thread_id: string;
-  username: string;
 }
 
 export interface GetThread extends Thread {
-  acount: string;
+  account_id: string;
+  assigned_to: "Human" | "Robot";
+  username: string;
   //
 }
 
@@ -42,4 +41,19 @@ export interface GeneratedResponse {
   generated_comment: string | { error: string };
   text: string;
   success: boolean;
+}
+
+export interface SendDirectMessageManually {
+  id: string;
+  data: {
+    assigned_to: "Robot" | "Human";
+    message: string;
+  };
+}
+
+export interface AssignOperator {
+  accountId: string;
+  data: {
+    assigned_to: "Robot" | "Human";
+  };
 }

@@ -5,7 +5,7 @@ import {
   MonthPickerInput,
   YearPickerInput,
 } from "@mantine/dates";
-import { Calendar } from "tabler-icons-react";
+import { IconCalendar } from "@tabler/icons-react";
 import {
   addDays,
   addMonths,
@@ -22,13 +22,12 @@ export function DataGridDatePicker() {
   const { dispatch, endDate, startDate, dateRangeType } = useDataGrid();
   const today = new Date();
 
-  const [dateType, setDateType] = React.useState<TDataGridDateRangeTypes>(
-    dateRangeType,
-  );
+  const [dateType, setDateType] =
+    React.useState<TDataGridDateRangeTypes>(dateRangeType);
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
     startDate
       ? parse(startDate, EDGDateFormats.dgDateFormat, new Date())
-      : new Date(),
+      : new Date()
   );
   const [selectedDateRange, setSelectedDateRange] = React.useState<
     [Date | null, Date | null]
@@ -79,74 +78,70 @@ export function DataGridDatePicker() {
           }
         }}
       />
-      {dateType !== "All Time" &&
-        (
-          <>
-            {dateType === "Year" && (
-              <YearPickerInput
-                sx={{ flex: 0.6 }}
-                icon={<Calendar size="1.1rem" strokeWidth={1.5} />}
-                label="Year"
-                placeholder="Choose"
-                value={selectedDate}
-                error={selectedDate == null}
-                onChange={(val) => {
-                  if (val == null) return;
-                  setSelectedDate(val);
-                  setDateRange([val, subMilliseconds(addYears(val, 1), 1)]);
-                }}
-              />
-            )}
-            {dateType === "Month" && (
-              <MonthPickerInput
-                sx={{ flex: 0.6 }}
-                label="Month"
-                placeholder="Choose"
-                icon={<Calendar size="1.1rem" strokeWidth={1.5} />}
-                value={selectedDate}
-                error={selectedDate == null}
-                onChange={(val) => {
-                  if (val == null) return;
-                  setSelectedDate(val);
-                  setDateRange([val, subMilliseconds(addMonths(val, 1), 1)]);
-                }}
-              />
-            )}
-            {dateType === "Date" && (
-              <DatePickerInput
-                sx={{ flex: 0.6 }}
-                label="Date"
-                placeholder="Choose"
-                error={selectedDate == null}
-                icon={<Calendar size="1.1rem" strokeWidth={1.5} />}
-                value={selectedDate}
-                onChange={(val) => {
-                  if (val == null) return;
-                  setSelectedDate(val);
-                  setDateRange([val, subMilliseconds(addDays(val, 1), 1)]);
-                }}
-              />
-            )}
-            {dateType === "Date Range" && (
-              <DatePickerInput
-                sx={{ flex: 0.6 }}
-                type="range"
-                error={dateRange[0] === null || dateRange[1] === null}
-                label="Date Range"
-                placeholder="Choose"
-                value={selectedDateRange}
-                onChange={(val) => {
-                  setSelectedDateRange(val);
-                  if (val[0] == null || val[1] == null) return;
-                  setDateRange([
-                    val[0],
-                    subMilliseconds(addDays(val[1], 1), 1),
-                  ]);
-                }}
-              />
-            )}
-          </>
-        )}
+      {dateType !== "All Time" && (
+        <>
+          {dateType === "Year" && (
+            <YearPickerInput
+              sx={{ flex: 0.6 }}
+              icon={<IconCalendar size="1.1rem" strokeWidth={1.5} />}
+              label="Year"
+              placeholder="Choose"
+              value={selectedDate}
+              error={selectedDate == null}
+              onChange={(val) => {
+                if (val == null) return;
+                setSelectedDate(val);
+                setDateRange([val, subMilliseconds(addYears(val, 1), 1)]);
+              }}
+            />
+          )}
+          {dateType === "Month" && (
+            <MonthPickerInput
+              sx={{ flex: 0.6 }}
+              label="Month"
+              placeholder="Choose"
+              icon={<IconCalendar size="1.1rem" strokeWidth={1.5} />}
+              value={selectedDate}
+              error={selectedDate == null}
+              onChange={(val) => {
+                if (val == null) return;
+                setSelectedDate(val);
+                setDateRange([val, subMilliseconds(addMonths(val, 1), 1)]);
+              }}
+            />
+          )}
+          {dateType === "Date" && (
+            <DatePickerInput
+              sx={{ flex: 0.6 }}
+              label="Date"
+              placeholder="Choose"
+              error={selectedDate == null}
+              icon={<IconCalendar size="1.1rem" strokeWidth={1.5} />}
+              value={selectedDate}
+              onChange={(val) => {
+                if (val == null) return;
+                setSelectedDate(val);
+                setDateRange([val, subMilliseconds(addDays(val, 1), 1)]);
+              }}
+            />
+          )}
+          {dateType === "Date Range" && (
+            <DatePickerInput
+              sx={{ flex: 0.6 }}
+              type="range"
+              error={dateRange[0] === null || dateRange[1] === null}
+              label="Date Range"
+              placeholder="Choose"
+              value={selectedDateRange}
+              onChange={(val) => {
+                setSelectedDateRange(val);
+                if (val[0] == null || val[1] == null) return;
+                setDateRange([val[0], subMilliseconds(addDays(val[1], 1), 1)]);
+              }}
+            />
+          )}
+        </>
+      )}
     </Group>
   );
 }

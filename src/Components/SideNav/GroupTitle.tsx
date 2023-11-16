@@ -1,6 +1,6 @@
 import { Group, Text, ThemeIcon, useMantineTheme } from "@mantine/core";
 import React from "react";
-import { ChevronRight } from "tabler-icons-react";
+import { IconChevronRight } from "@tabler/icons-react";
 import { EGroup, GroupIcons } from "../../Pages";
 
 type Props = {
@@ -48,7 +48,7 @@ export function GroupTitle({ title, isGroupOpened, setIsGroupOpened }: Props) {
           {title}
         </Text>
       </Group>
-      <ChevronRight
+      <IconChevronRight
         size={14}
         strokeWidth={2}
         color={isGroupOpened ? theme.colors.brand[6] : "#000000"}

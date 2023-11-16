@@ -4,13 +4,17 @@ import {
   RankingInfo,
   rankItem,
 } from "@tanstack/match-sorter-utils";
-import { TFilterOperatorAndType, IApiSearchParams } from "./datagrid.interface";
+import {
+  IApiSearchParams,
+  IDGFilter,
+  TFilterOperatorAndType,
+} from "./datagrid.interface";
 
 export const fuzzyFilter = <T>(
   row: Row<T>,
   columnId: string,
   value: any,
-  addMeta: (meta: FilterMeta) => void,
+  addMeta: (meta: FilterMeta) => void
 ) => {
   // Rank the item
   const itemRank = rankItem(row.getValue(columnId), value);
@@ -29,7 +33,7 @@ export const fuzzySort = <T>(rowA: Row<T>, rowB: Row<T>, columnId: string) => {
   if (rowA.columnFiltersMeta[columnId]) {
     dir = compareItems(
       rowA.columnFiltersMeta[columnId]! as RankingInfo,
-      rowB.columnFiltersMeta[columnId]! as RankingInfo,
+      rowB.columnFiltersMeta[columnId]! as RankingInfo
     );
   }
 
@@ -37,9 +41,7 @@ export const fuzzySort = <T>(rowA: Row<T>, rowB: Row<T>, columnId: string) => {
   return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir;
 };
 
-export const mapFilterOperator = (
-  payload: TFilterOperatorAndType,
-) => {
+export const mapFilterOperator = (payload: TFilterOperatorAndType) => {
   const stringOperators = {
     eq: "is",
     ilike: "contains",
@@ -91,4 +93,35 @@ export const formatApiSearchParams = (params: IApiSearchParams) => {
     dateStr = `&ds=${startDate}&de=${endDate}`;
   }
   return `?c=${columns}${filterStr}${statusStr}${dateStr}`;
+};
+
+export const rowMatchesFilter = (
+  filter: IDGFilter,
+  rowValue: string | number
+) => {
+  console.log(filter, rowValue);
+  if (filter.operator === "ilike") {
+    return (rowValue as string)
+      .toLowerCase()
+      .includes(filter.value.toLowerCase());
+  }
+  if (filter.operator === "eq") {
+    if (typeof rowValue === "string") {
+      return rowValue.toLowerCase() === filter.value.toLowerCase();
+    } else {
+      return rowValue === parseInt(filter.value);
+    }
+  }
+  if (filter.operator === "gt") {
+    return rowValue > filter.value;
+  }
+  if (filter.operator === "gte") {
+    return rowValue >= filter.value;
+  }
+  if (filter.operator === "lt") {
+    return rowValue < filter.value;
+  }
+  if (filter.operator === "lte") {
+    return rowValue <= filter.value;
+  }
 };

@@ -1,8 +1,12 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../../../../Constants/ApiConstants";
 import { useAccountsApi } from "../../../../Apis/Instagram/Accounts.api";
-import { CreateAccount } from "../../../../Interfaces/Instagram/account.interface";
+import {
+  CreateAccount,
+  UpdateAccountParams,
+} from "../../../../Interfaces/Instagram/account.interface";
 import { UploadCSV } from "../../../../Interfaces/Instagram/upload.interface";
+import { AssignOperator } from "../../../../Interfaces/Instagram/Threads/thread.interface";
 
 export const useAccountsWrapperApi = () => {
   const { create } = useAccountsApi();
@@ -10,6 +14,11 @@ export const useAccountsWrapperApi = () => {
   return {
     createAccount,
   };
+};
+
+export const useUpdateAccount = () => {
+  const { update } = useAccountsApi();
+  return useMutation((params: UpdateAccountParams) => update(params));
 };
 
 export const useBulkUploadAccounts = () => {
@@ -25,6 +34,17 @@ export const useResetAccount = () => {
 export const useGetAccounts = () => {
   const { getAll } = useAccountsApi();
   return useQuery([queryKeys.instagram.accounts.getAccounts], () => getAll());
+};
+
+export const useGetAccount = (accountId: string) => {
+  const { getOne } = useAccountsApi();
+  return useQuery(
+    [queryKeys.instagram.accounts.getById, accountId],
+    () => getOne(accountId),
+    {
+      enabled: accountId !== "",
+    }
+  );
 };
 
 export const useGetAccountFollower = (id: string) => {
@@ -47,12 +67,18 @@ export const useGetAccountFollower = (id: string) => {
   );
 };
 
+export const useAssignOperator = () => {
+  const { assignOperator } = useAccountsApi();
+  return useMutation((params: AssignOperator) => assignOperator(params));
+};
+
 export const useGetPotentialToBuy = (id: string) => {
   const { potentialToBuy } = useAccountsApi();
   return useQuery(
     [queryKeys.instagram.accounts.potentiaToBuy, id],
     () => potentialToBuy(id),
     {
+      enabled: false,
       retry: false,
     }
   );

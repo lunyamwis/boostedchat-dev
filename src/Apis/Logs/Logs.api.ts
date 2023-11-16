@@ -11,5 +11,10 @@ export const useAuditLogsApi = () => {
         .get("/entries")
         .then(handleRestResponse)
         .catch(handleRestError),
+    getStatusChangesLogs: (accountId: string): Promise<AuditLog[]> =>
+      axiosInstance
+        .get(`/filter-by-status/${accountId}/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
   };
 };

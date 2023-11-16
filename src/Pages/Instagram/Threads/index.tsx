@@ -1,5 +1,5 @@
 import React from "react";
-import { useCheckResponse, useGetThreads } from "./Hooks/thread.hooks";
+import { useGetThreads } from "./Hooks/thread.hooks";
 import { Box, Divider, Grid, ScrollArea, Stack, Text } from "@mantine/core";
 import { Loading } from "../../../Components/UIState/Loading";
 import { Error } from "../../../Components/UIState/Error";
@@ -10,9 +10,8 @@ import { DirectMessages } from "./DirectMessages";
 
 export type ThreadDetails = {
   threadId: string;
-  replied: boolean;
-  repliedAt: string | null;
   username: string;
+  account_id: string;
 };
 
 export function Threads() {
@@ -21,7 +20,6 @@ export function Threads() {
     React.useState<ThreadDetails | null>(null);
 
   const threadsQR = useGetThreads();
-  useCheckResponse();
 
   if (threadsQR.isLoading) {
     return <Loading />;
@@ -72,9 +70,8 @@ export function Threads() {
                   key={thread.id}
                   threadDetails={{
                     threadId: thread.id,
-                    replied: thread.replied,
-                    repliedAt: thread.replied_at,
                     username: thread.username,
+                    account_id: thread.account_id,
                   }}
                   setThreadDetails={setThreadDetails}
                   setAvatarColor={setCurrentAvatarColor}

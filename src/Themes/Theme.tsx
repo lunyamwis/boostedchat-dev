@@ -13,20 +13,21 @@ declare module "@mantine/core" {
 const theme: MantineThemeOverride = {
   colorScheme: "light",
   primaryColor: "brand",
-  fontFamily: "Nunito",
+  fontFamily: "Figtree",
   defaultRadius: "12px",
+  black: "#1d1d1d",
   colors: {
     brand: [
-      "#f6eeff",
-      "#e7daf7",
-      "#cab1ea",
-      "#ad86dd",
-      "#9562d2",
-      "#854bcb",
-      "#7d3ec9",
-      "#6b31b2",
-      "#5f2aa0",
-      "#52228d",
+      "#DEF4F6",
+      "#98E3E7",
+      "#58DAE2",
+      "#1DD9E5",
+      "#0CBDC7",
+      "#077980",
+      "#00A3AD",
+      "#0B595E",
+      "#0C4346",
+      "#0C3234",
     ],
     brand2: [
       "#E3FAFF",
@@ -45,7 +46,7 @@ const theme: MantineThemeOverride = {
     Button: {
       styles: {
         root: {
-          borderRadius: "32px",
+          borderRadius: "7px",
           textTransform: "capitalize",
           fontWeight: 500,
           letterSpacing: "0.3px",
@@ -58,7 +59,7 @@ const theme: MantineThemeOverride = {
     TextInput: {
       styles: {
         input: {
-          borderRadius: "12px",
+          borderRadius: "7px",
         },
         label: {
           fontWeight: 500,
@@ -70,7 +71,7 @@ const theme: MantineThemeOverride = {
     Select: {
       styles: {
         input: {
-          borderRadius: "12px",
+          borderRadius: "7px",
         },
         label: {
           fontWeight: 500,
@@ -82,7 +83,7 @@ const theme: MantineThemeOverride = {
     NumberInput: {
       styles: {
         input: {
-          borderRadius: "12px",
+          borderRadius: "7px",
         },
         label: {
           fontWeight: 500,
@@ -94,7 +95,7 @@ const theme: MantineThemeOverride = {
     PasswordInput: {
       styles: {
         input: {
-          borderRadius: "12px",
+          borderRadius: "7px",
         },
         label: {
           fontWeight: 500,

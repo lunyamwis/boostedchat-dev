@@ -8,7 +8,7 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
-import { Check, Trash, X } from "tabler-icons-react";
+import { IconCheck, IconTrash, IconX } from "@tabler/icons-react";
 import { format, parseISO } from "date-fns";
 import {
   ColDef,
@@ -39,15 +39,13 @@ type FormatFilterValue =
   | { type: "string" | "number" | "date" | "dateTime"; value: string }
   | { type: "boolean"; value: boolean }
   | {
-    type: "singleSelect";
-    value: string;
-    options: TValueOptions[] | string[];
-  }
+      type: "singleSelect";
+      value: string;
+      options: TValueOptions[] | string[];
+    }
   | { type: "actions"; value: null };
 
-const formatFilterValue = (
-  payload: FormatFilterValue,
-) => {
+const formatFilterValue = (payload: FormatFilterValue) => {
   if (payload.type === "string" || payload.type === "number") {
     return payload.value;
   }
@@ -61,7 +59,7 @@ const formatFilterValue = (
     return format(new Date(payload.value), EDGDateFormats.shortDateWithTime);
   }
   if (payload.type === "singleSelect") {
-    let mFilterLabel: string = "";
+    let mFilterLabel = "";
     for (let i = 0; i < payload.options.length; i += 1) {
       const opt: string | TValueOptions = payload.options[i];
       if (typeof opt === "string") {
@@ -80,7 +78,7 @@ const formatFilterValue = (
 
 const getColType = (
   isGenerated: boolean | undefined,
-  isRelation: boolean | undefined,
+  isRelation: boolean | undefined
 ): TColumnType => {
   let colType: TColumnType = "select";
   if (isGenerated) {
@@ -99,13 +97,25 @@ export function ColumnFilter({
 }: Props) {
   const { dispatch, tableColumns } = useDataGrid();
 
-  const [selectedColumnDef, setSelectedColumnDef] = useState<
-    null | ColDef<any>
-  >(null);
+  const [selectedColumnDef, setSelectedColumnDef] =
+    useState<null | ColDef<any>>(null);
   const [selectedColumnId, setSelectedColumnId] = useState<null | string>(null);
   const [filterOperator, setFilterOperator] = useState<TFilterOperator>("eq");
   const [filterValue, setFilterValue] = React.useState("");
   const [editMode, setEditMode] = React.useState(true);
+
+  const [readableFilterOperator, setReadableFilterOperator] =
+    React.useState("");
+
+  React.useEffect(() => {
+    console.log(filteredColumn);
+    setReadableFilterOperator(
+      mapFilterOperator({
+        type: filteredColumn?.type,
+        operator: filteredColumn?.operator,
+      } as TFilterOperatorAndType)
+    );
+  }, [filteredColumn?.operator, filteredColumn?.type]);
 
   const handleSetFilter = () => {
     if (filterValue === "") {
@@ -119,7 +129,7 @@ export function ColumnFilter({
     }
     const colType = getColType(
       selectedColumnDef?.isGenerated,
-      selectedColumnDef?.isRelation,
+      selectedColumnDef?.isRelation
     );
     dispatch({
       type: "ADD_FILTER",
@@ -140,7 +150,7 @@ export function ColumnFilter({
   const handleRemoveFilter = () => {
     const colType = getColType(
       selectedColumnDef?.isGenerated,
-      selectedColumnDef?.isRelation,
+      selectedColumnDef?.isRelation
     );
     if (setIsCreating) {
       setIsCreating(false);
@@ -161,133 +171,125 @@ export function ColumnFilter({
     setSelectedColumnDef(filteredColumn);
   }, []);
 
-  return editMode
-    ? (
-      <Group
-        sx={{
-          padding: "20px",
-          backgroundColor: "#f8f9fa",
-        }}
-      >
-        <Stack sx={{ flex: 0.9 }}>
-          <Select
-            label="Column"
-            searchable
-            data={visibleTableColumns}
-            value={selectedColumnId}
-            onChange={(val) => {
-              setSelectedColumnId(val);
-              const mColDef = tableColumns.find(
-                (visColDef) => visColDef.id === val,
-              );
-              setSelectedColumnDef(mColDef ?? null);
-            }}
-          />
-          {selectedColumnDef == null
-            ? (
-              <Group sx={{ flex: 0.89 }}>
-                <Select
-                  sx={{ flex: 0.4 }}
-                  label="Operator"
-                  disabled
-                  data={[]}
-                />
-                <TextInput sx={{ flex: 0.6 }} disabled label="Value" />
-              </Group>
-            )
-            : (
-              <Group sx={{ flex: 0.89 }}>
-                {(selectedColumnDef.type === "string" ||
-                  selectedColumnDef.type == null) && (
-                  <StringFilters
-                    filterValue={filterValue}
-                    setFilterValue={setFilterValue}
-                    filterOperator={filterOperator as TStringOperators | null}
-                    setFilterOperator={setFilterOperator as React.Dispatch<
-                      React.SetStateAction<TStringOperators | null>
-                    >}
-                  />
-                )}
-                {selectedColumnDef.type === "number" && (
-                  <NumberFilters
-                    filterValue={filterValue}
-                    setFilterValue={setFilterValue}
-                    filterOperator={filterOperator as TNumberOperators | null}
-                    setFilterOperator={setFilterOperator as React.Dispatch<
-                      React.SetStateAction<TNumberOperators | null>
-                    >}
-                  />
-                )}
-                {(selectedColumnDef.type === "date" ||
-                  selectedColumnDef.type === "dateTime") && (
-                  <DateFilters
-                    type={selectedColumnDef.type}
-                    filterValue={filterValue}
-                    setFilterValue={setFilterValue}
-                    filterOperator={filterOperator as TDateOperators}
-                    setFilterOperator={setFilterOperator as React.Dispatch<
-                      React.SetStateAction<TDateOperators | null>
-                    >}
-                  />
-                )}
-                {selectedColumnDef.type === "singleSelect" && (
-                  <SingleSelectFilters
-                    setFilterValue={setFilterValue}
-                    options={selectedColumnDef.valueOptions}
-                  />
-                )}
-              </Group>
+  return editMode ? (
+    <Group
+      sx={{
+        padding: "20px",
+        backgroundColor: "#f8f9fa",
+      }}
+    >
+      <Stack sx={{ flex: 0.9 }}>
+        <Select
+          label="Column"
+          searchable
+          data={visibleTableColumns}
+          value={selectedColumnId}
+          onChange={(val) => {
+            setSelectedColumnId(val);
+            const mColDef = tableColumns.find(
+              (visColDef) => visColDef.id === val
+            );
+            setSelectedColumnDef(mColDef ?? null);
+          }}
+        />
+        {selectedColumnDef == null ? (
+          <Group sx={{ flex: 0.89 }}>
+            <Select sx={{ flex: 0.4 }} label="Operator" disabled data={[]} />
+            <TextInput sx={{ flex: 0.6 }} disabled label="Value" />
+          </Group>
+        ) : (
+          <Group sx={{ flex: 0.89 }}>
+            {(selectedColumnDef.type === "string" ||
+              selectedColumnDef.type == null) && (
+              <StringFilters
+                filterValue={filterValue}
+                setFilterValue={setFilterValue}
+                filterOperator={filterOperator as TStringOperators | null}
+                setFilterOperator={
+                  setFilterOperator as React.Dispatch<
+                    React.SetStateAction<TStringOperators | null>
+                  >
+                }
+              />
             )}
-        </Stack>
-        <Group sx={{ flex: 0.1 }}>
-          <ActionIcon onClick={handleRemoveFilter} radius="xl" color="red">
-            <X />
-          </ActionIcon>
-          <ActionIcon onClick={handleSetFilter} radius="xl" color="teal">
-            <Check />
-          </ActionIcon>
-        </Group>
+            {selectedColumnDef.type === "number" && (
+              <NumberFilters
+                filterValue={filterValue}
+                setFilterValue={setFilterValue}
+                filterOperator={filterOperator as TNumberOperators | null}
+                setFilterOperator={
+                  setFilterOperator as React.Dispatch<
+                    React.SetStateAction<TNumberOperators | null>
+                  >
+                }
+              />
+            )}
+            {(selectedColumnDef.type === "date" ||
+              selectedColumnDef.type === "dateTime") && (
+              <DateFilters
+                type={selectedColumnDef.type}
+                filterValue={filterValue}
+                setFilterValue={setFilterValue}
+                filterOperator={filterOperator as TDateOperators}
+                setFilterOperator={
+                  setFilterOperator as React.Dispatch<
+                    React.SetStateAction<TDateOperators | null>
+                  >
+                }
+              />
+            )}
+            {selectedColumnDef.type === "singleSelect" && (
+              <SingleSelectFilters
+                setFilterValue={setFilterValue}
+                options={selectedColumnDef.valueOptions}
+              />
+            )}
+          </Group>
+        )}
+      </Stack>
+      <Group sx={{ flex: 0.1 }}>
+        <ActionIcon onClick={handleRemoveFilter} radius="xl" color="red">
+          <IconX />
+        </ActionIcon>
+        <ActionIcon onClick={handleSetFilter} radius="xl" color="teal">
+          <IconCheck />
+        </ActionIcon>
       </Group>
-    )
-    : (
-      <Stack>
-        <Group position="apart">
-          <Group sx={{ fontSize: 16 }} spacing={4}>
-            <Text>
-              {typeof filteredColumn?.header === "string"
-                ? filteredColumn?.header
-                : selectedColumnDef?.id}
-            </Text>
-            {filteredColumn?.type && filteredColumn?.operator &&
-              filteredColumn?.type !== "actions" &&
-              (
-                <Text color="dimmed">
-                  {mapFilterOperator({
-                    type: filteredColumn?.type,
-                    operator: filteredColumn?.operator,
-                  } as TFilterOperatorAndType)}
-                </Text>
-              )}
-            <Text fw={500}>
-              {filteredColumn?.type === "singleSelect"
-                ? formatFilterValue({
+    </Group>
+  ) : (
+    <Stack>
+      <Group position="apart">
+        <Group sx={{ fontSize: 16 }} spacing={4}>
+          <Text>
+            {typeof filteredColumn?.header === "string"
+              ? filteredColumn?.header
+              : selectedColumnDef?.id}
+          </Text>
+          {filteredColumn?.type &&
+            filteredColumn?.operator &&
+            filteredColumn?.type !== "actions" && (
+              <Text color="dimmed">{readableFilterOperator}</Text>
+            )}
+          <Text fw={500}>
+            {filteredColumn?.type === "singleSelect"
+              ? formatFilterValue({
                   type: "singleSelect",
                   value: filteredColumn?.value ?? "",
                   options: filteredColumn.valueOptions,
                 })
-                : formatFilterValue({
+              : formatFilterValue({
                   type: filteredColumn?.type ?? "string",
                   value: filteredColumn?.value ?? "",
                 } as FormatFilterValue)}
-            </Text>
-          </Group>
-          <Group>
-            <ActionIcon onClick={handleRemoveFilter} color="red" radius="xl">
-              <Trash strokeWidth={1.2} size={19} />
-            </ActionIcon>
-          </Group>
+          </Text>
         </Group>
-        <Divider />
-      </Stack>
-    );
+        <Group>
+          <ActionIcon onClick={handleRemoveFilter} color="red" radius="xl">
+            <IconTrash strokeWidth={1.2} size={19} />
+          </ActionIcon>
+        </Group>
+      </Group>
+      <Divider />
+    </Stack>
+  );
 }

@@ -1,7 +1,7 @@
-import { Alert, Collapse } from '@mantine/core';
-import React from 'react';
-import { AlertCircle } from 'tabler-icons-react';
-import { TAlertInfo } from '../../Hooks/useAlert';
+import { Alert, Collapse } from "@mantine/core";
+import React from "react";
+import { IconAlertCircle } from "@tabler/icons-react";
+import { TAlertInfo } from "../../Hooks/useAlert";
 
 type Props = {
   showAlert: boolean;
@@ -9,15 +9,11 @@ type Props = {
   onClose: () => void;
 };
 
-export function CollapsingAlert({
-  showAlert,
-  alertInfo,
-  onClose,
-}: Props) {
+export function CollapsingAlert({ showAlert, alertInfo, onClose }: Props) {
   return (
     <Collapse in={showAlert}>
       <Alert
-        icon={alertInfo.icon ?? <AlertCircle size={16} />}
+        icon={alertInfo.icon ?? <IconAlertCircle size={16} />}
         title={alertInfo.title}
         color={alertInfo.color}
         withCloseButton

@@ -20,7 +20,7 @@ import { ChatItem } from "./ChatItem";
 import { EDateFormats } from "../../../Interfaces/general.interface";
 import { MessageBox } from "./MessageBox";
 import { DEFAULT_IG_USER } from "../../../Constants/GeneralConstants";
-import { DotsVertical } from "tabler-icons-react";
+import { IconDotsVertical } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import {
   MediaType,
@@ -307,7 +307,7 @@ export function Comments({
         <Menu position="bottom-end" shadow="md" width={200}>
           <Menu.Target>
             <ActionIcon>
-              <DotsVertical />
+              <IconDotsVertical />
             </ActionIcon>
           </Menu.Target>
 

@@ -22,6 +22,8 @@ const dataGridDefaults: IDGProvider = {
   limit: "50",
   offset: "0",
   sort: [],
+  currentTableRows: [],
+  originalTableRows: [],
   tableColumns: [] as ColDef<any>[],
   dispatch: () => null,
 };
@@ -46,6 +48,8 @@ export function DataGridProvider({ children }: { children: React.ReactNode }) {
       offset: state.offset,
       sort: state.sort,
       tableColumns: state.tableColumns,
+      originalTableRows: state.originalTableRows,
+      currentTableRows: state.currentTableRows,
       dispatch,
     }),
     [
@@ -61,7 +65,9 @@ export function DataGridProvider({ children }: { children: React.ReactNode }) {
       state.startDate,
       state.status,
       state.tableColumns,
-    ],
+      state.originalTableRows,
+      state.currentTableRows,
+    ]
   );
   return (
     <DataGridContext.Provider value={values}>

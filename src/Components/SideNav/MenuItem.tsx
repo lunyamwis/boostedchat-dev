@@ -7,7 +7,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import React from "react";
-import { ChevronDown, Icon as IconType } from "tabler-icons-react";
+import { Icon as IconType, IconChevronDown } from "@tabler/icons-react";
 import { Link, useLocation } from "react-router-dom";
 import { ChildKeys, pageData, PrimaryPageData } from "../../Pages";
 import { useHover } from "@mantine/hooks";
@@ -25,12 +25,26 @@ type Level1Props = {
 };
 
 export function MenuItem({ title, Icon, url }: Props) {
+  const [isActive, setIsActive] = React.useState(false);
   const { pathname } = useLocation();
   const theme = useMantineTheme();
+
+  React.useEffect(() => {
+    setIsActive(false);
+    const currentSplitPath = pathname.split("/");
+    const menuSplitPath = url.split("/");
+
+    if (currentSplitPath.length > 1 && menuSplitPath.length > 1) {
+      if (currentSplitPath[2] === menuSplitPath[2]) {
+        setIsActive(true);
+      }
+    }
+  }, [pathname, url]);
+
   return (
     <NavLink
       key={title}
-      active={pathname === url}
+      active={isActive}
       label={title}
       color={theme.primaryColor}
       component={Link}
@@ -107,7 +121,7 @@ export function ParentMenuItem({ title, Icon, childrenKeys }: Level1Props) {
               {title}
             </Text>
           </Group>
-          <ChevronDown
+          <IconChevronDown
             size={14}
             strokeWidth={2}
             color={isExpanded || hovered ? theme.colors.brand[6] : "#000000"}
