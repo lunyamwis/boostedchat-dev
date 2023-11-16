@@ -6,30 +6,7 @@ services:
       context: .
     container_name: boosted-chat-client
     ports:
-      - "8080:8080"
+      - "80:80"
       - "443:443"
-    volumes:
-      - web-root:/usr/share/nginx/html
-      - ./nginx-conf:/etc/nginx/conf.d
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-      - ./dhparam:/etc/ssl/certs
     environment:
       - NODE_ENV=production
-
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    volumes:
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-      - web-root:/usr/share/nginx/html
-    depends_on:
-      - client
-    command: certonly --webroot --webroot-path=/usr/share/nginx/html --email tomek@boostedchat.com --agree-tos --no-eff-email --force-renewal -d elth.uk.boostedchat.com
-
-volumes:
-  certbot-etc:
-  certbot-var:
-  web-root:
-  dhparam:
