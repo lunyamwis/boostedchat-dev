@@ -4,8 +4,10 @@ import { useThreadsApi } from "../../../../Apis/Instagram/Threads.api";
 import {
   CreateThreadParams,
   GenerateResponseParams,
+  SendDirectMessageManually,
 } from "../../../../Interfaces/Instagram/Threads/thread.interface";
 import { AddComment } from "../../../../Interfaces/Instagram/photo.interface";
+import { useAuditLogsApi } from "../../../../Apis/Logs/Logs.api";
 
 export const useThreadsWrapperApi = () => {
   const { create } = useThreadsApi();
@@ -67,7 +69,9 @@ export const useCheckResponse = () => {
 
 export const useSendDirectMessage = () => {
   const { sendDirectMessage } = useThreadsApi();
-  return useMutation((params: AddComment) => sendDirectMessage(params));
+  return useMutation((params: SendDirectMessageManually) =>
+    sendDirectMessage(params)
+  );
 };
 
 export const useAddDM = () => {
@@ -89,4 +93,14 @@ export const useGenerateMessage = () => {
 export const useClearThread = () => {
   const { clearThread } = useThreadsApi();
   return useMutation((threadId: string) => clearThread(threadId));
+};
+
+export const useGetAccountStatusAuditLogs = (accountId: string) => {
+  const { getStatusChangesLogs } = useAuditLogsApi();
+
+  return useQuery(
+    [queryKeys.auditLogs.getAll],
+    () => getStatusChangesLogs(accountId),
+    {}
+  );
 };

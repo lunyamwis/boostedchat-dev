@@ -5,7 +5,7 @@ import { Button, TextInput } from "@mantine/core";
 import { ButtonRow } from "../../../Components/FormComponents/ButtonRow";
 import { useAccountsWrapperApi } from "./Hooks/accounts.hook";
 import { showNotification } from "@mantine/notifications";
-import { AlertTriangle, Check } from "tabler-icons-react";
+import { IconAlertTriangle, IconCheck } from "@tabler/icons-react";
 import { isValidEmail } from "../../../Utils/validator.util";
 import { apiErrorMessage } from "../../../Utils/api.util";
 import { axiosError } from "../../../Interfaces/general.interface";
@@ -13,6 +13,7 @@ import { axiosError } from "../../../Interfaces/general.interface";
 export function CreateAccount() {
   const { createAccount } = useAccountsWrapperApi();
   const [igName, setIgName] = React.useState("");
+  const [fullName, setFullName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [phoneNumber, setPhoneNumber] = React.useState("");
 
@@ -21,7 +22,7 @@ export function CreateAccount() {
       showNotification({
         color: "orange",
         message: "Please enter the Instagram name",
-        icon: <AlertTriangle />,
+        icon: <IconAlertTriangle />,
       });
       return;
     }
@@ -29,7 +30,7 @@ export function CreateAccount() {
       showNotification({
         color: "orange",
         message: "Please enter a valid email",
-        icon: <AlertTriangle />,
+        icon: <IconAlertTriangle />,
       });
       return;
     }
@@ -37,6 +38,7 @@ export function CreateAccount() {
     createAccount.mutate(
       {
         email,
+        full_name: fullName === "" ? null : fullName,
         igname: igName,
         phone_number: phoneNumber,
       },
@@ -45,18 +47,19 @@ export function CreateAccount() {
           showNotification({
             color: "teal",
             message: "Account created successfully",
-            icon: <Check />,
+            icon: <IconCheck />,
           });
           setIgName("");
           setEmail("");
           setPhoneNumber("");
+          setFullName("");
         },
         onError: (err) => {
           const errorMessage = apiErrorMessage(err as axiosError);
           showNotification({
             color: "red",
             message: errorMessage,
-            icon: <AlertTriangle />,
+            icon: <IconAlertTriangle />,
           });
         },
       }
@@ -70,6 +73,13 @@ export function CreateAccount() {
           required
           value={igName}
           onChange={(e) => setIgName(e.target.value)}
+        />
+      </InputRow>
+      <InputRow title="Full Name">
+        <TextInput
+          required
+          value={fullName}
+          onChange={(e) => setFullName(e.target.value)}
         />
       </InputRow>
       <InputRow title="Email">

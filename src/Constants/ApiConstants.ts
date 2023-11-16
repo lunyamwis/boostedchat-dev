@@ -1,10 +1,13 @@
 export const API_URL = import.meta.env.PROD
-  ? "https://api.boostedchat.com/api/v1"
+  ? "https://api.elth.uk.boostedchat.com/api/v1"
   : "http://localhost:8001/api/v1";
 
 export const queryKeys = {
   users: {
     getAll: "get-all-users",
+  },
+  accountRequests: {
+    getAll: "get-all-account-requests",
   },
   salesReps: {
     getAll: "get-all-sales-representatives",

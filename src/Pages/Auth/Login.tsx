@@ -133,12 +133,7 @@ export function Login() {
         >
           Forgot password?
         </Anchor>
-        <Button
-          variant="gradient"
-          gradient={{ from: "#5b51cf", to: "#dd3061", deg: 105 }}
-          type="submit"
-          loading={login.isLoading}
-        >
+        <Button type="submit" loading={login.isLoading}>
           Log in
         </Button>
         <Anchor

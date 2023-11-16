@@ -20,7 +20,7 @@ const getColType = (colType: TColumnType): TColumnTypeKey => {
 
 export const dataGridReducer: React.Reducer<IDGProvider, TDataGridActions> = (
   state,
-  action,
+  action
 ) => {
   switch (action.type) {
     case "ADD_VISIBLE_COLUMN":
@@ -46,6 +46,10 @@ export const dataGridReducer: React.Reducer<IDGProvider, TDataGridActions> = (
       return { ...state, visibleColumns: nColumns };
     case "SET_TABLE_COLS":
       return { ...state, tableColumns: action.payload.tableColumns };
+    case "SET_ORIGINAL_TABLE_ROWS":
+      return { ...state, originalTableRows: action.payload.originalTableRows };
+    case "SET_CURRENT_TABLE_ROWS":
+      return { ...state, currentTableRows: action.payload.currentTableRows };
     case "ADD_FILTER":
       const mFilters = { ...state.filters };
       const aFColType = getColType(action.payload.columnType);
@@ -58,7 +62,7 @@ export const dataGridReducer: React.Reducer<IDGProvider, TDataGridActions> = (
       const rFColType = getColType(action.payload.columnType);
       const rColFilters = [...rFilters[rFColType]];
       const rFColumnIndex = rColFilters.findIndex(
-        (colFilter) => colFilter.columnId === action.payload.columnId,
+        (colFilter) => colFilter.columnId === action.payload.columnId
       );
       if (rFColumnIndex === -1) {
         return { ...state };
@@ -82,7 +86,8 @@ export const dataGridReducer: React.Reducer<IDGProvider, TDataGridActions> = (
         return { ...state };
       }
       if (
-        action.payload.startDate === "All" || action.payload.endDate === "All"
+        action.payload.startDate === "All" ||
+        action.payload.endDate === "All"
       ) {
         return {
           ...state,
@@ -96,7 +101,7 @@ export const dataGridReducer: React.Reducer<IDGProvider, TDataGridActions> = (
         dateRangeType: action.payload.dateRangeType,
         startDate: format(
           action.payload.startDate,
-          EDGDateFormats.dgDateFormat,
+          EDGDateFormats.dgDateFormat
         ),
         endDate: format(action.payload.endDate, EDGDateFormats.dgDateFormat),
       };

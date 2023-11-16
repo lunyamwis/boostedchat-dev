@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { ArrowLeft } from "tabler-icons-react";
+import { IconArrowLeft } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { CollapsingAlert } from "../../Components/Widgets/CollapsingAlert";
 import { useAlert } from "../../Hooks/useAlert";
@@ -101,7 +101,7 @@ export function ForgotPassword() {
               onClick={() => navigate(`${authPageData.login.url}`)}
               color={theme.primaryColor}
             >
-              <ArrowLeft />
+              <IconArrowLeft />
             </ActionIcon>
           </Tooltip>
         </Group>

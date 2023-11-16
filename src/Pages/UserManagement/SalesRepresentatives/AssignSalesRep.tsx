@@ -2,7 +2,7 @@ import React from "react";
 import { useAssignSalseRep } from "../Hooks/salesRepresentatives.hook";
 import { Button, Group, Modal, Select, Stack } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
-import { Check } from "tabler-icons-react";
+import { IconCheck } from "@tabler/icons-react";
 import { apiErrorMessage } from "../../../Utils/api.util";
 import { axiosError } from "../../../Interfaces/general.interface";
 
@@ -40,7 +40,7 @@ function AssignSalesRepModal({ isOpen, setIsOpen }: Props) {
         showNotification({
           color: "teal",
           message: "Accounts assigned successfully.",
-          icon: <Check />,
+          icon: <IconCheck />,
         });
         setIsOpen(false);
       },

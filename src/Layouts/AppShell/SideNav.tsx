@@ -2,7 +2,6 @@ import {
   Avatar,
   Box,
   createStyles,
-  Image,
   Menu,
   Navbar,
   Overlay,
@@ -18,9 +17,10 @@ import React, { SetStateAction } from "react";
 import { SIDENAV_WIDTH } from "../../Constants/GeneralConstants";
 import { EGroup, GroupIcons, pageData, TPageData } from "../../Pages";
 import { MenuItem, ParentMenuItem } from "../../Components/SideNav/MenuItem";
-import { Settings } from "tabler-icons-react";
+import { IconSettings } from "@tabler/icons-react";
 import { useAuth } from "../../Context/AuthContext/AuthProvider";
-import Logo from "../../Assets/logo.png";
+import { useLocation } from "react-router-dom";
+import { LogoSmall } from "../../Assets/LogoSmall";
 
 type Props = {
   opened: boolean;
@@ -50,7 +50,7 @@ const useStyles = createStyles((theme) => ({
   aside: {
     flex: `0 0 ${rem(64)}`,
     backgroundColor:
-      theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+      theme.colorScheme === "dark" ? theme.colors.dark[7] : "#ffffff",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -62,7 +62,7 @@ const useStyles = createStyles((theme) => ({
   main: {
     flex: 1,
     backgroundColor:
-      theme.colorScheme === "dark" ? theme.colors.dark[6] : "white",
+      theme.colorScheme === "dark" ? theme.colors.dark[6] : "#ffffff",
   },
 
   mainLink: {
@@ -101,7 +101,7 @@ const useStyles = createStyles((theme) => ({
     fontFamily: `Greycliff CF, ${theme.fontFamily}`,
     marginBottom: theme.spacing.xl,
     backgroundColor:
-      theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+      theme.colorScheme === "dark" ? theme.colors.dark[7] : "#ffffff",
     padding: theme.spacing.md,
     paddingTop: rem(18),
     height: rem(60),
@@ -170,7 +170,7 @@ const Links = ({ navKey }: { navKey: string }) => {
         if (navValue.level === "1" && !navValue.hasChildren) {
           return (
             <MenuItem
-              key={index}
+              key={navValue.url}
               url={navValue.url}
               title={navValue.title}
               Icon={navValue.icon}
@@ -206,7 +206,7 @@ function UserMenu() {
           <Menu.Label>Application</Menu.Label>
           <Menu.Item
             onClick={() => dispatch({ type: "LOGOUT" })}
-            icon={<Settings size={14} />}
+            icon={<IconSettings size={14} />}
           >
             Logout
           </Menu.Item>
@@ -217,14 +217,30 @@ function UserMenu() {
 }
 export function SideNav({ opened, setOpened }: Props) {
   const smallScreen = useMediaQuery("(max-width: 768px)");
+  const location = useLocation();
   const { classes, cx } = useStyles();
-  const [active, setActive] = React.useState<EGroup>(EGroup.userManagement);
+  const [active, setActive] = React.useState<EGroup>(EGroup.instagram);
   const [navKeys] = navStructure();
 
   const GroupIcon = (title: EGroup) => {
     const MIcon = GroupIcons[title];
     return <MIcon size={16} />;
   };
+
+  React.useEffect(() => {
+    const currentSplitPath = location.pathname.split("/");
+
+    const paths = Object.values(pageData);
+    for (let i = 0; i < paths.length; i++) {
+      if (paths[i].url != null) {
+        const splitPath = paths[i].url?.split("/");
+        if (splitPath?.[1] === currentSplitPath[1]) {
+          setActive(paths[i].group);
+          break;
+        }
+      }
+    }
+  }, [location.pathname]);
 
   return (
     <>
@@ -277,10 +293,10 @@ export function SideNav({ opened, setOpened }: Props) {
               <Stack h="100%" justify="space-between">
                 <Box>
                   <div className={classes.logo}>
-                    <Image width={40} src={Logo} />
+                    <LogoSmall />
                   </div>
                   {navKeys.map((navKey, idx) => (
-                    <Box key={idx}>
+                    <Box key={navKey}>
                       <Tooltip
                         label={navKey}
                         position="right"

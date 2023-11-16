@@ -4,7 +4,7 @@ import { Button, Group, Stack } from "@mantine/core";
 import { ButtonRow } from "../../../Components/FormComponents/ButtonRow";
 import { useBulkUploadAccounts } from "./Hooks/accounts.hook";
 import { showNotification } from "@mantine/notifications";
-import { AlertTriangle, Check } from "tabler-icons-react";
+import { IconAlertTriangle, IconCheck } from "@tabler/icons-react";
 import { apiErrorMessage } from "../../../Utils/api.util";
 import { axiosError } from "../../../Interfaces/general.interface";
 import { FileWithPath } from "@mantine/dropzone";
@@ -20,7 +20,7 @@ export function BulkUploadAccounts() {
       showNotification({
         color: "orange",
         message: "Please upload a file",
-        icon: <AlertTriangle />,
+        icon: <IconAlertTriangle />,
       });
       return;
     }
@@ -36,7 +36,7 @@ export function BulkUploadAccounts() {
           showNotification({
             color: "teal",
             message: "Accounts uploaded successfully",
-            icon: <Check />,
+            icon: <IconCheck />,
           });
           setCsvFile(null);
         },
@@ -45,7 +45,7 @@ export function BulkUploadAccounts() {
           showNotification({
             color: "red",
             message: errorMessage,
-            icon: <AlertTriangle />,
+            icon: <IconAlertTriangle />,
           });
         },
       }

@@ -1,9 +1,9 @@
-import { Box, Divider, Grid, Group, Image, Stack } from "@mantine/core";
+import { Box, Divider, Grid, Group, Stack } from "@mantine/core";
 import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { authPageData } from "../Pages/Auth";
 import { useMediaQuery } from "../Hooks/useMediaQuery";
-import Logo from "../Assets/logo.png";
+import { Logo } from "../Assets/Logo";
 
 export function AuthLayout() {
   const pages = Object.values(authPageData);
@@ -16,7 +16,7 @@ export function AuthLayout() {
         justifyContent: "center",
         alignItems: "center",
         margin: 0,
-        backgroundColor: "#f4f5fa",
+        backgroundColor: "#fafafa",
       }}
     >
       <Grid.Col lg={4} xl={3} md={4} sm={6} p={0}>
@@ -30,7 +30,10 @@ export function AuthLayout() {
           }}
         >
           <Group position="center">
-            <Image width={80} src={Logo} />
+            <Logo />
+            {/*
+            <Image width={100} src={Logo} />
+            */}
           </Group>
           <Box sx={{ mb: 2, px: 10, width: "100%" }}>
             <Divider

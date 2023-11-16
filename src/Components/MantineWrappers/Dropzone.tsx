@@ -1,7 +1,7 @@
 import React from "react";
 import { Group, rem, Text, useMantineTheme } from "@mantine/core";
 import { Dropzone as MantineDropzone, FileWithPath } from "@mantine/dropzone";
-import { File as FileIcon, Upload, X } from "tabler-icons-react";
+import { IconFile as FileIcon, IconUpload, IconX } from "@tabler/icons-react";
 import { showNotification } from "@mantine/notifications";
 
 type Props = {
@@ -17,7 +17,7 @@ export function Dropzone({ file, setFile }: Props) {
       onDrop={(files) => setFile(files[0])}
       onReject={() => {
         showNotification({
-          icon: <X />,
+          icon: <IconX />,
           color: "red",
           message: "You can only upload .csv files",
         });
@@ -31,7 +31,7 @@ export function Dropzone({ file, setFile }: Props) {
         style={{ minHeight: rem(220), pointerEvents: "none" }}
       >
         <MantineDropzone.Accept>
-          <Upload
+          <IconUpload
             size="3.2rem"
             strokeWidth={1.5}
             color={
@@ -42,7 +42,7 @@ export function Dropzone({ file, setFile }: Props) {
           />
         </MantineDropzone.Accept>
         <MantineDropzone.Reject>
-          <X
+          <IconX
             size="3.2rem"
             strokeWidth={1.5}
             color={theme.colors.red[theme.colorScheme === "dark" ? 4 : 6]}

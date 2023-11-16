@@ -3,7 +3,7 @@ import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import { format } from "date-fns";
 import { ActionIcon } from "@mantine/core";
-import { Download } from "tabler-icons-react";
+import { IconDownload } from "@tabler/icons-react";
 import { ColDef } from "./datagrid.interface";
 
 export function ExportToExcel({
@@ -22,7 +22,7 @@ export function ExportToExcel({
   const exportData = (
     mRows: Array<any>,
     mFileName: string,
-    mColumns: ColDef<any>[],
+    mColumns: ColDef<any>[]
   ) => {
     const newRowArray = [] as any[];
     mRows.forEach((row) => {
@@ -47,7 +47,7 @@ export function ExportToExcel({
               ...newRow,
               [column.header as string]: format(
                 Date.parse(row[column.id]),
-                "dd/MMM/yyyy h:mm aaa",
+                "dd/MMM/yyyy h:mm aaa"
               ),
             };
             return;
@@ -64,11 +64,9 @@ export function ExportToExcel({
       type: "array",
     });
     const data = new Blob([excelBuffer], { type: fileType });
-    const sanitizedFileName = `${
-      mFileName
-        .toLowerCase()
-        .replace(" ", "_")
-    }_${format(new Date(), "HHmmssddMMyy")}`;
+    const sanitizedFileName = `${mFileName
+      .toLowerCase()
+      .replace(" ", "_")}_${format(new Date(), "HHmmssddMMyy")}`;
     FileSaver.saveAs(data, sanitizedFileName + fileExtension);
   };
 
@@ -77,7 +75,7 @@ export function ExportToExcel({
       onClick={() => exportData(rows, fileName, columns)}
       variant="text"
     >
-      <Download />
+      <IconDownload />
     </ActionIcon>
   );
 }

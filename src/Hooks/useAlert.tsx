@@ -1,7 +1,7 @@
 import React from "react";
 import { MantineColor } from "@mantine/core";
 import { useState } from "react";
-import { AlertCircle } from "tabler-icons-react";
+import { IconAlertCircle } from "@tabler/icons-react";
 
 export type TAlertInfo = {
   title: string;
@@ -16,7 +16,7 @@ export const useAlert = () => {
     title: "",
     message: "",
     color: "teal",
-    icon: <AlertCircle size={16} />,
+    icon: <IconAlertCircle size={16} />,
   });
 
   return {

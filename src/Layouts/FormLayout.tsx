@@ -32,7 +32,7 @@ export function FormLayout({
             <Group
               sx={(theme) => ({
                 overflow: "hidden",
-                backgroundColor: theme.fn.lighten(theme.colors.brand[2], 0.82),
+                backgroundColor: theme.colors.brand[5],
                 paddingTop: 21,
                 paddingBottom: 21,
                 paddingLeft: 20,
@@ -40,7 +40,7 @@ export function FormLayout({
                 borderTopRightRadius: 12,
               })}
             >
-              <Text sx={{ fontSize: 18 }}>{title}</Text>
+              <Text sx={{ fontSize: 18, color: "#FFF" }}>{title}</Text>
               <Text sx={{ pl: 0.5 }} color="text.secondary">
                 {subTitle}
               </Text>
