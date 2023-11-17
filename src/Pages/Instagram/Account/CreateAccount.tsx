@@ -1,58 +1,71 @@
 import React from "react";
-import { FormLayout } from "../../../Layouts/FormLayout";
-import { InputRow } from "../../../Components/FormComponents/InputRow";
-import { Button, TextInput } from "@mantine/core";
-import { ButtonRow } from "../../../Components/FormComponents/ButtonRow";
-import { useAccountsWrapperApi } from "./Hooks/accounts.hook";
+import {
+  ActionIcon,
+  Alert,
+  Button,
+  Collapse,
+  FileInput,
+  Group,
+  Modal,
+  Stack,
+  Tabs,
+  TextInput,
+  Tooltip,
+} from "@mantine/core";
+import {
+  useAccountsWrapperApi,
+  useBulkUploadAccounts,
+} from "./Hooks/accounts.hook";
 import { showNotification } from "@mantine/notifications";
-import { IconAlertTriangle, IconCheck } from "@tabler/icons-react";
-import { isValidEmail } from "../../../Utils/validator.util";
+import {
+  IconAlertTriangle,
+  IconCheck,
+  IconDownload,
+} from "@tabler/icons-react";
 import { apiErrorMessage } from "../../../Utils/api.util";
 import { axiosError } from "../../../Interfaces/general.interface";
+import { useAlert } from "../../../Hooks/useAlert";
+import { Link } from "react-router-dom";
 
-export function CreateAccount() {
-  const { createAccount } = useAccountsWrapperApi();
+type Props = {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export function CreateAccount({ isOpen, setIsOpen }: Props) {
+  const { alertInfo, setAlertInfo, showAlert, setShowAlert } = useAlert();
   const [igName, setIgName] = React.useState("");
   const [fullName, setFullName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [phoneNumber, setPhoneNumber] = React.useState("");
+  const [csvFile, setCsvFile] = React.useState<null | File>(null);
+  const [accountTab, setAccountTab] = React.useState<string | null>("single");
+  const bulkUploadAccounts = useBulkUploadAccounts();
+  const { createAccount } = useAccountsWrapperApi();
 
   const handleCreateAccount = () => {
+    setShowAlert(false);
     if (igName === "") {
-      showNotification({
+      setShowAlert(true);
+      setAlertInfo({
+        title: "Error",
         color: "orange",
         message: "Please enter the Instagram name",
-        icon: <IconAlertTriangle />,
-      });
-      return;
-    }
-    if (email !== "" && !isValidEmail(email)) {
-      showNotification({
-        color: "orange",
-        message: "Please enter a valid email",
-        icon: <IconAlertTriangle />,
       });
       return;
     }
 
     createAccount.mutate(
       {
-        email,
         full_name: fullName === "" ? null : fullName,
         igname: igName,
-        phone_number: phoneNumber,
       },
       {
         onSuccess: () => {
+          onModalClose();
           showNotification({
             color: "teal",
             message: "Account created successfully",
             icon: <IconCheck />,
           });
-          setIgName("");
-          setEmail("");
-          setPhoneNumber("");
-          setFullName("");
         },
         onError: (err) => {
           const errorMessage = apiErrorMessage(err as axiosError);
@@ -66,36 +79,145 @@ export function CreateAccount() {
     );
   };
 
+  const handleBulkUploadAccounts = () => {
+    if (csvFile == null) {
+      showNotification({
+        color: "orange",
+        message: "Please upload a file",
+        icon: <IconAlertTriangle />,
+      });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file_uploaded", csvFile);
+    bulkUploadAccounts.mutate(
+      {
+        formData,
+      },
+      {
+        onSuccess: () => {
+          onModalClose();
+          showNotification({
+            color: "teal",
+            message: "Accounts uploaded successfully",
+            icon: <IconCheck />,
+          });
+        },
+        onError: (err) => {
+          const errorMessage = apiErrorMessage(err as axiosError);
+          showNotification({
+            color: "red",
+            message: errorMessage,
+            icon: <IconAlertTriangle />,
+          });
+        },
+      }
+    );
+  };
+
+  function onModalClose() {
+    setCsvFile(null);
+    setIgName("");
+    setFullName("");
+    setAccountTab("single");
+    setIsOpen(false);
+  }
   return (
-    <FormLayout span={7} title="Create Account">
-      <InputRow title="Instagram username">
-        <TextInput
-          required
-          value={igName}
-          onChange={(e) => setIgName(e.target.value)}
-        />
-      </InputRow>
-      <InputRow title="Full Name">
-        <TextInput
-          required
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-        />
-      </InputRow>
-      <InputRow title="Email">
-        <TextInput value={email} onChange={(e) => setEmail(e.target.value)} />
-      </InputRow>
-      <InputRow title="Phone Number">
-        <TextInput
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-        />
-      </InputRow>
-      <ButtonRow>
-        <Button loading={createAccount.isLoading} onClick={handleCreateAccount}>
-          Create Account
-        </Button>
-      </ButtonRow>
-    </FormLayout>
+    <Modal
+      opened={isOpen}
+      onClose={() => {
+        onModalClose();
+      }}
+      title="Create New Account"
+    >
+      <Tabs
+        value={accountTab}
+        onTabChange={setAccountTab}
+        classNames={{ tabLabel: "material-tab" }}
+      >
+        <Tabs.List position="center">
+          <Tabs.Tab value="single">Single</Tabs.Tab>
+          <Tabs.Tab value="bulk">Bulk Upload</Tabs.Tab>
+        </Tabs.List>
+
+        <Tabs.Panel value="single" pt="xs">
+          <Collapse
+            in={showAlert}
+            sx={{
+              marginBottom: showAlert ? 2 : 0,
+              marginTop: showAlert ? 1 : 0,
+            }}
+          >
+            <Alert
+              icon={<IconAlertTriangle />}
+              color="orange"
+              title={alertInfo.title}
+            >
+              {alertInfo.message}
+            </Alert>
+          </Collapse>
+          <Stack p={20}>
+            <TextInput
+              label="Instagram username"
+              withAsterisk={true}
+              required
+              value={igName}
+              onChange={(e) => setIgName(e.target.value)}
+            />
+            <TextInput
+              label="Full Name"
+              withAsterisk={true}
+              required
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+            />
+            <Group position="center">
+              <Button
+                loading={createAccount.isLoading}
+                onClick={handleCreateAccount}
+              >
+                Create Account
+              </Button>
+            </Group>
+          </Stack>
+        </Tabs.Panel>
+
+        <Tabs.Panel value="bulk" pt="xs">
+          <Stack px={20} pb={8}>
+            <Group position="right">
+              <Tooltip label="Download template">
+                <ActionIcon
+                  color="brand"
+                  variant="light"
+                  size="lg"
+                  component={Link}
+                  to="../AccountTemplate.csv"
+                  target="_blank"
+                >
+                  <IconDownload />
+                </ActionIcon>
+              </Tooltip>
+            </Group>
+            <Stack spacing={32}>
+              <FileInput
+                label="Accounts"
+                placeholder="Click to choose a file"
+                value={csvFile}
+                onChange={setCsvFile}
+              />
+              <Group position="center">
+                <Button
+                  loading={createAccount.isLoading}
+                  onClick={handleBulkUploadAccounts}
+                >
+                  Upload Accounts
+                </Button>
+              </Group>
+            </Stack>
+          </Stack>
+        </Tabs.Panel>
+      </Tabs>
+    </Modal>
   );
 }

@@ -14,7 +14,7 @@ const theme: MantineThemeOverride = {
   colorScheme: "light",
   primaryColor: "brand",
   fontFamily: "Figtree",
-  defaultRadius: "12px",
+  defaultRadius: "7px",
   black: "#1d1d1d",
   colors: {
     brand: [

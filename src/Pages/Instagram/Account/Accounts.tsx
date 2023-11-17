@@ -12,8 +12,12 @@ import { DataGrid } from "../../../Components/Datagrid";
 import { useGetAccounts, useResetAccount } from "./Hooks/accounts.hook";
 import { openConfirmModal } from "@mantine/modals";
 import { Badge } from "../../../Components/MantineWrappers/Badge";
+import { Affix } from "../../../Components/Widgets/Affix";
+import { CreateAccount } from "./CreateAccount";
 
 export function Accounts() {
+  const [isCreateAccountModalOpen, setIsCreateAccountModalOpen] =
+    React.useState(false);
   const navigate = useNavigate();
   const accountsQR = useGetAccounts();
   const resetAccount = useResetAccount();
@@ -155,11 +159,21 @@ export function Accounts() {
   );
 
   return (
-    <DataGrid
-      loading={accountsQR.isLoading}
-      tableName="Accounts"
-      data={accountsQR.data ?? []}
-      columns={columns}
-    />
+    <>
+      <DataGrid
+        loading={accountsQR.isLoading}
+        tableName="Accounts"
+        data={accountsQR.data ?? []}
+        columns={columns}
+      />
+      <Affix
+        tooltipLabel="Create New Account"
+        onClickAction={() => setIsCreateAccountModalOpen(true)}
+      />
+      <CreateAccount
+        isOpen={isCreateAccountModalOpen}
+        setIsOpen={setIsCreateAccountModalOpen}
+      />
+    </>
   );
 }
