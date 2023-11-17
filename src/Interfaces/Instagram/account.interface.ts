@@ -8,10 +8,7 @@ interface AccountPrimary {
   full_name: string | null;
 }
 
-export type CreateAccount = Pick<
-  AccountPrimary,
-  "email" | "igname" | "phone_number" | "full_name"
->;
+export type CreateAccount = Pick<AccountPrimary, "igname" | "full_name">;
 
 export type UpdateAccount = Pick<
   AccountPrimary,
