@@ -101,6 +101,13 @@ export function Accounts() {
         type: "string",
       },
       {
+        accessorFn: (row) => row.outsourced_data?.[0]?.results.media_id ?? "-",
+        id: "media_id",
+        header: "Media",
+        visible: false,
+        type: "string",
+      },
+      {
         accessorFn: (row) => row.status,
         id: "status",
         header: "Status",

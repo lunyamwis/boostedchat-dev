@@ -13,7 +13,11 @@ import { format, parseISO } from "date-fns";
 import { Loading } from "../../../Components/UIState/Loading";
 import { Error } from "../../../Components/UIState/Error";
 import { EDateFormats } from "../../../Interfaces/general.interface";
-import { useClearThread, useGetThreadMessages } from "./Hooks/thread.hooks";
+import {
+  useClearThread,
+  useGetThreadMessages,
+  useResetThreadCount,
+} from "./Hooks/thread.hooks";
 import { formatChatDate } from "../../../Utils/validator.util";
 import { ChatItem } from "../MediaComments/ChatItem";
 import { DateHolder } from "../MediaComments/Comments";
@@ -24,6 +28,8 @@ import { openConfirmModal } from "@mantine/modals";
 import { AssignedToSwitch } from "./AssignedToSwitch";
 import { useGetAccount } from "../Account/Hooks/accounts.hook";
 import { LogItem } from "./LogItem";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "../../../Constants/ApiConstants";
 
 type Props = {
   threadDetails: ThreadDetails;
@@ -48,6 +54,7 @@ type FormattedThreads = {
   [key: string]: FormattedThreadsBody[];
 };
 export function DirectMessages({ threadDetails, avatarColor }: Props) {
+  const queryClient = useQueryClient();
   const [formattedThreads, setFormattedThreads] =
     React.useState<FormattedThreads | null>(null);
 
@@ -63,6 +70,7 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
 
   const messagesQR = useGetThreadMessages(threadDetails.threadId);
   const accountQR = useGetAccount(threadDetails.account_id);
+  const resetThreadCount = useResetThreadCount();
   /*
   const statusChangeLogsQR = useGetAccountStatusAuditLogs(
     threadDetails.account_id
@@ -206,6 +214,14 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
       scrollToBottom();
     }
   }, [messagesQR.data]);
+
+  React.useEffect(() => {
+    resetThreadCount.mutate(threadDetails.threadId, {
+      onSuccess: () => {
+        queryClient.invalidateQueries([queryKeys.instagram.threads.getAll]);
+      },
+    });
+  }, [threadDetails.threadId]);
 
   return (
     <Stack justify="space-between" spacing={0} sx={{ height: "100%" }}>
