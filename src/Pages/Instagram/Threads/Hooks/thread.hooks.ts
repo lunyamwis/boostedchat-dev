@@ -25,21 +25,6 @@ export const useGetThreads = () => {
   return useQuery([queryKeys.instagram.threads.getAll], () => getAll());
 };
 
-export const useGetDirectMessages = (threadId: string) => {
-  const { getMessages } = useThreadsApi();
-  return useQuery(
-    [queryKeys.instagram.threads.getMessages, threadId],
-    () => getMessages(threadId),
-    {
-      select: (data) => data.reverse(),
-      //refetchInterval: 45000,
-      enabled: false,
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-    }
-  );
-};
-
 export const useGetThreadMessages = (threadId: string) => {
   const { getThreadMessages } = useThreadsApi();
   return useQuery(
@@ -93,6 +78,11 @@ export const useGenerateMessage = () => {
 export const useClearThread = () => {
   const { clearThread } = useThreadsApi();
   return useMutation((threadId: string) => clearThread(threadId));
+};
+
+export const useResetThreadCount = () => {
+  const { resetThreadCount } = useThreadsApi();
+  return useMutation((id: string) => resetThreadCount(id));
 };
 
 export const useGetAccountStatusAuditLogs = (accountId: string) => {

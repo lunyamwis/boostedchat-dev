@@ -10,6 +10,9 @@ export interface GetThread extends Thread {
   account_id: string;
   assigned_to: "Human" | "Robot";
   username: string;
+  unread_message_count: number;
+  last_message_content: string;
+  last_message_at: string;
   //
 }
 

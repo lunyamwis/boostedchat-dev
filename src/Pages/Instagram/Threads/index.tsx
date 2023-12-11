@@ -73,6 +73,9 @@ export function Threads() {
                     username: thread.username,
                     account_id: thread.account_id,
                   }}
+                  unreadCount={thread.unread_message_count}
+                  lastMessage={thread.last_message_content}
+                  lastMessageDate={thread.last_message_at}
                   setThreadDetails={setThreadDetails}
                   setAvatarColor={setCurrentAvatarColor}
                 />

@@ -97,6 +97,7 @@ export interface OutsourcedData {
     city_id: null;
     category: null;
     latitude: null;
+    media_id: string;
     username: string;
     biography: string;
     city_name: null;

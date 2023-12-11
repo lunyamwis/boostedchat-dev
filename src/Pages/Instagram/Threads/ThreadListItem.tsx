@@ -1,20 +1,35 @@
 import React from "react";
-import { Avatar, Divider, Group, Stack, Text } from "@mantine/core";
-import { getRandomColor } from "../../../Utils/validator.util";
+import {
+  Avatar,
+  Badge,
+  Divider,
+  Group,
+  Stack,
+  Text,
+  useMantineTheme,
+} from "@mantine/core";
+import { formatChatDate, getRandomColor } from "../../../Utils/validator.util";
 import { ThreadDetails } from ".";
 
 type Props = {
   setThreadDetails: React.Dispatch<React.SetStateAction<ThreadDetails | null>>;
   threadDetails: ThreadDetails;
   setAvatarColor: React.Dispatch<React.SetStateAction<string>>;
+  unreadCount: number;
+  lastMessage: string;
+  lastMessageDate: string;
 };
 
 export function ThreadListItem({
   setAvatarColor,
   threadDetails,
   setThreadDetails,
+  unreadCount,
+  lastMessage,
+  lastMessageDate,
 }: Props) {
   const avatarColor = React.useRef(getRandomColor());
+  const theme = useMantineTheme();
 
   return (
     <Stack
@@ -24,6 +39,9 @@ export function ThreadListItem({
         "&:hover": {
           backgroundColor: "#F9F8Fa",
         },
+        width: "20px",
+        maxWidth: "100%",
+        minWidth: "100%",
       }}
       px={12}
     >
@@ -36,14 +54,38 @@ export function ThreadListItem({
         }}
         sx={{ flexWrap: "nowrap", width: "100%" }}
       >
-        <Group sx={{ flexWrap: "nowrap", flex: "0 1 auto", width: "80%" }}>
-          <Avatar color={avatarColor.current} sx={{ flex: "0 1 auto" }}>
-            {threadDetails.username.charAt(0).toUpperCase()}
-          </Avatar>
-          <Stack spacing={2} sx={{ flex: "1 1 auto", overflow: "hidden" }}>
+        <Avatar color={avatarColor.current} sx={{ flex: "0 1 auto" }}>
+          {threadDetails.username.charAt(0).toUpperCase()}
+        </Avatar>
+        <Stack spacing={2} sx={{ flex: "1 1 auto", overflow: "hidden" }}>
+          <Group position="apart">
             <Text sx={{ flex: "0 3 auto" }}>{threadDetails.username}</Text>
-          </Stack>
-        </Group>
+            <Text
+              fz={12}
+              color={unreadCount > 0 ? theme.primaryColor : "#8C8C8C"}
+              fw={unreadCount > 0 ? 600 : 400}
+              sx={{ flex: "0 1 auto" }}
+            >
+              {formatChatDate(lastMessageDate)}
+            </Text>
+          </Group>
+          <Group position="apart" sx={{ flexWrap: "nowrap" }}>
+            <Text
+              fz={12}
+              color={unreadCount > 0 ? "#4C4C4C" : "#8C8C8C"}
+              sx={{
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+              }}
+            >
+              {lastMessage}
+            </Text>
+            {unreadCount > 0 && (
+              <Badge styles={{ inner: { overflow: "initial" } }}>1</Badge>
+            )}
+          </Group>
+        </Stack>
       </Group>
       <Divider m={0} color="#F0F0F0" />
     </Stack>

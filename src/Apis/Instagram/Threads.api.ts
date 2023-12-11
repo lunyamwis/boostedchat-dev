@@ -4,7 +4,6 @@ import {
   CreateThreadParams,
   GeneratedResponse,
   GenerateResponseParams,
-  GetDirectMessage,
   GetThread,
   GetThreadMessage,
   SendDirectMessageManually,
@@ -35,11 +34,6 @@ export const useThreadsApi = () => {
         .get(`/${threadId}/get-thread-messages`)
         .then(handleRestResponse)
         .catch(handleRestError),
-    getMessages: (threadId: string): Promise<GetDirectMessage[]> =>
-      axiosInstance
-        .get(`/${threadId}/fetch-messages/`)
-        .then(handleRestResponse)
-        .catch(handleRestError),
     addComment: (params: AddComment): Promise<AddedCommentRespose> =>
       axiosInstance
         .post(`/${params.id}/add-comment/`, params.data)
@@ -65,6 +59,11 @@ export const useThreadsApi = () => {
     checkResponses: () =>
       axiosInstance
         .get(`/check-respons/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    resetThreadCount: (id: string) =>
+      axiosInstance
+        .post(`/${id}/reset-thread-count/`)
         .then(handleRestResponse)
         .catch(handleRestError),
   };
