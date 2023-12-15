@@ -249,12 +249,12 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
           </Stack>
         </Group>
         <Group>
-          <ActionIcon component={Link} to="http://promptemplate.boostedchat.com/admin/" target="_blank">
-
-            <IconExternalLink
-
-            />
-
+          <ActionIcon
+            component={Link}
+            to="http://promptemplate.boostedchat.com/admin/"
+            target="_blank"
+          >
+            <IconExternalLink />
           </ActionIcon>
           <Menu
             position="bottom-end"
@@ -274,6 +274,7 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
               <Menu.Item>
                 <AssignedToSwitch
                   setMenuOpened={setMenuOpened}
+                  igThreadId={threadDetails.igThreadId}
                   accountId={threadDetails.account_id}
                   assignedTo={accountQR.data?.assigned_to ?? "Robot"}
                 />

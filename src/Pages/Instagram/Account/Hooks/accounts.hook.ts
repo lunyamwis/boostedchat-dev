@@ -6,7 +6,6 @@ import {
   UpdateAccountParams,
 } from "../../../../Interfaces/Instagram/account.interface";
 import { UploadCSV } from "../../../../Interfaces/Instagram/upload.interface";
-import { AssignOperator } from "../../../../Interfaces/Instagram/Threads/thread.interface";
 
 export const useAccountsWrapperApi = () => {
   const { create } = useAccountsApi();
@@ -65,11 +64,6 @@ export const useGetAccountFollower = (id: string) => {
       },
     }
   );
-};
-
-export const useAssignOperator = () => {
-  const { assignOperator } = useAccountsApi();
-  return useMutation((params: AssignOperator) => assignOperator(params));
 };
 
 export const useGetPotentialToBuy = (id: string) => {

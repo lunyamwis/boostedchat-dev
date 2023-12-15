@@ -10,6 +10,7 @@ import { DirectMessages } from "./DirectMessages";
 
 export type ThreadDetails = {
   threadId: string;
+  igThreadId: string;
   username: string;
   account_id: string;
 };
@@ -70,6 +71,7 @@ export function Threads() {
                   key={thread.id}
                   threadDetails={{
                     threadId: thread.id,
+                    igThreadId: thread.thread_id,
                     username: thread.username,
                     account_id: thread.account_id,
                   }}
