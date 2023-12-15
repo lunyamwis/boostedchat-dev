@@ -55,7 +55,7 @@ export interface SendDirectMessageManually {
 }
 
 export interface AssignOperator {
-  accountId: string;
+  threadId: string;
   data: {
     assigned_to: "Robot" | "Human";
   };

@@ -1,6 +1,7 @@
 import { handleRestError, handleRestResponse } from "../response";
 import { useGlobalAxios } from "../../Hooks/useAxios";
 import {
+  AssignOperator,
   CreateThreadParams,
   GeneratedResponse,
   GenerateResponseParams,
@@ -64,6 +65,11 @@ export const useThreadsApi = () => {
     resetThreadCount: (id: string) =>
       axiosInstance
         .post(`/${id}/reset-thread-count/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    assignOperator: (params: AssignOperator) =>
+      axiosInstance
+        .patch(`/${params.threadId}/assign-operator/`, params.data)
         .then(handleRestResponse)
         .catch(handleRestError),
   };

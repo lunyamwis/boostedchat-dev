@@ -264,6 +264,7 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
             <Menu.Item>
               <AssignedToSwitch
                 setMenuOpened={setMenuOpened}
+                igThreadId={threadDetails.igThreadId}
                 accountId={threadDetails.account_id}
                 assignedTo={accountQR.data?.assigned_to ?? "Robot"}
               />

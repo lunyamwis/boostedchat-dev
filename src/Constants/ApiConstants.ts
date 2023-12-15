@@ -16,6 +16,9 @@ export const queryKeys = {
     getAll: "get-all-leads",
   },
   instagram: {
+    dashboard: {
+      responseRate: "response-rates",
+    },
     media: {
       getAll: "get-all-media",
       getComments: "media-comments",

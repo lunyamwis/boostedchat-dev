@@ -1,18 +1,21 @@
 import { Group, Loader, Switch, Text } from "@mantine/core";
 import React from "react";
-import { useAssignOperator } from "../Account/Hooks/accounts.hook";
 import { queryKeys } from "../../../Constants/ApiConstants";
 import { useQueryClient } from "@tanstack/react-query";
+import { useAssignOperator } from "./Hooks/thread.hooks";
 
 type Props = {
   assignedTo: "Robot" | "Human";
+  igThreadId: string;
   accountId: string;
   setMenuOpened: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export function AssignedToSwitch({
   assignedTo,
+  igThreadId,
   accountId,
+
   setMenuOpened,
 }: Props) {
   const queryClient = useQueryClient();
@@ -33,7 +36,7 @@ export function AssignedToSwitch({
             setAssignToRobot(event.currentTarget.checked);
             assignOperator.mutate(
               {
-                accountId,
+                threadId: igThreadId,
                 data: {
                   assigned_to: event.currentTarget.checked ? "Robot" : "Human",
                 },

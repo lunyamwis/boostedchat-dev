@@ -40,6 +40,7 @@ export type ParentKeys =
 
 export type ChildKeys =
   | "CreateAccount"
+  | "Dashboards"
   | "AccountDetails"
   | "BulkUploadAccounts";
 
@@ -59,6 +60,14 @@ export const componentData: {
   key: keyof TMPageData;
   component: React.LazyExoticComponent<() => JSX.Element>;
 }[] = [
+  {
+    key: "Dashboards",
+    component: React.lazy(() =>
+      import("./Dashboard/index").then(({ Dashboard }) => ({
+        default: Dashboard,
+      }))
+    ),
+  },
   {
     key: "AccountDetails",
     component: React.lazy(() =>
@@ -124,6 +133,15 @@ export const componentData: {
 ];
 
 export const pageData: TMPageData = {
+  Dashboards: {
+    level: "1",
+    group: EGroup.instagram,
+    hasChildren: false,
+    title: "Dashboards",
+    isNavItem: false,
+    icon: IconBrandMessenger,
+    url: "/instagram/dashboards",
+  },
   Threads: {
     level: "1",
     group: EGroup.instagram,

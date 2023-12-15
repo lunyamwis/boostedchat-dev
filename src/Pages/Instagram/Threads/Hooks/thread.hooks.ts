@@ -1,3 +1,4 @@
+import { AssignOperator } from "../../../../Interfaces/Instagram/Threads/thread.interface";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../../../../Constants/ApiConstants";
 import { useThreadsApi } from "../../../../Apis/Instagram/Threads.api";
@@ -93,4 +94,9 @@ export const useGetAccountStatusAuditLogs = (accountId: string) => {
     () => getStatusChangesLogs(accountId),
     {}
   );
+};
+
+export const useAssignOperator = () => {
+  const { assignOperator } = useThreadsApi();
+  return useMutation((params: AssignOperator) => assignOperator(params));
 };
