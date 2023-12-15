@@ -76,7 +76,7 @@ export const useFallbackApi = () => {
   return {
     assignOperator: (params: AssignOperator) =>
       axiosInstance
-        .patch(`/${params.threadId}/assign-operator/`, params.data)
+        .post(`/${params.threadId}/assign-operator/`, params.data)
         .then(handleRestResponse)
         .catch(handleRestError),
   };
