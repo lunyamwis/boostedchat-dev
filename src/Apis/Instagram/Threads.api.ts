@@ -67,6 +67,13 @@ export const useThreadsApi = () => {
         .post(`/${id}/reset-thread-count/`)
         .then(handleRestResponse)
         .catch(handleRestError),
+  };
+};
+
+export const useFallbackApi = () => {
+  const axiosInstance = useGlobalAxios("instagram/fallback");
+
+  return {
     assignOperator: (params: AssignOperator) =>
       axiosInstance
         .patch(`/${params.threadId}/assign-operator/`, params.data)
