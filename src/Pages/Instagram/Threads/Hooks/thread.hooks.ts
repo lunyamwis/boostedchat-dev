@@ -1,7 +1,10 @@
 import { AssignOperator } from "../../../../Interfaces/Instagram/Threads/thread.interface";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../../../../Constants/ApiConstants";
-import { useThreadsApi } from "../../../../Apis/Instagram/Threads.api";
+import {
+  useFallbackApi,
+  useThreadsApi,
+} from "../../../../Apis/Instagram/Threads.api";
 import {
   CreateThreadParams,
   GenerateResponseParams,
@@ -97,6 +100,6 @@ export const useGetAccountStatusAuditLogs = (accountId: string) => {
 };
 
 export const useAssignOperator = () => {
-  const { assignOperator } = useThreadsApi();
+  const { assignOperator } = useFallbackApi();
   return useMutation((params: AssignOperator) => assignOperator(params));
 };
