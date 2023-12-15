@@ -24,12 +24,14 @@ import { DateHolder } from "../MediaComments/Comments";
 import { MessageBox } from "./MessageBox";
 import { ThreadDetails } from ".";
 import { IconDotsVertical } from "@tabler/icons-react";
+import { IconExternalLink } from "@tabler/icons-react";
 import { openConfirmModal } from "@mantine/modals";
 import { AssignedToSwitch } from "./AssignedToSwitch";
 import { useGetAccount } from "../Account/Hooks/accounts.hook";
 import { LogItem } from "./LogItem";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../../../Constants/ApiConstants";
+import { Link } from "react-router-dom";
 
 type Props = {
   threadDetails: ThreadDetails;
@@ -246,32 +248,41 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
             </Text>
           </Stack>
         </Group>
-        <Menu
-          position="bottom-end"
-          shadow="md"
-          opened={menuOpened}
-          onChange={setMenuOpened}
-          width={200}
-          closeOnItemClick={false}
-        >
-          <Menu.Target>
-            <ActionIcon>
-              <IconDotsVertical />
-            </ActionIcon>
-          </Menu.Target>
+        <Group>
+          <ActionIcon
+            component={Link}
+            to="http://promptemplate.boostedchat.com/admin/"
+            target="_blank"
+          >
+            <IconExternalLink />
+          </ActionIcon>
+          <Menu
+            position="bottom-end"
+            shadow="md"
+            opened={menuOpened}
+            onChange={setMenuOpened}
+            width={200}
+            closeOnItemClick={false}
+          >
+            <Menu.Target>
+              <ActionIcon>
+                <IconDotsVertical />
+              </ActionIcon>
+            </Menu.Target>
 
-          <Menu.Dropdown>
-            <Menu.Item>
-              <AssignedToSwitch
-                setMenuOpened={setMenuOpened}
-                igThreadId={threadDetails.igThreadId}
-                accountId={threadDetails.account_id}
-                assignedTo={accountQR.data?.assigned_to ?? "Robot"}
-              />
-            </Menu.Item>
-            <Menu.Item onClick={handleClearChat}>Clear Chat</Menu.Item>
-          </Menu.Dropdown>
-        </Menu>
+            <Menu.Dropdown>
+              <Menu.Item>
+                <AssignedToSwitch
+                  setMenuOpened={setMenuOpened}
+                  igThreadId={threadDetails.igThreadId}
+                  accountId={threadDetails.account_id}
+                  assignedTo={accountQR.data?.assigned_to ?? "Robot"}
+                />
+              </Menu.Item>
+              <Menu.Item onClick={handleClearChat}>Clear Chat</Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        </Group>
       </Group>
       {messagesQR.isLoading ? (
         <Box sx={{ height: "100%", backgroundColor: "#F8f9fa" }}>
