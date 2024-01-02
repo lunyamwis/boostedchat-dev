@@ -11,7 +11,6 @@ import {
   isYesterday,
   parseISO,
 } from "date-fns";
-import { MediaType } from "../Pages/Instagram/MediaComments/Hooks/mediaComments.hooks";
 
 export const isValidEmail = (email_address: string) =>
   /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i.test(email_address);
@@ -83,11 +82,4 @@ export const formatChatDate = (
     return format(date, "dd/MM");
   }
   return getYear(date);
-};
-
-export const formatMediaPlural = (mediaType: MediaType) => {
-  if (mediaType === "story") {
-    return "Stories";
-  }
-  return `${capitalize(mediaType)}s`;
 };

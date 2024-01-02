@@ -5,8 +5,8 @@ import { Loading } from "../../../Components/UIState/Loading";
 import { Error } from "../../../Components/UIState/Error";
 import { NoThreads } from "./NoThreads";
 import { ThreadListItem } from "./ThreadListItem";
-import { NoMediaSelected } from "../MediaComments/NoMediaSelected";
 import { DirectMessages } from "./DirectMessages";
+import { NoMediaSelected } from "./NoMediaSelected";
 
 export type ThreadDetails = {
   threadId: string;

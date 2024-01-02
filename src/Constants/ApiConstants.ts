@@ -1,6 +1,6 @@
 export const API_URL = import.meta.env.PROD
-  ? "https://booksy.us.boostedchat.com/api/v1"
-  : "http://127.0.0.1:8001/api/v1";
+  ? "https://api.booksy.us.boostedchat.com/v1"
+  : "http://127.0.0.1:8001/v1";
 
 export const queryKeys = {
   users: {

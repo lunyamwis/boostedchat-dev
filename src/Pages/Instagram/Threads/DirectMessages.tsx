@@ -19,8 +19,6 @@ import {
   useResetThreadCount,
 } from "./Hooks/thread.hooks";
 import { formatChatDate } from "../../../Utils/validator.util";
-import { ChatItem } from "../MediaComments/ChatItem";
-import { DateHolder } from "../MediaComments/Comments";
 import { MessageBox } from "./MessageBox";
 import { ThreadDetails } from ".";
 import { IconDotsVertical } from "@tabler/icons-react";
@@ -32,6 +30,8 @@ import { LogItem } from "./LogItem";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../../../Constants/ApiConstants";
 import { Link } from "react-router-dom";
+import { ChatItem } from "./ChatItem";
+import { DateHolder } from "./DateHolder";
 
 type Props = {
   threadDetails: ThreadDetails;
