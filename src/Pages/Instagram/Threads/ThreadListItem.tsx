@@ -9,11 +9,11 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { formatChatDate, getRandomColor } from "../../../Utils/validator.util";
-import { ThreadDetails } from ".";
+import { useSearchParams } from "react-router-dom";
 
 type Props = {
-  setThreadDetails: React.Dispatch<React.SetStateAction<ThreadDetails | null>>;
-  threadDetails: ThreadDetails;
+  username: string;
+  igThreadId: string;
   setAvatarColor: React.Dispatch<React.SetStateAction<string>>;
   unreadCount: number;
   lastMessage: string;
@@ -22,12 +22,13 @@ type Props = {
 
 export function ThreadListItem({
   setAvatarColor,
-  threadDetails,
-  setThreadDetails,
+  username,
+  igThreadId,
   unreadCount,
   lastMessage,
   lastMessageDate,
 }: Props) {
+  const [_, setUsernameSearchParam] = useSearchParams();
   const avatarColor = React.useRef(getRandomColor());
   const theme = useMantineTheme();
 
@@ -49,17 +50,17 @@ export function ThreadListItem({
         py={16}
         position="apart"
         onClick={() => {
+          setUsernameSearchParam({ thread: igThreadId });
           setAvatarColor(avatarColor.current);
-          setThreadDetails(threadDetails);
         }}
         sx={{ flexWrap: "nowrap", width: "100%" }}
       >
         <Avatar color={avatarColor.current} sx={{ flex: "0 1 auto" }}>
-          {threadDetails.username.charAt(0).toUpperCase()}
+          {username.charAt(0).toUpperCase()}
         </Avatar>
         <Stack spacing={2} sx={{ flex: "1 1 auto", overflow: "hidden" }}>
           <Group position="apart">
-            <Text sx={{ flex: "0 3 auto" }}>{threadDetails.username}</Text>
+            <Text sx={{ flex: "0 3 auto" }}>{username}</Text>
             <Text
               fz={12}
               color={unreadCount > 0 ? theme.primaryColor : "#8C8C8C"}

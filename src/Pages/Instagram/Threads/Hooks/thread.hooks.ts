@@ -29,11 +29,22 @@ export const useGetThreads = () => {
   return useQuery([queryKeys.instagram.threads.getAll], () => getAll());
 };
 
-export const useGetThreadMessages = (threadId: string) => {
-  const { getThreadMessages } = useThreadsApi();
+export const useGetThreadByIgThreadId = (igThreadId: string | null) => {
+  const { getThreadByIgThreadId } = useThreadsApi();
+  return useQuery(
+    [queryKeys.instagram.threads.byIgThreadId, igThreadId],
+    () => getThreadByIgThreadId(igThreadId as string),
+    {
+      enabled: igThreadId != null,
+    }
+  );
+};
+
+export const useGetThreadMessagesByThreadId = (threadId: string) => {
+  const { getThreadMessagesByThreadId } = useThreadsApi();
   return useQuery(
     [queryKeys.instagram.threads.getMessages, threadId],
-    () => getThreadMessages(threadId),
+    () => getThreadMessagesByThreadId(threadId),
     {
       refetchInterval: 45000,
       refetchOnMount: false,
@@ -42,16 +53,16 @@ export const useGetThreadMessages = (threadId: string) => {
   );
 };
 
-export const useCheckResponse = () => {
-  const { checkResponses } = useThreadsApi();
+export const useGetThreadMessagesByIgThreadId = (igThreadId: string | null) => {
+  const { getThreadMessagesByIgThreadId } = useThreadsApi();
   return useQuery(
-    [queryKeys.instagram.threads.getMessages],
-    () => checkResponses(),
+    [queryKeys.instagram.threads.getMessages, igThreadId],
+    () => getThreadMessagesByIgThreadId(igThreadId as string),
     {
-      enabled: false,
-      // refetchInterval: 20000,
+      enabled: igThreadId != null,
+      refetchInterval: 45000,
       refetchOnMount: false,
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
     }
   );
 };

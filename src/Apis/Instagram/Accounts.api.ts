@@ -20,6 +20,11 @@ export const useAccountsApi = () => {
         .get(`/${id}`)
         .then(handleRestResponse)
         .catch(handleRestError),
+    getByIgThreadId: (igThreadId: string): Promise<GetSingleAccount> =>
+      axiosInstance
+        .get(`/account-by-ig-thread/${igThreadId}/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
     getFollowers: (id: string): Promise<Lead> =>
       axiosInstance
         .get(`/${id}/extract-followers`)

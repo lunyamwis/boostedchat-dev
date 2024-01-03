@@ -46,6 +46,17 @@ export const useGetAccount = (accountId: string) => {
   );
 };
 
+export const useGetAccountByThreadId = (igThreadId: string | null) => {
+  const { getByIgThreadId } = useAccountsApi();
+  return useQuery(
+    [queryKeys.instagram.accounts.getByIgThreadId, igThreadId],
+    () => getByIgThreadId(igThreadId as string),
+    {
+      enabled: igThreadId != null,
+    }
+  );
+};
+
 export const useGetAccountFollower = (id: string) => {
   const { getFollowers } = useAccountsApi();
   return useQuery(

@@ -6,6 +6,7 @@ import {
   Group,
   Menu,
   ScrollArea,
+  Skeleton,
   Stack,
   Text,
 } from "@mantine/core";
@@ -15,26 +16,25 @@ import { Error } from "../../../Components/UIState/Error";
 import { EDateFormats } from "../../../Interfaces/general.interface";
 import {
   useClearThread,
-  useGetThreadMessages,
+  useGetThreadByIgThreadId,
+  useGetThreadMessagesByIgThreadId,
   useResetThreadCount,
 } from "./Hooks/thread.hooks";
 import { formatChatDate } from "../../../Utils/validator.util";
 import { MessageBox } from "./MessageBox";
-import { ThreadDetails } from ".";
 import { IconDotsVertical } from "@tabler/icons-react";
 import { IconExternalLink } from "@tabler/icons-react";
 import { openConfirmModal } from "@mantine/modals";
 import { AssignedToSwitch } from "./AssignedToSwitch";
-import { useGetAccount } from "../Account/Hooks/accounts.hook";
+import { useGetAccountByThreadId } from "../Account/Hooks/accounts.hook";
 import { LogItem } from "./LogItem";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../../../Constants/ApiConstants";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { ChatItem } from "./ChatItem";
 import { DateHolder } from "./DateHolder";
 
 type Props = {
-  threadDetails: ThreadDetails;
   avatarColor: string;
 };
 
@@ -55,8 +55,11 @@ type FormattedThreadsBody =
 type FormattedThreads = {
   [key: string]: FormattedThreadsBody[];
 };
-export function DirectMessages({ threadDetails, avatarColor }: Props) {
+export function DirectMessages({ avatarColor }: Props) {
   const queryClient = useQueryClient();
+
+  const [igThreadIdSearchParam] = useSearchParams();
+  const [igThreadId, setIgThreadId] = React.useState<string | null>(null);
   const [formattedThreads, setFormattedThreads] =
     React.useState<FormattedThreads | null>(null);
 
@@ -70,8 +73,9 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
       behavior: "smooth",
     });
 
-  const messagesQR = useGetThreadMessages(threadDetails.threadId);
-  const accountQR = useGetAccount(threadDetails.account_id);
+  const messagesQR = useGetThreadMessagesByIgThreadId(igThreadId);
+  const accountQR = useGetAccountByThreadId(igThreadId);
+  const threadQR = useGetThreadByIgThreadId(igThreadId);
   const resetThreadCount = useResetThreadCount();
   /*
   const statusChangeLogsQR = useGetAccountStatusAuditLogs(
@@ -81,6 +85,7 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
   const clearThread = useClearThread();
 
   const handleClearChat = () => {
+    if (threadQR.data == null) return;
     setMenuOpened(false);
     openConfirmModal({
       title: "Alert",
@@ -91,12 +96,19 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
         </Text>
       ),
       labels: { confirm: "Confirm", cancel: "Cancel" },
-      onConfirm: () => clearThread.mutate(threadDetails.threadId),
+      onConfirm: () => clearThread.mutate(threadQR.data.id),
     });
   };
 
   React.useEffect(() => {
-    if (messagesQR.data == null /* || statusChangeLogsQR.data == null*/) {
+    setIgThreadId(igThreadIdSearchParam.get("thread"));
+  }, [igThreadIdSearchParam]);
+
+  React.useEffect(() => {
+    if (
+      messagesQR.data == null ||
+      accountQR.data == null /* || statusChangeLogsQR.data == null*/
+    ) {
       return;
     }
     const mFormattedThreads: FormattedThreads = {};
@@ -108,7 +120,7 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
       const formattedThreadBody: FormattedThreadsBody = {
         type: "message",
         username:
-          currThread.sent_by === "Client" ? threadDetails.username : "Me",
+          currThread.sent_by === "Client" ? accountQR.data.igname : "Me",
         text: currThread.content,
         date: currThread.sent_on,
       };
@@ -209,7 +221,7 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
       }
     }
     setFormattedThreads(mFormattedThreads);
-  }, [messagesQR.data]);
+  }, [messagesQR.data, accountQR.data]);
 
   React.useEffect(() => {
     if (messagesQR.data != null && viewport.current != null) {
@@ -218,12 +230,13 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
   }, [messagesQR.data]);
 
   React.useEffect(() => {
-    resetThreadCount.mutate(threadDetails.threadId, {
+    if (threadQR.data == null) return;
+    resetThreadCount.mutate(threadQR.data.id, {
       onSuccess: () => {
         queryClient.invalidateQueries([queryKeys.instagram.threads.getAll]);
       },
     });
-  }, [threadDetails.threadId]);
+  }, [threadQR.data]);
 
   return (
     <Stack justify="space-between" spacing={0} sx={{ height: "100%" }}>
@@ -234,20 +247,33 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
         pr={16}
         sx={{ borderBottom: "1px solid #F0F0F0" }}
       >
-        <Group>
-          <Avatar color={avatarColor}>
-            {threadDetails.username.charAt(0)}
-          </Avatar>
-          <Stack spacing={1}>
-            <Text>{threadDetails.username}</Text>
-            <Text fz={13} color="dimmed">
-              Assigned to{" "}
-              <Text component="span" color="dimmed">
-                {accountQR.data?.assigned_to === "Robot" ? "Bot" : "me"}
+        {accountQR.isLoading && (
+          <Group>
+            <Avatar color={avatarColor}>
+              <Skeleton />
+            </Avatar>
+            <Stack spacing={1}>
+              <Skeleton />
+              <Skeleton />
+            </Stack>
+          </Group>
+        )}
+        {accountQR.data != null && (
+          <Group>
+            <Avatar color={avatarColor}>
+              {accountQR.data.igname.charAt(0)}
+            </Avatar>
+            <Stack spacing={1}>
+              <Text>{accountQR.data.igname}</Text>
+              <Text fz={13} color="dimmed">
+                Assigned to{" "}
+                <Text component="span" color="dimmed">
+                  {accountQR.data.assigned_to === "Robot" ? "Bot" : "me"}
+                </Text>
               </Text>
-            </Text>
-          </Stack>
-        </Group>
+            </Stack>
+          </Group>
+        )}
         <Group>
           <ActionIcon
             component={Link}
@@ -256,32 +282,34 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
           >
             <IconExternalLink />
           </ActionIcon>
-          <Menu
-            position="bottom-end"
-            shadow="md"
-            opened={menuOpened}
-            onChange={setMenuOpened}
-            width={200}
-            closeOnItemClick={false}
-          >
-            <Menu.Target>
-              <ActionIcon>
-                <IconDotsVertical />
-              </ActionIcon>
-            </Menu.Target>
+          {accountQR.data != null && igThreadId != null && (
+            <Menu
+              position="bottom-end"
+              shadow="md"
+              opened={menuOpened}
+              onChange={setMenuOpened}
+              width={200}
+              closeOnItemClick={false}
+            >
+              <Menu.Target>
+                <ActionIcon>
+                  <IconDotsVertical />
+                </ActionIcon>
+              </Menu.Target>
 
-            <Menu.Dropdown>
-              <Menu.Item>
-                <AssignedToSwitch
-                  setMenuOpened={setMenuOpened}
-                  igThreadId={threadDetails.igThreadId}
-                  accountId={threadDetails.account_id}
-                  assignedTo={accountQR.data?.assigned_to ?? "Robot"}
-                />
-              </Menu.Item>
-              <Menu.Item onClick={handleClearChat}>Clear Chat</Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
+              <Menu.Dropdown>
+                <Menu.Item>
+                  <AssignedToSwitch
+                    setMenuOpened={setMenuOpened}
+                    igThreadId={igThreadId}
+                    accountId={accountQR.data?.id}
+                    assignedTo={accountQR.data?.assigned_to ?? "Robot"}
+                  />
+                </Menu.Item>
+                <Menu.Item onClick={handleClearChat}>Clear Chat</Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          )}
         </Group>
       </Group>
       {messagesQR.isLoading ? (
@@ -361,7 +389,7 @@ export function DirectMessages({ threadDetails, avatarColor }: Props) {
           </Box>
           <MessageBox
             assignedTo={accountQR.data?.assigned_to ?? "Robot"}
-            threadId={threadDetails.threadId}
+            threadId={threadQR.data?.id}
           />
         </>
       )}

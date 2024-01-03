@@ -26,7 +26,8 @@ export default function AppShell() {
       navbar={<SideNav opened={navOpened} setOpened={setNavOpened} />}
       header={<AppHeader opened={navOpened} setOpened={setNavOpened} />}
     >
-      <>{onlineStatus.online ? <Outlet /> : <>No network connection</>}</>
+      {/*<>{onlineStatus.online ? <Outlet /> : <>No network connection</>}</>*/}
+      <Outlet />
     </MantineAppShell>
   );
 }

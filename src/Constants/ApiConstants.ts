@@ -26,6 +26,7 @@ export const queryKeys = {
     accounts: {
       getAccounts: "get-all-accounts",
       getById: "get-account-by-id",
+      getByIgThreadId: "get-account-by-ig-thread-id",
       getFollowers: "get-account-followers",
       potentiaToBuy: "potential-to-buy",
       potentialToPromote: "potential-to-promote",
@@ -55,6 +56,7 @@ export const queryKeys = {
       getViewers: "get-story-viewers",
     },
     threads: {
+      byIgThreadId: "get-thread-by-ig-thread-id",
       getAll: "get-all-threads",
       getMessages: "get-direct-messages",
       checkResponse: "check-response",

@@ -7,6 +7,7 @@ import { NoThreads } from "./NoThreads";
 import { ThreadListItem } from "./ThreadListItem";
 import { DirectMessages } from "./DirectMessages";
 import { NoMediaSelected } from "./NoMediaSelected";
+import { useSearchParams } from "react-router-dom";
 
 export type ThreadDetails = {
   threadId: string;
@@ -16,12 +17,18 @@ export type ThreadDetails = {
 };
 
 export function Threads() {
+  const [searchParams, _] = useSearchParams();
+  const [igThreadId, setIgThreadId] = React.useState<string | null>(null);
   const [currentAvatarColor, setCurrentAvatarColor] = React.useState("");
-  const [threadDetails, setThreadDetails] =
-    React.useState<ThreadDetails | null>(null);
 
   const threadsQR = useGetThreads();
 
+  React.useEffect(() => {
+    const id = searchParams.get("thread");
+    setIgThreadId(id);
+  }, [searchParams]);
+
+  console.log("Rendered index");
   if (threadsQR.isLoading) {
     return <Loading />;
   }
@@ -68,17 +75,12 @@ export function Threads() {
             <Stack spacing={0}>
               {threadsQR.data.map((thread) => (
                 <ThreadListItem
+                  igThreadId={thread.thread_id}
                   key={thread.id}
-                  threadDetails={{
-                    threadId: thread.id,
-                    igThreadId: thread.thread_id,
-                    username: thread.username,
-                    account_id: thread.account_id,
-                  }}
+                  username={thread.username}
                   unreadCount={thread.unread_message_count}
                   lastMessage={thread.last_message_content}
                   lastMessageDate={thread.last_message_at}
-                  setThreadDetails={setThreadDetails}
                   setAvatarColor={setCurrentAvatarColor}
                 />
               ))}
@@ -94,13 +96,10 @@ export function Threads() {
             height: "100%",
           }}
         >
-          {threadDetails == null ? (
+          {igThreadId == null ? (
             <NoMediaSelected />
           ) : (
-            <DirectMessages
-              threadDetails={threadDetails}
-              avatarColor={currentAvatarColor}
-            />
+            <DirectMessages avatarColor={currentAvatarColor} />
           )}
         </Box>
       </Grid.Col>

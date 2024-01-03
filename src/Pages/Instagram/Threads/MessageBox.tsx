@@ -7,7 +7,7 @@ import { queryKeys } from "../../../Constants/ApiConstants";
 import { SendAndAssignModal } from "./SendAndAssignModal";
 
 type Props = {
-  threadId: string;
+  threadId: string | undefined;
   assignedTo: "Robot" | "Human";
 };
 
@@ -25,6 +25,7 @@ export function MessageBox({ threadId, assignedTo }: Props) {
   const queryClient = useQueryClient();
 
   React.useEffect(() => {
+    if (threadId == null) return;
     if (choiceSelected) {
       console.log("A choice has been selected", choiceSelected);
       setChoiceSelected(false);
@@ -50,7 +51,7 @@ export function MessageBox({ threadId, assignedTo }: Props) {
         }
       );
     }
-  }, [choiceSelected]);
+  }, [choiceSelected, threadId]);
 
   const handleSendMessage = () => {
     if (message === "") {
@@ -64,6 +65,7 @@ export function MessageBox({ threadId, assignedTo }: Props) {
       setIsAssignModalOpen(true);
     }
   };
+  console.log(threadId);
 
   return (
     <>
@@ -82,23 +84,25 @@ export function MessageBox({ threadId, assignedTo }: Props) {
           onChange={(e) => setMessage(e.target.value)}
           sx={{ flex: 1 }}
         />
-        <Group px={16} position="center">
-          {sendDirectMessage.isLoading ? (
-            <ActionIcon size="xl" radius="xl" variant="light" color="brand">
-              <Loader size="sm" variant="dots" />
-            </ActionIcon>
-          ) : (
-            <ActionIcon
-              size="xl"
-              radius="xl"
-              variant="light"
-              color="brand"
-              onClick={handleSendMessage}
-            >
-              <IconSend strokeWidth={1.4} />
-            </ActionIcon>
-          )}
-        </Group>
+        {threadId != null && (
+          <Group px={16} position="center">
+            {sendDirectMessage.isLoading ? (
+              <ActionIcon size="xl" radius="xl" variant="light" color="brand">
+                <Loader size="sm" variant="dots" />
+              </ActionIcon>
+            ) : (
+              <ActionIcon
+                size="xl"
+                radius="xl"
+                variant="light"
+                color="brand"
+                onClick={handleSendMessage}
+              >
+                <IconSend strokeWidth={1.4} />
+              </ActionIcon>
+            )}
+          </Group>
+        )}
       </Group>
       <SendAndAssignModal
         isOpen={isAssignModalOpen}

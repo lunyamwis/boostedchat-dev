@@ -8,6 +8,7 @@ import {
   GetThread,
   GetThreadMessage,
   SendDirectMessageManually,
+  Thread,
 } from "../../Interfaces/Instagram/Threads/thread.interface";
 import {
   AddComment,
@@ -30,9 +31,23 @@ export const useThreadsApi = () => {
         .post("/", params)
         .then(handleRestResponse)
         .catch(handleRestError),
-    getThreadMessages: (threadId: string): Promise<GetThreadMessage[]> =>
+    getThreadByIgThreadId: (igThreadId: string): Promise<Thread> =>
+      axiosInstance
+        .get(`/thread-by-ig-thread/${igThreadId}/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    getThreadMessagesByThreadId: (
+      threadId: string
+    ): Promise<GetThreadMessage[]> =>
       axiosInstance
         .get(`/${threadId}/get-thread-messages`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    getThreadMessagesByIgThreadId: (
+      igThreadId: string
+    ): Promise<GetThreadMessage[]> =>
+      axiosInstance
+        .get(`/messages-by-ig-thread/${igThreadId}/`)
         .then(handleRestResponse)
         .catch(handleRestError),
     addComment: (params: AddComment): Promise<AddedCommentRespose> =>
