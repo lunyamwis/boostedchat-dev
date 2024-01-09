@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 import {
   Badge as MantineBadge,
   MantineColor,
   MantineSize,
-} from '@mantine/core';
+} from "@mantine/core";
 
 type Props = {
   color: MantineColor;
@@ -12,12 +12,12 @@ type Props = {
   size?: MantineSize;
 };
 
-export function Badge({ color, text, radius = 'md', size = 'md' }: Props) {
+export function Badge({ color, text, radius = "md", size = "md" }: Props) {
   return (
     <MantineBadge
       size={size}
       styles={{
-        inner: {
+        label: {
           fontWeight: 500,
         },
       }}

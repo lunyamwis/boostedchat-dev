@@ -22,7 +22,7 @@ export function DateFilters({
   setFilterValue,
 }: Props) {
   const [dateFilterValue, setDateFilterValue] = React.useState<Date | null>(
-    filterValue === "" ? null : new Date(filterValue),
+    filterValue === "" ? null : new Date(filterValue)
   );
   return (
     <Group align="center">
@@ -38,32 +38,30 @@ export function DateFilters({
         value={filterOperator ?? "eq"}
         onChange={(val) => setFilterOperator((val as TDateOperators) ?? "eq")}
         label="Operator"
-        sx={{ flex: 0.4 }}
+        style={{ flex: 0.4 }}
       />
-      {type === "date"
-        ? (
-          <DatePickerInput
-            value={dateFilterValue}
-            onChange={(val) => {
-              setDateFilterValue(val);
-              setFilterValue(format(val ?? new Date(), "yyyy-MM-dd hh:mm:ss"));
-            }}
-            label="Value"
-            sx={{ flex: 0.6 }}
-          />
-        )
-        : (
-          <DateTimePicker
-            valueFormat="DD MMM YYYY hh:mm A"
-            value={dateFilterValue}
-            onChange={(val) => {
-              setDateFilterValue(val);
-              setFilterValue(format(val ?? new Date(), "yyyy-MM-dd hh:mm:ss"));
-            }}
-            label="Value"
-            sx={{ flex: 0.6 }}
-          />
-        )}
+      {type === "date" ? (
+        <DatePickerInput
+          value={dateFilterValue}
+          onChange={(val) => {
+            setDateFilterValue(val);
+            setFilterValue(format(val ?? new Date(), "yyyy-MM-dd hh:mm:ss"));
+          }}
+          label="Value"
+          style={{ flex: 0.6 }}
+        />
+      ) : (
+        <DateTimePicker
+          valueFormat="DD MMM YYYY hh:mm A"
+          value={dateFilterValue}
+          onChange={(val) => {
+            setDateFilterValue(val);
+            setFilterValue(format(val ?? new Date(), "yyyy-MM-dd hh:mm:ss"));
+          }}
+          label="Value"
+          style={{ flex: 0.6 }}
+        />
+      )}
     </Group>
   );
 }

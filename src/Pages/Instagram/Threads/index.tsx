@@ -1,6 +1,14 @@
 import React from "react";
 import { useGetThreads } from "./Hooks/thread.hooks";
-import { Box, Divider, Grid, ScrollArea, Stack, Text } from "@mantine/core";
+import {
+  Box,
+  Divider,
+  Grid,
+  Group,
+  ScrollArea,
+  Stack,
+  Text,
+} from "@mantine/core";
 import { Loading } from "../../../Components/UIState/Loading";
 import { Error } from "../../../Components/UIState/Error";
 import { NoThreads } from "./NoThreads";
@@ -8,6 +16,8 @@ import { ThreadListItem } from "./ThreadListItem";
 import { DirectMessages } from "./DirectMessages";
 import { NoMediaSelected } from "./NoMediaSelected";
 import { useSearchParams } from "react-router-dom";
+import { ChatHeader } from "./Header";
+import { AssignedTabs } from "./AssignedTabs";
 
 export type ThreadDetails = {
   threadId: string;
@@ -28,8 +38,7 @@ export function Threads() {
     setIgThreadId(id);
   }, [searchParams]);
 
-  console.log("Rendered index");
-  if (threadsQR.isLoading) {
+  if (threadsQR.isPending) {
     return <Loading />;
   }
 
@@ -47,32 +56,42 @@ export function Threads() {
   }
   return (
     <Grid
-      my={8}
-      mx={16}
-      sx={{
+      m={0}
+      overflow="hidden"
+      styles={{
+        inner: {
+          height: "100%",
+          margin: 0,
+        },
+      }}
+      style={{
+        border: "1px solid #00000011",
         borderRadius: "4px",
-        border: "1px solid #e9e9e9",
         backgroundColor: "#FFFFFF",
         height: "98%",
       }}
     >
-      <Grid.Col sm={3} p={0}>
+      <Grid.Col span={3} p={0}>
         <Stack
           py={16}
-          sx={{
+          style={{
             height: "100%",
-            borderRight: "1px solid #f0f0f0",
           }}
         >
-          <Text pl={8} fw={500} fz={18}>
-            Threads
-          </Text>
-          <Divider />
+          <ChatHeader />
+          <Stack gap={0}>
+            <AssignedTabs />
+            <Divider />
+          </Stack>
           <Box
             component={ScrollArea}
-            sx={{ height: 200, flexGrow: 1, backgroundColor: "#FFFFFF" }}
+            style={{
+              height: 200,
+              flexGrow: 1,
+              backgroundColor: "#FFFFFF",
+            }}
           >
-            <Stack spacing={0}>
+            <Stack gap={0}>
               {threadsQR.data.map((thread) => (
                 <ThreadListItem
                   igThreadId={thread.thread_id}
@@ -89,9 +108,9 @@ export function Threads() {
         </Stack>
       </Grid.Col>
 
-      <Grid.Col sm={9} p={0}>
+      <Grid.Col span={9} p={0}>
         <Box
-          sx={{
+          style={{
             borderRadius: 16,
             height: "100%",
           }}

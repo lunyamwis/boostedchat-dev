@@ -9,7 +9,7 @@ type ComponentProps = {
   actions: THistory;
 };
 export function TableView({ actions }: ComponentProps) {
-  const groupedActions = _.map(actions, (action) => ({
+  const groupedActions = actions.map((action) => ({
     ...action,
     date: format(new Date(action.created_on ?? 2021), "dd MMM yyyy"),
     time: format(new Date(action.created_on ?? 2021), "h:mm aaa"),
@@ -24,7 +24,11 @@ export function TableView({ actions }: ComponentProps) {
   }
 
   return (
-    <Table horizontalSpacing="md" verticalSpacing="md" sx={{ minWidth: 650 }}>
+    <Table
+      horizontalSpacing="md"
+      verticalSpacing="md"
+      style={{ minWidth: 650 }}
+    >
       <thead>
         <tr>
           <th>Date</th>
@@ -38,7 +42,7 @@ export function TableView({ actions }: ComponentProps) {
           <>
             <tr
               key={idx}
-              // sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              // style={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <td rowSpan={pair[1].length}>{pair[0]}</td>
               <td align="left">{pair[1][0].time}</td>

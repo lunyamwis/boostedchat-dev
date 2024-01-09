@@ -31,22 +31,22 @@ export function Text({
   align = "right",
 }: ComponentProps & DefaultProps) {
   return (
-    <Grid gutter={16} sx={{ marginTop: 16, marginBottom: 16 }}>
-      <Grid.Col py={0} pr={0} pl={16} sm={5}>
+    <Grid gutter={16} style={{ marginTop: 16, marginBottom: 16 }}>
+      <Grid.Col py={0} pr={0} pl={16} span={5}>
         <MantineText
-          sx={{ fontWeight: 600, fontSize: "0.875rem", textAlign: align }}
+          style={{ fontWeight: 600, fontSize: "0.875rem", textAlign: align }}
         >
           {title}:
         </MantineText>
       </Grid.Col>
-      <Grid.Col py={0} pr={0} pl={16} sm={7}>
+      <Grid.Col py={0} pr={0} pl={16} span={7}>
         {type === "date" && <DateComponent {...value} />}
         {type === "status" && <StatusComponent {...value} />}
         {type === "text" && <TextComponent value={value} />}
         {comment && (
           <MantineText
-            color={comment.error ? "#ef5350" : "#999999"}
-            sx={{ fontSize: "0.8rem" }}
+            c={comment.error ? "#ef5350" : "#999999"}
+            style={{ fontSize: "0.8rem" }}
           >
             {comment.value}
           </MantineText>
@@ -58,7 +58,7 @@ export function Text({
 
 function NAComponent() {
   return (
-    <MantineText sx={{ fontSize: "0.875rem" }} color="#999999">
+    <MantineText style={{ fontSize: "0.875rem" }} c="#999999">
       n/a
     </MantineText>
   );
@@ -75,13 +75,13 @@ function DateComponent({
     return <NAComponent />;
   }
   return typeof date === "string" ? (
-    <MantineText sx={{ fontSize: "0.875rem" }} color="#444">
+    <MantineText style={{ fontSize: "0.875rem" }} c="#444">
       {withTime
         ? format(new Date(date), "dd MMM yyy, h:mm aaa")
         : format(new Date(date), "dd MMMM yyy")}
     </MantineText>
   ) : (
-    <MantineText sx={{ fontSize: "0.875rem" }} color="#444">
+    <MantineText style={{ fontSize: "0.875rem" }} c="#444">
       {withTime
         ? format(date as Date, "dd MMM yyy, h:mm aaa")
         : format(date as Date, "dd MMMM yyy")}
@@ -102,11 +102,11 @@ function StatusComponent({
     return <NAComponent />;
   }
   return timeStatus ? (
-    <MantineText sx={{ fontSize: "0.875rem" }} color={color}>
+    <MantineText style={{ fontSize: "0.875rem" }} c={color}>
       {message}
     </MantineText>
   ) : (
-    <Group position="left">
+    <Group justify="left">
       <Badge size="lg" color={color} text={message} />
     </Group>
   );
@@ -117,7 +117,7 @@ function TextComponent({ value }: { value?: string }) {
     return <NAComponent />;
   }
   return (
-    <MantineText sx={{ fontSize: "0.875rem" }} color="#444">
+    <MantineText style={{ fontSize: "0.875rem" }} c="#444">
       {value}
     </MantineText>
   );

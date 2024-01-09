@@ -56,7 +56,7 @@ export function AccountDetails() {
       <Grid justify="center" m={0}>
         <Grid.Col span={4}>
           <Box
-            sx={{
+            style={{
               backgroundColor: "white",
               paddingTop: 20,
             }}
@@ -67,7 +67,7 @@ export function AccountDetails() {
         </Grid.Col>
         <Grid.Col span={8}>
           <Box
-            sx={{
+            style={{
               backgroundColor: "white",
               paddingTop: 20,
             }}
@@ -78,7 +78,7 @@ export function AccountDetails() {
               defaultValue="Details"
               classNames={{ tabLabel: "material-tab" }}
             >
-              <Tabs.List position="center">
+              <Tabs.List justify="center">
                 <Tabs.Tab value="Details">Details</Tabs.Tab>
               </Tabs.List>
 

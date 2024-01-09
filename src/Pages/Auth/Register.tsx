@@ -32,36 +32,34 @@ export function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const register = useMutation(
-    (params: RegisterParams) => AuthAPI.register(params),
-    {
-      onSuccess: () => {
-        navigate("/login", {
-          replace: true,
-          state: {
-            color: "teal",
-            title: "Success",
-            message:
-              "Your account was created successfully. You can now log in with your email and password.",
-          } as LoginState,
-        });
-        setFirstName("");
-        setLastName("");
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
-      },
-      onError: (error: axiosError) => {
-        const errMessage = error.data;
-        setShowAlert(true);
-        setAlertInfo({
-          color: "red",
-          title: "Error",
-          message: errMessage,
-        });
-      },
-    }
-  );
+  const register = useMutation({
+    mutationFn: (params: RegisterParams) => AuthAPI.register(params),
+    onSuccess: () => {
+      navigate("/login", {
+        replace: true,
+        state: {
+          color: "teal",
+          title: "Success",
+          message:
+            "Your account was created successfully. You can now log in with your email and password.",
+        } as LoginState,
+      });
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+    },
+    onError: (error: axiosError) => {
+      const errMessage = error.data;
+      setShowAlert(true);
+      setAlertInfo({
+        color: "red",
+        title: "Error",
+        message: errMessage,
+      });
+    },
+  });
 
   const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -177,13 +175,13 @@ export function Register() {
           name="confirm_password"
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
-        <Button type="submit" loading={register.isLoading}>
+        <Button type="submit" loading={register.isPending}>
           Register
         </Button>
-        <Group position="center">
+        <Group align="center">
           <Tooltip label="Back to Login">
             <ActionIcon
-              disabled={register.isLoading}
+              disabled={register.isPending}
               variant="subtle"
               radius="xl"
               size="xl"

@@ -7,12 +7,7 @@ export function RequireAuth({ children }: { children?: React.ReactNode }) {
   const { user } = useAuth();
 
   if (!user) {
-    return (
-      <Navigate
-        to={`${authPageData.login.url}`}
-        replace
-      />
-    );
+    return <Navigate to={`${authPageData.login.url}`} replace />;
   }
 
   return <>{children}</>;

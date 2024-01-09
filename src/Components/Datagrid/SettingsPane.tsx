@@ -4,11 +4,11 @@ import {
   Button,
   Checkbox,
   CloseButton,
+  ComboboxItem,
   Divider,
   Group,
   ScrollArea,
   Select,
-  SelectItem,
   Stack,
   Text,
 } from "@mantine/core";
@@ -220,7 +220,7 @@ export function DataGridSettings({ setIsOpen, statusProps }: Props) {
 
   return (
     <Box
-      sx={{
+      style={{
         backgroundColor: "white",
         borderRadius: "4px",
         height: "100%",
@@ -229,9 +229,9 @@ export function DataGridSettings({ setIsOpen, statusProps }: Props) {
           DATAGRID_HEIGHT + DATAGRID_FOOTER_HEIGHT + DATAGRID_HEADER_HEIGHT,
       }}
     >
-      <Stack sx={{ height: "100%", justifyContent: "space-between" }}>
+      <Stack style={{ height: "100%", justifyContent: "space-between" }}>
         <Box>
-          <Group mt={20} mx={10} position="apart">
+          <Group mt={20} mx={10} justify="space-between">
             <Text>Table settings</Text>
             <CloseButton onClick={() => setIsOpen(false)} />
           </Group>
@@ -251,7 +251,7 @@ export function DataGridSettings({ setIsOpen, statusProps }: Props) {
               <Accordion.Item value="status">
                 <Accordion.Control>Status</Accordion.Control>
                 <Accordion.Panel>
-                  <Group position="left" mx={16}>
+                  <Group justify="left" mx={16}>
                     <Select
                       placeholder="Status"
                       value={statusValue}
@@ -270,7 +270,7 @@ export function DataGridSettings({ setIsOpen, statusProps }: Props) {
                           value: "All",
                         },
                         ...(statusColumnDef.valueOptions as (
-                          | SelectItem
+                          | ComboboxItem
                           | string
                         )[]),
                       ]}
@@ -332,7 +332,7 @@ export function DataGridSettings({ setIsOpen, statusProps }: Props) {
         </Box>
         <Box>
           <Divider />
-          <Group position="right" mt={16} pb={16} pr={16}>
+          <Group justify="right" mt={16} pb={16} pr={16}>
             <Button onClick={handleApplySettings}>Apply</Button>
           </Group>
         </Box>

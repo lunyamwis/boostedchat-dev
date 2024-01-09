@@ -3,9 +3,9 @@ import React from "react";
 export function DateHolder({ isoDate }: { isoDate: string }) {
   const theme = useMantineTheme();
   return (
-    <Group position="center">
+    <Group justify="center">
       <Box
-        sx={{
+        style={{
           backgroundColor: theme.colors.brand[0],
           borderRadius: "4px",
           padding: 8,

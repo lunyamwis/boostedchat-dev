@@ -9,7 +9,7 @@ type ComponentProps = {
 
 export function Column({ col, children, single = false }: ComponentProps) {
   return (
-    <Grid.Col span={single ? 9 : 5} sx={{ paddingLeft: col === 2 ? 3 : 0 }}>
+    <Grid.Col span={single ? 9 : 5} style={{ paddingLeft: col === 2 ? 3 : 0 }}>
       <Stack>{children}</Stack>
     </Grid.Col>
   );

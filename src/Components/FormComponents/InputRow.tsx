@@ -12,7 +12,7 @@ export function InputRow({ title, required = false, children }: Props) {
     <Grid
       align="center"
       columns={12}
-      sx={{
+      style={{
         "&:hover": {
           backgroundColor: "#F5F7F9",
         },
@@ -24,9 +24,9 @@ export function InputRow({ title, required = false, children }: Props) {
       }}
     >
       <Grid.Col span={3}>
-        <Group spacing={5}>
+        <Group gap={5}>
           <Text
-            sx={{
+            style={{
               fontSize: "14px",
               fontWeight: 500,
             }}
@@ -34,7 +34,7 @@ export function InputRow({ title, required = false, children }: Props) {
             {title}
           </Text>
           {required && (
-            <Text sx={{ fontSize: "15px" }} color="red" component="span">
+            <Text style={{ fontSize: "15px" }} c="red" component="span">
               *
             </Text>
           )}

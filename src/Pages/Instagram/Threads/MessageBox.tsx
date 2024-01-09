@@ -27,9 +27,7 @@ export function MessageBox({ threadId, assignedTo }: Props) {
   React.useEffect(() => {
     if (threadId == null) return;
     if (choiceSelected) {
-      console.log("A choice has been selected", choiceSelected);
       setChoiceSelected(false);
-      console.log(mAssignedTo);
 
       sendDirectMessage.mutate(
         {
@@ -41,10 +39,9 @@ export function MessageBox({ threadId, assignedTo }: Props) {
         },
         {
           onSuccess: () => {
-            queryClient.invalidateQueries([
-              queryKeys.instagram.threads.getMessages,
-              threadId,
-            ]);
+            queryClient.invalidateQueries({
+              queryKey: [queryKeys.instagram.threads.getMessages, threadId],
+            });
             setChoiceSelected(false);
             setMessage("");
           },
@@ -65,14 +62,13 @@ export function MessageBox({ threadId, assignedTo }: Props) {
       setIsAssignModalOpen(true);
     }
   };
-  console.log(threadId);
 
   return (
     <>
       <Group
         pl={8}
-        sx={{ borderTop: "1px solid #f0f0f0" }}
-        spacing={0}
+        style={{ borderTop: "1px solid #f0f0f0" }}
+        gap={0}
         mih={104}
       >
         <Textarea
@@ -82,11 +78,11 @@ export function MessageBox({ threadId, assignedTo }: Props) {
           minRows={4}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          sx={{ flex: 1 }}
+          style={{ flex: 1 }}
         />
         {threadId != null && (
-          <Group px={16} position="center">
-            {sendDirectMessage.isLoading ? (
+          <Group px={16} justify="center">
+            {sendDirectMessage.isPending ? (
               <ActionIcon size="xl" radius="xl" variant="light" color="brand">
                 <Loader size="sm" variant="dots" />
               </ActionIcon>

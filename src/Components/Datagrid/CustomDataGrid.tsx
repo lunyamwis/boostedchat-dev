@@ -21,7 +21,7 @@ type Props<T extends RowData> = {
 export function CustomDataGrid<T extends RowData>({ table, noData }: Props<T>) {
   return (
     <MantineTable
-      sx={{
+      style={{
         tableLayout: "fixed",
       }}
       highlightOnHover
@@ -46,10 +46,10 @@ export function CustomDataGrid<T extends RowData>({ table, noData }: Props<T>) {
                 colSpan={header.colSpan}
               >
                 {header.isPlaceholder ? null : (
-                  <Group position="apart" sx={{ flexWrap: "nowrap" }}>
-                    <Group spacing={2} sx={{ flexWrap: "nowrap" }}>
+                  <Group justify="space-between" style={{ flexWrap: "nowrap" }}>
+                    <Group gap={2} style={{ flexWrap: "nowrap" }}>
                       <Box
-                        sx={{
+                        style={{
                           textTransform: "uppercase",
                           fontSize: 12,
                           color: "#262626",
@@ -84,7 +84,7 @@ export function CustomDataGrid<T extends RowData>({ table, noData }: Props<T>) {
                     </Group>
                     <Divider
                       orientation="vertical"
-                      sx={{
+                      style={{
                         cursor: "col-resize",
                         touchAction: "none",
                         userSelect: "none",
@@ -112,7 +112,7 @@ export function CustomDataGrid<T extends RowData>({ table, noData }: Props<T>) {
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id}>
                     <Box
-                      sx={{
+                      style={{
                         WebkitLineClamp: 1,
                         overflow: "hidden",
                         display: "-webkit-box",

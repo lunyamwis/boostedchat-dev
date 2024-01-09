@@ -24,12 +24,12 @@ export function SendAndAssignModal({
       title="Alert"
       onClose={() => setIsOpen(false)}
     >
-      <Stack spacing={48}>
+      <Stack gap={48}>
         <Text>Would you like to take over this conversation?</Text>
-        <Group position="right">
+        <Group justify="right">
           <Button
             variant="outline"
-            loading={sendDirectMessage.isLoading}
+            loading={sendDirectMessage.isPending}
             onClick={() => {
               setChoiceSelected(true);
               setAssignedTo("Robot");
@@ -39,7 +39,7 @@ export function SendAndAssignModal({
             No, let the bot continue
           </Button>
           <Button
-            loading={sendDirectMessage.isLoading}
+            loading={sendDirectMessage.isPending}
             onClick={() => {
               setChoiceSelected(true);
               setAssignedTo("Human");

@@ -29,8 +29,8 @@ export function ActionButtons({
   useEffect(() => {}, []);
   return (
     <Group
-      position="apart"
-      sx={{
+      justify="space-between"
+      style={{
         borderTop: "1px solid #dee2e6",
         borderRight: "1px solid #dee2e6",
         borderLeft: "1px solid #dee2e6",
@@ -54,7 +54,7 @@ export function ActionButtons({
         )}
       </Box>
       <Group>
-        <Group spacing={2}>
+        <Group gap={2}>
           <Text>Rows per page:</Text>
           <Select
             w={80}

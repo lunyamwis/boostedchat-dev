@@ -1,4 +1,10 @@
-import { Group, Text, ThemeIcon, useMantineTheme } from "@mantine/core";
+import {
+  Group,
+  lighten,
+  Text,
+  ThemeIcon,
+  useMantineTheme,
+} from "@mantine/core";
 import React from "react";
 import { IconChevronRight } from "@tabler/icons-react";
 import { EGroup, GroupIcons } from "../../Pages";
@@ -17,18 +23,18 @@ export function GroupTitle({ title, isGroupOpened, setIsGroupOpened }: Props) {
   return (
     <Group
       onClick={() => setIsGroupOpened(!isGroupOpened)}
-      position="apart"
-      sx={{
+      justify="space-between"
+      style={{
         cursor: "pointer",
         flexWrap: "nowrap",
         borderRight: isGroupOpened
           ? `2px solid ${theme.colors.brand[6]}`
           : "2px solid transparent",
         backgroundColor: isGroupOpened
-          ? theme.fn.lighten("#00D0FF", 0.9)
+          ? lighten("#00D0FF", 0.9)
           : "transparent",
         "&:hover": {
-          backgroundColor: theme.fn.lighten("#00D0FF", 0.96),
+          backgroundColor: lighten("#00D0FF", 0.96),
         },
       }}
       px={16}
@@ -39,7 +45,7 @@ export function GroupTitle({ title, isGroupOpened, setIsGroupOpened }: Props) {
           <GroupIcon size={16} />
         </ThemeIcon>
         <Text
-          sx={{
+          style={{
             fontSize: "15px",
             fontWeight: 500,
             color: "#212121",

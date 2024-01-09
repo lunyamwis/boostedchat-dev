@@ -35,7 +35,7 @@ const color = getRandomColor();
 
 function UserStat({ title, count }: { title: string; count: number }) {
   return (
-    <Group spacing={5}>
+    <Group gap={5}>
       <Text fw={600} fz={15}>
         {count}
       </Text>
@@ -53,9 +53,9 @@ export function ParentContainer({
 
   const theme = useMantineTheme();
   return (
-    <Stack spacing={variant === "email" ? 20 : 0}>
+    <Stack gap={variant === "email" ? 20 : 0}>
       <Group
-        sx={{
+        style={{
           paddingTop: 35,
           paddingLeft: 20,
           paddingBottom: 35,
@@ -67,14 +67,14 @@ export function ParentContainer({
           {titleProps.igname?.charAt(0).toUpperCase()}
         </Avatar>
         <Stack>
-          <Stack spacing={4}>
-            <Group spacing={6} ref={ref}>
+          <Stack gap={4}>
+            <Group gap={6} ref={ref}>
               <Text
                 component={Link}
                 to={`https://www.instagram.com/${titleProps.igname}`}
                 target="_blank"
-                color={hovered ? theme.colors[color][6] : "black"}
-                sx={{
+                c={hovered ? theme.colors[color][6] : "black"}
+                style={{
                   fontWeight: 600,
                   fontSize: "20px",
                 }}
@@ -89,7 +89,7 @@ export function ParentContainer({
               )}
             </Group>
             <Text
-              sx={(theme) => ({
+              style={(theme) => ({
                 color: theme.colors.gray[9],
                 fontSize: "13px",
               })}
@@ -97,7 +97,7 @@ export function ParentContainer({
               {titleProps.fullName}
             </Text>
             <Text
-              sx={(theme) => ({
+              style={(theme) => ({
                 color: theme.colors.gray[9],
                 fontSize: "13px",
               })}
@@ -113,7 +113,7 @@ export function ParentContainer({
         </Stack>
       </Group>
 
-      <Box sx={{ display: "flex", flexDirection: "column" }}>{children}</Box>
+      <Box style={{ display: "flex", flexDirection: "column" }}>{children}</Box>
     </Stack>
   );
 }

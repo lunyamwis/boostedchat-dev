@@ -1,5 +1,5 @@
 // import { IClientGet } from '../Interfaces/Core/client.interface';
-import { MANTINE_COLORS } from "@mantine/core";
+import { MANTINE_COLORS } from "@/Constants/GeneralConstants";
 import { IActor } from "../Interfaces/general.interface";
 import {
   differenceInDays,
@@ -43,12 +43,9 @@ export const getNames = (user: IActor | null | undefined) => {
 };
 
 export const getRandomColor = () => {
-  let col =
-    MANTINE_COLORS[Math.floor(Math.random() * (MANTINE_COLORS.length - 1))];
-  if (col === "gray") {
-    col = getRandomColor();
-  }
-  return col;
+  return MANTINE_COLORS[
+    Math.floor(Math.random() * (MANTINE_COLORS.length - 1))
+  ];
 };
 
 export const formatChatDate = (

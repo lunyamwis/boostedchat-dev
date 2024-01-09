@@ -28,7 +28,7 @@ export function Affix({
         <ActionIcon
           color={theme.primaryColor}
           id={id}
-          sx={{
+          style={{
             width: 48,
             height: 48,
             boxShadow:

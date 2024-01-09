@@ -8,7 +8,7 @@ type Props = {
 
 export const Loading = ({ loadingText, loaderVariant }: Props) => {
   return (
-    <Stack justify="center" align="center" sx={{ height: "100%" }}>
+    <Stack justify="center" align="center" style={{ height: "100%" }}>
       <Loader variant={loaderVariant} />
       <Text>{loadingText ? loadingText : "Please wait..."}</Text>
     </Stack>

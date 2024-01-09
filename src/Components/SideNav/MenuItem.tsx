@@ -1,7 +1,9 @@
 import {
   Box,
   Collapse,
+  darken,
   Group,
+  lighten,
   NavLink,
   Text,
   useMantineTheme,
@@ -52,7 +54,7 @@ export function MenuItem({ title, Icon, url }: Props) {
       my={{ base: 8, sm: 4 }}
       pl={24}
       py={12}
-      icon={<Icon size={18} strokeWidth={1.5} />}
+      leftSection={<Icon size={18} strokeWidth={1.5} />}
       styles={{
         label: {
           fontSize: "14px",
@@ -63,7 +65,7 @@ export function MenuItem({ title, Icon, url }: Props) {
             backgroundColor:
               pathname === url
                 ? "transparent"
-                : theme.fn.lighten(theme.colors.brand[6], 0.9),
+                : lighten(theme.colors.brand[6], 0.9),
           },
         },
       }}
@@ -82,7 +84,7 @@ export function ParentMenuItem({ title, Icon, childrenKeys }: Level1Props) {
           setIsExpanded(!isExpanded);
         }}
         ref={ref}
-        sx={{
+        style={{
           marginTop: 0,
           marginBottom: 0,
           paddingTop: "12px",
@@ -96,7 +98,7 @@ export function ParentMenuItem({ title, Icon, childrenKeys }: Level1Props) {
           },
         }}
       >
-        <Group position="apart" align="center" px={24}>
+        <Group justify="space-between" align="center" px={24}>
           <Group align="center">
             <Icon
               strokeWidth={1.3}
@@ -104,15 +106,15 @@ export function ParentMenuItem({ title, Icon, childrenKeys }: Level1Props) {
               color={isExpanded || hovered ? theme.colors.brand[6] : "#000000"}
             />
             <Text
-              color={isExpanded || hovered ? "brand" : "#111111"}
-              sx={{
+              c={isExpanded || hovered ? "brand" : "#111111"}
+              style={{
                 textTransform: "capitalize",
                 fontWeight: isExpanded ? 500 : 400,
                 fontSize: "15px",
                 letterSpacing: "0.1px",
                 "&:hover": {
                   textDecoration: "none",
-                  color: theme.fn.darken(theme.colors.brand[6], 0.1),
+                  color: darken(theme.colors.brand[6], 0.1),
                   cursor: "pointer",
                   fontWeight: 500,
                 },
@@ -134,7 +136,7 @@ export function ParentMenuItem({ title, Icon, childrenKeys }: Level1Props) {
       </Box>
       <Collapse in={isExpanded}>
         <Box
-          sx={{
+          style={{
             borderLeft: "1px solid #dee2e6",
             marginLeft: 48,
             marginTop: 0,
@@ -153,8 +155,8 @@ export function ParentMenuItem({ title, Icon, childrenKeys }: Level1Props) {
                   py={12}
                   component={Link}
                   to={child.url}
-                  color={pathname === child.url ? "brand" : "#222222"}
-                  sx={{
+                  c={pathname === child.url ? "brand" : "#222222"}
+                  style={{
                     fontWeight: pathname === child.url ? 500 : 400,
                     display: "list-item",
                     listStyleType: "disc",
@@ -165,7 +167,7 @@ export function ParentMenuItem({ title, Icon, childrenKeys }: Level1Props) {
                     marginLeft: 24,
                     "&:hover": {
                       borderRadius: "4px",
-                      color: theme.fn.darken(theme.colors.brand[6], 0.1),
+                      color: darken(theme.colors.brand[6], 0.1),
                       cursor: "pointer",
                     },
                   }}

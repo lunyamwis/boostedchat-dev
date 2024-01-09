@@ -29,7 +29,9 @@ export function LoadingDialog({
       onClose={handleClose}
       title={
         isLoading ? null : (
-          <Text sx={{ fontWeight: 500, fontSize: "20px", color: "#000000DE" }}>
+          <Text
+            style={{ fontWeight: 500, fontSize: "20px", color: "#000000DE" }}
+          >
             {title}
           </Text>
         )
@@ -43,8 +45,8 @@ export function LoadingDialog({
     >
       {isLoading ? (
         <Stack
-          spacing={4}
-          sx={{
+          gap={4}
+          style={{
             marginTop: 20,
             display: "flex",
             justifyContent: "center",
@@ -52,12 +54,12 @@ export function LoadingDialog({
           }}
         >
           <Loader />
-          <Text color="dimmed">{loadingMessage ?? "Please wait..."}</Text>
+          <Text c="dimmed">{loadingMessage ?? "Please wait..."}</Text>
         </Stack>
       ) : (
         <Stack>
-          <Text sx={{ color: "rgb(0 0 0 / 78%)" }}>{message}</Text>
-          <Group position="apart">
+          <Text style={{ color: "rgb(0 0 0 / 78%)" }}>{message}</Text>
+          <Group justify="space-between">
             <Box />
             {next ? (
               <Button onClick={next.fn} fullWidth={false} variant="subtle">

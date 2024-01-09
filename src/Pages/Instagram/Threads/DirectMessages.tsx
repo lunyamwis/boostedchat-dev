@@ -27,7 +27,6 @@ import { IconExternalLink } from "@tabler/icons-react";
 import { openConfirmModal } from "@mantine/modals";
 import { AssignedToSwitch } from "./AssignedToSwitch";
 import { useGetAccountByThreadId } from "../Account/Hooks/accounts.hook";
-import { LogItem } from "./LogItem";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../../../Constants/ApiConstants";
 import { Link, useSearchParams } from "react-router-dom";
@@ -233,26 +232,28 @@ export function DirectMessages({ avatarColor }: Props) {
     if (threadQR.data == null) return;
     resetThreadCount.mutate(threadQR.data.id, {
       onSuccess: () => {
-        queryClient.invalidateQueries([queryKeys.instagram.threads.getAll]);
+        queryClient.invalidateQueries({
+          queryKey: [queryKeys.instagram.threads.getAll],
+        });
       },
     });
   }, [threadQR.data]);
 
   return (
-    <Stack justify="space-between" spacing={0} sx={{ height: "100%" }}>
+    <Stack justify="space-between" gap={0} style={{ height: "100%" }}>
       <Group
-        position="apart"
+        justify="space-between"
         py={16}
         pl={8}
         pr={16}
-        sx={{ borderBottom: "1px solid #F0F0F0" }}
+        style={{ borderBottom: "1px solid #F0F0F0" }}
       >
         {accountQR.isLoading && (
           <Group>
-            <Avatar color={avatarColor}>
+            <Avatar c={avatarColor}>
               <Skeleton />
             </Avatar>
-            <Stack spacing={1}>
+            <Stack gap={1}>
               <Skeleton />
               <Skeleton />
             </Stack>
@@ -260,14 +261,12 @@ export function DirectMessages({ avatarColor }: Props) {
         )}
         {accountQR.data != null && (
           <Group>
-            <Avatar color={avatarColor}>
-              {accountQR.data.igname.charAt(0)}
-            </Avatar>
-            <Stack spacing={1}>
+            <Avatar c={avatarColor}>{accountQR.data.igname.charAt(0)}</Avatar>
+            <Stack gap={1}>
               <Text>{accountQR.data.igname}</Text>
-              <Text fz={13} color="dimmed">
+              <Text fz={13} c="dimmed">
                 Assigned to{" "}
-                <Text component="span" color="dimmed">
+                <Text component="span" c="dimmed">
                   {accountQR.data.assigned_to === "Robot" ? "Bot" : "me"}
                 </Text>
               </Text>
@@ -313,7 +312,7 @@ export function DirectMessages({ avatarColor }: Props) {
         </Group>
       </Group>
       {messagesQR.isLoading ? (
-        <Box sx={{ height: "100%", backgroundColor: "#F8f9fa" }}>
+        <Box style={{ height: "100%", backgroundColor: "#F8f9fa" }}>
           <Loading loaderVariant="dots" loadingText="Loading messages..." />
         </Box>
       ) : messagesQR.isError ||
@@ -328,12 +327,12 @@ export function DirectMessages({ avatarColor }: Props) {
           <Box
             viewportRef={viewport}
             component={ScrollArea}
-            sx={{ height: 200, flexGrow: 1, backgroundColor: "#F8f9fa" }}
+            style={{ height: 200, flexGrow: 1, backgroundColor: "#F8f9fa" }}
           >
             <Stack
               py={24}
               px={12}
-              sx={{ height: "100%", backgroundColor: "#F9F8Fa" }}
+              style={{ height: "100%", backgroundColor: "#F9F8Fa" }}
             >
               {Object.keys(formattedThreads).map((threadDate) => (
                 <Stack key={threadDate}>
@@ -343,19 +342,19 @@ export function DirectMessages({ avatarColor }: Props) {
                       {formattedThreadBody.type === "message" ? (
                         <Group
                           key={formattedThreadBody.date}
-                          position={
+                          justify={
                             formattedThreadBody.username === "Me"
                               ? "right"
                               : "left"
                           }
                         >
                           <Group
-                            position={
+                            justify={
                               formattedThreadBody.username === "Me"
                                 ? "right"
                                 : "left"
                             }
-                            sx={{
+                            style={{
                               width: "60%",
                             }}
                           >
@@ -375,11 +374,7 @@ export function DirectMessages({ avatarColor }: Props) {
                           </Group>
                         </Group>
                       ) : (
-                        <LogItem
-                          date={formattedThreadBody.date}
-                          actor={formattedThreadBody.username}
-                          action={formattedThreadBody.change}
-                        />
+                        <></>
                       )}
                     </>
                   ))}

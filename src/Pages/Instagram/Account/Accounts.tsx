@@ -36,7 +36,7 @@ export function Accounts() {
             <IconPencil size={17} strokeWidth={1.4} />
           </ActionIcon>
         </Tooltip>
-        {resetAccount.isLoading ? (
+        {resetAccount.isPending ? (
           <Loader size="xs" />
         ) : (
           <Tooltip label="Reset Account">

@@ -12,7 +12,7 @@ export function DetailsRow({ title, iconColor, icon, children }: RowProps) {
   return (
     <>
       <Group
-        sx={{
+        style={{
           paddingLeft: 24,
           paddingRight: 24,
           paddingTop: 16,
@@ -23,7 +23,7 @@ export function DetailsRow({ title, iconColor, icon, children }: RowProps) {
           {icon}
         </ThemeIcon>
         <Text
-          sx={(theme) => ({
+          style={(theme) => ({
             color: theme.black,
             fontSize: "16px",
             fontWeight: 500,
@@ -32,7 +32,7 @@ export function DetailsRow({ title, iconColor, icon, children }: RowProps) {
           {title}
         </Text>
       </Group>
-      <Box sx={{ paddingLeft: 66, paddingRight: 40, paddingBottom: 16 }}>
+      <Box style={{ paddingLeft: 66, paddingRight: 40, paddingBottom: 16 }}>
         {children}
       </Box>
     </>

@@ -3,8 +3,6 @@ import { useGlobalAxios } from "../../Hooks/useAxios";
 import {
   AssignOperator,
   CreateThreadParams,
-  GeneratedResponse,
-  GenerateResponseParams,
   GetThread,
   GetThreadMessage,
   SendDirectMessageManually,
@@ -65,21 +63,14 @@ export const useThreadsApi = () => {
         .post(`/${params.id}/send-message-manually/`, params.data)
         .then(handleRestResponse)
         .catch(handleRestError),
-    generateResponse: (
-      params: GenerateResponseParams
-    ): Promise<GeneratedResponse> =>
-      axiosInstance
-        .post(`/${params.id}/generate-respons/`, params.data)
-        .then(handleRestResponse)
-        .catch(handleRestError),
-    checkResponses: () =>
-      axiosInstance
-        .get(`/check-respons/`)
-        .then(handleRestResponse)
-        .catch(handleRestError),
     resetThreadCount: (id: string) =>
       axiosInstance
         .post(`/${id}/reset-thread-count/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    getSnapshotByDate: (date: string) =>
+      axiosInstance
+        .post(`/response-rate/`, { date })
         .then(handleRestResponse)
         .catch(handleRestError),
   };

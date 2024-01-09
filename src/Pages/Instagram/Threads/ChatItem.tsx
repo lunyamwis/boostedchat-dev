@@ -19,26 +19,26 @@ export function ChatItem({
   date,
 }: Props) {
   return (
-    <Group sx={{ flexWrap: "nowrap" }}>
-      <Avatar src={profilePicture} color={avatarColor}>
+    <Group style={{ flexWrap: "nowrap" }}>
+      <Avatar src={profilePicture} c={avatarColor}>
         {userInitials}
       </Avatar>
       <Stack
-        spacing={3}
+        gap={3}
         p={8}
-        sx={{
+        style={{
           backgroundColor: "white",
           borderRadius: 8,
         }}
       >
-        <Text fz={12} color={avatarColor}>
+        <Text fz={12} c={avatarColor}>
           {userNames}
         </Text>
-        <Text color="#262626" fz={14}>
+        <Text c="#262626" fz={14}>
           {content}
         </Text>
-        <Group position="right">
-          <Text color="dimmed" fz={12}>
+        <Group justify="right">
+          <Text c="dimmed" fz={12}>
             {date}
           </Text>
         </Group>

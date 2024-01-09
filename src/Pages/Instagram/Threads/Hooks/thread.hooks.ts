@@ -7,7 +7,6 @@ import {
 } from "../../../../Apis/Instagram/Threads.api";
 import {
   CreateThreadParams,
-  GenerateResponseParams,
   SendDirectMessageManually,
 } from "../../../../Interfaces/Instagram/Threads/thread.interface";
 import { AddComment } from "../../../../Interfaces/Instagram/photo.interface";
@@ -15,9 +14,9 @@ import { useAuditLogsApi } from "../../../../Apis/Logs/Logs.api";
 
 export const useThreadsWrapperApi = () => {
   const { create } = useThreadsApi();
-  const createThread = useMutation((params: CreateThreadParams) =>
-    create(params)
-  );
+  const createThread = useMutation({
+    mutationFn: (params: CreateThreadParams) => create(params),
+  });
 
   return {
     createThread,
@@ -26,91 +25,86 @@ export const useThreadsWrapperApi = () => {
 
 export const useGetThreads = () => {
   const { getAll } = useThreadsApi();
-  return useQuery([queryKeys.instagram.threads.getAll], () => getAll());
+  return useQuery({
+    queryKey: [queryKeys.instagram.threads.getAll],
+    queryFn: () => getAll(),
+  });
 };
 
 export const useGetThreadByIgThreadId = (igThreadId: string | null) => {
   const { getThreadByIgThreadId } = useThreadsApi();
-  return useQuery(
-    [queryKeys.instagram.threads.byIgThreadId, igThreadId],
-    () => getThreadByIgThreadId(igThreadId as string),
-    {
-      enabled: igThreadId != null,
-    }
-  );
+  return useQuery({
+    queryKey: [queryKeys.instagram.threads.byIgThreadId, igThreadId],
+    queryFn: () => getThreadByIgThreadId(igThreadId as string),
+    enabled: igThreadId != null,
+  });
 };
 
 export const useGetThreadMessagesByThreadId = (threadId: string) => {
   const { getThreadMessagesByThreadId } = useThreadsApi();
-  return useQuery(
-    [queryKeys.instagram.threads.getMessages, threadId],
-    () => getThreadMessagesByThreadId(threadId),
-    {
-      refetchInterval: 45000,
-      refetchOnMount: false,
-      refetchOnWindowFocus: true,
-    }
-  );
+  return useQuery({
+    queryKey: [queryKeys.instagram.threads.getMessages, threadId],
+    queryFn: () => getThreadMessagesByThreadId(threadId),
+    refetchInterval: 45000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+  });
 };
 
 export const useGetThreadMessagesByIgThreadId = (igThreadId: string | null) => {
   const { getThreadMessagesByIgThreadId } = useThreadsApi();
-  return useQuery(
-    [queryKeys.instagram.threads.getMessages, igThreadId],
-    () => getThreadMessagesByIgThreadId(igThreadId as string),
-    {
-      enabled: igThreadId != null,
-      refetchInterval: 45000,
-      refetchOnMount: false,
-      refetchOnWindowFocus: true,
-    }
-  );
+  return useQuery({
+    queryKey: [queryKeys.instagram.threads.getMessages, igThreadId],
+    queryFn: () => getThreadMessagesByIgThreadId(igThreadId as string),
+    enabled: igThreadId != null,
+    refetchInterval: 45000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+  });
 };
 
 export const useSendDirectMessage = () => {
   const { sendDirectMessage } = useThreadsApi();
-  return useMutation((params: SendDirectMessageManually) =>
-    sendDirectMessage(params)
-  );
+  return useMutation({
+    mutationFn: (params: SendDirectMessageManually) =>
+      sendDirectMessage(params),
+  });
 };
 
 export const useAddDM = () => {
   const { addComment } = useThreadsApi();
 
-  return useMutation((params: AddComment) => {
-    return addComment(params);
-  });
-};
-
-export const useGenerateMessage = () => {
-  const { generateResponse } = useThreadsApi();
-
-  return useMutation((params: GenerateResponseParams) => {
-    return generateResponse(params);
+  return useMutation({
+    mutationFn: (params: AddComment) => {
+      return addComment(params);
+    },
   });
 };
 
 export const useClearThread = () => {
   const { clearThread } = useThreadsApi();
-  return useMutation((threadId: string) => clearThread(threadId));
+  return useMutation({
+    mutationFn: (threadId: string) => clearThread(threadId),
+  });
 };
 
 export const useResetThreadCount = () => {
   const { resetThreadCount } = useThreadsApi();
-  return useMutation((id: string) => resetThreadCount(id));
+  return useMutation({ mutationFn: (id: string) => resetThreadCount(id) });
 };
 
 export const useGetAccountStatusAuditLogs = (accountId: string) => {
   const { getStatusChangesLogs } = useAuditLogsApi();
 
-  return useQuery(
-    [queryKeys.auditLogs.getAll],
-    () => getStatusChangesLogs(accountId),
-    {}
-  );
+  return useQuery({
+    queryKey: [queryKeys.auditLogs.getAll],
+    queryFn: () => getStatusChangesLogs(accountId),
+  });
 };
 
 export const useAssignOperator = () => {
   const { assignOperator } = useFallbackApi();
-  return useMutation((params: AssignOperator) => assignOperator(params));
+  return useMutation({
+    mutationFn: (params: AssignOperator) => assignOperator(params),
+  });
 };

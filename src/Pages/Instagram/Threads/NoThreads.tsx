@@ -3,9 +3,11 @@ import React from "react";
 
 export function NoThreads() {
   return (
-    <Stack sx={{ border: "1px solid #ced4da", height: "98%", borderRadius: 4 }}>
+    <Stack
+      style={{ border: "1px solid #ced4da", height: "98%", borderRadius: 4 }}
+    >
       <Stack
-        sx={{
+        style={{
           borderRadius: 4,
           borderBottom: "1px solid #eee",
           backgroundColor: "#FFFFFF",
@@ -16,7 +18,7 @@ export function NoThreads() {
           Threads
         </Text>
       </Stack>
-      <Stack justify="center" align="center" sx={{ height: "100%" }}>
+      <Stack justify="center" align="center" style={{ height: "100%" }}>
         <Text>No threads</Text>
       </Stack>
     </Stack>

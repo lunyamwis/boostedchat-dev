@@ -25,7 +25,7 @@ export function LoadingTable<T extends RowData>({
   return (
     <Box
       bg="#ffffff"
-      sx={{
+      style={{
         borderRight: "1px solid #dee2e6",
         borderLeft: "1px solid #dee2e6",
         borderTop: "1px solid #dee2e6",
@@ -33,14 +33,14 @@ export function LoadingTable<T extends RowData>({
         borderTopRightRadius: "4px",
       }}
     >
-      <Stack spacing={0}>
-        <Group position="apart" px={30} py={30}>
-          <Group position="left">
+      <Stack gap={0}>
+        <Group justify="space-between" px={30} py={30}>
+          <Group justify="left">
             <Text fw={500}>{tableName}</Text>
           </Group>
-          <Group position="left">
+          <Group justify="left">
             <TextInput
-              icon={<IconSearch size={16} />}
+              leftSection={<IconSearch size={16} />}
               placeholder="Search all columns"
               readOnly
             />
@@ -48,9 +48,9 @@ export function LoadingTable<T extends RowData>({
             <Skeleton height={20} circle width={20} />
           </Group>
         </Group>
-        <Box sx={{ height: 600, overflowX: "auto" }}>
+        <Box style={{ height: 600, overflowX: "auto" }}>
           <MantineTable
-            sx={{
+            style={{
               tableLayout: "fixed",
             }}
             highlightOnHover
@@ -70,10 +70,10 @@ export function LoadingTable<T extends RowData>({
                   }
                   return (
                     <th className="relative" key={col.id}>
-                      <Group position="apart" sx={{ flexWrap: "nowrap" }}>
-                        <Group spacing={2} sx={{ flexWrap: "nowrap" }}>
+                      <Group justify="space-between" style={{ flexWrap: "nowrap" }}>
+                        <Group gap={2} style={{ flexWrap: "nowrap" }}>
                           <Box
-                            sx={{
+                            style={{
                               textTransform: "uppercase",
                               fontSize: 12,
                               color: "#262626",
@@ -89,7 +89,7 @@ export function LoadingTable<T extends RowData>({
                         </Group>
                         <Divider
                           orientation="vertical"
-                          sx={{
+                          style={{
                             cursor: "col-resize",
                             touchAction: "none",
                             userSelect: "none",

@@ -173,12 +173,12 @@ export function ColumnFilter({
 
   return editMode ? (
     <Group
-      sx={{
+      style={{
         padding: "20px",
         backgroundColor: "#f8f9fa",
       }}
     >
-      <Stack sx={{ flex: 0.9 }}>
+      <Stack style={{ flex: 0.9 }}>
         <Select
           label="Column"
           searchable
@@ -193,12 +193,12 @@ export function ColumnFilter({
           }}
         />
         {selectedColumnDef == null ? (
-          <Group sx={{ flex: 0.89 }}>
-            <Select sx={{ flex: 0.4 }} label="Operator" disabled data={[]} />
-            <TextInput sx={{ flex: 0.6 }} disabled label="Value" />
+          <Group style={{ flex: 0.89 }}>
+            <Select style={{ flex: 0.4 }} label="Operator" disabled data={[]} />
+            <TextInput style={{ flex: 0.6 }} disabled label="Value" />
           </Group>
         ) : (
-          <Group sx={{ flex: 0.89 }}>
+          <Group style={{ flex: 0.89 }}>
             {(selectedColumnDef.type === "string" ||
               selectedColumnDef.type == null) && (
               <StringFilters
@@ -247,7 +247,7 @@ export function ColumnFilter({
           </Group>
         )}
       </Stack>
-      <Group sx={{ flex: 0.1 }}>
+      <Group style={{ flex: 0.1 }}>
         <ActionIcon onClick={handleRemoveFilter} radius="xl" color="red">
           <IconX />
         </ActionIcon>
@@ -258,8 +258,8 @@ export function ColumnFilter({
     </Group>
   ) : (
     <Stack>
-      <Group position="apart">
-        <Group sx={{ fontSize: 16 }} spacing={4}>
+      <Group justify="space-between">
+        <Group style={{ fontSize: 16 }} gap={4}>
           <Text>
             {typeof filteredColumn?.header === "string"
               ? filteredColumn?.header
@@ -268,7 +268,7 @@ export function ColumnFilter({
           {filteredColumn?.type &&
             filteredColumn?.operator &&
             filteredColumn?.type !== "actions" && (
-              <Text color="dimmed">{readableFilterOperator}</Text>
+              <Text c="dimmed">{readableFilterOperator}</Text>
             )}
           <Text fw={500}>
             {filteredColumn?.type === "singleSelect"

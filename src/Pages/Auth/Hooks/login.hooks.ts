@@ -3,19 +3,19 @@ import { ILogIn } from "../../../Interfaces/UserManagement/auth.interface";
 import { AuthAPI } from "../../../Apis/UserManagement/Auth.api";
 
 const useLogin = () => {
-  return useMutation((params: ILogIn) => AuthAPI.login(params), {});
+  return useMutation({ mutationFn: (params: ILogIn) => AuthAPI.login(params) });
 };
 
 const useGoogleLogin = () => {
-  return useMutation(() => AuthAPI.googleLogin(), {});
+  return useMutation({ mutationFn: () => AuthAPI.googleLogin() });
 };
 
 const useFacebookLogin = () => {
-  return useMutation(() => AuthAPI.facebookLogin(), {});
+  return useMutation({ mutationFn: () => AuthAPI.facebookLogin() });
 };
 
 const useTwitterLogin = () => {
-  return useMutation(() => AuthAPI.twitterLogin(), {});
+  return useMutation({ mutationFn: () => AuthAPI.twitterLogin() });
 };
 
 export { useFacebookLogin, useGoogleLogin, useLogin, useTwitterLogin };

@@ -34,8 +34,8 @@ export function ThreadListItem({
 
   return (
     <Stack
-      spacing={0}
-      sx={{
+      gap={0}
+      style={{
         cursor: "pointer",
         "&:hover": {
           backgroundColor: "#F9F8Fa",
@@ -48,33 +48,33 @@ export function ThreadListItem({
     >
       <Group
         py={16}
-        position="apart"
+        justify="space-between"
         onClick={() => {
           setUsernameSearchParam({ thread: igThreadId });
           setAvatarColor(avatarColor.current);
         }}
-        sx={{ flexWrap: "nowrap", width: "100%" }}
+        style={{ flexWrap: "nowrap", width: "100%" }}
       >
-        <Avatar color={avatarColor.current} sx={{ flex: "0 1 auto" }}>
+        <Avatar color={avatarColor.current} style={{ flex: "0 1 auto" }}>
           {username.charAt(0).toUpperCase()}
         </Avatar>
-        <Stack spacing={2} sx={{ flex: "1 1 auto", overflow: "hidden" }}>
-          <Group position="apart">
-            <Text sx={{ flex: "0 3 auto" }}>{username}</Text>
+        <Stack gap={2} style={{ flex: "1 1 auto", overflow: "hidden" }}>
+          <Group justify="space-between">
+            <Text style={{ flex: "0 3 auto" }}>{username}</Text>
             <Text
               fz={12}
-              color={unreadCount > 0 ? theme.primaryColor : "#8C8C8C"}
+              c={unreadCount > 0 ? theme.primaryColor : "#8C8C8C"}
               fw={unreadCount > 0 ? 600 : 400}
-              sx={{ flex: "0 1 auto" }}
+              style={{ flex: "0 1 auto" }}
             >
               {formatChatDate(lastMessageDate)}
             </Text>
           </Group>
-          <Group position="apart" sx={{ flexWrap: "nowrap" }}>
+          <Group justify="space-between" style={{ flexWrap: "nowrap" }}>
             <Text
               fz={12}
-              color={unreadCount > 0 ? "#4C4C4C" : "#8C8C8C"}
-              sx={{
+              c={unreadCount > 0 ? "#4C4C4C" : "#8C8C8C"}
+              style={{
                 whiteSpace: "nowrap",
                 textOverflow: "ellipsis",
                 overflow: "hidden",
@@ -82,13 +82,12 @@ export function ThreadListItem({
             >
               {lastMessage}
             </Text>
-            {unreadCount > 0 && (
-              <Badge styles={{ inner: { overflow: "initial" } }}>1</Badge>
+            {unreadCount === 0 && ( // >0
+              <Badge styles={{ label: { overflow: "initial" } }}>1</Badge>
             )}
           </Group>
         </Stack>
       </Group>
-      <Divider m={0} color="#F0F0F0" />
     </Stack>
   );
 }

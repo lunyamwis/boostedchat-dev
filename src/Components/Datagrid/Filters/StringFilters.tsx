@@ -27,13 +27,13 @@ export function StringFilters({
         value={filterOperator ?? "eq"}
         onChange={(val) => setFilterOperator((val as "eq" | "ilike") ?? "eq")}
         label="Operator"
-        sx={{ flex: 0.4 }}
+        style={{ flex: 0.4 }}
       />
       <TextInput
         value={filterValue}
         onChange={(e) => setFilterValue(e.target.value)}
         label="Value"
-        sx={{ flex: 0.6 }}
+        style={{ flex: 0.6 }}
       />
     </Group>
   );

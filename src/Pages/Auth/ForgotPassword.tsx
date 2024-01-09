@@ -27,30 +27,28 @@ export function ForgotPassword() {
 
   const [email, setEmail] = useState("");
 
-  const forgotPassword = useMutation(
-    (params: { email: string }) => AuthAPI.forgotPassword(params),
-    {
-      onSuccess: () => {
-        setShowAlert(true);
-        setEmail("");
-        setAlertInfo({
-          color: "teal",
-          title: "Success",
-          message:
-            "We have emailed you a password reset link. Log into your email and click it to reset your account password.",
-        });
-      },
-      onError: (error: axiosError) => {
-        const msg = apiErrorMessage(error);
-        setShowAlert(true);
-        setAlertInfo({
-          color: "red",
-          title: "Error",
-          message: msg,
-        });
-      },
-    }
-  );
+  const forgotPassword = useMutation({
+    mutationFn: (params: { email: string }) => AuthAPI.forgotPassword(params),
+    onSuccess: () => {
+      setShowAlert(true);
+      setEmail("");
+      setAlertInfo({
+        color: "teal",
+        title: "Success",
+        message:
+          "We have emailed you a password reset link. Log into your email and click it to reset your account password.",
+      });
+    },
+    onError: (error: axiosError) => {
+      const msg = apiErrorMessage(error);
+      setShowAlert(true);
+      setAlertInfo({
+        color: "red",
+        title: "Error",
+        message: msg,
+      });
+    },
+  });
   const handleForgotPassword = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setShowAlert(false);
@@ -89,10 +87,10 @@ export function ForgotPassword() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <Button type="submit" loading={forgotPassword.isLoading}>
+        <Button type="submit" loading={forgotPassword.isPending}>
           Get Password reset link
         </Button>
-        <Group position="center">
+        <Group align="center">
           <Tooltip label="Back to Login">
             <ActionIcon
               variant="subtle"

@@ -1,4 +1,4 @@
-import { DefaultMantineColor, Tuple } from "@mantine/core";
+import { DefaultMantineColor, MantineColorsTuple } from "@mantine/core";
 import React from "react";
 import { MantineProvider, MantineThemeOverride } from "@mantine/core";
 
@@ -6,12 +6,11 @@ type ExtendedCustomColors = "brand" | DefaultMantineColor;
 
 declare module "@mantine/core" {
   export interface MantineThemeColorsOverride {
-    colors: Record<ExtendedCustomColors, Tuple<string, 10>>;
+    colors: Record<ExtendedCustomColors, MantineColorsTuple>;
   }
 }
 
-const theme: MantineThemeOverride = {
-  colorScheme: "light",
+export const theme: MantineThemeOverride = {
   primaryColor: "brand",
   fontFamily: "Figtree",
   defaultRadius: "7px",
@@ -108,9 +107,5 @@ const theme: MantineThemeOverride = {
 };
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  return (
-    <MantineProvider withNormalizeCSS theme={theme}>
-      {children}
-    </MantineProvider>
-  );
+  return <MantineProvider theme={theme}>{children}</MantineProvider>;
 }
