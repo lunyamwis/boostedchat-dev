@@ -1,5 +1,5 @@
 import { handleRestError, handleRestResponse } from "../response";
-import { useGlobalAxios } from "../../Hooks/useAxios";
+import { useAPIGlobalAxios } from "../../Hooks/useAxios";
 import {
   CreateComment,
   GetComment,
@@ -7,7 +7,7 @@ import {
 import { User } from "../../Interfaces/UserManagement/user.interface";
 
 export const useUsersApi = () => {
-  const axiosInstance = useGlobalAxios("authentication");
+  const axiosInstance = useAPIGlobalAxios("authentication");
 
   return {
     getAll: (): Promise<{ users: User[] }> =>

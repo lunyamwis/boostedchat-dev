@@ -1,9 +1,9 @@
 import { handleRestError, handleRestResponse } from "../response";
-import { useGlobalAxios } from "../../Hooks/useAxios";
+import { useAPIGlobalAxios } from "../../Hooks/useAxios";
 import { AccountsPerStage } from "../../Interfaces/Instagram/dashboard.interface";
 
 export const useDashboardApi = () => {
-  const axiosInstance = useGlobalAxios("instagram/dm");
+  const axiosInstance = useAPIGlobalAxios("instagram/dm");
 
   return {
     getAccountsPerStage: (): Promise<AccountsPerStage[]> =>

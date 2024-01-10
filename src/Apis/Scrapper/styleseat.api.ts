@@ -1,9 +1,9 @@
 import { handleRestError, handleRestResponse } from "../response";
-import { useGlobalAxios } from "../../Hooks/useAxios";
+import { useAPIGlobalAxios } from "../../Hooks/useAxios";
 import { StyleSeatScrapperInput } from "../../Interfaces/Scrapper/scrapper.interface";
 
 export const useStyleSeatApi = () => {
-  const axiosInstance = useGlobalAxios("scrapper/styleseat/");
+  const axiosInstance = useAPIGlobalAxios("scrapper/styleseat/");
 
   return {
     create: (params: StyleSeatScrapperInput) =>

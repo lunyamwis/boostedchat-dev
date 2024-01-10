@@ -1,34 +1,30 @@
 import { handleRestError, handleRestResponse } from "../response";
-import { useGlobalAxios } from "../../Hooks/useAxios";
+import { usePromptGlobalAxios } from "../../Hooks/useAxios";
 import {
-  CreateComment,
-  GetComment,
-} from "../../Interfaces/Instagram/comment.interface";
+  CreateRole,
+  GetRole,
+  UpdateRoleParams,
+} from "@/Interfaces/Prompts/role.interface";
 
-export const useCommentsApi = () => {
-  const axiosInstance = useGlobalAxios("instagram/comment");
+export const useRoleApi = () => {
+  const axiosInstance = usePromptGlobalAxios("roles");
 
   return {
-    getAll: (): Promise<GetComment[]> =>
+    getAll: (): Promise<GetRole[]> =>
       axiosInstance.get("/").then(handleRestResponse).catch(handleRestError),
-    getOne: (id: string): Promise<GetComment> =>
+    getOne: (id: string): Promise<GetRole> =>
       axiosInstance
         .get(`/${id}`)
         .then(handleRestResponse)
         .catch(handleRestError),
-    create: (params: CreateComment) =>
+    create: (params: CreateRole) =>
       axiosInstance
         .post("/", params)
         .then(handleRestResponse)
         .catch(handleRestError),
-    softRemove: (id: string) =>
+    update: (params: UpdateRoleParams) =>
       axiosInstance
-        .delete(`/soft-remove/${id}`)
-        .then(handleRestResponse)
-        .catch(handleRestError),
-    restore: (id: string) =>
-      axiosInstance
-        .patch(`/restore/${id}`, null)
+        .put(`/${params.id}/`, params.data)
         .then(handleRestResponse)
         .catch(handleRestError),
     remove: (id: string) =>

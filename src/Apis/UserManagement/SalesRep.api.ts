@@ -1,5 +1,5 @@
 import { handleRestError, handleRestResponse } from "../response";
-import { useGlobalAxios } from "../../Hooks/useAxios";
+import { useAPIGlobalAxios } from "../../Hooks/useAxios";
 import { User } from "../../Interfaces/UserManagement/user.interface";
 import {
   CreateSalesRep,
@@ -7,7 +7,7 @@ import {
 } from "../../Interfaces/UserManagement/salesRep.interface";
 
 export const useSalesRepApi = () => {
-  const axiosInstance = useGlobalAxios("sales");
+  const axiosInstance = useAPIGlobalAxios("sales");
 
   return {
     getAll: (): Promise<GetSalesRepBulk> =>

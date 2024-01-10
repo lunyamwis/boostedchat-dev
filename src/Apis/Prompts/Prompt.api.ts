@@ -1,35 +1,30 @@
 import { handleRestError, handleRestResponse } from "../response";
-import { useGlobalAxios } from "../../Hooks/useAxios";
-import { User } from "../../Interfaces/UserManagement/user.interface";
+import { usePromptGlobalAxios } from "../../Hooks/useAxios";
 import {
-  CreateLead,
-  GetLeadsBulk,
-} from "../../Interfaces/Leads/lead.interface";
+  CreatePrompt,
+  GetPrompt,
+  UpdatePromptParams,
+} from "@/Interfaces/Prompts/prompt.interface";
 
-export const useLeadsApi = () => {
-  const axiosInstance = useGlobalAxios("leads");
+export const usePromptApi = () => {
+  const axiosInstance = usePromptGlobalAxios("prompts");
 
   return {
-    getAll: (): Promise<GetLeadsBulk> =>
+    getAll: (): Promise<GetPrompt[]> =>
       axiosInstance.get("/").then(handleRestResponse).catch(handleRestError),
-    getOne: (id: string): Promise<User> =>
+    getOne: (id: string): Promise<GetPrompt> =>
       axiosInstance
         .get(`/${id}`)
         .then(handleRestResponse)
         .catch(handleRestError),
-    create: (params: CreateLead) =>
+    create: (params: CreatePrompt) =>
       axiosInstance
         .post("/", params)
         .then(handleRestResponse)
         .catch(handleRestError),
-    softRemove: (id: string) =>
+    update: (params: UpdatePromptParams) =>
       axiosInstance
-        .delete(`/soft-remove/${id}`)
-        .then(handleRestResponse)
-        .catch(handleRestError),
-    restore: (id: string) =>
-      axiosInstance
-        .patch(`/restore/${id}`, null)
+        .put(`/${params.id}/`, params.data)
         .then(handleRestResponse)
         .catch(handleRestError),
     remove: (id: string) =>

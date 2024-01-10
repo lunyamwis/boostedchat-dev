@@ -1,5 +1,5 @@
 import { handleRestError, handleRestResponse } from "../response";
-import { useGlobalAxios } from "../../Hooks/useAxios";
+import { useAPIGlobalAxios } from "../../Hooks/useAxios";
 import {
   CreateAccount,
   GetAccount,
@@ -10,7 +10,7 @@ import { Lead } from "../../Interfaces/general.interface";
 import { UploadCSV } from "../../Interfaces/Instagram/upload.interface";
 
 export const useAccountsApi = () => {
-  const axiosInstance = useGlobalAxios("instagram/account");
+  const axiosInstance = useAPIGlobalAxios("instagram/account");
 
   return {
     getAll: (): Promise<GetAccount[]> =>

@@ -1,9 +1,9 @@
 import { handleRestError, handleRestResponse } from "../response";
-import { useGlobalAxios } from "../../Hooks/useAxios";
+import { useAPIGlobalAxios } from "../../Hooks/useAxios";
 import { AuditLog } from "../../Interfaces/Logs/logs.interface";
 
 export const useAuditLogsApi = () => {
-  const axiosInstance = useGlobalAxios("logs");
+  const axiosInstance = useAPIGlobalAxios("logs");
 
   return {
     getAll: (): Promise<AuditLog[]> =>

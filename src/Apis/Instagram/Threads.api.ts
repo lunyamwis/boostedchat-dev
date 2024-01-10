@@ -1,5 +1,5 @@
 import { handleRestError, handleRestResponse } from "../response";
-import { useGlobalAxios } from "../../Hooks/useAxios";
+import { useAPIGlobalAxios } from "../../Hooks/useAxios";
 import {
   AssignOperator,
   CreateThreadParams,
@@ -14,7 +14,7 @@ import {
 } from "../../Interfaces/Instagram/photo.interface";
 
 export const useThreadsApi = () => {
-  const axiosInstance = useGlobalAxios("instagram/dm");
+  const axiosInstance = useAPIGlobalAxios("instagram/dm");
 
   return {
     getAll: (): Promise<GetThread[]> =>
@@ -77,7 +77,7 @@ export const useThreadsApi = () => {
 };
 
 export const useFallbackApi = () => {
-  const axiosInstance = useGlobalAxios("instagram/fallback");
+  const axiosInstance = useAPIGlobalAxios("instagram/fallback");
 
   return {
     assignOperator: (params: AssignOperator) =>

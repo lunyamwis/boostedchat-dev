@@ -1,6 +1,7 @@
 import React from "react";
 import {
   Icon,
+  IconApple,
   IconBrandInstagram,
   IconBrandMessenger,
   IconChartInfographic,
@@ -33,22 +34,24 @@ type Level1 =
 export type TPageData = PrimaryPageData &
   (({ level: "1" } & Level1) | { level: "2"; url: string });
 
-export type ParentKeys = "Snapshot" | "Accounts" | "Threads";
+export type ParentKeys = "Snapshot" | "Accounts" | "Threads" | "Prompts";
 
-export type ChildKeys = string;
+export type ChildKeys = "";
 
-type TMPageData = Record<ParentKeys | ChildKeys, TPageData>;
+type TMPageData = Record<ParentKeys, TPageData>;
 
 export enum EGroup {
   summaries = "Summaries",
   instagram = "Instagram",
   userManagement = "User Management",
+  prompt = "Prompt",
 }
 
 export const GroupIcons: Record<EGroup, Icon> = {
   Instagram: IconBrandInstagram,
   "User Management": IconUsers,
   Summaries: IconGraph,
+  Prompt: IconApple,
 };
 
 export const componentData: {
@@ -79,6 +82,14 @@ export const componentData: {
       }))
     ),
   },
+  {
+    key: "Prompts",
+    component: React.lazy(() =>
+      import("./Scripts/Prompts/index").then(({ Prompts }) => ({
+        default: Prompts,
+      }))
+    ),
+  },
 ];
 
 export const pageData: TMPageData = {
@@ -106,6 +117,15 @@ export const pageData: TMPageData = {
     hasChildren: false,
     url: "/instagram/accounts",
     title: "Accounts",
+    isNavItem: true,
+    icon: IconUsersGroup,
+  },
+  Prompts: {
+    level: "1",
+    group: EGroup.prompt,
+    hasChildren: false,
+    url: "/prompt/prompts",
+    title: "Prompts",
     isNavItem: true,
     icon: IconUsersGroup,
   },
