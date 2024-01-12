@@ -15,6 +15,7 @@ export const queryKeys = {
   },
   salesReps: {
     getAll: "get-all-sales-representatives",
+    getFlattened: "get-all-flattened-sales-representatives",
   },
   leads: {
     getAll: "get-all-leads",
@@ -42,6 +43,10 @@ export const queryKeys = {
     prompts: {
       promptById: "prompt-by-id",
       allPrompts: "all-prompts",
+    },
+    roles: {
+      allRoles: "all-script-roles",
+      roleById: "script-role-by-id",
     },
   },
 };

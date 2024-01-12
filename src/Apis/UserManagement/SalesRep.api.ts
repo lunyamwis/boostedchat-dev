@@ -3,6 +3,7 @@ import { useAPIGlobalAxios } from "../../Hooks/useAxios";
 import { User } from "../../Interfaces/UserManagement/user.interface";
 import {
   CreateSalesRep,
+  GetSalesRep,
   GetSalesRepBulk,
 } from "../../Interfaces/UserManagement/salesRep.interface";
 
@@ -12,6 +13,11 @@ export const useSalesRepApi = () => {
   return {
     getAll: (): Promise<GetSalesRepBulk> =>
       axiosInstance.get("/rep").then(handleRestResponse).catch(handleRestError),
+    getAllFlattened: (): Promise<GetSalesRep[]> =>
+      axiosInstance
+        .get("/rep/all")
+        .then(handleRestResponse)
+        .catch(handleRestError),
     getOne: (id: string): Promise<User> =>
       axiosInstance
         .get(`/${id}`)

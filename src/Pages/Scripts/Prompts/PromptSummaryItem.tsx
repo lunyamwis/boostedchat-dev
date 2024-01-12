@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid, Group, Stack, Text } from "@mantine/core";
-import { GetPrompt } from "@/Interfaces/Prompts/prompt.interface";
+import { GetPrompt } from "@/Interfaces/Scripts/prompt.interface";
 import classes from "./PromptSummaryItem.module.css";
 import { useSearchParams } from "react-router-dom";
 

@@ -16,7 +16,7 @@ import React from "react";
 import { useSearchParams } from "react-router-dom";
 import classes from "./PromptSummaryItem.module.css";
 import { showNotification } from "@mantine/notifications";
-import { UpdatePromptParams } from "@/Interfaces/Prompts/prompt.interface";
+import { UpdatePromptParams } from "@/Interfaces/Scripts/prompt.interface";
 import { IconCheck } from "@tabler/icons-react";
 
 type Props = {};

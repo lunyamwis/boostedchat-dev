@@ -1,15 +1,14 @@
 import React from "react";
 import {
   Icon,
-  IconApple,
   IconBrandInstagram,
   IconBrandMessenger,
   IconChartInfographic,
   IconGraph,
-  IconUserPlus,
+  IconTerminal2,
   IconUsers,
-  IconUserSearch,
   IconUsersGroup,
+  IconUserShield,
 } from "@tabler/icons-react";
 
 export type PrimaryPageData = {
@@ -34,7 +33,12 @@ type Level1 =
 export type TPageData = PrimaryPageData &
   (({ level: "1" } & Level1) | { level: "2"; url: string });
 
-export type ParentKeys = "Snapshot" | "Accounts" | "Threads" | "Prompts";
+export type ParentKeys =
+  | "Snapshot"
+  | "Accounts"
+  | "Threads"
+  | "Prompts"
+  | "Roles";
 
 export type ChildKeys = "";
 
@@ -44,14 +48,14 @@ export enum EGroup {
   summaries = "Summaries",
   instagram = "Instagram",
   userManagement = "User Management",
-  prompt = "Prompt",
+  scripts = "Scripts",
 }
 
 export const GroupIcons: Record<EGroup, Icon> = {
   Instagram: IconBrandInstagram,
   "User Management": IconUsers,
   Summaries: IconGraph,
-  Prompt: IconApple,
+  Scripts: IconTerminal2,
 };
 
 export const componentData: {
@@ -90,6 +94,14 @@ export const componentData: {
       }))
     ),
   },
+  {
+    key: "Roles",
+    component: React.lazy(() =>
+      import("./Scripts/Roles/index").then(({ ScriptRoles }) => ({
+        default: ScriptRoles,
+      }))
+    ),
+  },
 ];
 
 export const pageData: TMPageData = {
@@ -122,11 +134,20 @@ export const pageData: TMPageData = {
   },
   Prompts: {
     level: "1",
-    group: EGroup.prompt,
+    group: EGroup.scripts,
     hasChildren: false,
-    url: "/prompt/prompts",
+    url: "/scripts/prompts",
     title: "Prompts",
     isNavItem: true,
     icon: IconUsersGroup,
+  },
+  Roles: {
+    level: "1",
+    group: EGroup.scripts,
+    hasChildren: false,
+    url: "/scripts/roles",
+    title: "Roles",
+    isNavItem: true,
+    icon: IconUserShield,
   },
 };

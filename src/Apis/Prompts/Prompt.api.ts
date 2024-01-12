@@ -1,10 +1,10 @@
+import { usePromptGlobalAxios } from "@/Hooks/useAxios";
 import { handleRestError, handleRestResponse } from "../response";
-import { usePromptGlobalAxios } from "../../Hooks/useAxios";
 import {
   CreatePrompt,
   GetPrompt,
   UpdatePromptParams,
-} from "@/Interfaces/Prompts/prompt.interface";
+} from "@/Interfaces/Scripts/prompt.interface";
 
 export const usePromptApi = () => {
   const axiosInstance = usePromptGlobalAxios("prompts");

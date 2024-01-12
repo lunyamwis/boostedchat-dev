@@ -13,6 +13,7 @@ export interface GetThread extends Thread {
   unread_message_count: number;
   last_message_content: string;
   last_message_at: string;
+  stage: number;
   //
 }
 

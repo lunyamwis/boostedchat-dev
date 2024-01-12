@@ -17,8 +17,11 @@ export const useThreadsApi = () => {
   const axiosInstance = useAPIGlobalAxios("instagram/dm");
 
   return {
-    getAll: (): Promise<GetThread[]> =>
-      axiosInstance.get("/").then(handleRestResponse).catch(handleRestError),
+    getAll: (filterParams: string): Promise<GetThread[]> =>
+      axiosInstance
+        .get(`/?${filterParams}`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
     getOne: (id: string): Promise<GetThread> =>
       axiosInstance
         .get(`/${id}`)

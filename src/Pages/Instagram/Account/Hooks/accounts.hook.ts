@@ -59,21 +59,3 @@ export const useGetAccountByThreadId = (igThreadId: string | null) => {
     enabled: igThreadId != null,
   });
 };
-
-export const useGetAccountFollower = (id: string) => {
-  const { getFollowers } = useAccountsApi();
-  return useQuery({
-    queryKey: [queryKeys.instagram.accounts.getFollowers, id],
-    queryFn: () => getFollowers(id),
-    enabled: id !== "",
-    select: (data) => {
-      return Object.values(data).map((account) => {
-        return {
-          username: account[1][1],
-          full_name: account[2][1],
-          prof_pic: account[3][1],
-        };
-      });
-    },
-  });
-};

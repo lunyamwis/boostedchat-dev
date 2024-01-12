@@ -23,11 +23,11 @@ export const useThreadsWrapperApi = () => {
   };
 };
 
-export const useGetThreads = () => {
+export const useGetThreads = (filterParams: string) => {
   const { getAll } = useThreadsApi();
   return useQuery({
-    queryKey: [queryKeys.instagram.threads.getAll],
-    queryFn: () => getAll(),
+    queryKey: [queryKeys.instagram.threads.getAll, filterParams],
+    queryFn: () => getAll(filterParams),
   });
 };
 

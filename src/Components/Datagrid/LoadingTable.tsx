@@ -56,21 +56,24 @@ export function LoadingTable<T extends RowData>({
             highlightOnHover
             verticalSpacing="lg"
           >
-            <thead
+            <MantineTable.Thead
               style={{
                 backgroundColor: "rgb(250, 250, 250)",
                 borderTop: "1px solid rgb(240, 240, 240)",
                 borderBottom: "1px solid rgb(240,240,240)",
               }}
             >
-              <tr>
+              <MantineTable.Tr>
                 {columnsDef.map((col) => {
                   if (!col.visible) {
                     return null;
                   }
                   return (
-                    <th className="relative" key={col.id}>
-                      <Group justify="space-between" style={{ flexWrap: "nowrap" }}>
+                    <MantineTable.Th className="relative" key={col.id}>
+                      <Group
+                        justify="space-between"
+                        style={{ flexWrap: "nowrap" }}
+                      >
                         <Group gap={2} style={{ flexWrap: "nowrap" }}>
                           <Box
                             style={{
@@ -97,26 +100,26 @@ export function LoadingTable<T extends RowData>({
                           px={2}
                         />
                       </Group>
-                    </th>
+                    </MantineTable.Th>
                   );
                 })}
-              </tr>
-            </thead>
-            <tbody
+              </MantineTable.Tr>
+            </MantineTable.Thead>
+            <MantineTable.Tbody
               style={{
                 borderBottom: "1px solid #dee2e6",
               }}
             >
               {[1, 2, 3, 4, 5, 6, 7, 8].map((o) => (
-                <tr key={o}>
+                <MantineTable.Tr key={o}>
                   {[1, 2, 3, 4, 5, 6, 7, 8].map((c) => (
-                    <td key={c}>
+                    <MantineTable.Td key={c}>
                       <Skeleton height={12} key={c} width="70%" radius="xl" />
-                    </td>
+                    </MantineTable.Td>
                   ))}
-                </tr>
+                </MantineTable.Tr>
               ))}
-            </tbody>
+            </MantineTable.Tbody>
           </MantineTable>
         </Box>
       </Stack>

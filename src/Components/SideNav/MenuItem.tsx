@@ -11,22 +11,21 @@ import {
 import React from "react";
 import { Icon as IconType, IconChevronDown } from "@tabler/icons-react";
 import { Link, useLocation } from "react-router-dom";
-import { ChildKeys, pageData, PrimaryPageData } from "../../Pages";
 import { useHover } from "@mantine/hooks";
 
 type Props = {
   title: string;
   Icon: IconType;
   url: string;
+  setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 type Level1Props = {
   title: string;
   Icon: IconType;
-  childrenKeys: ChildKeys[];
 };
 
-export function MenuItem({ title, Icon, url }: Props) {
+export function MenuItem({ title, Icon, url, setCollapsed }: Props) {
   const [isActive, setIsActive] = React.useState(false);
   const { pathname } = useLocation();
   const theme = useMantineTheme();
@@ -48,11 +47,12 @@ export function MenuItem({ title, Icon, url }: Props) {
       key={title}
       active={isActive}
       label={title}
+      onClick={() => setCollapsed(true)}
       color={theme.primaryColor}
       component={Link}
       to={url}
       my={{ base: 8, sm: 4 }}
-      pl={24}
+      pl={12}
       py={12}
       leftSection={<Icon size={18} strokeWidth={1.5} />}
       styles={{
@@ -61,6 +61,7 @@ export function MenuItem({ title, Icon, url }: Props) {
           // color: "#616161",
         },
         root: {
+          borderRadius: 7,
           "&:hover": {
             backgroundColor:
               pathname === url
@@ -72,10 +73,9 @@ export function MenuItem({ title, Icon, url }: Props) {
     />
   );
 }
-export function ParentMenuItem({ title, Icon, childrenKeys }: Level1Props) {
+export function ParentMenuItem({ title, Icon }: Level1Props) {
   const { ref, hovered } = useHover();
   const theme = useMantineTheme();
-  const { pathname } = useLocation();
   const [isExpanded, setIsExpanded] = React.useState(false);
   return (
     <>
@@ -142,6 +142,7 @@ export function ParentMenuItem({ title, Icon, childrenKeys }: Level1Props) {
             marginTop: 0,
           }}
         >
+          {/*
           {childrenKeys.map((childKey) => {
             const child = pageData[childKey] as PrimaryPageData & {
               level: "2";
@@ -177,6 +178,7 @@ export function ParentMenuItem({ title, Icon, childrenKeys }: Level1Props) {
               </>
             );
           })}
+          */}
         </Box>
       </Collapse>
     </>

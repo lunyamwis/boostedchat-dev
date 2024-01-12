@@ -3,15 +3,14 @@ import { useGetThreads } from "./Hooks/thread.hooks";
 import {
   Box,
   Divider,
+  Flex,
   Grid,
-  Group,
   ScrollArea,
   Stack,
   Text,
 } from "@mantine/core";
 import { Loading } from "../../../Components/UIState/Loading";
 import { Error } from "../../../Components/UIState/Error";
-import { NoThreads } from "./NoThreads";
 import { ThreadListItem } from "./ThreadListItem";
 import { DirectMessages } from "./DirectMessages";
 import { NoMediaSelected } from "./NoMediaSelected";
@@ -26,21 +25,117 @@ export type ThreadDetails = {
   account_id: string;
 };
 
+type NullableString = string | null;
+type NullableStringArray = string[] | null;
+export type ThreadFilterParams = {
+  assigned_to: { label: NullableString; value: NullableString };
+  sales_rep: { label: NullableStringArray; value: NullableStringArray };
+  stage: { label: NullableStringArray; value: NullableStringArray };
+  q: { label: NullableString; value: NullableString };
+};
+
+const formatFilterParams = (params: ThreadFilterParams) => {
+  const mApiParams = [];
+  const mSearchParams = [];
+  if (
+    params.assigned_to &&
+    params.assigned_to.value != null &&
+    params.assigned_to.value.length > 0
+  ) {
+    mApiParams.push(`assigned_to=${params.assigned_to.value}`);
+    mSearchParams.push(`assigned_to=${params.assigned_to.label}`);
+  }
+  if (
+    params.sales_rep &&
+    params.sales_rep.value != null &&
+    params.sales_rep.value.length > 0
+  ) {
+    mApiParams.push(`sales_rep=${JSON.stringify(params.sales_rep.value)}`);
+    mSearchParams.push(`sales_rep=${JSON.stringify(params.sales_rep)}`);
+  }
+  if (params.stage && params.stage.value != null) {
+    mApiParams.push(`stage=${JSON.stringify(params.stage.value)}`);
+    mSearchParams.push(`stage=${JSON.stringify(params.stage)}`);
+  }
+  if (params.q && params.q.value != null && params.q.value.length > 0) {
+    mApiParams.push(`q=${params.q.value}`);
+    mSearchParams.push(`q=${params.q.value}`);
+  }
+  return { api: mApiParams.join("&"), search: mSearchParams.join("&") };
+};
+
 export function Threads() {
-  const [searchParams, _] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [filterParams, setFilterParams] = React.useState<ThreadFilterParams>({
+    assigned_to: { label: null, value: null },
+    sales_rep: { label: null, value: null },
+    stage: { label: null, value: null },
+    q: { label: null, value: null },
+  });
+
+  const [formattedFilterParams, setFormattedFilterParams] =
+    React.useState<string>("");
+
   const [igThreadId, setIgThreadId] = React.useState<string | null>(null);
   const [currentAvatarColor, setCurrentAvatarColor] = React.useState("");
 
-  const threadsQR = useGetThreads();
+  const threadsQR = useGetThreads(formattedFilterParams);
 
   React.useEffect(() => {
     const id = searchParams.get("thread");
+    if (id == null) {
+      setIgThreadId(null);
+      return;
+    }
     setIgThreadId(id);
   }, [searchParams]);
 
-  if (threadsQR.isPending) {
-    return <Loading />;
-  }
+  React.useEffect(() => {
+    const assignedToParams = searchParams.get("assigned_to");
+    const stageParams = searchParams.get("stage");
+    const salesrepParams = searchParams.get("sales_rep");
+    const qParams = searchParams.get("q");
+
+    const mFilterParams: ThreadFilterParams = {
+      assigned_to: { label: null, value: null },
+      sales_rep: { label: null, value: null },
+      stage: { label: null, value: null },
+      q: { label: null, value: null },
+    };
+
+    if (assignedToParams != null) {
+      mFilterParams.assigned_to = JSON.parse(assignedToParams);
+    } else {
+      mFilterParams.assigned_to = { label: null, value: null };
+    }
+
+    if (stageParams != null) {
+      mFilterParams.stage = JSON.parse(stageParams);
+    } else {
+      mFilterParams.stage = { label: null, value: null };
+    }
+
+    if (salesrepParams != null) {
+      mFilterParams.sales_rep = JSON.parse(salesrepParams);
+    } else {
+      mFilterParams.sales_rep = { label: null, value: null };
+    }
+
+    if (qParams != null) {
+      mFilterParams.q = JSON.parse(qParams);
+    } else {
+      mFilterParams.q = { label: null, value: null };
+    }
+
+    setFilterParams(mFilterParams);
+  }, []);
+
+  React.useEffect(() => {
+    const params = formatFilterParams(filterParams);
+    setSearchParams(params.search);
+    setFormattedFilterParams(params.api);
+  }, [filterParams]);
 
   if (threadsQR.isError) {
     return (
@@ -51,9 +146,6 @@ export function Threads() {
     );
   }
 
-  if (threadsQR.data.length === 0) {
-    return <NoThreads />;
-  }
   return (
     <Grid
       m={0}
@@ -73,38 +165,51 @@ export function Threads() {
     >
       <Grid.Col span={3} p={0}>
         <Stack
-          py={16}
+          pb={16}
           style={{
             height: "100%",
           }}
         >
-          <ChatHeader />
-          <Stack gap={0}>
-            <AssignedTabs />
-            <Divider />
-          </Stack>
-          <Box
-            component={ScrollArea}
-            style={{
-              height: 200,
-              flexGrow: 1,
-              backgroundColor: "#FFFFFF",
-            }}
-          >
-            <Stack gap={0}>
-              {threadsQR.data.map((thread) => (
-                <ThreadListItem
-                  igThreadId={thread.thread_id}
-                  key={thread.id}
-                  username={thread.username}
-                  unreadCount={thread.unread_message_count}
-                  lastMessage={thread.last_message_content}
-                  lastMessageDate={thread.last_message_at}
-                  setAvatarColor={setCurrentAvatarColor}
-                />
-              ))}
-            </Stack>
-          </Box>
+          <ChatHeader
+            setFilterParams={setFilterParams}
+            filterParams={filterParams}
+          />
+          {threadsQR.isPending ? (
+            <Loading />
+          ) : (
+            <>
+              <Stack gap={0}>
+                <AssignedTabs count={threadsQR.data.length} />
+                <Divider />
+              </Stack>
+              {threadsQR.data.length === 0 ? (
+                <Flex h="100%" justify="center" align="center">
+                  <Text c="#444444" fz={14}>
+                    No threads
+                  </Text>
+                </Flex>
+              ) : (
+                <Box
+                  component={ScrollArea}
+                  style={{
+                    height: 200,
+                    flexGrow: 1,
+                    backgroundColor: "#FFFFFF",
+                  }}
+                >
+                  <Stack gap={0}>
+                    {threadsQR.data.map((thread) => (
+                      <ThreadListItem
+                        key={thread.id}
+                        setAvatarColor={setCurrentAvatarColor}
+                        thread={thread}
+                      />
+                    ))}
+                  </Stack>
+                </Box>
+              )}
+            </>
+          )}
         </Stack>
       </Grid.Col>
 

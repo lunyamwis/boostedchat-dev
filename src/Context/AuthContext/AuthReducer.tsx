@@ -2,6 +2,7 @@ import { Buffer } from "buffer";
 import { TAuthContextData } from "./AuthProvider";
 
 export type TAuthActions =
+  | { type: "TOGGLE_NAV" }
   | {
       type: "LOGIN";
       payload: {
@@ -71,5 +72,8 @@ export const authReducer: React.Reducer<TAuthContextData, TAuthActions> = (
         accessToken: null,
         refreshToken: null,
       };
+    case "TOGGLE_NAV":
+      console.log("Cli");
+      return { ...state, isNavOpened: !state.isNavOpened };
   }
 };

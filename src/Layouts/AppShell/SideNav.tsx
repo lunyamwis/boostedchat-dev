@@ -1,7 +1,6 @@
 import {
   Avatar,
   Box,
-  Flex,
   Group,
   Menu,
   Overlay,
@@ -29,8 +28,6 @@ import classes from "./SideNav.module.css";
 type Props = {
   collapsed: boolean;
   setCollapsed: React.Dispatch<SetStateAction<boolean>>;
-  opened: boolean;
-  setOpened: React.Dispatch<SetStateAction<boolean>>;
 };
 
 const navStructure = (): [string[], TPageData[][]] => {
@@ -48,7 +45,13 @@ const navStructure = (): [string[], TPageData[][]] => {
   return [Object.keys(navMap), Object.values(navMap)];
 };
 
-const Links = ({ navKey }: { navKey: string }) => {
+const Links = ({
+  navKey,
+  setCollapsed,
+}: {
+  navKey: string;
+  setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const [navKeys, navValues] = navStructure();
   const idx = navKeys.indexOf(navKey);
   return (
@@ -57,6 +60,7 @@ const Links = ({ navKey }: { navKey: string }) => {
         if (navValue.level === "1" && !navValue.hasChildren) {
           return (
             <MenuItem
+              setCollapsed={setCollapsed}
               key={navValue.url}
               url={navValue.url}
               title={navValue.title}
@@ -70,7 +74,6 @@ const Links = ({ navKey }: { navKey: string }) => {
               Icon={navValue.icon}
               key={index}
               title={navValue.title}
-              childrenKeys={navValue.children}
             />
           );
         }
@@ -86,7 +89,12 @@ function UserMenu() {
     <Box mb={16}>
       <Menu shadow="md" width={200}>
         <Menu.Target>
-          <Avatar color="brand" src={null} size="md" />
+          <Avatar
+            style={{ cursor: "pointer" }}
+            color="brand"
+            src={null}
+            size="md"
+          />
         </Menu.Target>
 
         <Menu.Dropdown>
@@ -102,11 +110,12 @@ function UserMenu() {
     </Box>
   );
 }
-export function SideNav({ collapsed, setCollapsed, opened, setOpened }: Props) {
+export function SideNav({ collapsed, setCollapsed }: Props) {
   const smallScreen = useMediaQuery("(max-width: 768px)");
   const location = useLocation();
   const [active, setActive] = React.useState<EGroup>(EGroup.summaries);
   const [navKeys] = navStructure();
+  const { isNavOpened, dispatch } = useAuth();
 
   const GroupIcon = (title: EGroup) => {
     const MIcon = GroupIcons[title];
@@ -131,7 +140,7 @@ export function SideNav({ collapsed, setCollapsed, opened, setOpened }: Props) {
   return (
     <>
       {smallScreen ? (
-        opened && (
+        isNavOpened && (
           <Box
             component="nav"
             style={{
@@ -141,17 +150,21 @@ export function SideNav({ collapsed, setCollapsed, opened, setOpened }: Props) {
               height: "100vh",
             }}
           >
-            <Transition mounted={opened} transition="fade" duration={10000}>
+            <Transition
+              mounted={isNavOpened}
+              transition="fade"
+              duration={10000}
+            >
               {() => (
                 <Overlay
                   opacity={0.5}
                   color="#000"
                   zIndex={120}
-                  onClick={() => setOpened(false)}
+                  onClick={() => dispatch({ type: "TOGGLE_NAV" })}
                 />
               )}
             </Transition>
-            <Transition mounted={opened} transition="slide-left">
+            <Transition mounted={isNavOpened} transition="slide-left">
               {() => (
                 <Box
                   style={{
@@ -161,8 +174,9 @@ export function SideNav({ collapsed, setCollapsed, opened, setOpened }: Props) {
                     backgroundColor: "#ffffff",
                     position: "absolute",
                   }}
+                  px={12}
                 >
-                  {/*                  <SideNavItems />*/}
+                  <Links setCollapsed={setCollapsed} navKey={active} />
                 </Box>
               )}
             </Transition>
@@ -175,7 +189,7 @@ export function SideNav({ collapsed, setCollapsed, opened, setOpened }: Props) {
             w={{ sm: collapsed ? ASIDE_WIDTH : SIDENAV_WIDTH }}
             style={{
               zIndex: 100,
-              background: "transparent",
+              backgroundClip: "#FFF",
               border: 0,
               display: "flex",
             }}
@@ -188,45 +202,47 @@ export function SideNav({ collapsed, setCollapsed, opened, setOpened }: Props) {
                       <LogoSmall />
                     </div>
                     <Stack gap={5}>
-                      {navKeys.map((navKey, idx) => (
-                        <Flex
-                          className={classes.mainLink}
-                          justify="center"
-                          align="center"
-                          key={navKey}
-                        >
-                          <Tooltip
-                            label={navKey}
-                            position="right"
-                            withArrow
-                            transitionProps={{ duration: 0 }}
-                            key={navKey}
-                          >
-                            <UnstyledButton
-                              style={{ display: "flex" }}
-                              onClick={() => setActive(navKey as EGroup)}
-                            >
-                              {GroupIcon(navKey as EGroup)}
-                            </UnstyledButton>
-                          </Tooltip>
-                          {/*<NavGroup navKey={navKey} navValues={navValues} idx={idx} />*/}
-                          {idx !== navKeys.length - 1 && (
-                            <Box mt={{ base: 1, sm: 6 }} mb={0} />
-                          )}
-                        </Flex>
-                      ))}
+                      {navKeys.map(
+                        (navKey, idx) =>
+                          navKey !== "Scripts" && (
+                            <>
+                              <Tooltip
+                                label={navKey}
+                                position="right"
+                                withArrow
+                                transitionProps={{ duration: 0 }}
+                                key={navKey}
+                              >
+                                <UnstyledButton
+                                  className={classes.link}
+                                  data-active={active === navKey || undefined}
+                                  onClick={() => {
+                                    setActive(navKey as EGroup);
+                                    setCollapsed(false);
+                                  }}
+                                >
+                                  {GroupIcon(navKey as EGroup)}
+                                </UnstyledButton>
+                              </Tooltip>
+                              {/*<NavGroup navKey={navKey} navValues={navValues} idx={idx} />*/}
+                              {idx !== navKeys.length - 1 && (
+                                <Box mt={{ base: 1, sm: 6 }} mb={0} />
+                              )}
+                            </>
+                          )
+                      )}
                     </Stack>
                   </Box>
                   <UserMenu />
                 </Stack>
               </div>
               {!collapsed && (
-                <div className={classes.main}>
+                <div style={{ padding: "0px 12px" }} className={classes.main}>
                   <Title order={4} className={classes.title}>
                     {active}
                   </Title>
 
-                  <Links navKey={active} />
+                  <Links setCollapsed={setCollapsed} navKey={active} />
                 </div>
               )}
             </Box>

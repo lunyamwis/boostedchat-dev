@@ -27,7 +27,7 @@ export function CustomDataGrid<T extends RowData>({ table, noData }: Props<T>) {
       highlightOnHover
       verticalSpacing="md"
     >
-      <thead
+      <MantineTable.Thead
         style={{
           backgroundColor: "rgb(250, 250, 250)",
           borderTop: "1px solid rgb(240, 240, 240)",
@@ -35,9 +35,9 @@ export function CustomDataGrid<T extends RowData>({ table, noData }: Props<T>) {
         }}
       >
         {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
+          <MantineTable.Tr key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
-              <th
+              <MantineTable.Th
                 className="relative"
                 key={header.id}
                 style={{
@@ -95,12 +95,12 @@ export function CustomDataGrid<T extends RowData>({ table, noData }: Props<T>) {
                     />
                   </Group>
                 )}
-              </th>
+              </MantineTable.Th>
             ))}
-          </tr>
+          </MantineTable.Tr>
         ))}
-      </thead>
-      <tbody
+      </MantineTable.Thead>
+      <MantineTable.Tbody
         style={{
           borderBottom: "1px solid #dee2e6",
         }}
@@ -108,9 +108,9 @@ export function CustomDataGrid<T extends RowData>({ table, noData }: Props<T>) {
         {table.getRowModel().rows.length > 0 ? (
           <>
             {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
+              <MantineTable.Tr key={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>
+                  <MantineTable.Td key={cell.id}>
                     <Box
                       style={{
                         WebkitLineClamp: 1,
@@ -124,23 +124,23 @@ export function CustomDataGrid<T extends RowData>({ table, noData }: Props<T>) {
                         cell.getContext()
                       )}
                     </Box>
-                  </td>
+                  </MantineTable.Td>
                 ))}
-              </tr>
+              </MantineTable.Tr>
             ))}
           </>
         ) : (
-          <tr>
-            <td
+          <MantineTable.Tr>
+            <MantineTable.Td
               style={{ textAlign: "center" }}
               rowSpan={7}
               colSpan={table.getLeafHeaders().length}
             >
               {noData}
-            </td>
-          </tr>
+            </MantineTable.Td>
+          </MantineTable.Tr>
         )}
-      </tbody>
+      </MantineTable.Tbody>
     </MantineTable>
   );
 }

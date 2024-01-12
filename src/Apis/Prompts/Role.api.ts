@@ -1,28 +1,28 @@
 import { handleRestError, handleRestResponse } from "../response";
 import { usePromptGlobalAxios } from "../../Hooks/useAxios";
 import {
-  CreateRole,
-  GetRole,
-  UpdateRoleParams,
-} from "@/Interfaces/Prompts/role.interface";
+  CreateScriptRole,
+  GetScriptRole,
+  UpdateScriptRoleParams,
+} from "@/Interfaces/Scripts/role.interface";
 
-export const useRoleApi = () => {
+export const useScriptRoleApi = () => {
   const axiosInstance = usePromptGlobalAxios("roles");
 
   return {
-    getAll: (): Promise<GetRole[]> =>
+    getAll: (): Promise<GetScriptRole[]> =>
       axiosInstance.get("/").then(handleRestResponse).catch(handleRestError),
-    getOne: (id: string): Promise<GetRole> =>
+    getOne: (id: string): Promise<GetScriptRole> =>
       axiosInstance
         .get(`/${id}`)
         .then(handleRestResponse)
         .catch(handleRestError),
-    create: (params: CreateRole) =>
+    create: (params: CreateScriptRole) =>
       axiosInstance
         .post("/", params)
         .then(handleRestResponse)
         .catch(handleRestError),
-    update: (params: UpdateRoleParams) =>
+    update: (params: UpdateScriptRoleParams) =>
       axiosInstance
         .put(`/${params.id}/`, params.data)
         .then(handleRestResponse)
