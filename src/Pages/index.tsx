@@ -30,8 +30,7 @@ type Level1 =
       icon: Icon;
     };
 
-export type TPageData = PrimaryPageData &
-  (({ level: "1" } & Level1) | { level: "2"; url: string });
+export type TPageData = PrimaryPageData & ({ level: "1" } & Level1);
 
 export type ParentKeys =
   | "Snapshot"
@@ -67,7 +66,7 @@ export const componentData: {
     component: React.lazy(() =>
       import("./Dashboard/index").then(({ Summary }) => ({
         default: Summary,
-      }))
+      })),
     ),
   },
   {
@@ -75,7 +74,7 @@ export const componentData: {
     component: React.lazy(() =>
       import("./Instagram/Threads").then(({ Threads }) => ({
         default: Threads,
-      }))
+      })),
     ),
   },
   {
@@ -83,7 +82,7 @@ export const componentData: {
     component: React.lazy(() =>
       import("./Instagram/Account/Accounts").then(({ Accounts }) => ({
         default: Accounts,
-      }))
+      })),
     ),
   },
   {
@@ -91,7 +90,7 @@ export const componentData: {
     component: React.lazy(() =>
       import("./Scripts/Prompts/index").then(({ Prompts }) => ({
         default: Prompts,
-      }))
+      })),
     ),
   },
   {
@@ -99,7 +98,7 @@ export const componentData: {
     component: React.lazy(() =>
       import("./Scripts/Roles/index").then(({ ScriptRoles }) => ({
         default: ScriptRoles,
-      }))
+      })),
     ),
   },
 ];

@@ -1,15 +1,15 @@
 import { ActionIcon, Group, Loader, Textarea } from "@mantine/core";
 import React from "react";
 import { IconSend } from "@tabler/icons-react";
-import { SendAndAssignModal } from "./SendAndAssignModal";
-import { useMessageBox } from "./Hooks/message.hooks";
+import { useMessageBox } from "../Hooks/message.hooks";
+import { SendAndAssignModal } from "../SendAndAssignModal";
 
 type Props = {
   threadId: string | undefined;
   assignedTo: "Robot" | "Human";
 };
 
-export function MessageBox({ threadId, assignedTo }: Props) {
+export function MobileMessageBox({ threadId, assignedTo }: Props) {
   const {
     message,
     setMessage,
@@ -25,7 +25,8 @@ export function MessageBox({ threadId, assignedTo }: Props) {
     <>
       <Group
         pl={8}
-        style={{ borderTop: "1px solid #f0f0f0" }}
+        style={{ borderTop: "1px solid #dee2e6" }}
+        bg="#FFF"
         gap={0}
         mih={104}
       >

@@ -36,10 +36,7 @@ export function AppRoutes() {
           <Route path={"/"} element={<Home />} />
           {componentData.map((component) => {
             if (permittedPageKeys[component.key]) {
-              const mPageData = pageData[component.key] as PrimaryPageData & {
-                level: "2";
-                url: string;
-              };
+              const mPageData = pageData[component.key] as PrimaryPageData;
               return (
                 <Route
                   key={component.key}

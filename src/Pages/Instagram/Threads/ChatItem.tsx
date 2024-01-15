@@ -8,6 +8,7 @@ type Props = {
   avatarColor: string;
   userNames: string;
   date: string;
+  owner: "system" | "lead";
 };
 
 export function ChatItem({
@@ -17,10 +18,16 @@ export function ChatItem({
   content,
   userNames,
   date,
+  owner,
 }: Props) {
   return (
-    <Group style={{ flexWrap: "nowrap" }}>
-      <Avatar src={profilePicture} c={avatarColor}>
+    <Group
+      style={{
+        flexWrap: "nowrap",
+        flexDirection: owner === "lead" ? "row" : "row-reverse",
+      }}
+    >
+      <Avatar src={profilePicture} color={avatarColor}>
         {userInitials}
       </Avatar>
       <Stack

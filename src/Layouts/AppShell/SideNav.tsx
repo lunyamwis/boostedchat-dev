@@ -1,10 +1,12 @@
 import {
   Avatar,
   Box,
+  Divider,
   Group,
   Menu,
   Overlay,
   Stack,
+  Text,
   Title,
   Tooltip,
   Transition,
@@ -14,7 +16,11 @@ import { useMediaQuery } from "@mantine/hooks";
 import React, { SetStateAction } from "react";
 import { ASIDE_WIDTH, SIDENAV_WIDTH } from "../../Constants/GeneralConstants";
 import { EGroup, GroupIcons, pageData, TPageData } from "../../Pages";
-import { MenuItem, ParentMenuItem } from "../../Components/SideNav/MenuItem";
+import {
+  MenuItem,
+  MobileMenuItem,
+  ParentMenuItem,
+} from "../../Components/SideNav/MenuItem";
 import {
   IconChevronLeft,
   IconChevronRight,
@@ -24,6 +30,7 @@ import { useAuth } from "../../Context/AuthContext/AuthProvider";
 import { useLocation } from "react-router-dom";
 import { LogoSmall } from "../../Assets/LogoSmall";
 import classes from "./SideNav.module.css";
+import { Logo } from "../../Assets/Logo";
 
 type Props = {
   collapsed: boolean;
@@ -45,6 +52,35 @@ const navStructure = (): [string[], TPageData[][]] => {
   return [Object.keys(navMap), Object.values(navMap)];
 };
 
+const MobileLinks = () => {
+  const [, navValues] = navStructure();
+  const { dispatch } = useAuth();
+  return (
+    <Stack gap={12}>
+      {navValues.map((navValue, index) => {
+        return (
+          <Stack gap={2}>
+            <Text fw={500} ml={20} mb={12} fz={15}>
+              {navValue[0].group}
+            </Text>
+            <Stack gap={0}>
+              {navValue.map((val) => (
+                <MobileMenuItem
+                  closeNav={() => dispatch({ type: "TOGGLE_NAV" })}
+                  key={val.url}
+                  url={val.url as string}
+                  title={val.title}
+                  Icon={val.icon}
+                />
+              ))}
+            </Stack>
+            {index < navValues.length - 1 && <Divider mb={32} color="#eee" />}
+          </Stack>
+        );
+      })}
+    </Stack>
+  );
+};
 const Links = ({
   navKey,
   setCollapsed,
@@ -170,13 +206,16 @@ export function SideNav({ collapsed, setCollapsed }: Props) {
                   style={{
                     zIndex: 130,
                     height: "100%",
-                    width: smallScreen ? "65%" : "100%",
+                    width: smallScreen ? "75%" : "100%",
                     backgroundColor: "#ffffff",
                     position: "absolute",
                   }}
                   px={12}
                 >
-                  <Links setCollapsed={setCollapsed} navKey={active} />
+                  <Group justify="center" py={12} my={32}>
+                    <Logo />
+                  </Group>
+                  <MobileLinks />
                 </Box>
               )}
             </Transition>
@@ -229,7 +268,7 @@ export function SideNav({ collapsed, setCollapsed }: Props) {
                                 <Box mt={{ base: 1, sm: 6 }} mb={0} />
                               )}
                             </>
-                          )
+                          ),
                       )}
                     </Stack>
                   </Box>

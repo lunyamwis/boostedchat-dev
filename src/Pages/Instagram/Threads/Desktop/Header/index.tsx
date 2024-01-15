@@ -10,9 +10,9 @@ import {
 } from "@mantine/core";
 import { IconFilter, IconSearch, IconX } from "@tabler/icons-react";
 import React from "react";
-import { FilterModal } from "../Filters";
-import { ThreadFilterParams } from "..";
 import { useDebouncedValue } from "@mantine/hooks";
+import { ThreadFilterParams } from "../../Hooks/common.hooks";
+import { FilterModal } from "../../Filters";
 
 type Props = {
   setFilterParams: React.Dispatch<React.SetStateAction<ThreadFilterParams>>;

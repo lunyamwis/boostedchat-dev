@@ -5,9 +5,9 @@ import { queryKeys } from "@/Constants/ApiConstants";
 import { Button, Modal, MultiSelect, Select, Stack } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { ThreadFilterParams } from ".";
 import { useSearchParams } from "react-router-dom";
 import { mapStage } from "./ThreadListItem";
+import { ThreadFilterParams } from "./Hooks/common.hooks";
 
 type Props = {
   isOpen: boolean;
@@ -32,7 +32,7 @@ export function FilterModal({
   const [searchParams] = useSearchParams();
 
   const [assignedToFilter, setAssignedToFilter] = React.useState<string | null>(
-    null
+    null,
   );
   const [stageFilter, setStageFilter] = React.useState<string[]>([]);
   const [salesRepFilter, setSalesRepFilter] = React.useState<string[]>([]);
@@ -67,7 +67,7 @@ export function FilterModal({
           label: salesRepFilter.map(
             (val) =>
               salesRepQR.data.find((salesRep) => salesRep.value === val)
-                ?.label ?? ""
+                ?.label ?? "",
           ),
           value: salesRepFilter,
         },
@@ -99,13 +99,13 @@ export function FilterModal({
   React.useEffect(() => {
     if (!isOpen) return;
     setStageFilter(
-      JSON.parse(searchParams.get("stage") ?? "null")?.value ?? []
+      JSON.parse(searchParams.get("stage") ?? "null")?.value ?? [],
     );
     setAssignedToFilter(
-      JSON.parse(searchParams.get("assigned_to") ?? "null")?.value ?? null
+      JSON.parse(searchParams.get("assigned_to") ?? "null")?.value ?? null,
     );
     setSalesRepFilter(
-      JSON.parse(searchParams.get("sales_rep") ?? "null")?.value ?? []
+      JSON.parse(searchParams.get("sales_rep") ?? "null")?.value ?? [],
     );
   }, [isOpen]);
 

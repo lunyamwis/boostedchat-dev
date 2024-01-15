@@ -11,23 +11,22 @@ import {
   Text,
 } from "@mantine/core";
 import { format, parseISO } from "date-fns";
-import { Loading } from "../../../Components/UIState/Loading";
-import { Error } from "../../../Components/UIState/Error";
-import { EDateFormats } from "../../../Interfaces/general.interface";
-import { MessageBox } from "./MessageBox";
-import { IconDotsVertical } from "@tabler/icons-react";
-import { IconExternalLink } from "@tabler/icons-react";
-import { AssignedToSwitch } from "./AssignedToSwitch";
-import { Link } from "react-router-dom";
-import { ChatItem } from "./ChatItem";
-import { DateHolder } from "./DateHolder";
-import { useDirectMessages } from "./Hooks/direct_messages.hooks";
+import { Loading } from "../../../../Components/UIState/Loading";
+import { Error } from "../../../../Components/UIState/Error";
+import { EDateFormats } from "../../../../Interfaces/general.interface";
+import { IconArrowLeft, IconDotsVertical } from "@tabler/icons-react";
+import { AssignedToSwitch } from "../AssignedToSwitch";
+import { useSearchParams } from "react-router-dom";
+import { ChatItem } from "../ChatItem";
+import { DateHolder } from "../DateHolder";
+import { useDirectMessages } from "../Hooks/direct_messages.hooks";
+import { MobileMessageBox } from "./MessageBox";
 
 type Props = {
   avatarColor: string;
 };
 
-export function DirectMessages({ avatarColor }: Props) {
+export function MobileDirectMessages({ avatarColor }: Props) {
   const {
     accountQR,
     threadQR,
@@ -38,6 +37,7 @@ export function DirectMessages({ avatarColor }: Props) {
     viewport,
     formattedThreads,
   } = useDirectMessages();
+  const [, setSearchParams] = useSearchParams();
 
   return (
     <Stack justify="space-between" gap={0} style={{ height: "100%" }}>
@@ -45,8 +45,9 @@ export function DirectMessages({ avatarColor }: Props) {
         justify="space-between"
         py={16}
         pl={8}
+        bg="#FFF"
         pr={16}
-        style={{ borderBottom: "1px solid #F0F0F0" }}
+        style={{ borderBottom: "1px solid #ECEFE0" }}
       >
         {accountQR.isLoading && (
           <Group>
@@ -61,12 +62,24 @@ export function DirectMessages({ avatarColor }: Props) {
         )}
         {accountQR.data != null && (
           <Group>
-            <Avatar c={avatarColor}>{accountQR.data.igname.charAt(0)}</Avatar>
+            <Group gap={2}>
+              <ActionIcon
+                onClick={() => setSearchParams(undefined)}
+                color="gray"
+                variant="subtle"
+                radius="xl"
+              >
+                <IconArrowLeft />
+              </ActionIcon>
+              <Avatar color={avatarColor}>
+                {accountQR.data.igname.charAt(0)}
+              </Avatar>
+            </Group>
             <Stack gap={1}>
               <Text>{accountQR.data.igname}</Text>
               <Text fz={13} c="dimmed">
                 Assigned to{" "}
-                <Text component="span" c="dimmed">
+                <Text fz={13} component="span" c="dimmed">
                   {accountQR.data.assigned_to === "Robot" ? "Bot" : "me"}
                 </Text>
               </Text>
@@ -74,14 +87,6 @@ export function DirectMessages({ avatarColor }: Props) {
           </Group>
         )}
         <Group>
-          <ActionIcon
-            component={Link}
-            to="http://promptemplate.boostedchat.com/admin/"
-            target="_blank"
-            variant="light"
-          >
-            <IconExternalLink size={15} />
-          </ActionIcon>
           {accountQR.data != null && igThreadId != null && (
             <Menu
               position="bottom-end"
@@ -155,7 +160,7 @@ export function DirectMessages({ avatarColor }: Props) {
                                 : "left"
                             }
                             style={{
-                              width: "60%",
+                              maxWidth: "80%",
                             }}
                           >
                             <ChatItem
@@ -187,7 +192,7 @@ export function DirectMessages({ avatarColor }: Props) {
               ))}
             </Stack>
           </Box>
-          <MessageBox
+          <MobileMessageBox
             assignedTo={accountQR.data?.assigned_to ?? "Robot"}
             threadId={threadQR.data?.id}
           />
