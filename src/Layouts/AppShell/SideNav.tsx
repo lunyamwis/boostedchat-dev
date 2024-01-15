@@ -4,6 +4,7 @@ import {
   Divider,
   Group,
   Menu,
+  NavLink,
   Overlay,
   Stack,
   Text,
@@ -24,6 +25,7 @@ import {
 import {
   IconChevronLeft,
   IconChevronRight,
+  IconLogout2,
   IconSettings,
 } from "@tabler/icons-react";
 import { useAuth } from "../../Context/AuthContext/AuthProvider";
@@ -202,7 +204,7 @@ export function SideNav({ collapsed, setCollapsed }: Props) {
             </Transition>
             <Transition mounted={isNavOpened} transition="slide-left">
               {() => (
-                <Box
+                <Stack
                   style={{
                     zIndex: 130,
                     height: "100%",
@@ -215,8 +217,21 @@ export function SideNav({ collapsed, setCollapsed }: Props) {
                   <Group justify="center" py={12} my={32}>
                     <Logo />
                   </Group>
-                  <MobileLinks />
-                </Box>
+                  <Stack style={{ flex: 1 }} justify="space-between">
+                    <MobileLinks />
+                    <NavLink
+                      onClick={() => {
+                        dispatch({ type: "LOGOUT" });
+                        dispatch({ type: "TOGGLE_NAV" });
+                      }}
+                      mb={12}
+                      label="Logout"
+                      leftSection={<IconLogout2 size="17px" stroke={1.5} />}
+                      variant="subtle"
+                      active
+                    />
+                  </Stack>
+                </Stack>
               )}
             </Transition>
           </Box>
