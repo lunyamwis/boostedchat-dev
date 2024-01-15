@@ -22,8 +22,6 @@ import {
   IconCheck,
   IconDownload,
 } from "@tabler/icons-react";
-import { apiErrorMessage } from "../../../Utils/api.util";
-import { axiosError } from "../../../Interfaces/general.interface";
 import { useAlert } from "../../../Hooks/useAlert";
 import { Link } from "react-router-dom";
 
@@ -68,7 +66,8 @@ export function CreateAccount({ isOpen, setIsOpen }: Props) {
           });
         },
         onError: (err) => {
-          const errorMessage = apiErrorMessage(err as axiosError);
+          //const errorMessage = apiErrorMessage(err as axiosError);
+          const errorMessage = err.message;
           showNotification({
             color: "red",
             message: errorMessage,
@@ -105,7 +104,8 @@ export function CreateAccount({ isOpen, setIsOpen }: Props) {
           });
         },
         onError: (err) => {
-          const errorMessage = apiErrorMessage(err as axiosError);
+          //const errorMessage = apiErrorMessage(err as axiosError);
+          const errorMessage = err.message;
           showNotification({
             color: "red",
             message: errorMessage,
@@ -133,10 +133,10 @@ export function CreateAccount({ isOpen, setIsOpen }: Props) {
     >
       <Tabs
         value={accountTab}
-        onTabChange={setAccountTab}
+        onChange={setAccountTab}
         classNames={{ tabLabel: "material-tab" }}
       >
-        <Tabs.List position="center">
+        <Tabs.List justify="center">
           <Tabs.Tab value="single">Single</Tabs.Tab>
           <Tabs.Tab value="bulk">Bulk Upload</Tabs.Tab>
         </Tabs.List>
@@ -144,7 +144,7 @@ export function CreateAccount({ isOpen, setIsOpen }: Props) {
         <Tabs.Panel value="single" pt="xs">
           <Collapse
             in={showAlert}
-            sx={{
+            style={{
               marginBottom: showAlert ? 2 : 0,
               marginTop: showAlert ? 1 : 0,
             }}
@@ -172,9 +172,9 @@ export function CreateAccount({ isOpen, setIsOpen }: Props) {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
             />
-            <Group position="center">
+            <Group justify="center">
               <Button
-                loading={createAccount.isLoading}
+                loading={createAccount.isPending}
                 onClick={handleCreateAccount}
               >
                 Create Account
@@ -185,7 +185,7 @@ export function CreateAccount({ isOpen, setIsOpen }: Props) {
 
         <Tabs.Panel value="bulk" pt="xs">
           <Stack px={20} pb={8}>
-            <Group position="right">
+            <Group justify="right">
               <Tooltip label="Download template">
                 <ActionIcon
                   color="brand"
@@ -199,16 +199,16 @@ export function CreateAccount({ isOpen, setIsOpen }: Props) {
                 </ActionIcon>
               </Tooltip>
             </Group>
-            <Stack spacing={32}>
+            <Stack gap={32}>
               <FileInput
                 label="Accounts"
                 placeholder="Click to choose a file"
                 value={csvFile}
                 onChange={setCsvFile}
               />
-              <Group position="center">
+              <Group justify="center">
                 <Button
-                  loading={createAccount.isLoading}
+                  loading={createAccount.isPending}
                   onClick={handleBulkUploadAccounts}
                 >
                   Upload Accounts

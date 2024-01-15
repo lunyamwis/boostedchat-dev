@@ -1,101 +1,83 @@
 import React from "react";
-import { Avatar, Box, Grid, Group, Stack, Text } from "@mantine/core";
-import { useQuery } from "@tanstack/react-query";
-import { queryKeys } from "../../Constants/ApiConstants";
-import { useDashboardApi } from "../../Apis/Instagram/Dashboard.api";
-import { Loading } from "../../Components/UIState/Loading";
-import { Error } from "../../Components/UIState/Error";
+import { FormLayout } from "../../Layouts/FormLayout";
+import { Button, Group, Stack, Text } from "@mantine/core";
+import { DateInput, TimeInput } from "@mantine/dates";
+import { useThreadsApi } from "../../Apis/Instagram/Threads.api";
+import { joinDatesWithTime } from "../../Utils/dates.util";
+import { showNotification } from "@mantine/notifications";
+import { format } from "date-fns";
+import { useMutation } from "@tanstack/react-query";
+import { convertToCSV } from "../../Utils/csv.util";
 
-type ItemProps = {
-  stage: number;
-  accounts: string[];
-};
+export function Summary() {
+  const [date, setDate] = React.useState<Date | null>(null);
+  const [time, setTime] = React.useState<string | undefined>(undefined);
+  const timeRef = React.useRef<HTMLInputElement>(null);
 
-function Item({ stage, accounts }: ItemProps) {
-  return (
-    <Stack>
-      <Box>{stage}</Box>
-      {accounts.map((account) => (
-        <AccountHolder name={account} />
-      ))}
-    </Stack>
-  );
-}
+  const { getSnapshotByDate: getSnapshotByDateApi } = useThreadsApi();
 
-type AccountProps = {
-  name: string;
-};
+  const getSnapshotByDate = useMutation({
+    mutationFn: (params: string) => getSnapshotByDateApi(params),
+  });
 
-function AccountHolder({ name }: AccountProps) {
-  return (
-    <Box>
-      <Group>
-        <Avatar>{name.charAt(0)}</Avatar>
-        <Text>{name}</Text>
-      </Group>
-    </Box>
-  );
-}
-
-export const Dashboard = () => {
-  const { getAccountsPerStage } = useDashboardApi();
-
-  const [accountsPerStage, setAccountsPerStage] = React.useState<
-    Record<number, string[]>
-  >({});
-
-  const responseRateQR = useQuery(
-    [queryKeys.instagram.dashboard.responseRate],
-    () => getAccountsPerStage()
-  );
-
-  React.useEffect(() => {
-    if (responseRateQR.data == null) {
+  const handleGetSnapshot = () => {
+    if (date == null) {
+      showNotification({
+        message: "Please select a date",
+        color: "red",
+      });
       return;
     }
-
-    const mAccountsPerStage: Record<number, string[]> = {};
-    for (let i = 0; i < responseRateQR.data.length; i++) {
-      if (mAccountsPerStage[responseRateQR.data[i].stage]) {
-        mAccountsPerStage[responseRateQR.data[i].stage] = [
-          ...mAccountsPerStage[responseRateQR.data[i].stage],
-          responseRateQR.data[i].account,
-        ];
-      } else {
-        mAccountsPerStage[responseRateQR.data[i].stage] = [
-          responseRateQR.data[i].account,
-        ];
-      }
+    if (time == null) {
+      showNotification({
+        message: "Please select the time",
+        color: "red",
+      });
+      return;
     }
-    setAccountsPerStage(mAccountsPerStage);
-  }, [responseRateQR.data]);
+    getSnapshotByDate.mutate(
+      format(joinDatesWithTime(date, time), "yyyy-MM-dd HH:mm:ss"),
+      {
+        onSuccess: (val) => {
+          const d = convertToCSV(val);
+          window.open(d, "_blank");
+        },
+      }
+    );
+  };
 
-  console.log(accountsPerStage);
-
-  if (responseRateQR.isLoading) {
-    return <Loading />;
-  }
-
-  if (responseRateQR.isError || responseRateQR.data == null) {
-    return <Error errorText="There was a problem loading this page" />;
-  }
   return (
-    <Grid>
-      <Grid.Col sm={8}>
-        <Grid>
-          {Object.keys(accountsPerStage).map((stage) => (
-            <Grid.Col sm={3}>
-              <Item
-                stage={parseInt(stage)}
-                accounts={accountsPerStage[parseInt(stage)]}
-              />
-            </Grid.Col>
-          ))}
-        </Grid>
-      </Grid.Col>
-      <Grid.Col sm={4}>
-        <>Chart</>
-      </Grid.Col>
-    </Grid>
+    <FormLayout span={5} title="Download Snapshot">
+      <Stack justify="space-between" mih={320}>
+        <Stack mt={48}>
+          <Group justify="center">
+            <DateInput
+              value={date}
+              onChange={setDate}
+              label="Date"
+              placeholder="Select a date"
+              maw={400}
+            />
+            <TimeInput
+              label="Time"
+              ref={timeRef}
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+              maw={400}
+            />
+          </Group>
+
+          <Group justify="center">
+            <Button onClick={handleGetSnapshot}>Download Snapshot</Button>
+          </Group>
+        </Stack>
+        <Group justify="center" pb={12}>
+          <Text c="dimmed" fz={13}>
+            <Text component="span">*</Text>
+            Select a date and time to get a snapshot of the leads
+          </Text>
+        </Group>
+      </Stack>
+    </FormLayout>
   );
-};
+}

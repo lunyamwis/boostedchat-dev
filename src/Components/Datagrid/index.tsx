@@ -298,10 +298,10 @@ function MDataGrid<T>({
   }
   return (
     <Grid m={0}>
-      <Grid.Col md={isSettingsOpen ? 8 : 12}>
+      <Grid.Col span={isSettingsOpen ? 8 : 12}>
         <Box
           bg="#ffffff"
-          /* mx={40} mt={20} */ sx={{
+          /* mx={40} mt={20} */ style={{
             borderRight: "1px solid #dee2e6",
             borderLeft: "1px solid #dee2e6",
             borderTop: "1px solid #dee2e6",
@@ -309,12 +309,12 @@ function MDataGrid<T>({
             borderTopRightRadius: "12px",
           }}
         >
-          <Stack spacing={0}>
-            <Group position="apart" px={30} py={30}>
-              <Group position="left">
+          <Stack gap={0}>
+            <Group justify="space-between" px={30} py={30}>
+              <Group justify="left">
                 <Text fw={500}>{tableName}</Text>
               </Group>
-              <Group position="left">
+              <Group justify="left">
                 <DataGridSearch
                   value={globalFilter ?? ""}
                   onChange={(value) => setGlobalFilter(String(value))}
@@ -330,7 +330,7 @@ function MDataGrid<T>({
                 </ActionIcon>
               </Group>
             </Group>
-            <Box sx={{ height: 600, overflowX: "auto" }}>
+            <Box style={{ height: 600, overflowX: "auto" }}>
               <CustomDataGrid noData="No data" table={table} />
             </Box>
           </Stack>
@@ -345,7 +345,7 @@ function MDataGrid<T>({
         />
       </Grid.Col>
       {isSettingsOpen && (
-        <Grid.Col md={4}>
+        <Grid.Col span={4}>
           <DataGridSettings
             statusProps={statusProps}
             setIsOpen={setIsSettingsOpen}

@@ -1,5 +1,5 @@
 // import { IClientGet } from '../Interfaces/Core/client.interface';
-import { MANTINE_COLORS } from "@mantine/core";
+import { MANTINE_COLORS } from "@/Constants/GeneralConstants";
 import { IActor } from "../Interfaces/general.interface";
 import {
   differenceInDays,
@@ -11,7 +11,6 @@ import {
   isYesterday,
   parseISO,
 } from "date-fns";
-import { MediaType } from "../Pages/Instagram/MediaComments/Hooks/mediaComments.hooks";
 
 export const isValidEmail = (email_address: string) =>
   /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i.test(email_address);
@@ -44,12 +43,9 @@ export const getNames = (user: IActor | null | undefined) => {
 };
 
 export const getRandomColor = () => {
-  let col =
-    MANTINE_COLORS[Math.floor(Math.random() * (MANTINE_COLORS.length - 1))];
-  if (col === "gray") {
-    col = getRandomColor();
-  }
-  return col;
+  return MANTINE_COLORS[
+    Math.floor(Math.random() * (MANTINE_COLORS.length - 1))
+  ];
 };
 
 export const formatChatDate = (
@@ -83,11 +79,4 @@ export const formatChatDate = (
     return format(date, "dd/MM");
   }
   return getYear(date);
-};
-
-export const formatMediaPlural = (mediaType: MediaType) => {
-  if (mediaType === "story") {
-    return "Stories";
-  }
-  return `${capitalize(mediaType)}s`;
 };

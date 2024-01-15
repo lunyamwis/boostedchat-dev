@@ -8,15 +8,15 @@ type Props = {
 
 export function TextField({ title, textFieldProps }: Props) {
   return (
-    <Grid gutter={16} sx={{ margin: 0 }} align="center">
-      <Grid.Col py={0} pl={16} pr={0} sm={5}>
+    <Grid gutter={16} style={{ margin: 0 }} align="center">
+      <Grid.Col py={0} pl={16} pr={0} span={5}>
         <Text
-          sx={{ fontSize: "0.875rem", fontWeight: 500, textAlign: "right" }}
+          style={{ fontSize: "0.875rem", fontWeight: 500, textAlign: "right" }}
         >
           {title}:
         </Text>
       </Grid.Col>
-      <Grid.Col py={0} pl={16} pr={0} sm={7}>
+      <Grid.Col py={0} pl={16} pr={0} span={7}>
         <TextInput {...textFieldProps} />
       </Grid.Col>
     </Grid>

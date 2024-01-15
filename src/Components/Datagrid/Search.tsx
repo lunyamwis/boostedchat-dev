@@ -36,7 +36,7 @@ export function DataGridSearch({
       {...props}
       value={value}
       onChange={handleInputChange}
-      icon={<IconSearch size={16} />}
+      leftSection={<IconSearch size={16} />}
     />
   );
 }

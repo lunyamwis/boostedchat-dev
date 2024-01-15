@@ -1,26 +1,30 @@
-# Boosted Chat Web Client
+# React + TypeScript + Vite
 
-This is a frontend React application written in Typescript and bootstrapped with
-Vite.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Install dependencies
+Currently, two official plugins are available:
 
-Having pnpm installed, run `pnpm dev` to install all npm dependencies
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Run the Application locally in development mode
+## Expanding the ESLint configuration
 
-In the project directory, you can run `pnpm dev` which will start the local
-server on port 5173.\
-Open [http://localhost:5173](http://localhost:5173) to view the application in
-the browser.\
-Vite also comes with Hot Module Replacement by default so any changes made to
-the code will be automatically reflected in the browser.
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-## Run with docker
+- Configure the top-level `parserOptions` property like this:
 
-You may alternatively run the application with docker by running
-`docker compose up -d`. This will build and run a production image of the built
-application served with nginx.
+```js
+export default {
+  // other rules...
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    project: ['./tsconfig.json', './tsconfig.node.json'],
+    tsconfigRootDir: __dirname,
+  },
+}
+```
 
-The container binds on port 80, and if this is already in use you may change the
-port to 8080 on the docker-compose.yaml file.
+- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
+- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list

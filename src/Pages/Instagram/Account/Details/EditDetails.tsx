@@ -11,8 +11,6 @@ import { Button } from "@mantine/core";
 import { useUpdateAccount } from "../Hooks/accounts.hook";
 import { showNotification } from "@mantine/notifications";
 import { IconAlertTriangle } from "@tabler/icons-react";
-import { axiosError } from "../../../../Interfaces/general.interface";
-import { apiErrorMessage } from "../../../../Utils/api.util";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../../../../Constants/ApiConstants";
 
@@ -77,13 +75,13 @@ export function EditDetails({ account }: Props) {
             title: "Success",
             message: "The account has been updated successfully",
           });
-          queryClient.invalidateQueries([
-            queryKeys.instagram.accounts.getById,
-            account.id,
-          ]);
+          queryClient.invalidateQueries({
+            queryKey: [queryKeys.instagram.accounts.getById, account.id],
+          });
         },
         onError: (err) => {
-          const errMessage = apiErrorMessage(err as axiosError);
+          //const errMessage = apiErrorMessage(err );
+          const errMessage = err.message;
           setIsDialogLoading(false);
           setDialogMessage({
             ...dialogMessage,

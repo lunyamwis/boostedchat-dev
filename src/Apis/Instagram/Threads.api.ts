@@ -1,13 +1,12 @@
 import { handleRestError, handleRestResponse } from "../response";
-import { useGlobalAxios } from "../../Hooks/useAxios";
+import { useAPIGlobalAxios } from "../../Hooks/useAxios";
 import {
   AssignOperator,
   CreateThreadParams,
-  GeneratedResponse,
-  GenerateResponseParams,
   GetThread,
   GetThreadMessage,
   SendDirectMessageManually,
+  Thread,
 } from "../../Interfaces/Instagram/Threads/thread.interface";
 import {
   AddComment,
@@ -15,11 +14,14 @@ import {
 } from "../../Interfaces/Instagram/photo.interface";
 
 export const useThreadsApi = () => {
-  const axiosInstance = useGlobalAxios("instagram/dm");
+  const axiosInstance = useAPIGlobalAxios("instagram/dm");
 
   return {
-    getAll: (): Promise<GetThread[]> =>
-      axiosInstance.get("/").then(handleRestResponse).catch(handleRestError),
+    getAll: (filterParams: string): Promise<GetThread[]> =>
+      axiosInstance
+        .get(`/?${filterParams}`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
     getOne: (id: string): Promise<GetThread> =>
       axiosInstance
         .get(`/${id}`)
@@ -30,9 +32,23 @@ export const useThreadsApi = () => {
         .post("/", params)
         .then(handleRestResponse)
         .catch(handleRestError),
-    getThreadMessages: (threadId: string): Promise<GetThreadMessage[]> =>
+    getThreadByIgThreadId: (igThreadId: string): Promise<Thread> =>
+      axiosInstance
+        .get(`/thread-by-ig-thread/${igThreadId}/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    getThreadMessagesByThreadId: (
+      threadId: string
+    ): Promise<GetThreadMessage[]> =>
       axiosInstance
         .get(`/${threadId}/get-thread-messages`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    getThreadMessagesByIgThreadId: (
+      igThreadId: string
+    ): Promise<GetThreadMessage[]> =>
+      axiosInstance
+        .get(`/messages-by-ig-thread/${igThreadId}/`)
         .then(handleRestResponse)
         .catch(handleRestError),
     addComment: (params: AddComment): Promise<AddedCommentRespose> =>
@@ -50,28 +66,21 @@ export const useThreadsApi = () => {
         .post(`/${params.id}/send-message-manually/`, params.data)
         .then(handleRestResponse)
         .catch(handleRestError),
-    generateResponse: (
-      params: GenerateResponseParams
-    ): Promise<GeneratedResponse> =>
-      axiosInstance
-        .post(`/${params.id}/generate-respons/`, params.data)
-        .then(handleRestResponse)
-        .catch(handleRestError),
-    checkResponses: () =>
-      axiosInstance
-        .get(`/check-respons/`)
-        .then(handleRestResponse)
-        .catch(handleRestError),
     resetThreadCount: (id: string) =>
       axiosInstance
         .post(`/${id}/reset-thread-count/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    getSnapshotByDate: (date: string) =>
+      axiosInstance
+        .post(`/response-rate/`, { date })
         .then(handleRestResponse)
         .catch(handleRestError),
   };
 };
 
 export const useFallbackApi = () => {
-  const axiosInstance = useGlobalAxios("instagram/fallback");
+  const axiosInstance = useAPIGlobalAxios("instagram/fallback");
 
   return {
     assignOperator: (params: AssignOperator) =>

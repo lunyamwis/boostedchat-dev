@@ -25,7 +25,7 @@ export function LoadingTable<T extends RowData>({
   return (
     <Box
       bg="#ffffff"
-      sx={{
+      style={{
         borderRight: "1px solid #dee2e6",
         borderLeft: "1px solid #dee2e6",
         borderTop: "1px solid #dee2e6",
@@ -33,14 +33,14 @@ export function LoadingTable<T extends RowData>({
         borderTopRightRadius: "4px",
       }}
     >
-      <Stack spacing={0}>
-        <Group position="apart" px={30} py={30}>
-          <Group position="left">
+      <Stack gap={0}>
+        <Group justify="space-between" px={30} py={30}>
+          <Group justify="left">
             <Text fw={500}>{tableName}</Text>
           </Group>
-          <Group position="left">
+          <Group justify="left">
             <TextInput
-              icon={<IconSearch size={16} />}
+              leftSection={<IconSearch size={16} />}
               placeholder="Search all columns"
               readOnly
             />
@@ -48,32 +48,35 @@ export function LoadingTable<T extends RowData>({
             <Skeleton height={20} circle width={20} />
           </Group>
         </Group>
-        <Box sx={{ height: 600, overflowX: "auto" }}>
+        <Box style={{ height: 600, overflowX: "auto" }}>
           <MantineTable
-            sx={{
+            style={{
               tableLayout: "fixed",
             }}
             highlightOnHover
             verticalSpacing="lg"
           >
-            <thead
+            <MantineTable.Thead
               style={{
                 backgroundColor: "rgb(250, 250, 250)",
                 borderTop: "1px solid rgb(240, 240, 240)",
                 borderBottom: "1px solid rgb(240,240,240)",
               }}
             >
-              <tr>
+              <MantineTable.Tr>
                 {columnsDef.map((col) => {
                   if (!col.visible) {
                     return null;
                   }
                   return (
-                    <th className="relative" key={col.id}>
-                      <Group position="apart" sx={{ flexWrap: "nowrap" }}>
-                        <Group spacing={2} sx={{ flexWrap: "nowrap" }}>
+                    <MantineTable.Th className="relative" key={col.id}>
+                      <Group
+                        justify="space-between"
+                        style={{ flexWrap: "nowrap" }}
+                      >
+                        <Group gap={2} style={{ flexWrap: "nowrap" }}>
                           <Box
-                            sx={{
+                            style={{
                               textTransform: "uppercase",
                               fontSize: 12,
                               color: "#262626",
@@ -89,7 +92,7 @@ export function LoadingTable<T extends RowData>({
                         </Group>
                         <Divider
                           orientation="vertical"
-                          sx={{
+                          style={{
                             cursor: "col-resize",
                             touchAction: "none",
                             userSelect: "none",
@@ -97,26 +100,26 @@ export function LoadingTable<T extends RowData>({
                           px={2}
                         />
                       </Group>
-                    </th>
+                    </MantineTable.Th>
                   );
                 })}
-              </tr>
-            </thead>
-            <tbody
+              </MantineTable.Tr>
+            </MantineTable.Thead>
+            <MantineTable.Tbody
               style={{
                 borderBottom: "1px solid #dee2e6",
               }}
             >
               {[1, 2, 3, 4, 5, 6, 7, 8].map((o) => (
-                <tr key={o}>
+                <MantineTable.Tr key={o}>
                   {[1, 2, 3, 4, 5, 6, 7, 8].map((c) => (
-                    <td key={c}>
+                    <MantineTable.Td key={c}>
                       <Skeleton height={12} key={c} width="70%" radius="xl" />
-                    </td>
+                    </MantineTable.Td>
                   ))}
-                </tr>
+                </MantineTable.Tr>
               ))}
-            </tbody>
+            </MantineTable.Tbody>
           </MantineTable>
         </Box>
       </Stack>

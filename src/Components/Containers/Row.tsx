@@ -10,7 +10,7 @@ export function Row({ children }: TRowProps) {
   return (
     <Grid
       justify="center"
-      sx={{
+      style={{
         borderTop: "solid 1px #F3F4F8",
         borderBottom: "solid 1px #F3F4F8",
         padding: 20,

@@ -4,6 +4,7 @@ import { Buffer } from "buffer";
 import { authReducer, TAuthActions } from "./AuthReducer";
 
 export type TAuthContextData = {
+  isNavOpened: boolean;
   user: {
     id: string;
     email: string;
@@ -49,6 +50,7 @@ const AuthContext = createContext<TAuthContextData>({
   accessToken: parseTokens().accessToken,
   refreshToken: parseTokens().refreshToken,
   dispatch: () => null,
+  isNavOpened: false,
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -60,6 +62,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     accessToken: info.accessToken,
     refreshToken: info.refreshToken,
     dispatch: () => null,
+    isNavOpened: false,
   });
 
   return (
@@ -69,6 +72,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
         dispatch,
+        isNavOpened: state.isNavOpened,
       }}
     >
       {children}

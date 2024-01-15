@@ -11,7 +11,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CollapsingAlert } from "../../Components/Widgets/CollapsingAlert";
 import { useAlert } from "../../Hooks/useAlert";
 import { isValidEmail } from "../../Utils/validator.util";
-import { axiosError, LoginState } from "../../Interfaces/general.interface";
+import { LoginState } from "../../Interfaces/general.interface";
 import { useLogin } from "./Hooks/login.hooks";
 import { useAuth } from "../../Context/AuthContext/AuthProvider";
 
@@ -80,8 +80,7 @@ export function Login() {
           navigate("/", { replace: true });
         },
         onError: (error) => {
-          const err = error as axiosError;
-          const errMessage = err.data;
+          const errMessage = error.message;
           setShowAlert(true);
           setAlertInfo({
             color: "red",
@@ -127,17 +126,17 @@ export function Login() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <Anchor
-          sx={{ textDecoration: "none", textAlign: "end", fontSize: 14 }}
+          style={{ textDecoration: "none", textAlign: "end", fontSize: 14 }}
           component={Link}
           to="/forgot-password"
         >
           Forgot password?
         </Anchor>
-        <Button type="submit" loading={login.isLoading}>
+        <Button type="submit" loading={login.isPending}>
           Log in
         </Button>
         <Anchor
-          sx={{ textDecoration: "none", textAlign: "center", fontSize: 14 }}
+          style={{ textDecoration: "none", textAlign: "center", fontSize: 14 }}
           component={Link}
           to="/register"
         >

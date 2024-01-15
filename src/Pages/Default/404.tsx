@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -15,7 +15,7 @@ export function NotFound() {
   const theme = useMantineTheme();
   return (
     <Box
-      sx={{ alignItems: "center", justifyContent: "center" }}
+      style={{ alignItems: "center", justifyContent: "center" }}
       display="flex"
       h="100vh"
       w="100vw"
@@ -23,11 +23,11 @@ export function NotFound() {
     >
       <Card w="40%" h="40%" shadow="lg">
         <Stack h="100%" justify="center" align="center">
-          <Group spacing={2}>
+          <Group gap={2}>
             <Text fz="100px" fw={600}>
               4
             </Text>
-            <Text fz="100px" fw={600} color={theme.colors.brand[3]}>
+            <Text fz="100px" fw={600} c={theme.colors.brand[3]}>
               0
             </Text>
             <Text fz="100px" fw={600}>

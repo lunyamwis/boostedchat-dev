@@ -1,0 +1,37 @@
+.summaryItem {
+  background-color: light-dark(
+    var(--mantine-color-white),
+    var(--mantine-color-dark-6)
+  );
+  padding: var(--mantine-spacing-md);
+  gap: 5;
+  align-items: "start";
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+
+  &:hover {
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+      rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  }
+
+  &:active {
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+      rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  }
+}
+
+.promptList {
+  background-color: light-dark(
+    var(--mantine-color-white),
+    var(--mantine-color-dark-6)
+  );
+  height: 100%;
+  padding: var(--mantine-spacing-md);
+
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  height: 100%;
+}

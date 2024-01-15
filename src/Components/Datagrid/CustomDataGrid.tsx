@@ -21,13 +21,13 @@ type Props<T extends RowData> = {
 export function CustomDataGrid<T extends RowData>({ table, noData }: Props<T>) {
   return (
     <MantineTable
-      sx={{
+      style={{
         tableLayout: "fixed",
       }}
       highlightOnHover
       verticalSpacing="md"
     >
-      <thead
+      <MantineTable.Thead
         style={{
           backgroundColor: "rgb(250, 250, 250)",
           borderTop: "1px solid rgb(240, 240, 240)",
@@ -35,9 +35,9 @@ export function CustomDataGrid<T extends RowData>({ table, noData }: Props<T>) {
         }}
       >
         {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
+          <MantineTable.Tr key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
-              <th
+              <MantineTable.Th
                 className="relative"
                 key={header.id}
                 style={{
@@ -46,10 +46,10 @@ export function CustomDataGrid<T extends RowData>({ table, noData }: Props<T>) {
                 colSpan={header.colSpan}
               >
                 {header.isPlaceholder ? null : (
-                  <Group position="apart" sx={{ flexWrap: "nowrap" }}>
-                    <Group spacing={2} sx={{ flexWrap: "nowrap" }}>
+                  <Group justify="space-between" style={{ flexWrap: "nowrap" }}>
+                    <Group gap={2} style={{ flexWrap: "nowrap" }}>
                       <Box
-                        sx={{
+                        style={{
                           textTransform: "uppercase",
                           fontSize: 12,
                           color: "#262626",
@@ -84,7 +84,7 @@ export function CustomDataGrid<T extends RowData>({ table, noData }: Props<T>) {
                     </Group>
                     <Divider
                       orientation="vertical"
-                      sx={{
+                      style={{
                         cursor: "col-resize",
                         touchAction: "none",
                         userSelect: "none",
@@ -95,12 +95,12 @@ export function CustomDataGrid<T extends RowData>({ table, noData }: Props<T>) {
                     />
                   </Group>
                 )}
-              </th>
+              </MantineTable.Th>
             ))}
-          </tr>
+          </MantineTable.Tr>
         ))}
-      </thead>
-      <tbody
+      </MantineTable.Thead>
+      <MantineTable.Tbody
         style={{
           borderBottom: "1px solid #dee2e6",
         }}
@@ -108,11 +108,11 @@ export function CustomDataGrid<T extends RowData>({ table, noData }: Props<T>) {
         {table.getRowModel().rows.length > 0 ? (
           <>
             {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
+              <MantineTable.Tr key={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>
+                  <MantineTable.Td key={cell.id}>
                     <Box
-                      sx={{
+                      style={{
                         WebkitLineClamp: 1,
                         overflow: "hidden",
                         display: "-webkit-box",
@@ -124,23 +124,23 @@ export function CustomDataGrid<T extends RowData>({ table, noData }: Props<T>) {
                         cell.getContext()
                       )}
                     </Box>
-                  </td>
+                  </MantineTable.Td>
                 ))}
-              </tr>
+              </MantineTable.Tr>
             ))}
           </>
         ) : (
-          <tr>
-            <td
+          <MantineTable.Tr>
+            <MantineTable.Td
               style={{ textAlign: "center" }}
               rowSpan={7}
               colSpan={table.getLeafHeaders().length}
             >
               {noData}
-            </td>
-          </tr>
+            </MantineTable.Td>
+          </MantineTable.Tr>
         )}
-      </tbody>
+      </MantineTable.Tbody>
     </MantineTable>
   );
 }

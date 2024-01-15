@@ -1,9 +1,8 @@
 import axios from "axios";
 import { useAuth } from "../Context/AuthContext/AuthProvider";
-import { API_URL } from "../Constants/ApiConstants";
-import { useInstagrapiAuth } from "../Context/AuthContext/InstagrapiProvider";
+import { API_URL, PROMPT_URL } from "../Constants/ApiConstants";
 
-export const useGlobalAxios = (url: string) => {
+export const useAPIGlobalAxios = (url: string) => {
   const { accessToken } = useAuth();
   const axiosInstance = axios.create({
     baseURL: `${API_URL}/${url}/`,
@@ -12,11 +11,11 @@ export const useGlobalAxios = (url: string) => {
   return axiosInstance;
 };
 
-export const useInstagrapiAxios = (url: string) => {
-  const { sessionId } = useInstagrapiAuth();
+export const usePromptGlobalAxios = (url: string) => {
+  const { accessToken } = useAuth();
   const axiosInstance = axios.create({
-    baseURL: `${API_URL}/${url}/`,
-    headers: { Authorization: `Bearer ${sessionId}` },
+    baseURL: `${PROMPT_URL}/${url}/`,
+    headers: { Authorization: `Bearer ${accessToken}` },
   });
   return axiosInstance;
 };

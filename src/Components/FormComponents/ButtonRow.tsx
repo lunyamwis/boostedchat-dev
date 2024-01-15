@@ -1,4 +1,4 @@
-import { Group, GroupPosition } from "@mantine/core";
+import { Group } from "@mantine/core";
 import React from "react";
 
 export function ButtonRow({
@@ -6,13 +6,13 @@ export function ButtonRow({
   position = "center",
 }: {
   children: React.ReactNode;
-  position?: GroupPosition;
+  position?: React.CSSProperties["justifyContent"];
 }) {
   return (
     <Group
-      position={position}
+      justify={position}
       align="center"
-      sx={{
+      style={{
         backgroundColor: "#fffbfb",
         borderRadius: "12px",
         paddingTop: 20,

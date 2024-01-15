@@ -7,7 +7,7 @@ import { queryKeys } from "../../../Constants/ApiConstants";
 import { SendAndAssignModal } from "./SendAndAssignModal";
 
 type Props = {
-  threadId: string;
+  threadId: string | undefined;
   assignedTo: "Robot" | "Human";
 };
 
@@ -25,10 +25,9 @@ export function MessageBox({ threadId, assignedTo }: Props) {
   const queryClient = useQueryClient();
 
   React.useEffect(() => {
+    if (threadId == null) return;
     if (choiceSelected) {
-      console.log("A choice has been selected", choiceSelected);
       setChoiceSelected(false);
-      console.log(mAssignedTo);
 
       sendDirectMessage.mutate(
         {
@@ -40,17 +39,16 @@ export function MessageBox({ threadId, assignedTo }: Props) {
         },
         {
           onSuccess: () => {
-            queryClient.invalidateQueries([
-              queryKeys.instagram.threads.getMessages,
-              threadId,
-            ]);
+            queryClient.invalidateQueries({
+              queryKey: [queryKeys.instagram.threads.getMessages, threadId],
+            });
             setChoiceSelected(false);
             setMessage("");
           },
         }
       );
     }
-  }, [choiceSelected]);
+  }, [choiceSelected, threadId]);
 
   const handleSendMessage = () => {
     if (message === "") {
@@ -69,8 +67,8 @@ export function MessageBox({ threadId, assignedTo }: Props) {
     <>
       <Group
         pl={8}
-        sx={{ borderTop: "1px solid #f0f0f0" }}
-        spacing={0}
+        style={{ borderTop: "1px solid #f0f0f0" }}
+        gap={0}
         mih={104}
       >
         <Textarea
@@ -80,25 +78,27 @@ export function MessageBox({ threadId, assignedTo }: Props) {
           minRows={4}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          sx={{ flex: 1 }}
+          style={{ flex: 1 }}
         />
-        <Group px={16} position="center">
-          {sendDirectMessage.isLoading ? (
-            <ActionIcon size="xl" radius="xl" variant="light" color="brand">
-              <Loader size="sm" variant="dots" />
-            </ActionIcon>
-          ) : (
-            <ActionIcon
-              size="xl"
-              radius="xl"
-              variant="light"
-              color="brand"
-              onClick={handleSendMessage}
-            >
-              <IconSend strokeWidth={1.4} />
-            </ActionIcon>
-          )}
-        </Group>
+        {threadId != null && (
+          <Group px={16} justify="center">
+            {sendDirectMessage.isPending ? (
+              <ActionIcon size="xl" radius="xl" variant="light" color="brand">
+                <Loader size="sm" variant="dots" />
+              </ActionIcon>
+            ) : (
+              <ActionIcon
+                size="xl"
+                radius="xl"
+                variant="light"
+                color="brand"
+                onClick={handleSendMessage}
+              >
+                <IconSend strokeWidth={1.4} />
+              </ActionIcon>
+            )}
+          </Group>
+        )}
       </Group>
       <SendAndAssignModal
         isOpen={isAssignModalOpen}

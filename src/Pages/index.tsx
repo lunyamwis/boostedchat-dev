@@ -3,10 +3,12 @@ import {
   Icon,
   IconBrandInstagram,
   IconBrandMessenger,
-  IconUserPlus,
+  IconChartInfographic,
+  IconGraph,
+  IconTerminal2,
   IconUsers,
-  IconUserSearch,
   IconUsersGroup,
+  IconUserShield,
 } from "@tabler/icons-react";
 
 export type PrimaryPageData = {
@@ -32,28 +34,28 @@ export type TPageData = PrimaryPageData &
   (({ level: "1" } & Level1) | { level: "2"; url: string });
 
 export type ParentKeys =
-  | "AccountRequests"
-  | "SystemAccounts"
-  | "SalesRepresentatives"
+  | "Snapshot"
   | "Accounts"
-  | "Threads";
+  | "Threads"
+  | "Prompts"
+  | "Roles";
 
-export type ChildKeys =
-  | "CreateAccount"
-  | "Dashboards"
-  | "AccountDetails"
-  | "BulkUploadAccounts";
+export type ChildKeys = "";
 
-type TMPageData = Record<ParentKeys | ChildKeys, TPageData>;
+type TMPageData = Record<ParentKeys, TPageData>;
 
 export enum EGroup {
+  summaries = "Summaries",
   instagram = "Instagram",
   userManagement = "User Management",
+  scripts = "Scripts",
 }
 
 export const GroupIcons: Record<EGroup, Icon> = {
   Instagram: IconBrandInstagram,
   "User Management": IconUsers,
+  Summaries: IconGraph,
+  Scripts: IconTerminal2,
 };
 
 export const componentData: {
@@ -61,57 +63,11 @@ export const componentData: {
   component: React.LazyExoticComponent<() => JSX.Element>;
 }[] = [
   {
-    key: "Dashboards",
+    key: "Snapshot",
     component: React.lazy(() =>
-      import("./Dashboard/index").then(({ Dashboard }) => ({
-        default: Dashboard,
+      import("./Dashboard/index").then(({ Summary }) => ({
+        default: Summary,
       }))
-    ),
-  },
-  {
-    key: "AccountDetails",
-    component: React.lazy(() =>
-      import("./Instagram/Account/Details/").then(({ AccountDetails }) => ({
-        default: AccountDetails,
-      }))
-    ),
-  },
-  {
-    key: "BulkUploadAccounts",
-    component: React.lazy(() =>
-      import("./Instagram/Account/BulkUploadAccounts").then(
-        ({ BulkUploadAccounts }) => ({
-          default: BulkUploadAccounts,
-        })
-      )
-    ),
-  },
-  {
-    key: "SystemAccounts",
-    component: React.lazy(() =>
-      import("./UserManagement/Users").then(({ Users }) => ({
-        default: Users,
-      }))
-    ),
-  },
-  {
-    key: "AccountRequests",
-    component: React.lazy(() =>
-      import("./UserManagement/AccountRequests").then(
-        ({ AccountRequests }) => ({
-          default: AccountRequests,
-        })
-      )
-    ),
-  },
-  {
-    key: "SalesRepresentatives",
-    component: React.lazy(() =>
-      import("./UserManagement/SalesRepresentatives/SalesRepresentatives").then(
-        ({ SalesRepresentatives }) => ({
-          default: SalesRepresentatives,
-        })
-      )
     ),
   },
   {
@@ -130,17 +86,33 @@ export const componentData: {
       }))
     ),
   },
+  {
+    key: "Prompts",
+    component: React.lazy(() =>
+      import("./Scripts/Prompts/index").then(({ Prompts }) => ({
+        default: Prompts,
+      }))
+    ),
+  },
+  {
+    key: "Roles",
+    component: React.lazy(() =>
+      import("./Scripts/Roles/index").then(({ ScriptRoles }) => ({
+        default: ScriptRoles,
+      }))
+    ),
+  },
 ];
 
 export const pageData: TMPageData = {
-  Dashboards: {
+  Snapshot: {
     level: "1",
-    group: EGroup.instagram,
+    group: EGroup.summaries,
     hasChildren: false,
-    title: "Dashboards",
-    isNavItem: false,
-    icon: IconBrandMessenger,
-    url: "/instagram/dashboards",
+    title: "Snapshot",
+    isNavItem: true,
+    icon: IconChartInfographic,
+    url: "/dashboard/snapshot",
   },
   Threads: {
     level: "1",
@@ -160,52 +132,22 @@ export const pageData: TMPageData = {
     isNavItem: true,
     icon: IconUsersGroup,
   },
-  AccountRequests: {
+  Prompts: {
     level: "1",
-    group: EGroup.userManagement,
+    group: EGroup.scripts,
     hasChildren: false,
-    title: "Account Requests",
-    url: "/user-management/account-requests",
+    url: "/scripts/prompts",
+    title: "Prompts",
     isNavItem: true,
-    icon: IconUserSearch,
+    icon: IconUsersGroup,
   },
-  SystemAccounts: {
+  Roles: {
     level: "1",
-    group: EGroup.userManagement,
+    group: EGroup.scripts,
     hasChildren: false,
-    title: "User Accounts",
-    url: "/user-management/system-users",
+    url: "/scripts/roles",
+    title: "Roles",
     isNavItem: true,
-    icon: IconUsers,
-  },
-  SalesRepresentatives: {
-    level: "1",
-    group: EGroup.userManagement,
-    hasChildren: false,
-    title: "Sales Representatives",
-    url: "/user-management/sales-representatives",
-    isNavItem: true,
-    icon: IconUserPlus,
-  },
-  CreateAccount: {
-    level: "2",
-    group: EGroup.instagram,
-    title: "Create Account",
-    isNavItem: true,
-    url: "/create-account",
-  },
-  AccountDetails: {
-    level: "2",
-    group: EGroup.instagram,
-    title: "Accounts List",
-    isNavItem: false,
-    url: "/instagram/accounts/:id",
-  },
-  BulkUploadAccounts: {
-    level: "2",
-    group: EGroup.instagram,
-    title: "Bulk Upload",
-    isNavItem: true,
-    url: "/upload-accounts",
+    icon: IconUserShield,
   },
 };

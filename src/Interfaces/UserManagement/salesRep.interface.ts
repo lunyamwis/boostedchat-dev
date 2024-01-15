@@ -11,6 +11,11 @@ export interface GetSalesRep {
   instagram: unknown[];
 }
 
+export interface GetSalesRep {
+  id: string;
+  ig_username: string;
+}
+
 export interface GetSalesRepBulk {
   info: SalesRepObj[];
   status_code: number;

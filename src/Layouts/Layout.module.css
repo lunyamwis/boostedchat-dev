@@ -1,0 +1,18 @@
+.authContainer {
+  @media (max-width: $mantine-breakpoint-xs) {
+    width: 100%;
+  }
+
+  @media (min-width: $mantine-breakpoint-sm) {
+    width: 50%;
+  }
+  @media (min-width: $mantine-breakpoint-md) {
+    width: 33.3%;
+  }
+  @media (min-width: $mantine-breakpoint-lg) {
+    width: 33.3%;
+  }
+  @media (min-width: $mantine-breakpoint-xl) {
+    width: 25%;
+  }
+}

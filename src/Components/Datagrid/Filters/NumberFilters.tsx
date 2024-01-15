@@ -17,9 +17,9 @@ export function NumberFilters({
   filterValue,
   setFilterValue,
 }: Props) {
-  const [numberFilterValue, setNumberFilterValue] = React.useState<"" | number>(
-    filterValue === "" ? "" : parseInt(filterValue, 10),
-  );
+  const [numberFilterValue, setNumberFilterValue] = React.useState<
+    string | number
+  >(filterValue === "" ? "" : parseInt(filterValue, 10));
 
   return (
     <Group>
@@ -34,9 +34,10 @@ export function NumberFilters({
           { value: "lte", label: "Less than or Equal to" },
         ]}
         value={filterOperator ?? "eq"}
-        onChange={(val: TNumberOperators | null) =>
-          setFilterOperator(val ?? "eq")}
-        sx={{ flex: 0.7 }}
+        onChange={(val: string | null) =>
+          setFilterOperator((val as TNumberOperators) ?? "eq")
+        }
+        style={{ flex: 0.7 }}
       />
       <NumberInput
         hideControls
@@ -46,7 +47,7 @@ export function NumberFilters({
           setNumberFilterValue(val);
         }}
         label="Value"
-        sx={{ flex: 0.3 }}
+        style={{ flex: 0.3 }}
       />
     </Group>
   );

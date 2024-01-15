@@ -61,9 +61,9 @@ export function DataGridDatePicker() {
   }, [dateRange]);
 
   return (
-    <Group sx={{ flexWrap: "nowrap" }} mx={16}>
+    <Group style={{ flexWrap: "nowrap" }} mx={16}>
       <Select
-        sx={{ flex: 0.4 }}
+        style={{ flex: 0.4 }}
         data={["All Time", "Year", "Month", "Date", "Date Range"]}
         label="Type"
         value={dateType}
@@ -82,8 +82,8 @@ export function DataGridDatePicker() {
         <>
           {dateType === "Year" && (
             <YearPickerInput
-              sx={{ flex: 0.6 }}
-              icon={<IconCalendar size="1.1rem" strokeWidth={1.5} />}
+              style={{ flex: 0.6 }}
+              leftSection={<IconCalendar size="1.1rem" strokeWidth={1.5} />}
               label="Year"
               placeholder="Choose"
               value={selectedDate}
@@ -97,10 +97,10 @@ export function DataGridDatePicker() {
           )}
           {dateType === "Month" && (
             <MonthPickerInput
-              sx={{ flex: 0.6 }}
+              style={{ flex: 0.6 }}
               label="Month"
               placeholder="Choose"
-              icon={<IconCalendar size="1.1rem" strokeWidth={1.5} />}
+              leftSection={<IconCalendar size="1.1rem" strokeWidth={1.5} />}
               value={selectedDate}
               error={selectedDate == null}
               onChange={(val) => {
@@ -112,11 +112,11 @@ export function DataGridDatePicker() {
           )}
           {dateType === "Date" && (
             <DatePickerInput
-              sx={{ flex: 0.6 }}
+              style={{ flex: 0.6 }}
               label="Date"
               placeholder="Choose"
               error={selectedDate == null}
-              icon={<IconCalendar size="1.1rem" strokeWidth={1.5} />}
+              leftSection={<IconCalendar size="1.1rem" strokeWidth={1.5} />}
               value={selectedDate}
               onChange={(val) => {
                 if (val == null) return;
@@ -127,7 +127,7 @@ export function DataGridDatePicker() {
           )}
           {dateType === "Date Range" && (
             <DatePickerInput
-              sx={{ flex: 0.6 }}
+              style={{ flex: 0.6 }}
               type="range"
               error={dateRange[0] === null || dateRange[1] === null}
               label="Date Range"

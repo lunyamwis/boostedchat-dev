@@ -24,10 +24,10 @@ export function AssignedToSwitch({
     assignedTo === "Robot" ? true : false
   );
   return (
-    <Group position="apart">
+    <Group justify="space-between">
       <Text>Assign to bot</Text>
 
-      {assignOperator.isLoading ? (
+      {assignOperator.isPending ? (
         <Loader size="sm" />
       ) : (
         <Switch
@@ -43,10 +43,12 @@ export function AssignedToSwitch({
               },
               {
                 onSuccess: () => {
-                  queryClient.invalidateQueries([
-                    queryKeys.instagram.accounts.getAccounts,
-                    accountId,
-                  ]);
+                  queryClient.invalidateQueries({
+                    queryKey: [
+                      queryKeys.instagram.accounts.getAccounts,
+                      accountId,
+                    ],
+                  });
                   setMenuOpened(false);
                 },
               }

@@ -1,5 +1,6 @@
 import React from "react";
-import "./App.css";
+import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
 import { ThemeProvider } from "./Themes/Theme";
@@ -10,8 +11,8 @@ import { QueryProvider } from "./QueryProvider";
 function App() {
   return (
     <>
-      <Notifications autoClose={8000} />
       <ThemeProvider>
+        <Notifications autoClose={8000} />
         <ModalsProvider>
           <AuthProvider>
             <QueryProvider>

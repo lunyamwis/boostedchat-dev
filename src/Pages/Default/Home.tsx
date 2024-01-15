@@ -7,5 +7,5 @@ export function Home() {
   React.useEffect(() => {
     navigate(pageData.Threads.url ?? "/threads");
   }, [navigate]);
-  return <></>;
+  return <>Home</>;
 }

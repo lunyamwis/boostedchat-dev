@@ -1,7 +1,7 @@
 import { Collapse } from "@mantine/core";
 import React from "react";
 import { TPageData } from "../../Pages";
-import { MenuItem, ParentMenuItem } from "./MenuItem";
+import { ParentMenuItem } from "./MenuItem";
 import { GroupTitle } from "./GroupTitle";
 
 type Props = {
@@ -22,23 +22,12 @@ export function NavGroup({ navValues, idx, navKey }: Props) {
       />
       <Collapse in={isOpened}>
         {navValues[idx].map((navValue, index) => {
-          if (navValue.level === "1" && !navValue.hasChildren) {
-            return (
-              <MenuItem
-                key={index}
-                url={navValue.url}
-                title={navValue.title}
-                Icon={navValue.icon}
-              />
-            );
-          }
           if (navValue.level === "1" && navValue.hasChildren) {
             return (
               <ParentMenuItem
                 Icon={navValue.icon}
                 key={index}
                 title={navValue.title}
-                childrenKeys={navValue.children}
               />
             );
           }

@@ -15,9 +15,9 @@ export function FormLayout({
 }: ComponentProps) {
   return (
     <Grid m={0} justify="center">
-      <Grid.Col span={span} sx={{}}>
+      <Grid.Col span={span} style={{ width: "100%" }}>
         <Box
-          sx={(theme) => ({
+          style={(theme) => ({
             boxShadow: "0px 3px 8px -1px #3232470d",
             border: `solid 1px ${theme.colors.gray[2]}`,
             marginLeft: 40,
@@ -26,11 +26,11 @@ export function FormLayout({
           })}
         >
           <Stack
-            spacing={0}
-            sx={{ borderTopLeftRadius: 8, borderTopRightRadius: 8 }}
+            gap={0}
+            style={{ borderTopLeftRadius: 8, borderTopRightRadius: 8 }}
           >
             <Group
-              sx={(theme) => ({
+              style={(theme) => ({
                 overflow: "hidden",
                 backgroundColor: theme.colors.brand[5],
                 paddingTop: 21,
@@ -40,13 +40,13 @@ export function FormLayout({
                 borderTopRightRadius: 12,
               })}
             >
-              <Text sx={{ fontSize: 18, color: "#FFF" }}>{title}</Text>
-              <Text sx={{ pl: 0.5 }} color="text.secondary">
+              <Text style={{ fontSize: 18, color: "#FFF" }}>{title}</Text>
+              <Text style={{ pl: 0.5 }} c="text.secondary">
                 {subTitle}
               </Text>
             </Group>
             <Stack
-              sx={{
+              style={{
                 backgroundColor: "white",
                 paddingTop: 20,
                 borderBottomRightRadius: 12,

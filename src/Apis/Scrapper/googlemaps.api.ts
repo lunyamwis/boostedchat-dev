@@ -1,12 +1,12 @@
 import { handleRestError, handleRestResponse } from "../response";
-import { useGlobalAxios } from "../../Hooks/useAxios";
+import { useAPIGlobalAxios } from "../../Hooks/useAxios";
 import {
   GoogleMapsScrapperInput,
   GoogleMapsScrapperResult,
 } from "../../Interfaces/Scrapper/scrapper.interface";
 
 export const useGoogleMapsApi = () => {
-  const axiosInstance = useGlobalAxios("scrapper/gmaps/");
+  const axiosInstance = useAPIGlobalAxios("scrapper/gmaps/");
 
   return {
     create: (
@@ -35,7 +35,7 @@ export const useGoogleMapsApi = () => {
 };
 
 export const useGoogleMapsSearchUsersApi = () => {
-  const axiosInstance = useGlobalAxios("scrapper/instagram/search");
+  const axiosInstance = useAPIGlobalAxios("scrapper/instagram/search");
 
   return {
     search: (m: null): Promise<GoogleMapsScrapperResult> => {

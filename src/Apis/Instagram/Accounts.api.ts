@@ -1,5 +1,5 @@
 import { handleRestError, handleRestResponse } from "../response";
-import { useGlobalAxios } from "../../Hooks/useAxios";
+import { useAPIGlobalAxios } from "../../Hooks/useAxios";
 import {
   CreateAccount,
   GetAccount,
@@ -10,7 +10,7 @@ import { Lead } from "../../Interfaces/general.interface";
 import { UploadCSV } from "../../Interfaces/Instagram/upload.interface";
 
 export const useAccountsApi = () => {
-  const axiosInstance = useGlobalAxios("instagram/account");
+  const axiosInstance = useAPIGlobalAxios("instagram/account");
 
   return {
     getAll: (): Promise<GetAccount[]> =>
@@ -18,6 +18,11 @@ export const useAccountsApi = () => {
     getOne: (id: string): Promise<GetSingleAccount> =>
       axiosInstance
         .get(`/${id}`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    getByIgThreadId: (igThreadId: string): Promise<GetSingleAccount> =>
+      axiosInstance
+        .get(`/account-by-ig-thread/${igThreadId}/`)
         .then(handleRestResponse)
         .catch(handleRestError),
     getFollowers: (id: string): Promise<Lead> =>

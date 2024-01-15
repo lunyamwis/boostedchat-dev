@@ -5,8 +5,6 @@ import { ButtonRow } from "../../../Components/FormComponents/ButtonRow";
 import { useBulkUploadAccounts } from "./Hooks/accounts.hook";
 import { showNotification } from "@mantine/notifications";
 import { IconAlertTriangle, IconCheck } from "@tabler/icons-react";
-import { apiErrorMessage } from "../../../Utils/api.util";
-import { axiosError } from "../../../Interfaces/general.interface";
 import { FileWithPath } from "@mantine/dropzone";
 import { Dropzone } from "../../../Components/MantineWrappers/Dropzone";
 import { Link } from "react-router-dom";
@@ -41,7 +39,8 @@ export function BulkUploadAccounts() {
           setCsvFile(null);
         },
         onError: (err) => {
-          const errorMessage = apiErrorMessage(err as axiosError);
+          //const errorMessage = apiErrorMessage(err as axiosError);
+          const errorMessage = err.message;
           showNotification({
             color: "red",
             message: errorMessage,
@@ -54,7 +53,7 @@ export function BulkUploadAccounts() {
 
   return (
     <FormLayout span={7} title="Bulk Upload Accounts">
-      <Group position="right">
+      <Group justify="right">
         <Button
           variant="subtle"
           component={Link}

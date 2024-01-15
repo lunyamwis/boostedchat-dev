@@ -29,9 +29,9 @@ export function FilterPanel({ filteredVisibleColumns }: Props) {
           setIsCreating={setIsCreating}
         />
       )}
-      <Group position="left">
+      <Group justify="start">
         <Button
-          leftIcon={<IconPlus />}
+          leftSection={<IconPlus />}
           disabled={isCreating}
           onClick={() => setIsCreating(true)}
           variant="subtle"

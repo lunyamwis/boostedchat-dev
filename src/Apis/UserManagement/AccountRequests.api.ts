@@ -1,5 +1,5 @@
 import { handleRestError, handleRestResponse } from "../response";
-import { useGlobalAxios } from "../../Hooks/useAxios";
+import { useAPIGlobalAxios } from "../../Hooks/useAxios";
 import {
   ActivateAccount,
   ApproveAccountRequest,
@@ -8,7 +8,7 @@ import {
 } from "../../Interfaces/UserManagement/accountRequest.interface";
 
 export const useAccountRequestApi = () => {
-  const axiosInstance = useGlobalAxios("authentication");
+  const axiosInstance = useAPIGlobalAxios("authentication");
 
   return {
     getAll: (): Promise<GetAccountRequest[]> =>

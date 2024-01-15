@@ -48,7 +48,7 @@ export function AccountInformation({ account }: ComponentProps) {
         handleClose={closeLoadingDialog}
       />
       <Box
-        sx={{
+        style={{
           paddingLeft: 24,
           paddingRight: 24,
           paddingTop: 16,
