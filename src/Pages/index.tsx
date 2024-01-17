@@ -35,6 +35,7 @@ export type TPageData = PrimaryPageData & ({ level: "1" } & Level1);
 export type ParentKeys =
   | "Snapshot"
   | "Accounts"
+  | "AccountDetails"
   | "Threads"
   | "Prompts"
   | "Roles";
@@ -86,6 +87,16 @@ export const componentData: {
     ),
   },
   {
+    key: "AccountDetails",
+    component: React.lazy(() =>
+      import("./Instagram/Account/Details/index").then(
+        ({ AccountDetails }) => ({
+          default: AccountDetails,
+        }),
+      ),
+    ),
+  },
+  {
     key: "Prompts",
     component: React.lazy(() =>
       import("./Scripts/Prompts/index").then(({ Prompts }) => ({
@@ -129,6 +140,15 @@ export const pageData: TMPageData = {
     url: "/instagram/accounts",
     title: "Accounts",
     isNavItem: true,
+    icon: IconUsersGroup,
+  },
+  AccountDetails: {
+    level: "1",
+    group: EGroup.instagram,
+    hasChildren: false,
+    url: "/instagram/accounts/:id",
+    title: "Account Details",
+    isNavItem: false,
     icon: IconUsersGroup,
   },
   Prompts: {

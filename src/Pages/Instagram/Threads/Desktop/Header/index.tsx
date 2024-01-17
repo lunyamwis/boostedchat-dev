@@ -27,7 +27,7 @@ export function ChatHeader({ setFilterParams, filterParams }: Props) {
   React.useEffect(() => {
     setFilterParams({
       ...filterParams,
-      q: { label: debouncedSearchQuery, value: debouncedSearchQuery },
+      q: debouncedSearchQuery,
     });
   }, [debouncedSearchQuery]);
   return (

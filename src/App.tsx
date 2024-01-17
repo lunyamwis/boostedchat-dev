@@ -7,7 +7,6 @@ import { ThemeProvider } from "./Themes/Theme";
 import { AppRoutes } from "./Routes/AppRoutes";
 import { AuthProvider } from "./Context/AuthContext/AuthProvider";
 import { QueryProvider } from "./QueryProvider";
-
 function App() {
   return (
     <>

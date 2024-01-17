@@ -8,7 +8,7 @@ export type ThreadFilterParams = {
   assigned_to: { label: NullableString; value: NullableString };
   sales_rep: { label: NullableStringArray; value: NullableStringArray };
   stage: { label: NullableStringArray; value: NullableStringArray };
-  q: { label: NullableString; value: NullableString };
+  q: string;
 };
 
 const formatFilterParams = (params: ThreadFilterParams) => {
@@ -34,9 +34,9 @@ const formatFilterParams = (params: ThreadFilterParams) => {
     mApiParams.push(`stage=${JSON.stringify(params.stage.value)}`);
     mSearchParams.push(`stage=${JSON.stringify(params.stage)}`);
   }
-  if (params.q && params.q.value != null && params.q.value.length > 0) {
-    mApiParams.push(`q=${params.q.value}`);
-    mSearchParams.push(`q=${params.q.value}`);
+  if (params.q && params.q != null && params.q.length > 0) {
+    mApiParams.push(`q=${params.q}`);
+    mSearchParams.push(`q=${params.q}`);
   }
   return { api: mApiParams.join("&"), search: mSearchParams.join("&") };
 };
@@ -49,7 +49,7 @@ export const useCommonState = () => {
     assigned_to: { label: null, value: null },
     sales_rep: { label: null, value: null },
     stage: { label: null, value: null },
-    q: { label: null, value: null },
+    q: "",
   });
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -80,7 +80,7 @@ export const useCommonState = () => {
       assigned_to: { label: null, value: null },
       sales_rep: { label: null, value: null },
       stage: { label: null, value: null },
-      q: { label: null, value: null },
+      q: "",
     };
 
     if (assignedToParams != null) {
@@ -102,9 +102,9 @@ export const useCommonState = () => {
     }
 
     if (qParams != null) {
-      mFilterParams.q = JSON.parse(qParams);
+      mFilterParams.q = qParams;
     } else {
-      mFilterParams.q = { label: null, value: null };
+      mFilterParams.q = "";
     }
 
     setFilterParams(mFilterParams);

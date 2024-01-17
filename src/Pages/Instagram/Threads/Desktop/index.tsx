@@ -4,6 +4,7 @@ import {
   Divider,
   Flex,
   Grid,
+  Loader,
   ScrollArea,
   Stack,
   Text,
@@ -11,11 +12,13 @@ import {
 import { Loading } from "../../../../Components/UIState/Loading";
 import { Error } from "../../../../Components/UIState/Error";
 import { ThreadListItem } from "../ThreadListItem";
-import { DirectMessages } from "../DirectMessages";
 import { NoMediaSelected } from "../NoMediaSelected";
 import { AssignedTabs } from "../AssignedTabs";
 import { useCommonState } from "../Hooks/common.hooks";
 import { ChatHeader } from "./Header";
+import { DirectMessages } from "./DirectMessages";
+import { useIntersection } from "@mantine/hooks";
+import { SearchItem } from "../SearchItem";
 
 export type ThreadDetails = {
   threadId: string;
@@ -29,6 +32,12 @@ export function DesktopThreads() {
   const { threadsQR, filterParams, setFilterParams, igThreadId } =
     useCommonState();
 
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const { ref, entry } = useIntersection({
+    root: containerRef.current,
+    threshold: 0.5,
+  });
+
   if (threadsQR.isError) {
     return (
       <Error
@@ -37,6 +46,12 @@ export function DesktopThreads() {
       />
     );
   }
+
+  React.useEffect(() => {
+    if (entry?.isIntersecting) {
+      threadsQR.fetchNextPage();
+    }
+  }, [entry?.isIntersecting]);
 
   return (
     <Grid
@@ -71,10 +86,10 @@ export function DesktopThreads() {
           ) : (
             <>
               <Stack gap={0}>
-                <AssignedTabs count={threadsQR.data.length} />
+                <AssignedTabs count={threadsQR.data.pages[0].count} />
                 <Divider />
               </Stack>
-              {threadsQR.data.length === 0 ? (
+              {threadsQR.data.pages.length === 0 ? (
                 <Flex h="100%" justify="center" align="center">
                   <Text c="#444444" fz={14}>
                     No threads
@@ -88,16 +103,47 @@ export function DesktopThreads() {
                     flexGrow: 1,
                     backgroundColor: "#FFFFFF",
                   }}
+                  ref={containerRef}
                 >
-                  <Stack gap={0}>
-                    {threadsQR.data.map((thread) => (
-                      <ThreadListItem
-                        key={thread.id}
-                        setAvatarColor={setCurrentAvatarColor}
-                        thread={thread}
-                      />
-                    ))}
-                  </Stack>
+                  {threadsQR.data.pages.map((page, idx) => (
+                    <React.Fragment key={idx}>
+                      {page.messages.length > 0 && (
+                        <>
+                          <Text fz={13} ml={12} c="dimmed">
+                            Messages
+                          </Text>
+                          {page.messages.map((message) => (
+                            <Stack>
+                              <SearchItem message={message} />
+                            </Stack>
+                          ))}
+                        </>
+                      )}
+                      <Stack gap={0}>
+                        {page.messages.length > 0 && (
+                          <Text fz={13} ml={12} c="dimmed">
+                            Threads
+                          </Text>
+                        )}
+                        {page.results.map((thread) => (
+                          <ThreadListItem
+                            key={thread.id}
+                            setAvatarColor={setCurrentAvatarColor}
+                            thread={thread}
+                          />
+                        ))}
+                      </Stack>
+                    </React.Fragment>
+                  ))}
+                  {threadsQR.data.pages[threadsQR.data.pages.length - 1]
+                    .next && (
+                    <Stack align="center" ref={ref}>
+                      <Loader size="sm" />
+                      <Text style={{ textAlign: "center" }} fz={12} c="dimmed">
+                        Loading more...
+                      </Text>
+                    </Stack>
+                  )}
                 </Box>
               )}
             </>

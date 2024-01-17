@@ -77,7 +77,7 @@ export function FilterModal({
       mParams = {
         ...mParams,
         stage: {
-          label: stageFilter.map((stage) => mapStage(parseInt(stage))),
+          label: stageFilter.map((stage) => mapStage(parseInt(stage)).value),
           value: stageFilter,
         },
       };

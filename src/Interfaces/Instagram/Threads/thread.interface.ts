@@ -14,7 +14,16 @@ export interface GetThread extends Thread {
   last_message_content: string;
   last_message_at: string;
   stage: number;
+  salesrep: string;
   //
+}
+
+export interface GetChatThreads {
+  count: number;
+  messages: { sent_on: string; username: string; content: string }[];
+  next: string | null;
+  previous: null | null;
+  results: GetThread[];
 }
 
 export interface CreateThreadParams extends Thread {

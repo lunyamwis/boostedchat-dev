@@ -31,12 +31,11 @@ export function MobileDirectMessages({ avatarColor }: Props) {
     accountQR,
     threadQR,
     igThreadId,
-    menuOpened,
-    setMenuOpened,
     messagesQR,
     viewport,
     formattedThreads,
   } = useDirectMessages();
+  const [menuOpened, setMenuOpened] = React.useState(false);
   const [, setSearchParams] = useSearchParams();
 
   return (

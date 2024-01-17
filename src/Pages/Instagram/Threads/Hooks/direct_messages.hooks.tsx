@@ -24,7 +24,7 @@ type FormattedThreadsBody =
       date: string;
     };
 
-type FormattedThreads = {
+export type FormattedThreads = {
   [key: string]: FormattedThreadsBody[];
 };
 
@@ -35,8 +35,6 @@ export const useDirectMessages = () => {
   const [igThreadId, setIgThreadId] = React.useState<string | null>(null);
   const [formattedThreads, setFormattedThreads] =
     React.useState<FormattedThreads | null>(null);
-
-  const [menuOpened, setMenuOpened] = React.useState(false);
 
   const viewport = React.useRef<HTMLDivElement>(null);
 
@@ -196,8 +194,6 @@ export const useDirectMessages = () => {
     messagesQR,
     threadQR,
     igThreadId,
-    menuOpened,
-    setMenuOpened,
     viewport,
     formattedThreads,
   };
