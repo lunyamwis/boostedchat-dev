@@ -31,6 +31,20 @@ import {
 import { DataGridProvider, useDataGrid } from "./Context/DataGridProvider";
 import { ExportToExcel } from "./ExportToExcel";
 import { LoadingTable } from "./LoadingTable";
+import { ManualPagination } from "./ManualPagination";
+
+type PaginationProps =
+  | {
+      isManual: false;
+    }
+  | {
+      isManual: true;
+      pageIndex: number;
+      setPageIndex: React.Dispatch<React.SetStateAction<number>>;
+      pageSize: number;
+      setPageSize: React.Dispatch<React.SetStateAction<number>>;
+      totalRows: number;
+    };
 
 interface Props<T> {
   statusProps?: TStatusProps;
@@ -38,6 +52,7 @@ interface Props<T> {
   data: T[];
   loading: boolean;
   tableName: string;
+  paginationOptions: PaginationProps;
 }
 
 function MDataGrid<T>({
@@ -46,6 +61,7 @@ function MDataGrid<T>({
   tableName,
   loading,
   statusProps,
+  paginationOptions,
 }: Props<T>) {
   const [searchParams, setSearchParams] = useSearchParams();
   const {
@@ -63,7 +79,7 @@ function MDataGrid<T>({
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnPinning, setColumnPinning] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
   const [globalFilter, setGlobalFilter] = React.useState("");
@@ -89,16 +105,20 @@ function MDataGrid<T>({
     onGroupingChange: setGrouping,
     onColumnPinningChange: setColumnPinning,
     onRowSelectionChange: setRowSelection,
+    manualPagination: paginationOptions.isManual,
     initialState: {
-      columnVisibility: tableColumns.reduce((prev, curr) => {
-        if (!curr.visible) {
-          const id = curr.id!;
-          const newVal = { ...prev };
-          newVal[id] = false;
-          return newVal;
-        }
-        return prev;
-      }, {} as Record<string, boolean>),
+      columnVisibility: tableColumns.reduce(
+        (prev, curr) => {
+          if (!curr.visible) {
+            const id = curr.id!;
+            const newVal = { ...prev };
+            newVal[id] = false;
+            return newVal;
+          }
+          return prev;
+        },
+        {} as Record<string, boolean>,
+      ),
     },
     // Provide our updateData function to our table meta
     // meta: getTableMeta(setData, skipAutoResetPageIndex),
@@ -296,6 +316,7 @@ function MDataGrid<T>({
   if (loading) {
     return null;
   }
+
   return (
     <Grid m={0}>
       <Grid.Col span={isSettingsOpen ? 8 : 12}>
@@ -335,14 +356,24 @@ function MDataGrid<T>({
             </Box>
           </Stack>
         </Box>
-        <ActionButtons
-          pageCount={table.getPageCount()}
-          pageIndex={table.getState().pagination.pageIndex}
-          pageSize={table.getState().pagination.pageSize}
-          setPageIndex={table.setPageIndex}
-          setPageSize={table.setPageSize}
-          totalRows={table.getPrePaginationRowModel().rows.length}
-        />
+        {paginationOptions.isManual ? (
+          <ManualPagination
+            totalRows={paginationOptions.totalRows}
+            pageIndex={paginationOptions.pageIndex}
+            setPageIndex={paginationOptions.setPageIndex}
+            pageSize={paginationOptions.pageSize}
+            setPageSize={paginationOptions.setPageSize}
+          />
+        ) : (
+          <ActionButtons
+            pageCount={table.getPageCount()}
+            pageIndex={table.getState().pagination.pageIndex}
+            pageSize={table.getState().pagination.pageSize}
+            setPageIndex={table.setPageIndex}
+            setPageSize={table.setPageSize}
+            totalRows={table.getPrePaginationRowModel().rows.length}
+          />
+        )}
       </Grid.Col>
       {isSettingsOpen && (
         <Grid.Col span={4}>
@@ -362,11 +393,13 @@ export function DataGrid<T>({
   tableName,
   statusProps,
   loading,
+  paginationOptions,
 }: Props<T>) {
   return (
     <DataGridProvider>
       {loading && <LoadingTable tableName={tableName} columnsDef={columns} />}
       <MDataGrid
+        paginationOptions={paginationOptions}
         columns={columns}
         data={data}
         loading={loading}

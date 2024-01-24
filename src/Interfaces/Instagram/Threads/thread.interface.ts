@@ -26,6 +26,10 @@ export interface GetChatThreads {
   results: GetThread[];
 }
 
+export interface SearchThreadMessages {
+  messages: { sent_on: string; username: string; content: string }[];
+}
+
 export interface CreateThreadParams extends Thread {
   account: string;
 }

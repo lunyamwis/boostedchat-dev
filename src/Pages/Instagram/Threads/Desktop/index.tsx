@@ -70,7 +70,7 @@ export function DesktopThreads() {
         height: "98%",
       }}
     >
-      <Grid.Col span={3} p={0}>
+      <Grid.Col style={{ height: "100%" }} span={3} p={0}>
         <Stack
           pb={16}
           style={{
@@ -151,7 +151,7 @@ export function DesktopThreads() {
         </Stack>
       </Grid.Col>
 
-      <Grid.Col span={9} p={0}>
+      <Grid.Col span={9} p={0} style={{ height: "100%" }}>
         <Box
           style={{
             borderRadius: 16,

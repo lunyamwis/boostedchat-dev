@@ -3,7 +3,7 @@ export const API_URL = import.meta.env.PROD
   : "http://127.0.0.1:8001/v1";
 
 export const PROMPT_URL = import.meta.env.PROD
-  ? "https://promptemplate.booksy.boostedchat.com"
+  ? "/prompt"
   : "http://localhost:8000";
 
 export const queryKeys = {

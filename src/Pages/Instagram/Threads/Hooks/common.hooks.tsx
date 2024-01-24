@@ -57,7 +57,12 @@ export const useCommonState = () => {
 
   React.useEffect(() => {
     const params = formatFilterParams(filterParams);
-    setSearchParams(params.search);
+    if (searchParams.get("thread")) {
+      console.log(searchParams.get("thread"));
+      setSearchParams(params.search + "&thread=" + searchParams.get("thread"));
+    } else {
+      setSearchParams(params.search);
+    }
     setFormattedFilterParams(params.api);
   }, [filterParams]);
 

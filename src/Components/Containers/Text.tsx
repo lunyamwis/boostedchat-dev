@@ -1,4 +1,4 @@
-import { Grid, Group, MantineColor, Text as MantineText } from "@mantine/core";
+import { Group, MantineColor, Text as MantineText } from "@mantine/core";
 import { format } from "date-fns";
 import React from "react";
 import { Badge } from "../MantineWrappers/Badge";
@@ -20,7 +20,7 @@ type ComponentProps =
     }
   | {
       type: "text";
-      value?: string;
+      value?: string | null;
     };
 
 export function Text({
@@ -31,34 +31,35 @@ export function Text({
   align = "right",
 }: ComponentProps & DefaultProps) {
   return (
-    <Grid gutter={16} style={{ marginTop: 16, marginBottom: 16 }}>
-      <Grid.Col py={0} pr={0} pl={16} span={5}>
+    <Group w="100%">
+      <MantineText
+        style={{
+          flex: 0.5,
+          fontWeight: 600,
+          fontSize: "0.875rem",
+          textAlign: align,
+        }}
+      >
+        {title}:
+      </MantineText>
+      {type === "date" && <DateComponent {...value} />}
+      {type === "status" && <StatusComponent {...value} />}
+      {type === "text" && <TextComponent value={value} />}
+      {comment && (
         <MantineText
-          style={{ fontWeight: 600, fontSize: "0.875rem", textAlign: align }}
+          c={comment.error ? "#ef5350" : "#999999"}
+          style={{ fontSize: "0.8rem" }}
         >
-          {title}:
+          {comment.value}
         </MantineText>
-      </Grid.Col>
-      <Grid.Col py={0} pr={0} pl={16} span={7}>
-        {type === "date" && <DateComponent {...value} />}
-        {type === "status" && <StatusComponent {...value} />}
-        {type === "text" && <TextComponent value={value} />}
-        {comment && (
-          <MantineText
-            c={comment.error ? "#ef5350" : "#999999"}
-            style={{ fontSize: "0.8rem" }}
-          >
-            {comment.value}
-          </MantineText>
-        )}
-      </Grid.Col>
-    </Grid>
+      )}
+    </Group>
   );
 }
 
 function NAComponent() {
   return (
-    <MantineText style={{ fontSize: "0.875rem" }} c="#999999">
+    <MantineText style={{ flex: 0.5, fontSize: "0.875rem" }} c="#999999">
       n/a
     </MantineText>
   );
@@ -112,12 +113,12 @@ function StatusComponent({
   );
 }
 
-function TextComponent({ value }: { value?: string }) {
+function TextComponent({ value }: { value?: string | null }) {
   if (value == null) {
     return <NAComponent />;
   }
   return (
-    <MantineText style={{ fontSize: "0.875rem" }} c="#444">
+    <MantineText style={{ flex: 0.5, fontSize: "0.875rem" }} c="#444">
       {value}
     </MantineText>
   );

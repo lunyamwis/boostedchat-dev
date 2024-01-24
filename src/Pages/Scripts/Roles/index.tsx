@@ -39,7 +39,7 @@ export function ScriptRoles() {
         </Tooltip>
       </Group>
     ),
-    []
+    [],
   );
 
   const columns: ColDef<GetScriptRole>[] = React.useMemo(
@@ -78,12 +78,13 @@ export function ScriptRoles() {
         cell: ActionColumn,
       },
     ],
-    []
+    [],
   );
 
   return (
     <>
       <DataGrid
+        paginationOptions={{ isManual: false }}
         loading={roleQR.isLoading}
         tableName="Roles"
         data={roleQR.data ?? []}

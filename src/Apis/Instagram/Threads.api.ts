@@ -3,9 +3,9 @@ import { useAPIGlobalAxios } from "../../Hooks/useAxios";
 import {
   AssignOperator,
   CreateThreadParams,
-  GetChatThreads,
   GetThread,
   GetThreadMessage,
+  SearchThreadMessages,
   SendDirectMessageManually,
   Thread,
 } from "../../Interfaces/Instagram/Threads/thread.interface";
@@ -13,6 +13,7 @@ import {
   AddComment,
   AddedCommentRespose,
 } from "../../Interfaces/Instagram/photo.interface";
+import { PaginatedQuery } from "@/Interfaces/general.interface";
 
 export const useThreadsApi = () => {
   const axiosInstance = useAPIGlobalAxios("instagram/dm");
@@ -21,7 +22,7 @@ export const useThreadsApi = () => {
     getAll: (
       filterParams: string,
       pageParam: number,
-    ): Promise<GetChatThreads> =>
+    ): Promise<PaginatedQuery<GetThread> & SearchThreadMessages> =>
       axiosInstance
         .get(`/?page_size=20&page=${pageParam}&${filterParams}`)
         .then(handleRestResponse)

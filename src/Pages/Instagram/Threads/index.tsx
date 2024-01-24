@@ -6,15 +6,7 @@ import { DesktopThreads } from "./Desktop";
 export function Threads() {
   const { toMdScreen } = useMediaQuery();
   if (toMdScreen) {
-    return (
-      <>
-        <MobileThreads />
-      </>
-    );
+    return <MobileThreads />;
   }
-  return (
-    <>
-      <DesktopThreads />
-    </>
-  );
+  return <DesktopThreads />;
 }

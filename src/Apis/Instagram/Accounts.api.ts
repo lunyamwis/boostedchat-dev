@@ -6,15 +6,18 @@ import {
   GetSingleAccount,
   UpdateAccountParams,
 } from "../../Interfaces/Instagram/account.interface";
-import { Lead } from "../../Interfaces/general.interface";
+import { Lead, PaginatedQuery } from "../../Interfaces/general.interface";
 import { UploadCSV } from "../../Interfaces/Instagram/upload.interface";
 
 export const useAccountsApi = () => {
   const axiosInstance = useAPIGlobalAxios("instagram/account");
 
   return {
-    getAll: (): Promise<GetAccount[]> =>
-      axiosInstance.get("/").then(handleRestResponse).catch(handleRestError),
+    getAll: (page: number): Promise<PaginatedQuery<GetAccount>> =>
+      axiosInstance
+        .get(`/?page=${page}`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
     getOne: (id: string): Promise<GetSingleAccount> =>
       axiosInstance
         .get(`/${id}`)
@@ -70,14 +73,14 @@ export const useAccountsApi = () => {
         .then(handleRestResponse)
         .catch(handleRestError),
     potentialToBuy: (
-      id: string
+      id: string,
     ): Promise<{ status_code: number; potential_buy: number }> =>
       axiosInstance
         .get(`/${id}/potential-buy`)
         .then(handleRestResponse)
         .catch(handleRestError),
     potentialToPromote: (
-      id: string
+      id: string,
     ): Promise<{ status_code: number; potential_promote: number }> =>
       axiosInstance
         .get(`/${id}/potential-promote`)
