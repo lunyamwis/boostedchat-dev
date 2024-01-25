@@ -60,17 +60,21 @@ export function DesktopThreads() {
       styles={{
         inner: {
           height: "100%",
+          width: "100%",
           margin: 0,
         },
       }}
       style={{
-        border: "1px solid #00000011",
         borderRadius: "4px",
         backgroundColor: "#FFFFFF",
-        height: "98%",
+        height: "100%",
       }}
     >
-      <Grid.Col style={{ height: "100%" }} span={3} p={0}>
+      <Grid.Col
+        style={{ height: "100%", borderRight: "1px solid #ecefe0" }}
+        span={3}
+        p={0}
+      >
         <Stack
           pb={16}
           style={{
