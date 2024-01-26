@@ -3,12 +3,15 @@ import {
   Icon,
   IconBrandInstagram,
   IconBrandMessenger,
+  IconCalendarCog,
   IconChartInfographic,
   IconGraph,
+  IconRouteSquare2,
   IconTerminal2,
   IconUsers,
   IconUsersGroup,
   IconUserShield,
+  IconWindmill,
 } from "@tabler/icons-react";
 
 export type PrimaryPageData = {
@@ -38,7 +41,10 @@ export type ParentKeys =
   | "AccountDetails"
   | "Threads"
   | "Prompts"
-  | "Roles";
+  | "Roles"
+  | "QualifyingAlgorithm"
+  | "OutreachScheduler"
+  | "LeadSources";
 
 export type ChildKeys = "";
 
@@ -49,6 +55,7 @@ export enum EGroup {
   instagram = "Instagram",
   userManagement = "User Management",
   scripts = "Scripts",
+  leadsManagement = "Leads Management",
 }
 
 export const GroupIcons: Record<EGroup, Icon> = {
@@ -56,6 +63,7 @@ export const GroupIcons: Record<EGroup, Icon> = {
   "User Management": IconUsers,
   Summaries: IconGraph,
   Scripts: IconTerminal2,
+  "Leads Management": IconWindmill,
 };
 
 export const componentData: {
@@ -109,6 +117,34 @@ export const componentData: {
     component: React.lazy(() =>
       import("./Scripts/Roles/index").then(({ ScriptRoles }) => ({
         default: ScriptRoles,
+      })),
+    ),
+  },
+  {
+    key: "OutreachScheduler",
+    component: React.lazy(() =>
+      import("./LeadsGeneration/OutreachScheduler/").then(
+        ({ OutreachSchedules }) => ({
+          default: OutreachSchedules,
+        }),
+      ),
+    ),
+  },
+  {
+    key: "QualifyingAlgorithm",
+    component: React.lazy(() =>
+      import("./LeadsGeneration/QualifyingAlgorithm/").then(
+        ({ QualifyingAlgorithms }) => ({
+          default: QualifyingAlgorithms,
+        }),
+      ),
+    ),
+  },
+  {
+    key: "LeadSources",
+    component: React.lazy(() =>
+      import("./LeadsGeneration/LeadSources/").then(({ LeadSources }) => ({
+        default: LeadSources,
       })),
     ),
   },
@@ -168,5 +204,32 @@ export const pageData: TMPageData = {
     title: "Roles",
     isNavItem: true,
     icon: IconUserShield,
+  },
+  LeadSources: {
+    level: "1",
+    group: EGroup.leadsManagement,
+    hasChildren: false,
+    url: "/leads-management/lead-sources",
+    title: "Lead Sources",
+    isNavItem: true,
+    icon: IconUserShield,
+  },
+  OutreachScheduler: {
+    level: "1",
+    group: EGroup.leadsManagement,
+    hasChildren: false,
+    url: "/leads-management/outreach-scheduler",
+    title: "Outreach Scheduler",
+    isNavItem: true,
+    icon: IconCalendarCog,
+  },
+  QualifyingAlgorithm: {
+    level: "1",
+    group: EGroup.leadsManagement,
+    hasChildren: false,
+    url: "/leads-management/qualifying-algorithm",
+    title: "Qualifying Algorithm",
+    isNavItem: true,
+    icon: IconRouteSquare2,
   },
 };

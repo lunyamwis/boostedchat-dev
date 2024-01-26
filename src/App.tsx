@@ -1,6 +1,7 @@
 import React from "react";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
+import "@mantine/dates/styles.css";
 import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
 import { ThemeProvider } from "./Themes/Theme";

@@ -103,6 +103,33 @@ export const theme: MantineThemeOverride = {
         },
       },
     },
+    DateInput: {
+      styles: {
+        label: {
+          fontWeight: 500,
+          fontSize: "13px",
+          color: "#333",
+        },
+      },
+    },
+    DateTimePicker: {
+      styles: {
+        label: {
+          fontWeight: 500,
+          fontSize: "13px",
+          color: "#333",
+        },
+      },
+    },
+    TimeInput: {
+      styles: {
+        label: {
+          fontWeight: 500,
+          fontSize: "13px",
+          color: "#333",
+        },
+      },
+    },
   },
 };
 

@@ -1,23 +1,24 @@
-export const SIDENAV_WIDTH = 300;
-export const ASIDE_WIDTH = 65;
-export const HEADER_HEIGHT = 60;
+interface OutreachSchedule {
+  id: string;
+  name: string;
+  timezone: Timezones;
+  outreach_capacity: number;
+  outreach_starttime: string;
+  outreach_endtime: string;
+  scrapper_endtime: string;
+  scrapper_starttime: string;
+}
 
-export const MANTINE_COLORS = [
-  "red",
-  "pink",
-  "grape",
-  "violet",
-  "indigo",
-  "blue",
-  "cyan",
-  "teal",
-  "green",
-  "lime",
-  "yellow",
-  "orange",
-];
+export type CreateOutreachSchedule = Omit<OutreachSchedule, "id">;
 
-export const TIMEZONES = [
+export type GetOutreachSchedule = OutreachSchedule;
+
+export type UpdateOutreachScheduleParams = {
+  id: string;
+  data: Partial<CreateOutreachSchedule>;
+};
+
+export enum Timezones {
   "Africa/Abidjan",
   "Africa/Accra",
   "Africa/Addis_Ababa",
@@ -451,4 +452,4 @@ export const TIMEZONES = [
   "US/Mountain",
   "US/Pacific",
   "UTC",
-];
+}
