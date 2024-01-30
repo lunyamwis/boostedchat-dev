@@ -2,7 +2,6 @@ import { GetSingleAccount } from "@/Interfaces/Instagram/account.interface";
 import {
   ActionIcon,
   Avatar,
-  Badge,
   Group,
   Menu,
   Select,
@@ -10,12 +9,7 @@ import {
   Stack,
   Text,
 } from "@mantine/core";
-import {
-  IconDotsVertical,
-  IconExternalLink,
-  IconPencil,
-  IconX,
-} from "@tabler/icons-react";
+import { IconDotsVertical, IconExternalLink } from "@tabler/icons-react";
 import { UseQueryResult } from "@tanstack/react-query";
 import React from "react";
 import { Link } from "react-router-dom";

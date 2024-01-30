@@ -12,7 +12,9 @@ export function PromptSummaryItem({ prompt }: Props) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   return (
-    <Grid.Col span={searchParams.get("prompt") ? 12 : 3}>
+    <Grid.Col
+      span={searchParams.get("prompt") ? 12 : { base: 12, sm: 6, md: 4, lg: 3 }}
+    >
       <Group
         className={classes.summaryItem}
         onClick={() => {

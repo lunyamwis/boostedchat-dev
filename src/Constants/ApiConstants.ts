@@ -3,12 +3,12 @@ export const API_URL = import.meta.env.PROD
   : "http://127.0.0.1:8001/v1";
 
 export const PROMPT_URL = import.meta.env.PROD
-  ? "/prompt"
+  ? "https://promptemplate.booksy.boostedchat.com"
   : "http://localhost:8000";
 
 export const LEADS_GENERATION_URL = import.meta.env.PROD
   ? "/prompt"
-  : "http://localhost:8002";
+  : "http://127.0.0.1:8002";
 
 export const queryKeys = {
   users: {

@@ -10,10 +10,11 @@ import { ColDef } from "@/Components/Datagrid/datagrid.interface";
 import { DataGrid } from "@/Components/Datagrid";
 import { Affix } from "@/Components/Widgets/Affix";
 import { EditRole } from "./EditRole";
+import { AddRole } from "./AddRole";
 
 export function ScriptRoles() {
   const [updateRoleModalOpen, setUpdateRoleModalOpen] = React.useState(false);
-  const [, setNewRoleModalOpen] = React.useState(false);
+  const [newRoleModalOpen, setNewRoleModalOpen] = React.useState(false);
   const [selectedRoleId, setSelectedRoleId] = React.useState("");
 
   const { getAll } = useScriptRoleApi();
@@ -94,6 +95,7 @@ export function ScriptRoles() {
         tooltipLabel="Create new Role"
         onClickAction={() => setNewRoleModalOpen(true)}
       />
+      <AddRole isOpen={newRoleModalOpen} setIsOpen={setNewRoleModalOpen} />
       <EditRole
         roleId={selectedRoleId}
         isOpen={updateRoleModalOpen}

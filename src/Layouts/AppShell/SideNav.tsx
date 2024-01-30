@@ -256,35 +256,32 @@ export function SideNav({ collapsed, setCollapsed }: Props) {
                       <LogoSmall />
                     </div>
                     <Stack gap={5}>
-                      {navKeys.map(
-                        (navKey, idx) =>
-                          navKey !== "Scripts" && (
-                            <>
-                              <Tooltip
-                                label={navKey}
-                                position="right"
-                                withArrow
-                                transitionProps={{ duration: 0 }}
-                                key={navKey}
-                              >
-                                <UnstyledButton
-                                  className={classes.link}
-                                  data-active={active === navKey || undefined}
-                                  onClick={() => {
-                                    setActive(navKey as EGroup);
-                                    setCollapsed(false);
-                                  }}
-                                >
-                                  {GroupIcon(navKey as EGroup)}
-                                </UnstyledButton>
-                              </Tooltip>
-                              {/*<NavGroup navKey={navKey} navValues={navValues} idx={idx} />*/}
-                              {idx !== navKeys.length - 1 && (
-                                <Box mt={{ base: 1, sm: 6 }} mb={0} />
-                              )}
-                            </>
-                          ),
-                      )}
+                      {navKeys.map((navKey, idx) => (
+                        <>
+                          <Tooltip
+                            label={navKey}
+                            position="right"
+                            withArrow
+                            transitionProps={{ duration: 0 }}
+                            key={navKey}
+                          >
+                            <UnstyledButton
+                              className={classes.link}
+                              data-active={active === navKey || undefined}
+                              onClick={() => {
+                                setActive(navKey as EGroup);
+                                setCollapsed(false);
+                              }}
+                            >
+                              {GroupIcon(navKey as EGroup)}
+                            </UnstyledButton>
+                          </Tooltip>
+                          {/*<NavGroup navKey={navKey} navValues={navValues} idx={idx} />*/}
+                          {idx !== navKeys.length - 1 && (
+                            <Box mt={{ base: 1, sm: 6 }} mb={0} />
+                          )}
+                        </>
+                      ))}
                     </Stack>
                   </Box>
                   <UserMenu />
