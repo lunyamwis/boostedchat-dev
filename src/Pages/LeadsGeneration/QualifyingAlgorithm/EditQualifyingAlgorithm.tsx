@@ -103,9 +103,9 @@ export function EditQualifyingAlgorithm({
         id: qualifyingAlgorithmId,
         data: {
           name,
-          positive_keywords: positiveKeywords,
+          positive_keywords: positiveKeywords.split(", "),
           number_positive_keywords: positiveKeywordsComparator,
-          negative_keywords: negativeKeywords,
+          negative_keywords: negativeKeywords.split(", "),
           number_negative_keywords: negativeKeywordsComparator,
         },
       },
@@ -148,11 +148,11 @@ export function EditQualifyingAlgorithm({
       return;
     }
     setName(qualifyingAlgoQR.data.name);
-    setPositiveKeywords(qualifyingAlgoQR.data.positive_keywords);
+    setPositiveKeywords(qualifyingAlgoQR.data.positive_keywords.join(", "));
     setPositiveKeywordsComparator(
       qualifyingAlgoQR.data.number_positive_keywords,
     );
-    setNegativeKeywords(qualifyingAlgoQR.data.negative_keywords);
+    setNegativeKeywords(qualifyingAlgoQR.data.negative_keywords.join(", "));
     setNegativeKeywordsComparator(
       qualifyingAlgoQR.data.number_negative_keywords,
     );
