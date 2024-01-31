@@ -198,16 +198,16 @@ export function EditLeadSource({
     setUseURLInBio(leadSourceQR.data.enrich_with_url_in_bio);
     setIsInfiniteLoop(leadSourceQR.data.is_infinite_loop);
     if (mLeadSourceCriterion === 0 || mLeadSourceCriterion === 1) {
-      setCriterionValues(leadSourceQR.data.account_usernames.join(", "));
+      setCriterionValues(leadSourceQR.data.account_usernames?.join(", ") ?? "");
     }
     if (mLeadSourceCriterion === 2) {
-      setCriterionValues(leadSourceQR.data.hashtags?.join(", "));
+      setCriterionValues(leadSourceQR.data.hashtags?.join(", ") ?? "");
     }
     if (mLeadSourceCriterion === 3) {
-      setCriterionValues(leadSourceQR.data.photo_links?.join(", "));
+      setCriterionValues(leadSourceQR.data.photo_links?.join(", ") ?? "");
     }
     if (mLeadSourceCriterion === 5) {
-      setCriterionValues(leadSourceQR.data.hashtags.join(", "));
+      setCriterionValues(leadSourceQR.data.hashtags?.join(", ") ?? "");
     }
   }, [leadSourceQR.data]);
 
