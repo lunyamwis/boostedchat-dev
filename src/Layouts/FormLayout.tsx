@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Grid, Group, Stack, Text } from "@mantine/core";
+import { useMediaQuery } from "@/Hooks/useMediaQuery";
 
 type ComponentProps = {
   children: React.ReactNode;
@@ -13,15 +14,16 @@ export function FormLayout({
   title,
   subTitle,
 }: ComponentProps) {
+  const { toXsScreen } = useMediaQuery();
   return (
     <Grid m={0} justify="center">
-      <Grid.Col span={span} style={{ width: "100%" }}>
+      <Grid.Col span={{ xs: 12, md: span }} style={{ width: "100%" }}>
         <Box
           style={(theme) => ({
             boxShadow: "0px 3px 8px -1px #3232470d",
             border: `solid 1px ${theme.colors.gray[2]}`,
-            marginLeft: 40,
-            marginRight: 40,
+            marginLeft: toXsScreen ? 0 : 40,
+            marginRight: toXsScreen ? 0 : 40,
             borderRadius: 12,
           })}
         >

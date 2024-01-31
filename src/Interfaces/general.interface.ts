@@ -62,6 +62,13 @@ export interface Lead {
     ["pk", string],
     ["username", string],
     ["full_name", string],
-    ["prof_pic", string]
+    ["prof_pic", string],
   ];
+}
+
+export interface PaginatedQuery<T> {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
 }

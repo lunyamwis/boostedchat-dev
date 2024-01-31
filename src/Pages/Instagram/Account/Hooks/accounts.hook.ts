@@ -34,11 +34,11 @@ export const useResetAccount = () => {
   return useMutation({ mutationFn: (id: string) => resetAccount(id) });
 };
 
-export const useGetAccounts = () => {
+export const useGetAccounts = (page: number) => {
   const { getAll } = useAccountsApi();
   return useQuery({
-    queryKey: [queryKeys.instagram.accounts.getAccounts],
-    queryFn: () => getAll(),
+    queryKey: [queryKeys.instagram.accounts.getAccounts, page],
+    queryFn: () => getAll(page),
   });
 };
 

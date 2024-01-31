@@ -33,7 +33,7 @@ const containerStyles = {
 
 const color = getRandomColor();
 
-function UserStat({ title, count }: { title: string; count: number }) {
+export function FollowStat({ title, count }: { title: string; count: number }) {
   return (
     <Group gap={5}>
       <Text fw={600} fz={15}>
@@ -106,9 +106,9 @@ export function ParentContainer({
             </Text>
           </Stack>
           <Group>
-            <UserStat title="followers" count={statProps.followers} />
-            <UserStat title="following" count={statProps.following} />
-            <UserStat title="posts" count={statProps.posts} />
+            <FollowStat title="followers" count={statProps.followers} />
+            <FollowStat title="following" count={statProps.following} />
+            <FollowStat title="posts" count={statProps.posts} />
           </Group>
         </Stack>
       </Group>

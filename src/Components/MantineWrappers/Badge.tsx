@@ -15,6 +15,7 @@ type Props = {
 export function Badge({ color, text, radius = "md", size = "md" }: Props) {
   return (
     <MantineBadge
+      variant="light"
       size={size}
       styles={{
         label: {

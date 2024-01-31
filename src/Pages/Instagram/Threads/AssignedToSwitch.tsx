@@ -21,11 +21,11 @@ export function AssignedToSwitch({
   const queryClient = useQueryClient();
   const assignOperator = useAssignOperator();
   const [assignToRobot, setAssignToRobot] = React.useState<boolean>(
-    assignedTo === "Robot" ? true : false
+    assignedTo === "Robot" ? true : false,
   );
   return (
     <Group justify="space-between">
-      <Text>Assign to bot</Text>
+      <Text fz={14}>Assign to bot</Text>
 
       {assignOperator.isPending ? (
         <Loader size="sm" />
@@ -51,7 +51,7 @@ export function AssignedToSwitch({
                   });
                   setMenuOpened(false);
                 },
-              }
+              },
             );
           }}
         />

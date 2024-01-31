@@ -18,10 +18,10 @@ type Props = {
 
 export const mapStage = (stage: number) => {
   const stages = {
-    "1": "Rapport Building",
-    "2": "Needs Assessment",
-    "3": "Solution Presentation",
-    "4": "Closing the sale",
+    "1": { value: "Rapport Building", color: "blue" },
+    "2": { value: "Needs Assessment", color: "orange" },
+    "3": { value: "Solution Presentation", color: "blue" },
+    "4": { value: "Closing the sale", color: "teal" },
   };
   return stages[stage.toString() as keyof typeof stages];
 };
@@ -100,9 +100,9 @@ export function ThreadListItem({ setAvatarColor, thread }: Props) {
           </Stack>
           <Group>
             <Badge
-              color={thread.assigned_to === "Human" ? "orange" : "teal"}
               variant="light"
               radius="sm"
+              color={mapStage(thread.stage).color}
               styles={{
                 label: {
                   fontWeight: 500,
@@ -110,7 +110,7 @@ export function ThreadListItem({ setAvatarColor, thread }: Props) {
                 },
               }}
             >
-              {thread.assigned_to}
+              {mapStage(thread.stage).value}
             </Badge>
             <Badge
               variant="light"
@@ -122,7 +122,20 @@ export function ThreadListItem({ setAvatarColor, thread }: Props) {
                 },
               }}
             >
-              {mapStage(thread.stage)}
+              {thread.salesrep}
+            </Badge>
+            <Badge
+              color={thread.assigned_to === "Human" ? "orange" : "teal"}
+              variant="light"
+              radius="sm"
+              styles={{
+                label: {
+                  fontWeight: 500,
+                  textTransform: "capitalize",
+                },
+              }}
+            >
+              {thread.assigned_to}
             </Badge>
           </Group>
         </Stack>

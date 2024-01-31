@@ -1,9 +1,6 @@
 import React from "react";
 import { ColDef } from "../../../Components/Datagrid/datagrid.interface";
-import {
-  AccountStatus,
-  GetAccount,
-} from "../../../Interfaces/Instagram/account.interface";
+import { GetAccount } from "../../../Interfaces/Instagram/account.interface";
 import { Row } from "@tanstack/react-table";
 import { ActionIcon, Group, Loader, Text, Tooltip } from "@mantine/core";
 import { IconPencil, IconX } from "@tabler/icons-react";
@@ -14,12 +11,16 @@ import { openConfirmModal } from "@mantine/modals";
 import { Badge } from "../../../Components/MantineWrappers/Badge";
 import { Affix } from "../../../Components/Widgets/Affix";
 import { CreateAccount } from "./CreateAccount";
+import { mapStage } from "../Threads/ThreadListItem";
 
 export function Accounts() {
+  const [page, setPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(50);
+
   const [isCreateAccountModalOpen, setIsCreateAccountModalOpen] =
     React.useState(false);
   const navigate = useNavigate();
-  const accountsQR = useGetAccounts();
+  const accountsQR = useGetAccounts(page);
   const resetAccount = useResetAccount();
 
   const ActionColumn = React.useCallback(
@@ -62,7 +63,7 @@ export function Accounts() {
         )}
       </Group>
     ),
-    [navigate]
+    [navigate],
   );
 
   const columns: ColDef<GetAccount>[] = React.useMemo(
@@ -74,7 +75,7 @@ export function Accounts() {
         visible: false,
       },
       {
-        accessorFn: (_, idx) => idx + 1,
+        accessorFn: (_, idx) => pageSize * page + idx + 1,
         id: "accountNo",
         header: "#",
         visible: true,
@@ -108,24 +109,21 @@ export function Accounts() {
         type: "string",
       },
       {
-        accessorFn: (row) => row.status,
+        accessorFn: (row) => row.stage,
         id: "status",
         header: "Status",
+        type: "number",
         visible: true,
         cell: (params) => {
-          const status = params.row.original.status;
-          switch (status) {
-            case null:
-              return <Badge color="orange" text="awaiting engagement" />;
-            case AccountStatus.onHold:
-              return <Badge color="yellow" text="on hold" />;
-            case AccountStatus.sentCompliment:
-              return <Badge color="brand2" text="engaging" />;
-            case AccountStatus.sentFirstQuestion:
-              return <Badge color="teal" text="Sent Question" />;
-            default:
-              return <Badge color="yellow" text={status} />;
+          if (params.row.original.stage == null) {
+            return <></>;
           }
+          return (
+            <Badge
+              color={mapStage(params.row.original.stage).color}
+              text={mapStage(params.row.original.stage).value}
+            />
+          );
         },
       },
       {
@@ -162,16 +160,24 @@ export function Accounts() {
         cell: ActionColumn,
       },
     ],
-    []
+    [],
   );
 
   return (
     <>
       <DataGrid
-        loading={accountsQR.isLoading}
+        loading={accountsQR.isPending}
         tableName="Accounts"
-        data={accountsQR.data ?? []}
+        data={accountsQR.data?.results ?? []}
         columns={columns}
+        paginationOptions={{
+          isManual: true,
+          pageIndex: page,
+          pageSize: pageSize,
+          setPageSize: setPageSize,
+          setPageIndex: setPage,
+          totalRows: accountsQR.data?.count ?? 0,
+        }}
       />
       <Affix
         tooltipLabel="Create New Account"

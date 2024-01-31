@@ -5,6 +5,7 @@ import {
   CreateThreadParams,
   GetThread,
   GetThreadMessage,
+  SearchThreadMessages,
   SendDirectMessageManually,
   Thread,
 } from "../../Interfaces/Instagram/Threads/thread.interface";
@@ -12,14 +13,18 @@ import {
   AddComment,
   AddedCommentRespose,
 } from "../../Interfaces/Instagram/photo.interface";
+import { PaginatedQuery } from "@/Interfaces/general.interface";
 
 export const useThreadsApi = () => {
   const axiosInstance = useAPIGlobalAxios("instagram/dm");
 
   return {
-    getAll: (filterParams: string): Promise<GetThread[]> =>
+    getAll: (
+      filterParams: string,
+      pageParam: number,
+    ): Promise<PaginatedQuery<GetThread> & SearchThreadMessages> =>
       axiosInstance
-        .get(`/?${filterParams}`)
+        .get(`/?page_size=20&page=${pageParam}&${filterParams}`)
         .then(handleRestResponse)
         .catch(handleRestError),
     getOne: (id: string): Promise<GetThread> =>
@@ -38,14 +43,14 @@ export const useThreadsApi = () => {
         .then(handleRestResponse)
         .catch(handleRestError),
     getThreadMessagesByThreadId: (
-      threadId: string
+      threadId: string,
     ): Promise<GetThreadMessage[]> =>
       axiosInstance
         .get(`/${threadId}/get-thread-messages`)
         .then(handleRestResponse)
         .catch(handleRestError),
     getThreadMessagesByIgThreadId: (
-      igThreadId: string
+      igThreadId: string,
     ): Promise<GetThreadMessage[]> =>
       axiosInstance
         .get(`/messages-by-ig-thread/${igThreadId}/`)
@@ -73,7 +78,7 @@ export const useThreadsApi = () => {
         .catch(handleRestError),
     getSnapshotByDate: (date: string) =>
       axiosInstance
-        .post(`/response-rate/`, { date })
+        .post(`/download-csv/`, { date })
         .then(handleRestResponse)
         .catch(handleRestError),
   };

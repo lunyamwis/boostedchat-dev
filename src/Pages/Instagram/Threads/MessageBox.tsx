@@ -1,10 +1,8 @@
 import { ActionIcon, Group, Loader, Textarea } from "@mantine/core";
 import React from "react";
 import { IconSend } from "@tabler/icons-react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useSendDirectMessage } from "./Hooks/thread.hooks";
-import { queryKeys } from "../../../Constants/ApiConstants";
 import { SendAndAssignModal } from "./SendAndAssignModal";
+import { useMessageBox } from "./Hooks/message.hooks";
 
 type Props = {
   threadId: string | undefined;
@@ -12,56 +10,16 @@ type Props = {
 };
 
 export function MessageBox({ threadId, assignedTo }: Props) {
-  const [message, setMessage] = React.useState("");
-  const [isAssignModalOpen, setIsAssignModalOpen] = React.useState(false);
-
-  const [mAssignedTo, setMAssignedTo] = React.useState<"Robot" | "Human">(
-    assignedTo
-  );
-
-  const [choiceSelected, setChoiceSelected] = React.useState(false);
-
-  const sendDirectMessage = useSendDirectMessage();
-  const queryClient = useQueryClient();
-
-  React.useEffect(() => {
-    if (threadId == null) return;
-    if (choiceSelected) {
-      setChoiceSelected(false);
-
-      sendDirectMessage.mutate(
-        {
-          id: threadId,
-          data: {
-            assigned_to: mAssignedTo,
-            message,
-          },
-        },
-        {
-          onSuccess: () => {
-            queryClient.invalidateQueries({
-              queryKey: [queryKeys.instagram.threads.getMessages, threadId],
-            });
-            setChoiceSelected(false);
-            setMessage("");
-          },
-        }
-      );
-    }
-  }, [choiceSelected, threadId]);
-
-  const handleSendMessage = () => {
-    if (message === "") {
-      return;
-    }
-    if (assignedTo === "Human") {
-      // Conversation is assigned to human, so continue
-      setChoiceSelected(true);
-    } else {
-      // conversation is assigned to robot, ask if human wants to take over.
-      setIsAssignModalOpen(true);
-    }
-  };
+  const {
+    message,
+    setMessage,
+    sendDirectMessage,
+    isAssignModalOpen,
+    setIsAssignModalOpen,
+    setChoiceSelected,
+    setMAssignedTo,
+    handleSendMessage,
+  } = useMessageBox(threadId, assignedTo);
 
   return (
     <>

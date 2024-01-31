@@ -73,6 +73,7 @@ export function MenuItem({ title, Icon, url, setCollapsed }: Props) {
     />
   );
 }
+
 export function ParentMenuItem({ title, Icon }: Level1Props) {
   const { ref, hovered } = useHover();
   const theme = useMantineTheme();
@@ -182,5 +183,65 @@ export function ParentMenuItem({ title, Icon }: Level1Props) {
         </Box>
       </Collapse>
     </>
+  );
+}
+
+type MobileLinkProps = {
+  title: string;
+  Icon: IconType;
+  url: string;
+  closeNav: () => void;
+};
+export function MobileMenuItem({
+  title,
+  Icon,
+  url,
+  closeNav,
+}: MobileLinkProps) {
+  const [isActive, setIsActive] = React.useState(false);
+  const { pathname } = useLocation();
+  const theme = useMantineTheme();
+
+  React.useEffect(() => {
+    setIsActive(false);
+    const currentSplitPath = pathname.split("/");
+    const menuSplitPath = url.split("/");
+
+    if (currentSplitPath.length > 1 && menuSplitPath.length > 1) {
+      if (currentSplitPath[2] === menuSplitPath[2]) {
+        setIsActive(true);
+      }
+    }
+  }, [pathname, url]);
+
+  return (
+    <NavLink
+      key={title}
+      active={isActive}
+      label={title}
+      onClick={() => closeNav()}
+      color={theme.primaryColor}
+      component={Link}
+      to={url}
+      my={{ base: 4, sm: 4 }}
+      pl={24}
+      py={12}
+      leftSection={<Icon size={18} strokeWidth={1.5} />}
+      styles={{
+        label: {
+          fontSize: "14px",
+          // color: "#616161",
+        },
+        root: {
+          borderRadius: 7,
+          "&:hover": {
+            backgroundColor:
+              pathname === url
+                ? "transparent"
+                : lighten(theme.colors.brand[6], 0.9),
+          },
+        },
+      }}
+    />
   );
 }

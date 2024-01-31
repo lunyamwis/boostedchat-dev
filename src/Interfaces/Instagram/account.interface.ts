@@ -25,6 +25,7 @@ export interface GetAccount extends AccountPrimary {
   assigned_to: "Robot" | "Human";
   status: AccountStatus | null;
   outsourced_data: OutsourcedData[];
+  stage: number;
 }
 
 export interface GetSingleAccount extends AccountPrimary {
@@ -36,22 +37,26 @@ export interface GetSingleAccount extends AccountPrimary {
     zip: string;
     city_id: string;
     category: string;
-    latitude: 0.0;
+    latitude: number;
+    book_button: boolean;
     username: string;
     biography: string;
     city_name: string;
     full_name: string;
-    longitude: 0.0;
+    longitude: number;
     is_private: boolean;
     is_business: boolean;
     is_verified: boolean;
+    is_popular: boolean;
+    is_posting_actively: boolean;
     media_count: number;
     account_type: number;
-    external_url: "https://linktr.ee/salonsdirect";
-    public_email: "sales@salonsdirect.co.uk";
+    external_url: string;
+    public_email: string;
     category_name: null;
     address_street: "";
     follower_count: number;
+    negative_keywords: string;
     following_count: number;
     profile_pic_url: string;
     profile_pic_url_hd: string;

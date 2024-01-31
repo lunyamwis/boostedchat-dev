@@ -1,5 +1,5 @@
 import { AssignOperator } from "../../../../Interfaces/Instagram/Threads/thread.interface";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../../../../Constants/ApiConstants";
 import {
   useFallbackApi,
@@ -25,9 +25,24 @@ export const useThreadsWrapperApi = () => {
 
 export const useGetThreads = (filterParams: string) => {
   const { getAll } = useThreadsApi();
-  return useQuery({
+  return useInfiniteQuery({
+    refetchOnWindowFocus: true,
     queryKey: [queryKeys.instagram.threads.getAll, filterParams],
-    queryFn: () => getAll(filterParams),
+    queryFn: ({ pageParam }) => getAll(filterParams, pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, _, lastPageParam) => {
+      if (lastPage.results.length === 0) {
+        return undefined;
+      }
+      return lastPageParam + 1;
+    },
+    getPreviousPageParam: (_, p, firstPageParam) => {
+      console.log(p);
+      if (firstPageParam <= 1) {
+        return undefined;
+      }
+      return firstPageParam - 1;
+    },
   });
 };
 

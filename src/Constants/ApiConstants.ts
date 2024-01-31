@@ -6,6 +6,10 @@ export const PROMPT_URL = import.meta.env.PROD
   ? "https://promptemplate.booksy.boostedchat.com"
   : "http://localhost:8000";
 
+export const LEADS_GENERATION_URL = import.meta.env.PROD
+  ? "https://scrapper.booksy.boostedchat.com"
+  : "http://127.0.0.1:8002";
+
 export const queryKeys = {
   users: {
     getAll: "get-all-users",
@@ -47,6 +51,20 @@ export const queryKeys = {
     roles: {
       allRoles: "all-script-roles",
       roleById: "script-role-by-id",
+    },
+  },
+  leadsGeneration: {
+    qualifyingAlgos: {
+      allAlgos: "all-qualifying-algos",
+      algoById: "qualifying-algo-by-id",
+    },
+    leadSource: {
+      allLeadSources: "all-lead-source",
+      leadSourceById: "lead-source-by-id",
+    },
+    outreachSchedule: {
+      allOutreachSchedules: "all-outreach-schedules",
+      outreachScheduleById: "outreach-schedule-by-id",
     },
   },
 };

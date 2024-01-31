@@ -3,12 +3,16 @@ import {
   Icon,
   IconBrandInstagram,
   IconBrandMessenger,
+  IconCalendarCog,
   IconChartInfographic,
+  IconClock,
   IconGraph,
+  IconRouteSquare2,
   IconTerminal2,
   IconUsers,
   IconUsersGroup,
   IconUserShield,
+  IconWindmill,
 } from "@tabler/icons-react";
 
 export type PrimaryPageData = {
@@ -30,15 +34,19 @@ type Level1 =
       icon: Icon;
     };
 
-export type TPageData = PrimaryPageData &
-  (({ level: "1" } & Level1) | { level: "2"; url: string });
+export type TPageData = PrimaryPageData & ({ level: "1" } & Level1);
 
 export type ParentKeys =
   | "Snapshot"
   | "Accounts"
+  | "AccountDetails"
   | "Threads"
   | "Prompts"
-  | "Roles";
+  | "Roles"
+  | "QualifyingAlgorithm"
+  | "OutreachScheduler"
+  | "LeadSources"
+  | "SetupScraper";
 
 export type ChildKeys = "";
 
@@ -49,6 +57,7 @@ export enum EGroup {
   instagram = "Instagram",
   userManagement = "User Management",
   scripts = "Scripts",
+  leadsManagement = "Leads Management",
 }
 
 export const GroupIcons: Record<EGroup, Icon> = {
@@ -56,6 +65,7 @@ export const GroupIcons: Record<EGroup, Icon> = {
   "User Management": IconUsers,
   Summaries: IconGraph,
   Scripts: IconTerminal2,
+  "Leads Management": IconWindmill,
 };
 
 export const componentData: {
@@ -67,7 +77,7 @@ export const componentData: {
     component: React.lazy(() =>
       import("./Dashboard/index").then(({ Summary }) => ({
         default: Summary,
-      }))
+      })),
     ),
   },
   {
@@ -75,7 +85,7 @@ export const componentData: {
     component: React.lazy(() =>
       import("./Instagram/Threads").then(({ Threads }) => ({
         default: Threads,
-      }))
+      })),
     ),
   },
   {
@@ -83,7 +93,17 @@ export const componentData: {
     component: React.lazy(() =>
       import("./Instagram/Account/Accounts").then(({ Accounts }) => ({
         default: Accounts,
-      }))
+      })),
+    ),
+  },
+  {
+    key: "AccountDetails",
+    component: React.lazy(() =>
+      import("./Instagram/Account/Details/index").then(
+        ({ AccountDetails }) => ({
+          default: AccountDetails,
+        }),
+      ),
     ),
   },
   {
@@ -91,7 +111,7 @@ export const componentData: {
     component: React.lazy(() =>
       import("./Scripts/Prompts/index").then(({ Prompts }) => ({
         default: Prompts,
-      }))
+      })),
     ),
   },
   {
@@ -99,7 +119,45 @@ export const componentData: {
     component: React.lazy(() =>
       import("./Scripts/Roles/index").then(({ ScriptRoles }) => ({
         default: ScriptRoles,
-      }))
+      })),
+    ),
+  },
+  {
+    key: "OutreachScheduler",
+    component: React.lazy(() =>
+      import("./LeadsGeneration/OutreachScheduler/").then(
+        ({ OutreachSchedules }) => ({
+          default: OutreachSchedules,
+        }),
+      ),
+    ),
+  },
+  {
+    key: "QualifyingAlgorithm",
+    component: React.lazy(() =>
+      import("./LeadsGeneration/QualifyingAlgorithm/").then(
+        ({ QualifyingAlgorithms }) => ({
+          default: QualifyingAlgorithms,
+        }),
+      ),
+    ),
+  },
+  {
+    key: "LeadSources",
+    component: React.lazy(() =>
+      import("./LeadsGeneration/LeadSources/").then(({ LeadSources }) => ({
+        default: LeadSources,
+      })),
+    ),
+  },
+  {
+    key: "SetupScraper",
+    component: React.lazy(() =>
+      import("./LeadsGeneration/Setup/Layout").then(
+        ({ SetupScraperLayout }) => ({
+          default: SetupScraperLayout,
+        }),
+      ),
     ),
   },
 ];
@@ -132,6 +190,15 @@ export const pageData: TMPageData = {
     isNavItem: true,
     icon: IconUsersGroup,
   },
+  AccountDetails: {
+    level: "1",
+    group: EGroup.instagram,
+    hasChildren: false,
+    url: "/instagram/accounts/:id",
+    title: "Account Details",
+    isNavItem: false,
+    icon: IconUsersGroup,
+  },
   Prompts: {
     level: "1",
     group: EGroup.scripts,
@@ -149,5 +216,41 @@ export const pageData: TMPageData = {
     title: "Roles",
     isNavItem: true,
     icon: IconUserShield,
+  },
+  LeadSources: {
+    level: "1",
+    group: EGroup.leadsManagement,
+    hasChildren: false,
+    url: "/leads-management/lead-sources",
+    title: "Lead Sources",
+    isNavItem: true,
+    icon: IconUserShield,
+  },
+  OutreachScheduler: {
+    level: "1",
+    group: EGroup.leadsManagement,
+    hasChildren: false,
+    url: "/leads-management/outreach-scheduler",
+    title: "Outreach Scheduler",
+    isNavItem: true,
+    icon: IconCalendarCog,
+  },
+  QualifyingAlgorithm: {
+    level: "1",
+    group: EGroup.leadsManagement,
+    hasChildren: false,
+    url: "/leads-management/qualifying-algorithm",
+    title: "Qualifying Algorithm",
+    isNavItem: true,
+    icon: IconRouteSquare2,
+  },
+  SetupScraper: {
+    level: "1",
+    group: EGroup.leadsManagement,
+    hasChildren: false,
+    url: "/leads-management/setup-scraper",
+    title: "Setup scraper",
+    isNavItem: true,
+    icon: IconClock,
   },
 };

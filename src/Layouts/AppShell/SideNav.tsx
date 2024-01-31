@@ -1,10 +1,13 @@
 import {
   Avatar,
   Box,
+  Divider,
   Group,
   Menu,
+  NavLink,
   Overlay,
   Stack,
+  Text,
   Title,
   Tooltip,
   Transition,
@@ -14,16 +17,22 @@ import { useMediaQuery } from "@mantine/hooks";
 import React, { SetStateAction } from "react";
 import { ASIDE_WIDTH, SIDENAV_WIDTH } from "../../Constants/GeneralConstants";
 import { EGroup, GroupIcons, pageData, TPageData } from "../../Pages";
-import { MenuItem, ParentMenuItem } from "../../Components/SideNav/MenuItem";
+import {
+  MenuItem,
+  MobileMenuItem,
+  ParentMenuItem,
+} from "../../Components/SideNav/MenuItem";
 import {
   IconChevronLeft,
   IconChevronRight,
+  IconLogout2,
   IconSettings,
 } from "@tabler/icons-react";
 import { useAuth } from "../../Context/AuthContext/AuthProvider";
 import { useLocation } from "react-router-dom";
 import { LogoSmall } from "../../Assets/LogoSmall";
 import classes from "./SideNav.module.css";
+import { Logo } from "../../Assets/Logo";
 
 type Props = {
   collapsed: boolean;
@@ -45,6 +54,35 @@ const navStructure = (): [string[], TPageData[][]] => {
   return [Object.keys(navMap), Object.values(navMap)];
 };
 
+const MobileLinks = () => {
+  const [, navValues] = navStructure();
+  const { dispatch } = useAuth();
+  return (
+    <Stack gap={12}>
+      {navValues.map((navValue, index) => {
+        return (
+          <Stack gap={2}>
+            <Text fw={500} ml={20} mb={12} fz={15}>
+              {navValue[0].group}
+            </Text>
+            <Stack gap={0}>
+              {navValue.map((val) => (
+                <MobileMenuItem
+                  closeNav={() => dispatch({ type: "TOGGLE_NAV" })}
+                  key={val.url}
+                  url={val.url as string}
+                  title={val.title}
+                  Icon={val.icon}
+                />
+              ))}
+            </Stack>
+            {index < navValues.length - 1 && <Divider mb={32} color="#eee" />}
+          </Stack>
+        );
+      })}
+    </Stack>
+  );
+};
 const Links = ({
   navKey,
   setCollapsed,
@@ -166,18 +204,34 @@ export function SideNav({ collapsed, setCollapsed }: Props) {
             </Transition>
             <Transition mounted={isNavOpened} transition="slide-left">
               {() => (
-                <Box
+                <Stack
                   style={{
                     zIndex: 130,
                     height: "100%",
-                    width: smallScreen ? "65%" : "100%",
+                    width: smallScreen ? "75%" : "100%",
                     backgroundColor: "#ffffff",
                     position: "absolute",
                   }}
                   px={12}
                 >
-                  <Links setCollapsed={setCollapsed} navKey={active} />
-                </Box>
+                  <Group justify="center" py={12} my={32}>
+                    <Logo />
+                  </Group>
+                  <Stack style={{ flex: 1 }} justify="space-between">
+                    <MobileLinks />
+                    <NavLink
+                      onClick={() => {
+                        dispatch({ type: "LOGOUT" });
+                        dispatch({ type: "TOGGLE_NAV" });
+                      }}
+                      mb={12}
+                      label="Logout"
+                      leftSection={<IconLogout2 size="17px" stroke={1.5} />}
+                      variant="subtle"
+                      active
+                    />
+                  </Stack>
+                </Stack>
               )}
             </Transition>
           </Box>
@@ -202,35 +256,32 @@ export function SideNav({ collapsed, setCollapsed }: Props) {
                       <LogoSmall />
                     </div>
                     <Stack gap={5}>
-                      {navKeys.map(
-                        (navKey, idx) =>
-                          navKey !== "Scripts" && (
-                            <>
-                              <Tooltip
-                                label={navKey}
-                                position="right"
-                                withArrow
-                                transitionProps={{ duration: 0 }}
-                                key={navKey}
-                              >
-                                <UnstyledButton
-                                  className={classes.link}
-                                  data-active={active === navKey || undefined}
-                                  onClick={() => {
-                                    setActive(navKey as EGroup);
-                                    setCollapsed(false);
-                                  }}
-                                >
-                                  {GroupIcon(navKey as EGroup)}
-                                </UnstyledButton>
-                              </Tooltip>
-                              {/*<NavGroup navKey={navKey} navValues={navValues} idx={idx} />*/}
-                              {idx !== navKeys.length - 1 && (
-                                <Box mt={{ base: 1, sm: 6 }} mb={0} />
-                              )}
-                            </>
-                          )
-                      )}
+                      {navKeys.map((navKey, idx) => (
+                        <>
+                          <Tooltip
+                            label={navKey}
+                            position="right"
+                            withArrow
+                            transitionProps={{ duration: 0 }}
+                            key={navKey}
+                          >
+                            <UnstyledButton
+                              className={classes.link}
+                              data-active={active === navKey || undefined}
+                              onClick={() => {
+                                setActive(navKey as EGroup);
+                                setCollapsed(false);
+                              }}
+                            >
+                              {GroupIcon(navKey as EGroup)}
+                            </UnstyledButton>
+                          </Tooltip>
+                          {/*<NavGroup navKey={navKey} navValues={navValues} idx={idx} />*/}
+                          {idx !== navKeys.length - 1 && (
+                            <Box mt={{ base: 1, sm: 6 }} mb={0} />
+                          )}
+                        </>
+                      ))}
                     </Stack>
                   </Box>
                   <UserMenu />

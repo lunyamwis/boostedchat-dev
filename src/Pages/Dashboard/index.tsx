@@ -42,7 +42,7 @@ export function Summary() {
           const d = convertToCSV(val);
           window.open(d, "_blank");
         },
-      }
+      },
     );
   };
 
@@ -68,7 +68,12 @@ export function Summary() {
           </Group>
 
           <Group justify="center">
-            <Button onClick={handleGetSnapshot}>Download Snapshot</Button>
+            <Button
+              loading={getSnapshotByDate.isPending}
+              onClick={handleGetSnapshot}
+            >
+              Download Snapshot
+            </Button>
           </Group>
         </Stack>
         <Group justify="center" pb={12}>
