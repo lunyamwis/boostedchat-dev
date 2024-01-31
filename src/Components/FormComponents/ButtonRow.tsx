@@ -1,4 +1,4 @@
-import { Group } from "@mantine/core";
+import { Group, lighten, useMantineTheme } from "@mantine/core";
 import React from "react";
 
 export function ButtonRow({
@@ -8,12 +8,13 @@ export function ButtonRow({
   children: React.ReactNode;
   position?: React.CSSProperties["justifyContent"];
 }) {
+  const theme = useMantineTheme();
   return (
     <Group
       justify={position}
       align="center"
       style={{
-        backgroundColor: "#fffbfb",
+        backgroundColor: lighten(theme.colors.brand[6], 0.96),
         borderRadius: "12px",
         paddingTop: 20,
         paddingBottom: 30,

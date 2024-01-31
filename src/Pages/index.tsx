@@ -5,6 +5,7 @@ import {
   IconBrandMessenger,
   IconCalendarCog,
   IconChartInfographic,
+  IconClock,
   IconGraph,
   IconRouteSquare2,
   IconTerminal2,
@@ -44,7 +45,8 @@ export type ParentKeys =
   | "Roles"
   | "QualifyingAlgorithm"
   | "OutreachScheduler"
-  | "LeadSources";
+  | "LeadSources"
+  | "SetupScraper";
 
 export type ChildKeys = "";
 
@@ -148,6 +150,16 @@ export const componentData: {
       })),
     ),
   },
+  {
+    key: "SetupScraper",
+    component: React.lazy(() =>
+      import("./LeadsGeneration/Setup/Layout").then(
+        ({ SetupScraperLayout }) => ({
+          default: SetupScraperLayout,
+        }),
+      ),
+    ),
+  },
 ];
 
 export const pageData: TMPageData = {
@@ -231,5 +243,14 @@ export const pageData: TMPageData = {
     title: "Qualifying Algorithm",
     isNavItem: true,
     icon: IconRouteSquare2,
+  },
+  SetupScraper: {
+    level: "1",
+    group: EGroup.leadsManagement,
+    hasChildren: false,
+    url: "/leads-management/setup-scraper",
+    title: "Setup scraper",
+    isNavItem: true,
+    icon: IconClock,
   },
 };

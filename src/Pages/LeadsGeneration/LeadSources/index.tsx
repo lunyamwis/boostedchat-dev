@@ -146,10 +146,10 @@ export function LeadSources() {
       {
         accessorFn: (row) => {
           if (row.criterion === 0) {
-            return `Followers of ${row.account_usernames.join(", ")}`;
+            return `Followers of ${row.account_usernames?.join(", ")}`;
           }
           if (row.criterion === 1) {
-            return `Similar accounts to ${row.account_usernames.join(", ")} `;
+            return `Similar accounts to ${row.account_usernames?.join(", ")} `;
           }
           if (row.criterion === 2) {
             return `Posts with hashtags ${row.hashtags?.join(", ")}`;
@@ -157,8 +157,14 @@ export function LeadSources() {
           if (row.criterion === 3) {
             return `Interacted with posts ${row.photo_links?.join(", ")}`;
           }
+          if (row.criterion === 4) {
+            return `Mentioned usernames ${row.estimated_usernames?.join(", ")}`;
+          }
           if (row.criterion === 5) {
             return `Google Maps locations ${row.google_maps_search_keywords}`;
+          }
+          if (row.criterion === 6) {
+            return `External URLs ${row.external_urls?.join(", ")}`;
           }
           return "-";
         },

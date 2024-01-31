@@ -77,9 +77,9 @@ export function CreateQualifyingAlgorithm({ isOpen, setIsOpen }: Props) {
     createQualifyingAlgorithm.mutate(
       {
         name,
-        positive_keywords: positiveKeywords,
+        positive_keywords: positiveKeywords.split(", "),
         number_positive_keywords: positiveKeywordsComparator,
-        negative_keywords: negativeKeywords,
+        negative_keywords: negativeKeywords.split(", "),
         number_negative_keywords: negativeKeywordsComparator,
       },
       {

@@ -63,6 +63,8 @@ export function CreateLeadSource({ isOpen, setIsOpen }: Props) {
       | "photo_links"
       | "hashtags"
       | "google_maps_search_keywords"
+      | "external_urls"
+      | "estimated_usernames"
     > = {};
     if (criterion === "0" || criterion === "1") {
       optionalData = { account_usernames: criterionValues.split(", ") };
@@ -73,8 +75,17 @@ export function CreateLeadSource({ isOpen, setIsOpen }: Props) {
     if (criterion === "3") {
       optionalData = { photo_links: criterionValues.split(", ") };
     }
+    if (criterion === "3") {
+      optionalData = { photo_links: criterionValues.split(", ") };
+    }
+    if (criterion === "4") {
+      optionalData = { estimated_usernames: criterionValues.split(", ") };
+    }
     if (criterion === "5") {
       optionalData = { google_maps_search_keywords: criterionValues };
+    }
+    if (criterion === "6") {
+      optionalData = { external_urls: criterionValues.split(", ") };
     }
 
     createLeadSource.mutate(
