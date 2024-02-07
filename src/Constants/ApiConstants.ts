@@ -1,13 +1,15 @@
+const DOMAIN1 = import.meta.env.DOMAIN1
+const DOMAIN2 = import.meta.env.DOMAIN2
 export const API_URL = import.meta.env.PROD
-  ? "https://api.booksy.us.boostedchat.com/v1"
+  ? `https://api.${DOMAIN1}.boostedchat.com/v1`
   : "http://127.0.0.1:8001/v1";
 
 export const PROMPT_URL = import.meta.env.PROD
-  ? "https://promptemplate.booksy.boostedchat.com"
+  ? `https://promptemplate.${DOMAIN2}.boostedchat.com`
   : "http://localhost:8000";
 
 export const LEADS_GENERATION_URL = import.meta.env.PROD
-  ? "https://scrapper.booksy.boostedchat.com"
+  ? `https://scrapper.${DOMAIN2}.boostedchat.com`
   : "http://127.0.0.1:8002";
 
 export const queryKeys = {
