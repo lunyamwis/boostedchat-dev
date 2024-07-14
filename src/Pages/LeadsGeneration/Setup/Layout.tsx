@@ -4,7 +4,7 @@ import { SetupScraper } from ".";
 
 export function SetupScraperLayout() {
   return (
-    <FormLayout span={6} title="Set up a scraper">
+    <FormLayout span={6} title="Set up workflow">
       <SetupScraper />
     </FormLayout>
   );
