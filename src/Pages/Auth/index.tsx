@@ -10,6 +10,8 @@ export type TAuthPageData = {
 type TAuthPageDataObj = {
   login: TAuthPageData;
   register: TAuthPageData;
+  instagramAutoLogin: TAuthPageData;  
+  registerDevice: TAuthPageData;
   forgotPassword: TAuthPageData;
   resetPassword: TAuthPageData;
 };
@@ -31,6 +33,25 @@ export const authPageData: TAuthPageDataObj = {
       import("./Register").then(({ Register }) => ({ default: Register }))
     ),
   },
+
+  registerDevice: {
+    title: "Register Device",
+    description: "Enter your details to register",
+    url: "/register-device",
+    component: React.lazy(() =>
+      import("./RegisterDevice").then(({ RegisterDevice }) => ({ default: RegisterDevice }))
+    ),
+  },
+
+  instagramAutoLogin: {
+    title: "Instagram Auto Login",
+    description: "Automatically login to IG",
+    url: "/instagram-login",
+    component: React.lazy(() =>
+      import("./InstagramLogin").then(({ InstagramLogin }) => ({ default: InstagramLogin }))
+    ),
+  },
+
   forgotPassword: {
     title: "Forgot password",
     description:

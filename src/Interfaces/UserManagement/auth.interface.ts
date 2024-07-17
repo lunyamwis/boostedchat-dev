@@ -5,9 +5,14 @@ export interface ILogIn {
   password: string;
 }
 
+export interface InstangramLogIn {
+  ig_username: string;
+}
+
 export interface RegisterParams {
   first_name: string;
   last_name: string;
+  available: boolean;
   email: string;
   password: string;
 }

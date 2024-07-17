@@ -12,6 +12,10 @@ export const LEADS_GENERATION_URL = import.meta.env.PROD
   ? `https://scrapper.${DOMAIN2}.boostedchat.com`
   : "http://127.0.0.1:8002";
 
+export const MQTT_API_URL = import.meta.env.PROD
+  ? `https://mqtt.booksy.us.boostedchat.com`
+  : "http://localhost:3000";
+
 export const queryKeys = {
   users: {
     getAll: "get-all-users",

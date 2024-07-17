@@ -120,7 +120,7 @@ export function Login() {
           onChange={(e) => setEmail(e.target.value)}
         />
         <PasswordInput
-          label="Password"
+          label="IG Password"
           value={password}
           name="password"
           onChange={(e) => setPassword(e.target.value)}

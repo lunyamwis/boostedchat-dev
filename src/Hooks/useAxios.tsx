@@ -10,7 +10,7 @@ export const useAPIGlobalAxios = (url: string) => {
   const { accessToken } = useAuth();
   const axiosInstance = axios.create({
     baseURL: `${API_URL}/${url}/`,
-    headers: { Authorization: `Bearer ${accessToken}` },
+    // headers: { Authorization: `Bearer ${accessToken}` },
   });
   return axiosInstance;
 };

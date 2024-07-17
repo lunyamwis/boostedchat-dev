@@ -5,6 +5,7 @@ import {
   CreateSalesRep,
   GetSalesRep,
   GetSalesRepBulk,
+  RegisterDeviceParams
 } from "../../Interfaces/UserManagement/salesRep.interface";
 
 export const useSalesRepApi = () => {
@@ -48,5 +49,12 @@ export const useSalesRepApi = () => {
         .delete(`/remove/${id}`)
         .then(handleRestResponse)
         .catch(handleRestError),
+    registerDevice: (data: RegisterDeviceParams) => {
+      return axiosInstance
+        .post('/rep/', {data})
+        .then(handleRestResponse)
+        .catch(handleRestError)
+
+    },
   };
 };

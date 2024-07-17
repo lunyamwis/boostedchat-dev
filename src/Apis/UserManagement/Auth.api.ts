@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosHeaders } from "axios";
 import {
   ILogIn,
   IResetPassword,
@@ -6,10 +6,14 @@ import {
   RegisterParams,
 } from "../../Interfaces/UserManagement/auth.interface";
 import { handleRestError, handleRestResponse } from "../response";
-import { API_URL } from "../../Constants/ApiConstants";
+import { API_URL, MQTT_API_URL } from "../../Constants/ApiConstants";
 
 const axiosInstance = axios.create({
   baseURL: `${API_URL}/authentication`,
+});
+
+const InstagramAxiosInstance = axios.create({
+  baseURL: `${MQTT_API_URL}/accounts`
 });
 
 export const AuthAPI = {
@@ -44,9 +48,21 @@ export const AuthAPI = {
       .catch(handleRestError),
   register: (data: RegisterParams) =>
     axiosInstance
-      .post("/account-request/create/", data)
+      .post("/register", data)
       .then(handleRestResponse)
       .catch(handleRestError),
+  instagramLogin: (ig_data: any) =>
+    InstagramAxiosInstance
+      .post("/login", ig_data, {})
+      .then((response) => {
+        console.log("this is where the response")
+        console.log(response);
+        return response.toString();
+      })
+      .catch((error) => {
+        console.log("this is where the erroor shouls dho")
+        console.log(error);
+      }),
   refresh: (
     userId: string,
     token: string
