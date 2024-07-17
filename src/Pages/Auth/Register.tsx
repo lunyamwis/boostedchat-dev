@@ -18,7 +18,7 @@ import { RegisterParams } from "../../Interfaces/UserManagement/auth.interface";
 import { CollapsingAlert } from "../../Components/Widgets/CollapsingAlert";
 import { useAlert } from "../../Hooks/useAlert";
 import { isValidEmail } from "../../Utils/validator.util";
-import { axiosError, LoginState } from "../../Interfaces/general.interface";
+import { axiosError } from "../../Interfaces/general.interface";
 import { authPageData } from ".";
 import { IconArrowLeft } from "@tabler/icons-react";
 import { useSalesRepApi } from "../../Apis/UserManagement/SalesRep.api";
@@ -123,11 +123,6 @@ export function Register() {
         }
       });
       setLoading(false);
-      // setFirstName("");
-      // setLastName("");
-      // setEmail("");
-      // setPassword("");
-      // setConfirmPassword("");
     },
     onError: (error: axiosError) => {
       const errMessage = error.data;

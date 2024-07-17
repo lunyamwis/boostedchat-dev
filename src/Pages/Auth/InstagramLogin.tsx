@@ -195,5 +195,3 @@ export function InstagramLogin() {
     </Box>
   );
 };
-
-// export default RegisterDevice;
