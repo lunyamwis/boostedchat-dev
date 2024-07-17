@@ -5,7 +5,7 @@ import {
   Group,
   Space,
   Stack,
-  TextInput,
+  // TextInput,
   Tooltip,
   Container,
   useMantineTheme,
@@ -14,13 +14,13 @@ import { Checkbox } from '@mantine/core';
 import { Text } from '@mantine/core';
 import { useMutation } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { useSalesRepApi } from "../../Apis/UserManagement/SalesRep.api";
-import { RegisterDeviceParams } from "../../Interfaces/UserManagement/salesRep.interface";
+import { useNavigate, useLocation } from "react-router-dom";
+// import { useSalesRepApi } from "../../Apis/UserManagement/SalesRep.api";
+// import { RegisterDeviceParams } from "../../Interfaces/UserManagement/salesRep.interface";
 import { AuthAPI } from "../../Apis/UserManagement/Auth.api";
 import { CollapsingAlert } from "../../Components/Widgets/CollapsingAlert";
 import { useAlert } from "../../Hooks/useAlert";
-import { axiosError, LoginState } from "../../Interfaces/general.interface";
+import { axiosError } from "../../Interfaces/general.interface";
 import { authPageData } from ".";
 import { IconArrowLeft } from "@tabler/icons-react";
 
@@ -32,33 +32,33 @@ export function InstagramLogin() {
 
   const [checked, setChecked] = useState(false);
   const [showLoginButton, setShowLoginButton] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [user, setUser] = useState({
-    'email': '',
-    'role': '',
-    'id': '',
-  });
+  // const [firstName, setFirstName] = useState("");
+  // const [lastName, setLastName] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [confirmPassword, setConfirmPassword] = useState("");
+  // const [user, setUser] = useState({
+  //   'email': '',
+  //   'role': '',
+  //   'id': '',
+  // });
   // const [ig_username, setigUsername] = useState("");
   // const [ig_password, setigPassword] = useState("");
   // const [instagram, setInstagram] = useState("");
-  const [app_version, setappVersion] = useState("");
-  const [android_version, setandroidVersion] = useState("");
-  const [android_release, setandroidRelease] = useState("");
-  const [dpi, setDpi] = useState("");
-  const [resolution, setResolution] = useState("");
-  const [manufacturer, setManufacturer] = useState("");
-  const [device, setDevice] = useState("");
-  const [model, setModel] = useState("");
-  const [cpu, setCpu] = useState("");
-  const [version_code, setVersionCode] = useState("");
+  // const [app_version, setappVersion] = useState("");
+  // const [android_version, setandroidVersion] = useState("");
+  // const [android_release, setandroidRelease] = useState("");
+  // const [dpi, setDpi] = useState("");
+  // const [resolution, setResolution] = useState("");
+  // const [manufacturer, setManufacturer] = useState("");
+  // const [device, setDevice] = useState("");
+  // const [model, setModel] = useState("");
+  // const [cpu, setCpu] = useState("");
+  // const [version_code, setVersionCode] = useState("");
 
 
   const location = useLocation();
-  const params = useParams();
+  // const params = useParams();
 
 
   // useEffect(() => {
@@ -109,11 +109,11 @@ export function InstagramLogin() {
       //   } as LoginState,
       // }
       // );
-      setFirstName("");
-      setLastName("");
-      setEmail("");
-      setPassword("");
-      setConfirmPassword("");
+      // setFirstName("");
+      // setLastName("");
+      // setEmail("");
+      // setPassword("");
+      // setConfirmPassword("");
     },
     onError: (error: axiosError) => {
       const errMessage = error.data;
