@@ -99,6 +99,12 @@ export function InstagramLogin() {
     mutationFn: (login_data: any) => AuthAPI.instagramLogin(login_data),
     onSuccess: () => {
       console.log("success");
+      setShowAlert(true);
+      setAlertInfo({
+        color: "teal",
+        title: "Error",
+        message: "Login success!",
+      });
       // navigate("/login", {
       //   replace: true,
       //   state: {
@@ -116,6 +122,9 @@ export function InstagramLogin() {
       // setConfirmPassword("");
     },
     onError: (error: axiosError) => {
+      console.log('Error now');
+      console.log(error.statusMessage);
+      console.log(error.data);
       const errMessage = error.data;
       setShowAlert(true);
       setAlertInfo({
@@ -131,16 +140,6 @@ export function InstagramLogin() {
   const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setShowAlert(false);
-    // if (firstName === "") {
-    //   setShowAlert(true);
-    //   setAlertInfo({
-    //     color: "orange",
-    //     title: "Error",
-    //     message: "Please fill in your first name",
-    //   });
-    //   return;
-    // }
-    // json={"igname":"ig_username"}
     register.mutate({
       'igname': location.state.ig_username,
     });
