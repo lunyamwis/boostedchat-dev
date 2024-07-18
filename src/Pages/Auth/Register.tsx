@@ -165,6 +165,7 @@ export function Register() {
         title: "Error",
         message: "Please fill in your first name",
       });
+      setLoading(false);
       return;
     }
     if (lastName === "") {
@@ -174,6 +175,7 @@ export function Register() {
         title: "Error",
         message: "Please fill in your last name",
       });
+      setLoading(false);
       return;
     }
     if (email === "") {
@@ -183,6 +185,7 @@ export function Register() {
         title: "Error",
         message: "Please fill in your email address",
       });
+      setLoading(false);
       return;
     }
     if (password === "") {
@@ -192,6 +195,7 @@ export function Register() {
         title: "Error",
         message: "Please enter your account password",
       });
+      setLoading(false);
       return;
     }
     if (confirmPassword === "") {
@@ -201,6 +205,7 @@ export function Register() {
         title: "Error",
         message: "Please confirm your account password",
       });
+      setLoading(false);
       return;
     }
     if (!isValidEmail(email)) {
@@ -210,6 +215,7 @@ export function Register() {
         title: "Error",
         message: "Please enter a valid email address",
       });
+      setLoading(false);
       return;
     }
     if (password !== confirmPassword) {
@@ -219,6 +225,7 @@ export function Register() {
         title: "Error",
         message: "Passwords do not match",
       });
+      setLoading(false);
       return;
     }
 
