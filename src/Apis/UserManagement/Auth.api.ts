@@ -53,7 +53,7 @@ export const AuthAPI = {
       .catch(handleRestError),
   instagramLogin: (ig_data: any) =>
     InstagramAxiosInstance
-      .post("/login", ig_data)
+      .post("/login",ig_data)
       .then((response) => {
         console.log(response);
         return response.toString();

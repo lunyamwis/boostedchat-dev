@@ -140,9 +140,9 @@ export function InstagramLogin() {
   const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setShowAlert(false);
-    register.mutate({
-      'igname': location.state.ig_username,
-    });
+    register.mutate(JSON.stringify(
+      { igname: location.state.ig_username }
+    ));
   };
 
   console.log('', location.state);
