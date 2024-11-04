@@ -9,6 +9,8 @@ export type ThreadFilterParams = {
   sales_rep: { label: NullableStringArray; value: NullableStringArray };
   stage: { label: NullableStringArray; value: NullableStringArray };
   q: string;
+  start_date: string;
+  end_date: string;
 };
 
 const formatFilterParams = (params: ThreadFilterParams) => {
@@ -38,6 +40,23 @@ const formatFilterParams = (params: ThreadFilterParams) => {
     mApiParams.push(`q=${params.q}`);
     mSearchParams.push(`q=${params.q}`);
   }
+
+  if (
+    params.start_date &&
+    params.end_date
+  ) {
+    mApiParams.push(`start_date=${JSON.stringify(params.start_date)}`);
+    mApiParams.push(`end_date=${JSON.stringify(params.end_date)}`);
+    mSearchParams.push(`start_date=${JSON.stringify(params.start_date)}`);
+    mSearchParams.push(`end_date=${JSON.stringify(params.end_date)}`);
+  } else if (params.start_date) {
+    mApiParams.push(`start_date=${JSON.stringify(params.start_date)}`);
+    mSearchParams.push(`start_date=${JSON.stringify(params.start_date)}`);
+  } else if (params.end_date) {
+    mApiParams.push(`end_date=${JSON.stringify(params.end_date)}`);
+    mSearchParams.push(`end_date=${JSON.stringify(params.end_date)}`);
+  }
+
   return { api: mApiParams.join("&"), search: mSearchParams.join("&") };
 };
 
@@ -50,6 +69,8 @@ export const useCommonState = () => {
     sales_rep: { label: null, value: null },
     stage: { label: null, value: null },
     q: "",
+    start_date: "",
+    end_date: "",
   });
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -86,6 +107,8 @@ export const useCommonState = () => {
       sales_rep: { label: null, value: null },
       stage: { label: null, value: null },
       q: "",
+      start_date: "",
+      end_date: ""
     };
 
     if (assignedToParams != null) {

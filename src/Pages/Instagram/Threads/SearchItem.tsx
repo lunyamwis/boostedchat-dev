@@ -33,7 +33,7 @@ export function SearchItem({ message }: Props) {
         style={{ flexWrap: "nowrap", width: "100%" }}
       >
         <Avatar color={avatarColor.current} style={{ flex: "0 1 auto" }}>
-          {message.username.charAt(0).toUpperCase()}
+          {message.username?.charAt(0).toUpperCase()}
         </Avatar>
         <Stack gap={12} style={{ flex: "1 1 auto", overflow: "hidden" }}>
           <Stack gap={2} style={{ flex: "1 1 auto", overflow: "hidden" }}>

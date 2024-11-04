@@ -8,8 +8,10 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
+import { DatePicker } from '@mantine/dates';
 import { IconFilter, IconSearch, IconX } from "@tabler/icons-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
+
 import { useDebouncedValue } from "@mantine/hooks";
 import { ThreadFilterParams } from "../../Hooks/common.hooks";
 import { FilterModal } from "../../Filters";
@@ -24,12 +26,46 @@ export function ChatHeader({ setFilterParams, filterParams }: Props) {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 700);
 
-  React.useEffect(() => {
+  const [value, setValue] = useState<[Date | null, Date | null]>([null, null]);
+  const [start_date, setStartDate] = useState('')
+  const [end_date, setEndDate] = useState('')
+  const [debouncedStartdate] = useDebouncedValue(start_date, 1000);
+  const [debouncedEnddate] = useDebouncedValue(end_date, 10000);
+
+  // console.log("value----------------");
+  // console.log(value);
+  // console.log(value.toLocaleString());
+
+  useEffect(() => {
     setFilterParams({
       ...filterParams,
       q: debouncedSearchQuery,
     });
   }, [debouncedSearchQuery]);
+
+  useEffect(() => {
+    console.log("value-----------UPDATE-----");
+    setFilterParams({
+      ...filterParams,
+      start_date: start_date,
+      end_date: end_date,
+    });
+  }, [debouncedStartdate]);
+
+  useEffect(() => {
+    if (value.length > 0) {
+      console.log("fhanging calie")
+      const formattedDates = value.map((date) =>
+        // date ? `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}` : ''
+      date ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`: '' 
+    );
+      setStartDate(formattedDates[0]);
+      setEndDate(formattedDates[1]);
+    }
+  }, [value]);
+
+  console.log(start_date);
+  console.log(end_date);
   return (
     <Stack py={24}>
       <Group px={24} justify="space-between">
@@ -56,6 +92,9 @@ export function ChatHeader({ setFilterParams, filterParams }: Props) {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
+      </Box>
+      <Box px={24}>
+        <DatePicker type="range" value={value} onChange={setValue} />;
       </Box>
       <Stack px={24}>
         {filterParams.assigned_to.value && filterParams.assigned_to.value && (
@@ -117,7 +156,7 @@ export function ChatHeader({ setFilterParams, filterParams }: Props) {
                     <Text fz={12} fw={700} component="span">
                       {
                         filterParams.stage?.label?.[
-                          filterParams.stage.value?.indexOf(val) ?? 0
+                        filterParams.stage.value?.indexOf(val) ?? 0
                         ]
                       }
                     </Text>
@@ -169,7 +208,7 @@ export function ChatHeader({ setFilterParams, filterParams }: Props) {
                     <Text fz={12} fw={700} component="span">
                       {
                         filterParams.sales_rep?.label?.[
-                          filterParams.sales_rep.value?.indexOf(val) ?? 0
+                        filterParams.sales_rep.value?.indexOf(val) ?? 0
                         ]
                       }
                     </Text>
