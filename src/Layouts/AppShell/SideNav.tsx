@@ -161,7 +161,7 @@ export function SideNav({ collapsed, setCollapsed }: Props) {
   };
 
   React.useEffect(() => {
-    const currentSplitPath = location.pathname.split("/");
+    const currentSplitPath = location.pathname?.split("/");
 
     const paths = Object.values(pageData);
     for (let i = 0; i < paths.length; i++) {

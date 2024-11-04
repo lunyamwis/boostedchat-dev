@@ -90,11 +90,11 @@ export function ThreadsBody({
                         <ChatItem
                           avatarColor={avatarColor}
                           profilePicture={null}
-                          content={formattedThreadBody.text}
-                          userInitials={formattedThreadBody.username.charAt(0)}
-                          userNames={formattedThreadBody.username}
+                          content={formattedThreadBody?.text}
+                          userInitials={formattedThreadBody?.username?.charAt(0)}
+                          userNames={formattedThreadBody?.username}
                           date={format(
-                            parseISO(formattedThreadBody.date),
+                            parseISO(formattedThreadBody?.date),
                             EDateFormats.time,
                           )}
                           owner={

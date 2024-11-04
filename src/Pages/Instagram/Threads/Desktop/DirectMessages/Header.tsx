@@ -48,15 +48,15 @@ export function DirectMessagesHeader({
           </Stack>
         </Group>
       )}
-      {accountQR.data != null && (
+      {accountQR?.data != null && (
         <Group>
-          <Avatar color={avatarColor}>{accountQR.data.igname.charAt(0)}</Avatar>
+          <Avatar color={avatarColor}>{accountQR?.data?.igname?.charAt(0)}</Avatar>
           <Stack gap={1}>
-            <Text>{accountQR.data.igname}</Text>
+            <Text>{accountQR?.data?.igname}</Text>
             <Text fz={13} c="dimmed">
               Assigned to{" "}
               <Text component="span" c="dimmed" fz={13}>
-                {accountQR.data.assigned_to === "Robot" ? "🤖" : "me"}
+                {accountQR?.data?.assigned_to === "Robot" ? "🤖" : "me"}
               </Text>
             </Text>
           </Stack>

@@ -34,7 +34,7 @@ export const isValidPhoneNumber = (rawPhoneNumber: string) => {
 
 export const capitalize = (val: string) => {
   const lower = val.trim().toLowerCase();
-  return lower.replace(lower.charAt(0), lower.charAt(0).toUpperCase());
+  return lower.replace(lower?.charAt(0), lower?.charAt(0)?.toUpperCase());
 };
 
 export const getNames = (user: IActor | null | undefined) => {

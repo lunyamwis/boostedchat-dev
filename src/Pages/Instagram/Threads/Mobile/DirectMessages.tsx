@@ -71,15 +71,15 @@ export function MobileDirectMessages({ avatarColor }: Props) {
                 <IconArrowLeft />
               </ActionIcon>
               <Avatar color={avatarColor}>
-                {accountQR.data.igname.charAt(0)}
+                {accountQR?.data?.igname?.charAt(0)}
               </Avatar>
             </Group>
             <Stack gap={1}>
-              <Text>{accountQR.data.igname}</Text>
+              <Text>{accountQR?.data?.igname}</Text>
               <Text fz={13} c="dimmed">
                 Assigned to{" "}
                 <Text fz={13} component="span" c="dimmed">
-                  {accountQR.data.assigned_to === "Robot" ? "Bot" : "me"}
+                  {accountQR?.data?.assigned_to === "Robot" ? "Bot" : "me"}
                 </Text>
               </Text>
             </Stack>
@@ -166,7 +166,7 @@ export function MobileDirectMessages({ avatarColor }: Props) {
                               avatarColor={avatarColor}
                               profilePicture={null}
                               content={formattedThreadBody.text}
-                              userInitials={formattedThreadBody.username.charAt(
+                              userInitials={formattedThreadBody?.username?.charAt(
                                 0,
                               )}
                               userNames={formattedThreadBody.username}

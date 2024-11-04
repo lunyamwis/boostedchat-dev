@@ -23,7 +23,7 @@ export const mapStage = (stage: number) => {
     "3": { value: "Solution Presentation", color: "blue" },
     "4": { value: "Closing the sale", color: "teal" },
   };
-  return stages[stage.toString() as keyof typeof stages];
+  return stages[stage?.toString() as keyof typeof stages];
 };
 
 export function ThreadListItem({ setAvatarColor, thread }: Props) {
@@ -60,7 +60,7 @@ export function ThreadListItem({ setAvatarColor, thread }: Props) {
         style={{ flexWrap: "nowrap", width: "100%" }}
       >
         <Avatar color={avatarColor.current} style={{ flex: "0 1 auto" }}>
-          {thread.username.charAt(0).toUpperCase()}
+          {thread.username?.charAt(0).toUpperCase()}
         </Avatar>
         <Stack gap={12} style={{ flex: "1 1 auto", overflow: "hidden" }}>
           <Stack gap={2} style={{ flex: "1 1 auto", overflow: "hidden" }}>
@@ -76,7 +76,7 @@ export function ThreadListItem({ setAvatarColor, thread }: Props) {
                 fw={thread.unread_message_count > 0 ? 600 : 400}
                 style={{ flex: "0 1 auto" }}
               >
-                {formatChatDate(thread.last_message_at)}
+                {thread?.last_message_at ? formatChatDate(thread?.last_message_at) : '-'}
               </Text>
             </Group>
             <Group justify="space-between" style={{ flexWrap: "nowrap" }}>
@@ -102,7 +102,7 @@ export function ThreadListItem({ setAvatarColor, thread }: Props) {
             <Badge
               variant="light"
               radius="sm"
-              color={mapStage(thread.stage).color}
+              color={thread?.stage ? mapStage(thread?.stage).color : 'gray'}
               styles={{
                 label: {
                   fontWeight: 500,
@@ -110,7 +110,7 @@ export function ThreadListItem({ setAvatarColor, thread }: Props) {
                 },
               }}
             >
-              {mapStage(thread.stage).value}
+              {mapStage(thread?.stage)?.value}
             </Badge>
             <Badge
               variant="light"

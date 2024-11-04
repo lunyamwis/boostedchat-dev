@@ -90,7 +90,7 @@ export function AccountDetails({ accountQR, avatarColor }: Props) {
       <Box px={24}>
         <Stack align="center">
           <Avatar size="xl" color={avatarColor}>
-            {accountQR.data.igname.charAt(0).toUpperCase()}
+            {accountQR?.data?.igname?.charAt(0).toUpperCase()}
           </Avatar>
           <Stack gap={2} align="center">
             <Text
@@ -105,7 +105,7 @@ export function AccountDetails({ accountQR, avatarColor }: Props) {
               {accountQR.data.igname}
             </Text>
             <Text fz={14} fw={600}>
-              {accountQR.data.outsourced.full_name}
+              {accountQR?.data?.outsourced?.full_name}
             </Text>
             <Group>
               <Text
@@ -114,58 +114,58 @@ export function AccountDetails({ accountQR, avatarColor }: Props) {
                 c="blue"
                 fz={14}
                 fw={500}
-                to={accountQR.data.outsourced.external_url}
+                to={accountQR.data.outsourced?.external_url}
               >
-                {accountQR.data.outsourced.external_url}
+                {accountQR.data.outsourced?.external_url}
               </Text>
             </Group>
           </Stack>
           <Text style={{ textAlign: "center", fontSize: 14 }}>
-            {accountQR.data.outsourced.biography}
+            {accountQR.data.outsourced?.biography}
           </Text>
           <Group>
             <FollowStat
               title="followers"
-              count={accountQR.data.outsourced.follower_count}
+              count={accountQR.data.outsourced?.follower_count}
             />
             <FollowStat
               title="following"
-              count={accountQR.data.outsourced.following_count}
+              count={accountQR.data.outsourced?.following_count}
             />
             <FollowStat
               title="posts"
-              count={accountQR.data.outsourced.media_count}
+              count={accountQR.data.outsourced?.media_count}
             />
           </Group>
 
           <Group my={24} justify="center">
             <PropertyBadge
-              value={accountQR.data.outsourced.is_verified}
+              value={accountQR.data.outsourced?.is_verified}
               trueVal="Verified"
               falseVal="Not Verified"
             />
             <PropertyBadge
-              value={accountQR.data.outsourced.is_business}
+              value={accountQR.data.outsourced?.is_business}
               trueVal="Business"
               falseVal="Not a business"
             />
             <PropertyBadge
-              value={accountQR.data.outsourced.is_popular}
+              value={accountQR.data.outsourced?.is_popular}
               trueVal="Popular"
               falseVal="Not popular"
             />
             <PropertyBadge
-              value={accountQR.data.outsourced.is_posting_actively}
+              value={accountQR.data.outsourced?.is_posting_actively}
               trueVal="Posts actively"
               falseVal="Posts rarely"
             />
             <PropertyBadge
-              value={accountQR.data.outsourced.is_private}
+              value={accountQR.data.outsourced?.is_private}
               trueVal="Private Account"
               falseVal="Public account"
             />
             <PropertyBadge
-              value={accountQR.data.outsourced.book_button}
+              value={accountQR.data.outsourced?.book_button}
               trueVal="Book Button"
               falseVal="No Book Button"
             />
@@ -174,15 +174,15 @@ export function AccountDetails({ accountQR, avatarColor }: Props) {
         <Stack>
           <ContactDetails
             Icon={IconPhone}
-            value={accountQR.data.outsourced.public_phone_number}
+            value={accountQR.data.outsourced?.public_phone_number}
           />
           <ContactDetails
             Icon={IconMail}
-            value={accountQR.data.outsourced.public_email}
+            value={accountQR.data.outsourced?.public_email}
           />
           <ContactDetails
             Icon={IconMapPin}
-            value={accountQR.data.outsourced.city_name}
+            value={accountQR.data.outsourced?.city_name}
           />
         </Stack>
       </Box>

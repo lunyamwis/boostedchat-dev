@@ -103,9 +103,9 @@ export function EditQualifyingAlgorithm({
         id: qualifyingAlgorithmId,
         data: {
           name,
-          positive_keywords: positiveKeywords.split(", "),
+          positive_keywords: positiveKeywords?.split(", "),
           number_positive_keywords: positiveKeywordsComparator,
-          negative_keywords: negativeKeywords.split(", "),
+          negative_keywords: negativeKeywords?.split(", "),
           number_negative_keywords: negativeKeywordsComparator,
         },
       },
