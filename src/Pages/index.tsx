@@ -37,6 +37,7 @@ type Level1 =
 export type TPageData = PrimaryPageData & ({ level: "1" } & Level1);
 
 export type ParentKeys =
+  | "AccountsCanban"
   | "Snapshot"
   | "Accounts"
   | "AccountDetails"
@@ -72,6 +73,14 @@ export const componentData: {
   key: keyof TMPageData;
   component: React.LazyExoticComponent<() => JSX.Element>;
 }[] = [
+  {
+    key: "AccountsCanban",
+    component: React.lazy(() =>
+      import("./Dashboard/AccountsCanban").then(({ AccountsCanban }) => ({
+        default: AccountsCanban,
+      })),
+    ),
+  },
   {
     key: "Snapshot",
     component: React.lazy(() =>
@@ -163,6 +172,15 @@ export const componentData: {
 ];
 
 export const pageData: TMPageData = {
+  AccountsCanban: {
+    level: "1",
+    group: EGroup.summaries,
+    hasChildren: false,
+    title: "Accounts canban",
+    isNavItem: true,
+    icon: IconChartInfographic,
+    url: "/dashboard/accounts",
+  },
   Snapshot: {
     level: "1",
     group: EGroup.summaries,
