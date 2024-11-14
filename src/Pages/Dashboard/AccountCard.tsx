@@ -4,16 +4,16 @@ import { IconUser, IconRobot } from '@tabler/icons-react';
 
 interface MessageCardProps {
   username: string;
-  msgSentBy: 'robot' | 'person';
+  msgSentBy: 'Robot' | 'Human';
   lastMsgSentAt: string;
-  assignedTo: 'robot' | 'person';
+  assignedTo: 'Robot' | 'Human';
   onClick?: () => void;
 }
 
 const AccountCard: React.FC<MessageCardProps> = ({ username, msgSentBy, lastMsgSentAt, assignedTo, onClick }) => {
-  const renderIcon = (type: 'robot' | 'person') => (
-    <ThemeIcon variant="outline" color={type === 'robot' ? 'blue' : 'green'}>
-      {type === 'robot' ? <IconRobot size={20} /> : <IconUser size={20} />}
+  const renderIcon = (type: 'Robot' | 'Human') => (
+    <ThemeIcon variant="outline" color={type === 'Robot' ? 'blue' : 'green'}>
+      {type === 'Robot' ? <IconRobot size={20} /> : <IconUser size={20} />}
     </ThemeIcon>
   );
 
