@@ -16,15 +16,42 @@ type Props = {
   thread: GetThread;
 };
 
-export const mapStage = (stage: number) => {
+export const mapStage = (stage: any) => {
+
   const stages = {
     "1": { value: "Rapport Building", color: "blue" },
     "2": { value: "Needs Assessment", color: "orange" },
     "3": { value: "Solution Presentation", color: "blue" },
-    "4": { value: "Closing the sale", color: "teal" },
+    "4": { value: "Closing the Sale", color: "teal" },
   };
   return stages[stage?.toString() as keyof typeof stages];
 };
+
+
+// export const mapStage = (stage: number | string) => {
+//   const stages = {
+//     "1": { value: "Rapport Building", color: "blue" },
+//     "2": { value: "Needs Assessment", color: "orange" },
+//     "3": { value: "Solution Presentation", color: "blue" },
+//     "4": { value: "Closing the Sale", color: "teal" },
+//   };
+
+//   // Convert stage to a string if it's a number
+//   const stageKey = typeof stage === "number" ? stage.toString() : undefined;
+
+//   // If stage is a number (or can be converted to a valid key), return based on key
+//   if (stageKey && stages[stageKey as keyof typeof stages]) {
+//     return stages[stageKey as keyof typeof stages];
+//   }
+
+//   // If stage is a string, search by value
+//   if (typeof stage === "string") {
+//     return Object.values(stages).find((s) => s.value === stage);
+//   }
+
+//   // Return undefined if no match is found
+//   return { value: "no stage defined", color: "red" };
+// };
 
 export function ThreadListItem({ setAvatarColor, thread }: Props) {
   const [searchParams, setSearchParam] = useSearchParams();
@@ -102,7 +129,7 @@ export function ThreadListItem({ setAvatarColor, thread }: Props) {
             <Badge
               variant="light"
               radius="sm"
-              color={thread?.stage ? mapStage(thread?.stage).color : 'gray'}
+              color={thread?.stage ? mapStage(thread?.stage)?.color : 'gray'}
               styles={{
                 label: {
                   fontWeight: 500,

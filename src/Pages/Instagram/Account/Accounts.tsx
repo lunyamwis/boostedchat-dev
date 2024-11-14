@@ -120,8 +120,8 @@ export function Accounts() {
           }
           return (
             <Badge
-              color={mapStage(params.row.original.stage).color}
-              text={mapStage(params.row.original.stage).value}
+              color={mapStage(params.row.original.stage)?.color}
+              text={mapStage(params.row.original.stage)?.value}
             />
           );
         },
