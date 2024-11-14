@@ -42,6 +42,14 @@ export const useGetAccounts = (page: number) => {
   });
 };
 
+export const useGetActiveStages = () => {
+  const { getActiveStages } = useAccountsApi();
+  return useQuery({
+    queryKey: [queryKeys.instagram.stages.getAllStages],
+    queryFn: () => getActiveStages(),
+  });
+};
+
 export const useGetAccount = (accountId: string) => {
   const { getOne } = useAccountsApi();
   return useQuery({
