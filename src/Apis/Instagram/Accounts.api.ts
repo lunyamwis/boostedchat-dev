@@ -18,6 +18,11 @@ export const useAccountsApi = () => {
         .get(`/?page=${page}`)
         .then(handleRestResponse)
         .catch(handleRestError),
+    getActiveStages: (): Promise<any> =>
+      axiosInstance
+        .get(`/active-stages/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
     getOne: (id: string): Promise<GetSingleAccount> =>
       axiosInstance
         .get(`/${id}`)

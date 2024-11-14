@@ -39,6 +39,9 @@ export const queryKeys = {
       getById: "get-account-by-id",
       getByIgThreadId: "get-account-by-ig-thread-id",
     },
+    stages: {
+      getAllStages: "get-all-stages",
+    },
     threads: {
       byIgThreadId: "get-thread-by-ig-thread-id",
       getAll: "get-all-threads",
