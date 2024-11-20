@@ -18,6 +18,11 @@ export const useAccountsApi = () => {
         .get(`/?page=${page}`)
         .then(handleRestResponse)
         .catch(handleRestError),
+    getByStage: (stage:string ,page: number): Promise<PaginatedQuery<GetAccount>> =>
+      axiosInstance
+        .get(`/?status_param=${stage}&page=${page}`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
     getActiveStages: (): Promise<any> =>
       axiosInstance
         .get(`/active-stages/`)
