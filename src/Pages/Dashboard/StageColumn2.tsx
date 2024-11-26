@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import {
-  Container,
-  ScrollArea,
   Box,
   Title,
   Stack,

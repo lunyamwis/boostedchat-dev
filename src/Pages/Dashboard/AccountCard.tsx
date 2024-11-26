@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Text, Group, Avatar, ThemeIcon } from '@mantine/core';
+import { Card, Text, Group, ThemeIcon } from '@mantine/core';
 import { IconUser, IconRobot } from '@tabler/icons-react';
 
 interface MessageCardProps {

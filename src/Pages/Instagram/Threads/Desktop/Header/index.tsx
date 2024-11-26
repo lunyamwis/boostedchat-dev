@@ -30,7 +30,7 @@ export function ChatHeader({ setFilterParams, filterParams }: Props) {
   const [start_date, setStartDate] = useState('')
   const [end_date, setEndDate] = useState('')
   const [debouncedStartdate] = useDebouncedValue(start_date, 1000);
-  const [debouncedEnddate] = useDebouncedValue(end_date, 10000);
+  // const [debouncedEnddate] = useDebouncedValue(end_date, 10000);
 
   // console.log("value----------------");
   // console.log(value);
