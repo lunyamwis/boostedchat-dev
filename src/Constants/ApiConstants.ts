@@ -1,4 +1,4 @@
-const DOMAIN1 = import.meta.env.VITE_DOMAIN1
+// const DOMAIN1 = import.meta.env.VITE_DOMAIN1
 const DOMAIN2 = import.meta.env.VITE_DOMAIN2
 
 
