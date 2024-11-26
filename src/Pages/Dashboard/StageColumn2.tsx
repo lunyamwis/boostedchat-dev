@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Title,
@@ -12,29 +12,29 @@ import { useIntersection } from "@mantine/hooks";
 import { useCommonState } from "../Instagram/Account/Hooks/common.hooks";
 import { Loading } from "@/Components/UIState/Loading";
 export function StageColumn2({ stage, index }: { stage: string, index: number }) {
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  // const [drawerOpen, setDrawerOpen] = useState(false);
   const [currentStage] = useState(stage);
   const { fetQR } = useCommonState(stage);
-  const [selectedMessage, setSelectedMessage] = useState<{
-    username: string;
-    assignedTo: string;
-    lastMsgSentAt: string;
-    msgSentBy: string;
-  } | null>(null);
-  const openDrawer = (messageDetails: {
-    username: string;
-    assignedTo: string;
-    lastMsgSentAt: string;
-    msgSentBy: string;
-  }) => {
-    setSelectedMessage(messageDetails);
-    setDrawerOpen(true);
-  };
+  // const [selectedMessage, setSelectedMessage] = useState<{
+  //   username: string;
+  //   assignedTo: string;
+  //   lastMsgSentAt: string;
+  //   msgSentBy: string;
+  // } | null>(null);
+  // const openDrawer = (messageDetails: {
+  //   username: string;
+  //   assignedTo: string;
+  //   lastMsgSentAt: string;
+  //   msgSentBy: string;
+  // }) => {
+  //   setSelectedMessage(messageDetails);
+  //   setDrawerOpen(true);
+  // };
 
-  const closeDrawer = () => {
-    setDrawerOpen(false);
-    setSelectedMessage(null);
-  };
+  // const closeDrawer = () => {
+  //   setDrawerOpen(false);
+  //   setSelectedMessage(null);
+  // };
 
   // const threadsQR = useGetThreads(formattedFilterParams);
   // const fetQR =  getInfiniteAccountsByStage(stage);
@@ -151,12 +151,12 @@ export function StageColumn2({ stage, index }: { stage: string, index: number })
                         assignedTo={result.assigned_to}
                         lastMsgSentAt={result.last_message_at}
                         msgSentBy={result.last_message_sent_by}
-                        onClick={() => openDrawer({
-                          username: result.igname,
-                          assignedTo: result.assigned_to,
-                          lastMsgSentAt: result.last_message_at,
-                          msgSentBy: result.last_message_sent_by
-                        })}
+                      // onClick={() => openDrawer({
+                      //   username: result.igname,
+                      //   assignedTo: result.assigned_to,
+                      //   lastMsgSentAt: result.last_message_at,
+                      //   msgSentBy: result.last_message_sent_by
+                      // })}
                       />
                     );
                   })
