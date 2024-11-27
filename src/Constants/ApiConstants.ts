@@ -44,6 +44,7 @@ export const queryKeys = {
       getAccounts: "get-all-accounts",
       getById: "get-account-by-id",
       getByIgThreadId: "get-account-by-ig-thread-id",
+      getAccountThreadDetails: "get-account-details",
     },
     stages: {
       getAllStages: "get-all-stages",

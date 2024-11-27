@@ -55,6 +55,20 @@ export const useGetAccountsByStageDirectly = (stage: any, page: number) => {
   return getByStage(stage, page);
 };
 
+export const useGetAccountThreadDetails = (id: string) => {
+  const { getOneWithThreadDetails } = useAccountsApi();
+  return useQuery({
+    queryKey: [queryKeys.instagram.accounts.getAccountThreadDetails, id],
+    queryFn: () => getOneWithThreadDetails(id),
+  });
+};
+
+
+export const useGetAccountThreadDetailsDirectly = (id: string) => {
+  const { getOneWithThreadDetails } = useAccountsApi();
+  return getOneWithThreadDetails(id);
+};
+
 export const getInfiniteAccountsByStage = (stage: string | null) => {
   console.log(`getInfiniteAccountsByStage1`, stage);
   return useInfiniteQuery(

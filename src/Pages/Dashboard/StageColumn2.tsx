@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Title,
@@ -11,17 +11,20 @@ import { Error } from "../../Components/UIState/Error";
 import { useIntersection } from "@mantine/hooks";
 import { useCommonState } from "../Instagram/Account/Hooks/common.hooks";
 import { Loading } from "@/Components/UIState/Loading";
+import AccountDrawer from "./AccountDrawer";
 export function StageColumn2({ stage, index }: { stage: string, index: number }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [currentStage] = useState(stage);
   const { fetQR } = useCommonState(stage);
   const [selectedMessage, setSelectedMessage] = useState<{
+    id: string;
     username: string;
     assignedTo: string;
     lastMsgSentAt: string;
     msgSentBy: string;
   } | null>(null);
   const openDrawer = (messageDetails: {
+    id: string;
     username: string;
     assignedTo: string;
     lastMsgSentAt: string;
@@ -36,6 +39,7 @@ export function StageColumn2({ stage, index }: { stage: string, index: number })
     setSelectedMessage(null);
   };
 
+  console.log(selectedMessage);
   // const threadsQR = useGetThreads(formattedFilterParams);
   // const fetQR =  getInfiniteAccountsByStage(stage);
 
@@ -65,41 +69,12 @@ export function StageColumn2({ stage, index }: { stage: string, index: number })
     );
   }
 
-  // if (fetQR.isFetched) {
-  //   console.log("fetQR.data?.pages[0]");
-  //   console.log(fetQR.data?.pages[0]);
 
-  // }
-
-  // Initialize queries only once per stage
-  // useEffect(() => {
-  //   useInfiniteQuery(
-  //     {
-  //       queryKey: ["accounts", stage],
-  //       queryFn: ({ pageParam = 1 }) => useGetAccountsByStageDirectly(stage, pageParam),
-  //       initialPageParam: 1,
-  //       getNextPageParam: (lastPage, _, lastPageParam) => {
-  //         if (lastPage.results.length === 0) {
-  //           return undefined;
-  //         }
-  //         return lastPageParam + 1;
-  //       },
-  //       getPreviousPageParam: (_, p, firstPageParam) => {
-  //         console.log(p);
-  //         if (firstPageParam <= 1) {
-  //           return undefined;
-  //         }
-  //         return firstPageParam - 1;
-  //       },
-  //     }
-  //   );
-  //   // }
-  // }
-  // );
 
 
   return (
     <>
+      <AccountDrawer isOpen={drawerOpen} onClose={closeDrawer} messageDetails={selectedMessage} />
       <Box
         key={index}
         // ref={containerRef}
@@ -152,6 +127,7 @@ export function StageColumn2({ stage, index }: { stage: string, index: number })
                         lastMsgSentAt={result.last_message_at}
                         msgSentBy={result.last_message_sent_by}
                         onClick={() => openDrawer({
+                          id: result.id,
                           username: result.igname,
                           assignedTo: result.assigned_to,
                           lastMsgSentAt: result.last_message_at,

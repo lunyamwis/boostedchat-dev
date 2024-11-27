@@ -4,6 +4,7 @@ import {
   CreateAccount,
   GetAccount,
   GetSingleAccount,
+  GetSingleAccountWithThreadDetails,
   UpdateAccountParams,
 } from "../../Interfaces/Instagram/account.interface";
 import { Lead, PaginatedQuery } from "../../Interfaces/general.interface";
@@ -26,6 +27,11 @@ export const useAccountsApi = () => {
     getActiveStages: (): Promise<any> =>
       axiosInstance
         .get(`/active-stages/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    getOneWithThreadDetails: (id: string): Promise<GetSingleAccountWithThreadDetails> =>
+      axiosInstance
+        .get(`/${id}/threads_with_messages/`)
         .then(handleRestResponse)
         .catch(handleRestError),
     getOne: (id: string): Promise<GetSingleAccount> =>

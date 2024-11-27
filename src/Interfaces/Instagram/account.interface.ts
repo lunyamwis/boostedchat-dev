@@ -1,4 +1,5 @@
 interface AccountPrimary {
+  id:string;
   igname: string;
   email: null | string;
   outsourced_id: null | string;
@@ -72,6 +73,30 @@ export interface GetSingleAccount extends AccountPrimary {
     public_phone_country_code: string;
     interop_messaging_user_fbid: null;
   };
+}
+
+export interface GetSingleAccountWithThreadDetails extends AccountPrimary {
+  threads: [
+    {
+      id: string;
+      messages: [
+        {
+          id: string;
+          deleted_at: string | null;
+          created_at: string; //"2024-10-07T12:54:37.586821Z",
+          updated_at: string;//"2024-11-22T10:43:09.314789Z",
+          content: string;
+          sent_by: string;
+          sent_on: string;//"2024-10-07T12:54:37.301523Z",
+          content_type: string | null;
+          content_link: string | null;
+          content_data: string | null;
+          thread_id: string;
+        }
+      ]
+    }
+  ]
+
 }
 
 export enum AccountStatus {
