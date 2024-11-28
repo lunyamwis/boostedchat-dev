@@ -1,11 +1,59 @@
 // AccountDrawer.tsx
 import React from 'react';
-import { Drawer, Text, Title, Stack, Divider, Box, ScrollArea, Group } from '@mantine/core';
+import { Drawer, Text, Title, Stack, Divider, Box, ScrollArea, Group, Avatar, Badge } from '@mantine/core';
 import { Loading } from '@/Components/UIState/Loading';
 import { ChatItem } from '../Instagram/Threads/ChatItem';
 import { EDateFormats } from '@/Interfaces/general.interface';
 import { format, parseISO } from "date-fns";
 import { useCommonStateForAccountThreads } from '../Instagram/Account/Hooks/common.hooks';
+import { Link } from 'react-router-dom';
+import { FollowStat } from '@/Components/Containers/ParentContainer';
+import { Icon, IconMail, IconMapPin, IconPhone } from '@tabler/icons-react';
+import { GetSingleAccount } from '@/Interfaces/Instagram/account.interface';
+
+
+type ContactDetailsProps = {
+  Icon: Icon;
+  value: string;
+};
+
+function ContactDetails({ Icon, value }: ContactDetailsProps) {
+  return (
+    <Group>
+      <Icon size={16} color="#444" />
+      {value == null || "" ? (
+        <Text fz={14} c="dimmed">
+          n/a
+        </Text>
+      ) : (
+        <Text fz={14}>{value}</Text>
+      )}
+    </Group>
+  );
+}
+
+type PropertyBadgeProps = {
+  value: boolean;
+  trueVal: string;
+  falseVal: string;
+};
+function PropertyBadge({ value, trueVal, falseVal }: PropertyBadgeProps) {
+  return (
+    <Badge
+      color={value ? "teal" : "orange"}
+      variant="light"
+      radius="sm"
+      styles={{
+        label: {
+          fontWeight: 500,
+          textTransform: "capitalize",
+        },
+      }}
+    >
+      {value ? trueVal : falseVal}
+    </Badge>
+  );
+}
 
 interface AccountDrawerProps {
   isOpen: boolean;
@@ -24,8 +72,7 @@ const AccountDrawer: React.FC<AccountDrawerProps> = ({ isOpen, onClose, messageD
 
   const { accountDetailsQR } = useCommonStateForAccountThreads(messageDetails.id);
 
-  if (accountDetailsQR.isError) return <>Errot</>;
-
+  if (accountDetailsQR.isError) return <>Error</>;
 
   return (
     <Drawer
@@ -38,6 +85,108 @@ const AccountDrawer: React.FC<AccountDrawerProps> = ({ isOpen, onClose, messageD
       offset={8}
     >
       <Stack gap="sm">
+
+      <Box px={24}>
+        <Stack align="center">
+          <Avatar size="xl" color={'brand'}>
+            {accountDetailsQR?.data?.igname?.charAt(0).toUpperCase()}
+          </Avatar>
+          <Stack gap={2} align="center">
+            <Text
+              style={{
+                "&:hover": { color: "yellow" },
+              }}
+              fz={16}
+              component={Link}
+              target="_blank"
+              to={`https://instagram.com/${accountDetailsQR.data?.igname}`}
+            >
+              {accountDetailsQR.data?.igname}
+            </Text>
+            <Text fz={14} fw={600}>
+              {accountDetailsQR?.data?.account?.full_name}
+            </Text>
+            <Group>
+              <Text
+                component={Link}
+                target="_blank"
+                c="blue"
+                fz={14}
+                fw={500}
+                to={accountDetailsQR.data?.account?.outsourced?.external_url || ''}
+              >
+                {accountDetailsQR.data?.account?.outsourced?.external_url}
+              </Text>
+            </Group>
+          </Stack>
+          <Text style={{ textAlign: "center", fontSize: 14 }}>
+            {accountDetailsQR.data?.account?.outsourced?.biography}
+          </Text>
+          <Group>
+            <FollowStat
+              title="followers"
+              count={accountDetailsQR.data?.account?.outsourced?.follower_count || 0}
+            />
+            <FollowStat
+              title="following"
+              count={accountDetailsQR.data?.account?.outsourced?.following_count || 0}
+            />
+            <FollowStat
+              title="posts"
+              count={accountDetailsQR.data?.account?.outsourced?.media_count || 0}
+            />
+          </Group>
+
+          <Group my={24} justify="center">
+            <PropertyBadge
+              value={accountDetailsQR.data?.account?.outsourced?.is_verified || false} 
+              trueVal="Verified"
+              falseVal="Not Verified"
+            />
+            <PropertyBadge
+              value={accountDetailsQR.data?.account?.outsourced?.is_business || false}
+              trueVal="Business"
+              falseVal="Not a business"
+            />
+            <PropertyBadge
+              value={accountDetailsQR.data?.account?.outsourced?.is_popular || false}
+              trueVal="Popular"
+              falseVal="Not popular"
+            />
+            <PropertyBadge
+              value={accountDetailsQR.data?.account?.outsourced?.is_posting_actively || false}
+              trueVal="Posts actively"
+              falseVal="Posts rarely"
+            />
+            <PropertyBadge
+              value={accountDetailsQR.data?.account?.outsourced?.is_private || false}
+              trueVal="Private Account"
+              falseVal="Public account"
+            />
+            <PropertyBadge
+              value={accountDetailsQR.data?.account?.outsourced?.book_button || false}
+              trueVal="Book Button"
+              falseVal="No Book Button"
+            />
+          </Group>
+        </Stack>
+        <Stack>
+          <ContactDetails
+            Icon={IconPhone}
+            value={accountDetailsQR.data?.account?.outsourced?.public_phone_number || ''}
+          />
+          <ContactDetails
+            Icon={IconMail}
+            value={accountDetailsQR.data?.account?.outsourced?.public_email || ''}
+          />
+          <ContactDetails
+            Icon={IconMapPin}
+            value={accountDetailsQR.data?.account?.outsourced?.city_name || ''}
+          />
+        </Stack>
+      </Box>
+
+        <Divider/>
         <Title order={5}>Username: {messageDetails.username}</Title>
         <Text><strong>Message Sent By:</strong> {messageDetails.msgSentBy}</Text>
         <Text><strong>Last Message Sent At:</strong> {messageDetails.lastMsgSentAt}</Text>

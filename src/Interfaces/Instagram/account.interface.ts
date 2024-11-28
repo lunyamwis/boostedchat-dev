@@ -76,6 +76,7 @@ export interface GetSingleAccount extends AccountPrimary {
 }
 
 export interface GetSingleAccountWithThreadDetails extends AccountPrimary {
+  account: GetSingleAccount,
   threads: [
     {
       id: string;
