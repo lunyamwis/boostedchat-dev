@@ -9,7 +9,6 @@ import { useCommonStateForAccountThreads } from '../Instagram/Account/Hooks/comm
 import { Link } from 'react-router-dom';
 import { FollowStat } from '@/Components/Containers/ParentContainer';
 import { Icon, IconMail, IconMapPin, IconPhone } from '@tabler/icons-react';
-import { GetSingleAccount } from '@/Interfaces/Instagram/account.interface';
 
 
 type ContactDetailsProps = {
