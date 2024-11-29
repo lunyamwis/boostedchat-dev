@@ -5,6 +5,7 @@ import {
   GetAccount,
   GetSingleAccount,
   GetSingleAccountWithThreadDetails,
+  Stat,
   UpdateAccountParams,
 } from "../../Interfaces/Instagram/account.interface";
 import { Lead, PaginatedQuery } from "../../Interfaces/general.interface";
@@ -19,14 +20,32 @@ export const useAccountsApi = () => {
         .get(`/?page=${page}`)
         .then(handleRestResponse)
         .catch(handleRestError),
-    getByStage: (stage:string ,page: number): Promise<PaginatedQuery<GetAccount>> =>
-      axiosInstance
+    getByStage: (stage: string, page: number): Promise<PaginatedQuery<GetAccount>> => {
+      console.log("stage IN THE QUERY");
+      console.log(stage);
+      return axiosInstance
         .get(`/?status_param=${stage}&page=${page}`)
+        // .get(`/?page=${page}&${stage}`)
         .then(handleRestResponse)
-        .catch(handleRestError),
+        .catch(handleRestError)
+    },
+    getByStageWithFilters: (filterParams: string, page: number): Promise<PaginatedQuery<GetAccount>> => {
+      // console.log("filterParams IN THE QUERY");
+      // console.log(filterParams);
+      return axiosInstance
+        // .get(`/?status_param=${stage}&page=${page}`)
+        .get(`/?${filterParams}&page=${page}`)
+        .then(handleRestResponse)
+        .catch(handleRestError)
+    },
     getActiveStages: (): Promise<any> =>
       axiosInstance
         .get(`/active-stages/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    getActiveStageStats: (): Promise<Stat[]> =>
+      axiosInstance
+        .get(`/active-stage-stats/`)
         .then(handleRestResponse)
         .catch(handleRestError),
     getOneWithThreadDetails: (id: string): Promise<GetSingleAccountWithThreadDetails> =>

@@ -57,6 +57,7 @@ export const queryKeys = {
     },
     stages: {
       getAllStages: "get-all-stages",
+      getStageStats: "get-stage-stats",
     },
     threads: {
       byIgThreadId: "get-thread-by-ig-thread-id",

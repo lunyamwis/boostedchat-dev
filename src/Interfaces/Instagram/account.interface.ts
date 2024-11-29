@@ -9,6 +9,16 @@ interface AccountPrimary {
   full_name: string | null;
 }
 
+export interface Stat {
+  status_param: string | null;
+  total_accounts: number | null;
+  sales_qualified_to_committed_count: number,
+  percentage_sales_qualified_to_committed: number,
+  prequalified_to_sales_qualified_count: number,
+  percentage_prequalified_to_sales_qualified: number,
+
+}
+
 export type CreateAccount = Pick<AccountPrimary, "igname" | "full_name">;
 
 export type UpdateAccount = Pick<

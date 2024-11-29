@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Title,
@@ -8,14 +8,17 @@ import {
 } from "@mantine/core";
 import AccountCard from "./AccountCard";
 import { Error } from "../../Components/UIState/Error";
-import { useIntersection } from "@mantine/hooks";
+import { useDebouncedValue, useIntersection } from "@mantine/hooks";
 import { useCommonState } from "../Instagram/Account/Hooks/common.hooks";
 import { Loading } from "@/Components/UIState/Loading";
 import AccountDrawer from "./AccountDrawer";
-export function StageColumn2({ stage, index }: { stage: string, index: number }) {
+
+
+export function StageColumn2({ stage, index, stringStartDate, stringEndDate }: { stage: string, index: number, stringStartDate: string, stringEndDate: string }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [currentStage] = useState(stage);
-  const { fetQR } = useCommonState(stage);
+  const { fetQR, filterParams, setFilterParams } = useCommonState();
+  const [debouncedStartdate] = useDebouncedValue(stringStartDate, 1000);
   const [selectedMessage, setSelectedMessage] = useState<{
     id: string;
     username: string;
@@ -39,28 +42,29 @@ export function StageColumn2({ stage, index }: { stage: string, index: number })
     setSelectedMessage(null);
   };
 
-  console.log(selectedMessage);
-  // const threadsQR = useGetThreads(formattedFilterParams);
-  // const fetQR =  getInfiniteAccountsByStage(stage);
-
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { ref, entry } = useIntersection({
     root: containerRef.current,
     threshold: 0.5,
   });
 
+  useEffect(() => {
+    setFilterParams({
+      ...filterParams,
+      end_date: stringEndDate,
+      start_date: stringStartDate,
+      stage: stage,
+    });
+  }, [debouncedStartdate]);
+
+
   React.useEffect(() => {
     if (entry?.isIntersecting) {
-      console.log("Intersecting");
       fetQR.fetchNextPage();
     }
   }, [entry?.isIntersecting]);
 
-  console.log("entry?.isIntersecting");
-  console.log(entry?.isIntersecting);
-
   if (fetQR.isError) {
-    console.log(fetQR.error);
     return (
       <Error
         onClickAction={() => fetQR.refetch()}
@@ -76,7 +80,7 @@ export function StageColumn2({ stage, index }: { stage: string, index: number })
     <>
       <AccountDrawer isOpen={drawerOpen} onClose={closeDrawer} messageDetails={selectedMessage} />
       <Box
-        key={index}
+        key={index + stage}
         // ref={containerRef}
         style={{
           minWidth: "300px",

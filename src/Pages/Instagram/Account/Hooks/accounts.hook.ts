@@ -55,11 +55,24 @@ export const useGetAccountsByStageDirectly = (stage: any, page: number) => {
   return getByStage(stage, page);
 };
 
+export const useGetAccountsByStageDirectlyWithFilters = (filterParams: any, page: number) => {
+  const { getByStageWithFilters } = useAccountsApi();
+  return getByStageWithFilters(filterParams, page);
+};
+
 export const useGetAccountThreadDetails = (id: string) => {
   const { getOneWithThreadDetails } = useAccountsApi();
   return useQuery({
     queryKey: [queryKeys.instagram.accounts.getAccountThreadDetails, id],
     queryFn: () => getOneWithThreadDetails(id),
+  });
+};
+
+export const useGetStageStats = () => {
+  const { getActiveStageStats } = useAccountsApi();
+  return useQuery({
+    queryKey: [queryKeys.instagram.stages.getStageStats],
+    queryFn: () => getActiveStageStats(),
   });
 };
 
@@ -70,11 +83,10 @@ export const useGetAccountThreadDetailsDirectly = (id: string) => {
 };
 
 export const getInfiniteAccountsByStage = (stage: string | null) => {
-  console.log(`getInfiniteAccountsByStage1`, stage);
   return useInfiniteQuery(
     {
       queryKey: ["accounts", stage],
-      queryFn: ({ pageParam = 1 }) =>   useGetAccountsByStageDirectly(stage, pageParam),//useGetAccountsByStage(stage, pageParam),
+      queryFn: ({ pageParam = 1 }) => useGetAccountsByStageDirectly(stage, pageParam),//useGetAccountsByStage(stage, pageParam),
       initialPageParam: 1,
       getNextPageParam: (lastPage, _, lastPageParam) => {
         // if (lastPage?.data?.results.length === 0) {
@@ -86,7 +98,33 @@ export const getInfiniteAccountsByStage = (stage: string | null) => {
         return lastPageParam + 1;
       },
       getPreviousPageParam: (_, p, firstPageParam) => {
-        console.log(p);
+        console.log(p)
+        if (firstPageParam <= 1) {
+          return undefined;
+        }
+        return firstPageParam - 1;
+      },
+    }
+  );
+}
+
+export const getInfiniteAccountsByStageWithFilters = (filterParams: string) => {
+  return useInfiniteQuery(
+    {
+      queryKey: ["accounts", filterParams],
+      queryFn: ({ pageParam = 1 }) => useGetAccountsByStageDirectlyWithFilters(filterParams, pageParam),//useGetAccountsByStage(stage, pageParam),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage, _, lastPageParam) => {
+        // if (lastPage?.data?.results.length === 0) {
+        //   return undefined;
+        // }
+        if (lastPage.results.length === 0) {
+          return undefined;
+        }
+        return lastPageParam + 1;
+      },
+      getPreviousPageParam: (_, p, firstPageParam) => {
+        console.log(p)
         if (firstPageParam <= 1) {
           return undefined;
         }

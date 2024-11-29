@@ -6,28 +6,26 @@ import {
   Group,
   Popover,
   Button,
-  TextInput
+  TextInput,
+  Space
 } from "@mantine/core";
 import { useGetActiveStages } from "../Instagram/Account/Hooks/accounts.hook";
 
 import { StageColumn2 } from "./StageColumn2";
 import { DatePicker } from "@mantine/dates";
-
-// Define a type for the query result
-interface QueryResult {
-  startDate: string | null;
-  endDate: string | null;
-}
+// import { StatsRingCard } from "./StatsCard";
+import { StatsRingCardsRow } from "./StatsHeader";
 
 export function AccountsCanban() {
   const [stages, setStages] = useState<string[]>([]);
   const stagesQR = useGetActiveStages()
 
   const [opened, setOpened] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  // const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  const [queryResult, setQueryResult] = useState<QueryResult | null>(null);
+  const [stringStartDate, setStringStartDate] = useState('');
+  const [stringEndDate, setStringEndDate] = useState('');
   const [dateError, setDateError] = useState(false);
 
 
@@ -42,14 +40,26 @@ export function AccountsCanban() {
 
     setDateError(false);
     // Execute your query her
+    const formattedStartDate = startDate ? `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}` : ''
+    const formattedEndDate = endDate ? `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}-${String(endDate.getDate()).padStart(2, '0')}` : ''
 
-    // Set query results based on the date range (for demonstration purposes)
-    setQueryResult({
-      startDate: startDate?.toLocaleDateString() || null,
-      endDate: endDate?.toLocaleDateString() || null,
-    });
+    setStringStartDate(formattedStartDate);
+    setStringEndDate(formattedEndDate);
     setOpened(false);
   };
+
+  const handleClearFilters = () => {
+    // Execute your query here with startDate and endDate
+    
+    setStartDate(null);
+    setEndDate(null);
+   
+    setStringStartDate('');
+    setStringEndDate('');
+    setOpened(false);
+  };
+
+  console.log(dateError)
 
   useEffect(() => {
     if (stagesQR.data) {
@@ -73,24 +83,9 @@ export function AccountsCanban() {
   return (
 
     <Container fluid style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }} >
+       <StatsRingCardsRow/>
+       <Space h="xl" />
       <Group style={{ marginBottom: "1rem" }}>
-
-
-        {/* Popover for Date Picker */}
-        {/* <Popover
-          opened={opened}
-          onClose={() => setOpened(false)}
-          position="bottom"
-          withArrow
-        >
-          <Popover.Target>
-            <Button onClick={() => setOpened((prev) => !prev)}>Filter</Button>
-          </Popover.Target>
-          <Popover.Dropdown>
-            <DatePicker  value={selectedDate} onChange={setSelectedDate} />
-          </Popover.Dropdown>
-
-        </Popover> */}
         <Popover
           opened={opened}
           onClose={() => setOpened(false)}
@@ -99,34 +94,36 @@ export function AccountsCanban() {
           trapFocus
         >
           <Popover.Target>
-           <Button onClick={() => setOpened((prev) => !prev)}>Filter</Button>
+            <Button  variant="outline" onClick={() => setOpened((prev) => !prev)}>Filter</Button>
           </Popover.Target>
           <Popover.Dropdown>
             {/* Form with Start and End Date Inputs */}
-            <Group  gap="sm">
+            <Group gap="sm">
               <TextInput label="Start Date" readOnly value={startDate?.toLocaleDateString()} onClick={() => setOpened(true)} />
               <TextInput label="End Date" readOnly value={endDate?.toLocaleDateString()} onClick={() => setOpened(true)} />
             </Group>
 
             {/* Date Pickers for Selecting Dates */}
-            <Group  gap="sm">
+            <Group gap="sm">
               <DatePicker
                 // label="Select Start Date"
                 value={startDate}
                 onChange={setStartDate}
-                // placeholder="Pick start date"
+              // placeholder="Pick start date"
               />
               <DatePicker
                 // label="Select End Date"
                 value={endDate}
                 onChange={setEndDate}
                 minDate={startDate || undefined} // Disable dates earlier than the start date
-                // placeholder="Pick end date"
+              // placeholder="Pick end date"
               />
             </Group>
 
             {/* Filter Button */}
             <Button onClick={handleFilterClick}>Filter</Button>
+            {" "}
+            <Button onClick={handleClearFilters}>Clear filters</Button>
           </Popover.Dropdown>
         </Popover>
       </Group>
@@ -147,7 +144,7 @@ export function AccountsCanban() {
             minHeight: "100%",
           }}>
           {stages.map((stage, index) => (
-            <StageColumn2 stage={stage} index={index} />
+            <StageColumn2 stage={stage} stringEndDate={stringEndDate} stringStartDate={stringStartDate} index={index} />
           ))}
 
         </Box>
