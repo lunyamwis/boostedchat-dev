@@ -35,16 +35,16 @@ import { ManualPagination } from "./ManualPagination";
 
 type PaginationProps =
   | {
-      isManual: false;
-    }
+    isManual: false;
+  }
   | {
-      isManual: true;
-      pageIndex: number;
-      setPageIndex: React.Dispatch<React.SetStateAction<number>>;
-      pageSize: number;
-      setPageSize: React.Dispatch<React.SetStateAction<number>>;
-      totalRows: number;
-    };
+    isManual: true;
+    pageIndex: number;
+    setPageIndex: React.Dispatch<React.SetStateAction<number>>;
+    pageSize: number;
+    setPageSize: React.Dispatch<React.SetStateAction<number>>;
+    totalRows: number;
+  };
 
 interface Props<T> {
   statusProps?: TStatusProps;
@@ -143,7 +143,7 @@ function MDataGrid<T>({
     setColumnVisibility(flattenedColIdsMap);
   }, [actualTableColumns]);
 
-  useDidUpdate(() => {}, [
+  useDidUpdate(() => { }, [
     pFilters,
     startDate,
     endDate,
@@ -172,150 +172,155 @@ function MDataGrid<T>({
     const startDateParam = searchParams.get("ds");
     const endDateParam = searchParams.get("de");
 
-    const dateRangeTypeParam: TDataGridDateRangeTypes | null =
-      (searchParams.get("drt") as TDataGridDateRangeTypes | null) ??
-      "Date Range";
+    if (tableName != "Manage Services") {
+      const dateRangeTypeParam: TDataGridDateRangeTypes | null =
+        (searchParams.get("drt") as TDataGridDateRangeTypes | null) ??
+        "Date Range";
 
-    const mTableColumns = [...tableColumns];
-    let selectColumns: string[] = [];
-    let generatedColumns: string[] = [];
-    let relationColumns: string[] = [];
-    let mOffset = 0;
-    let mLimit = 50;
-    const flattenedColIdsMap: Record<string, boolean> = {};
-    if (colParams && limitParam && offsetParam) {
-      const cols: { s: string[]; r: string[]; g: string[] } =
-        JSON.parse(colParams);
-      selectColumns = cols.s;
-      generatedColumns = cols.g;
-      relationColumns = cols.r;
-      const flattenedColIds = cols.s.concat(cols.r.concat(cols.g));
+      const mTableColumns = [...tableColumns];
+      let selectColumns: string[] = [];
+      let generatedColumns: string[] = [];
+      let relationColumns: string[] = [];
+      let mOffset = 0;
+      let mLimit = 50;
+      const flattenedColIdsMap: Record<string, boolean> = {};
+      if (colParams && limitParam && offsetParam) {
+        const cols: { s: string[]; r: string[]; g: string[] } =
+          JSON.parse(colParams);
+        selectColumns = cols.s;
+        generatedColumns = cols.g;
+        relationColumns = cols.r;
+        const flattenedColIds = cols.s.concat(cols.r.concat(cols.g));
 
-      flattenedColIds.forEach((colId) => {
-        flattenedColIdsMap[colId] = true;
-      });
-      mTableColumns.forEach((column, idx) => {
-        if (flattenedColIdsMap[column.id]) {
-          mTableColumns[idx] = { ...column, visible: true };
-        } else {
-          flattenedColIdsMap[column.id] = false;
-          mTableColumns[idx] = { ...column, visible: false };
-        }
-      });
-      mLimit = parseInt(limitParam, 10);
-      mOffset = parseInt(offsetParam, 10);
-    } else {
-      mTableColumns.forEach((col) => {
-        flattenedColIdsMap[col.id] = col.visible;
-        if (col.visible) {
-          if (col.isRelation) {
-            relationColumns.push(col.id);
-          } else if (col.isGenerated) {
-            generatedColumns.push(col.id);
+        flattenedColIds.forEach((colId) => {
+          flattenedColIdsMap[colId] = true;
+        });
+        mTableColumns.forEach((column, idx) => {
+          if (flattenedColIdsMap[column.id]) {
+            mTableColumns[idx] = { ...column, visible: true };
           } else {
-            selectColumns.push(col.id);
+            flattenedColIdsMap[column.id] = false;
+            mTableColumns[idx] = { ...column, visible: false };
           }
-        }
-      });
-    }
+        });
+        mLimit = parseInt(limitParam, 10);
+        mOffset = parseInt(offsetParam, 10);
+      } else {
+        mTableColumns.forEach((col) => {
+          flattenedColIdsMap[col.id] = col.visible;
+          if (col.visible) {
+            if (col.isRelation) {
+              relationColumns.push(col.id);
+            } else if (col.isGenerated) {
+              generatedColumns.push(col.id);
+            } else {
+              selectColumns.push(col.id);
+            }
+          }
+        });
+      }
 
-    if (statusParam) {
+      if (statusParam) {
+        dispatch({
+          type: "SET_STATUS",
+          payload: { status: statusParam },
+        });
+      } else if (statusProps) {
+        dispatch({
+          type: "SET_STATUS",
+          payload: { status: statusProps.defaultValue },
+        });
+      }
+      if (dateRangeTypeParam === "All Time") {
+        dispatch({
+          type: "SET_DATE_RANGE",
+          payload: {
+            dateRangeType: dateRangeTypeParam,
+            endDate: "All",
+            startDate: "All",
+          },
+        });
+      } else {
+        dispatch({
+          type: "SET_DATE_RANGE",
+          payload: {
+            dateRangeType: dateRangeTypeParam,
+            endDate: endDateParam
+              ? parse(endDateParam, EDGDateFormats.dgDateFormat, new Date())
+              : addDays(new Date(), 1),
+            startDate: startDateParam
+              ? parse(startDateParam, EDGDateFormats.dgDateFormat, new Date())
+              : subDays(new Date(), 21),
+          },
+        });
+      }
+      setColumnVisibility(flattenedColIdsMap);
+
       dispatch({
-        type: "SET_STATUS",
-        payload: { status: statusParam },
-      });
-    } else if (statusProps) {
-      dispatch({
-        type: "SET_STATUS",
-        payload: { status: statusProps.defaultValue },
-      });
-    }
-    if (dateRangeTypeParam === "All Time") {
-      dispatch({
-        type: "SET_DATE_RANGE",
+        type: "SET_VISIBLE_COLUMNS",
         payload: {
-          dateRangeType: dateRangeTypeParam,
-          endDate: "All",
-          startDate: "All",
+          columns: {
+            selectColumns,
+            generatedColumns,
+            relationColumns,
+          },
         },
       });
-    } else {
       dispatch({
-        type: "SET_DATE_RANGE",
-        payload: {
-          dateRangeType: dateRangeTypeParam,
-          endDate: endDateParam
-            ? parse(endDateParam, EDGDateFormats.dgDateFormat, new Date())
-            : addDays(new Date(), 1),
-          startDate: startDateParam
-            ? parse(startDateParam, EDGDateFormats.dgDateFormat, new Date())
-            : subDays(new Date(), 21),
-        },
+        type: "SET_TABLE_COLS",
+        payload: { tableColumns: mTableColumns },
+      });
+      dispatch({
+        type: "SET_OFFSET_LIMIT",
+        payload: { pageIndex: mOffset / mLimit, limit: mLimit },
+      });
+
+      const paramsObj: { st?: string; ds?: string; de?: string } = {};
+      const cols: { s: string[]; r: string[]; g: string[] } = {
+        s: selectColumns,
+        r: relationColumns,
+        g: generatedColumns,
+      };
+      const filterParams = {
+        s: pFilters.selectColumns,
+        r: pFilters.relationColumns,
+        g: pFilters.generatedColumns,
+      };
+      if (dateRangeTypeParam !== "All Time") {
+        paramsObj.ds =
+          startDateParam ??
+          format(subDays(new Date(), 21), EDGDateFormats.dgDateFormat);
+        paramsObj.de =
+          endDateParam ??
+          format(addDays(new Date(), 1), EDGDateFormats.dgDateFormat);
+      }
+      if (dateRangeTypeParam === "All Time") {
+        paramsObj.ds = "All";
+        paramsObj.de = "All";
+      }
+      if (statusParam) {
+        paramsObj.st = statusParam;
+      } else if (statusProps?.defaultValue) {
+        paramsObj.st = statusProps.defaultValue;
+      }
+
+      setSearchParams({
+        ...paramsObj,
+        drt: dateRangeTypeParam,
+        c: JSON.stringify(cols),
+        f: JSON.stringify(filterParams),
+        l: limit,
+        o: offset,
       });
     }
-    setColumnVisibility(flattenedColIdsMap);
-
-    dispatch({
-      type: "SET_VISIBLE_COLUMNS",
-      payload: {
-        columns: {
-          selectColumns,
-          generatedColumns,
-          relationColumns,
-        },
-      },
-    });
-    dispatch({
-      type: "SET_TABLE_COLS",
-      payload: { tableColumns: mTableColumns },
-    });
-    dispatch({
-      type: "SET_OFFSET_LIMIT",
-      payload: { pageIndex: mOffset / mLimit, limit: mLimit },
-    });
-
-    const paramsObj: { st?: string; ds?: string; de?: string } = {};
-    const cols: { s: string[]; r: string[]; g: string[] } = {
-      s: selectColumns,
-      r: relationColumns,
-      g: generatedColumns,
-    };
-    const filterParams = {
-      s: pFilters.selectColumns,
-      r: pFilters.relationColumns,
-      g: pFilters.generatedColumns,
-    };
-    if (dateRangeTypeParam !== "All Time") {
-      paramsObj.ds =
-        startDateParam ??
-        format(subDays(new Date(), 21), EDGDateFormats.dgDateFormat);
-      paramsObj.de =
-        endDateParam ??
-        format(addDays(new Date(), 1), EDGDateFormats.dgDateFormat);
-    }
-    if (dateRangeTypeParam === "All Time") {
-      paramsObj.ds = "All";
-      paramsObj.de = "All";
-    }
-    if (statusParam) {
-      paramsObj.st = statusParam;
-    } else if (statusProps?.defaultValue) {
-      paramsObj.st = statusProps.defaultValue;
-    }
-
-    setSearchParams({
-      ...paramsObj,
-      drt: dateRangeTypeParam,
-      c: JSON.stringify(cols),
-      f: JSON.stringify(filterParams),
-      l: limit,
-      o: offset,
-    });
   }, []);
 
   if (loading) {
     return null;
   }
+
+
+  console.log(tableName);
 
   return (
     <Grid m={0}>
@@ -335,7 +340,7 @@ function MDataGrid<T>({
               <Group justify="left">
                 <Text fw={500}>{tableName}</Text>
               </Group>
-              <Group justify="left">
+              {tableName != "Manage Services" && <Group justify="left">
                 <DataGridSearch
                   value={globalFilter ?? ""}
                   onChange={(value) => setGlobalFilter(String(value))}
@@ -349,14 +354,14 @@ function MDataGrid<T>({
                 <ActionIcon onClick={() => setIsSettingsOpen(!isSettingsOpen)}>
                   <IconSettings />
                 </ActionIcon>
-              </Group>
+              </Group>}
             </Group>
             <Box style={{ height: 600, overflowX: "auto" }}>
               <CustomDataGrid noData="No data" table={table} />
             </Box>
           </Stack>
         </Box>
-        {paginationOptions.isManual ? (
+        { tableName != "Manage Services" && paginationOptions.isManual ? (
           <ManualPagination
             totalRows={paginationOptions.totalRows}
             pageIndex={paginationOptions.pageIndex}
@@ -364,7 +369,7 @@ function MDataGrid<T>({
             pageSize={paginationOptions.pageSize}
             setPageSize={paginationOptions.setPageSize}
           />
-        ) : (
+        ) : tableName != "Manage Services" && (
           <ActionButtons
             pageCount={table.getPageCount()}
             pageIndex={table.getState().pagination.pageIndex}

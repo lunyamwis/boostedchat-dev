@@ -3,11 +3,11 @@ import {
   Icon,
   IconBrandInstagram,
   IconBrandMessenger,
-  IconCalendarCog,
+  // IconCalendarCog,
   IconChartInfographic,
-  IconClock,
+  // IconClock,
   IconGraph,
-  IconRouteSquare2,
+  // IconRouteSquare2,
   IconTerminal2,
   IconUsers,
   IconUsersGroup,
@@ -24,15 +24,15 @@ export type PrimaryPageData = {
 
 type Level1 =
   | {
-      hasChildren: true;
-      icon: Icon;
-      children: ChildKeys[];
-    }
+    hasChildren: true;
+    icon: Icon;
+    children: ChildKeys[];
+  }
   | {
-      hasChildren: false;
-      url: string;
-      icon: Icon;
-    };
+    hasChildren: false;
+    url: string;
+    icon: Icon;
+  };
 
 export type TPageData = PrimaryPageData & ({ level: "1" } & Level1);
 
@@ -44,10 +44,11 @@ export type ParentKeys =
   | "Threads"
   | "Prompts"
   | "Roles"
-  | "QualifyingAlgorithm"
-  | "OutreachScheduler"
-  | "LeadSources"
-  | "SetupScraper";
+  // | "QualifyingAlgorithm"
+  // | "OutreachScheduler"
+  // | "LeadSources"
+  | "ManageServices"
+  // | "SetupScraper";
 
 export type ChildKeys = "";
 
@@ -73,103 +74,111 @@ export const componentData: {
   key: keyof TMPageData;
   component: React.LazyExoticComponent<() => JSX.Element>;
 }[] = [
-  {
-    key: "AccountsCanban",
-    component: React.lazy(() =>
-      import("./Dashboard/AccountsCanban").then(({ AccountsCanban }) => ({
-        default: AccountsCanban,
-      })),
-    ),
-  },
-  {
-    key: "Snapshot",
-    component: React.lazy(() =>
-      import("./Dashboard/index").then(({ Summary }) => ({
-        default: Summary,
-      })),
-    ),
-  },
-  {
-    key: "Threads",
-    component: React.lazy(() =>
-      import("./Instagram/Threads").then(({ Threads }) => ({
-        default: Threads,
-      })),
-    ),
-  },
-  {
-    key: "Accounts",
-    component: React.lazy(() =>
-      import("./Instagram/Account/Accounts").then(({ Accounts }) => ({
-        default: Accounts,
-      })),
-    ),
-  },
-  {
-    key: "AccountDetails",
-    component: React.lazy(() =>
-      import("./Instagram/Account/Details/index").then(
-        ({ AccountDetails }) => ({
-          default: AccountDetails,
-        }),
+    {
+      key: "AccountsCanban",
+      component: React.lazy(() =>
+        import("./Dashboard/AccountsCanban").then(({ AccountsCanban }) => ({
+          default: AccountsCanban,
+        })),
       ),
-    ),
-  },
-  {
-    key: "Prompts",
-    component: React.lazy(() =>
-      import("./Scripts/Prompts/index").then(({ Prompts }) => ({
-        default: Prompts,
-      })),
-    ),
-  },
-  {
-    key: "Roles",
-    component: React.lazy(() =>
-      import("./Scripts/Roles/index").then(({ ScriptRoles }) => ({
-        default: ScriptRoles,
-      })),
-    ),
-  },
-  {
-    key: "OutreachScheduler",
-    component: React.lazy(() =>
-      import("./LeadsGeneration/OutreachScheduler/").then(
-        ({ OutreachSchedules }) => ({
-          default: OutreachSchedules,
-        }),
+    },
+    {
+      key: "Snapshot",
+      component: React.lazy(() =>
+        import("./Dashboard/index").then(({ Summary }) => ({
+          default: Summary,
+        })),
       ),
-    ),
-  },
-  {
-    key: "QualifyingAlgorithm",
-    component: React.lazy(() =>
-      import("./LeadsGeneration/QualifyingAlgorithm/").then(
-        ({ QualifyingAlgorithms }) => ({
-          default: QualifyingAlgorithms,
-        }),
+    },
+    {
+      key: "Threads",
+      component: React.lazy(() =>
+        import("./Instagram/Threads").then(({ Threads }) => ({
+          default: Threads,
+        })),
       ),
-    ),
-  },
-  {
-    key: "LeadSources",
-    component: React.lazy(() =>
-      import("./LeadsGeneration/LeadSources/").then(({ LeadSources }) => ({
-        default: LeadSources,
-      })),
-    ),
-  },
-  {
-    key: "SetupScraper",
-    component: React.lazy(() =>
-      import("./LeadsGeneration/Setup/Layout").then(
-        ({ SetupScraperLayout }) => ({
-          default: SetupScraperLayout,
-        }),
+    },
+    {
+      key: "Accounts",
+      component: React.lazy(() =>
+        import("./Instagram/Account/Accounts").then(({ Accounts }) => ({
+          default: Accounts,
+        })),
       ),
-    ),
-  },
-];
+    },
+    {
+      key: "AccountDetails",
+      component: React.lazy(() =>
+        import("./Instagram/Account/Details/index").then(
+          ({ AccountDetails }) => ({
+            default: AccountDetails,
+          }),
+        ),
+      ),
+    },
+    {
+      key: "Prompts",
+      component: React.lazy(() =>
+        import("./Scripts/Prompts/index").then(({ Prompts }) => ({
+          default: Prompts,
+        })),
+      ),
+    },
+    {
+      key: "Roles",
+      component: React.lazy(() =>
+        import("./Scripts/Roles/index").then(({ ScriptRoles }) => ({
+          default: ScriptRoles,
+        })),
+      ),
+    },
+    // {
+    //   key: "OutreachScheduler",
+    //   component: React.lazy(() =>
+    //     import("./LeadsGeneration/OutreachScheduler/").then(
+    //       ({ OutreachSchedules }) => ({
+    //         default: OutreachSchedules,
+    //       }),
+    //     ),
+    //   ),
+    // },
+    // {
+    //   key: "QualifyingAlgorithm",
+    //   component: React.lazy(() =>
+    //     import("./LeadsGeneration/QualifyingAlgorithm/").then(
+    //       ({ QualifyingAlgorithms }) => ({
+    //         default: QualifyingAlgorithms,
+    //       }),
+    //     ),
+    //   ),
+    // },
+    // {
+    //   key: "LeadSources",
+    //   component: React.lazy(() =>
+    //     import("./LeadsGeneration/LeadSources/").then(({ LeadSources }) => ({
+    //       default: LeadSources,
+    //     })),
+    //   ),
+    // },
+    {
+      key: "ManageServices",
+      component: React.lazy(() =>
+        import("./LeadsGeneration/ManageServices/").then(({ ManageServices }) => ({
+          default: ManageServices,
+        })),
+      ),
+    },
+    // {
+    //   key: "SetupScraper",
+    //   component: React.lazy(() =>
+    //     import("./LeadsGeneration/Setup/Layout").then(
+    //       ({ SetupScraperLayout }) => ({
+    //         default: SetupScraperLayout,
+    //       }),
+    //     ),
+    //   ),
+    // },
+  ];
 
 export const pageData: TMPageData = {
   AccountsCanban: {
@@ -235,40 +244,49 @@ export const pageData: TMPageData = {
     isNavItem: true,
     icon: IconUserShield,
   },
-  LeadSources: {
+  ManageServices: {
     level: "1",
     group: EGroup.leadsManagement,
     hasChildren: false,
-    url: "/leads-management/lead-sources",
-    title: "Lead Sources",
+    url: "/leads-management/services",
+    title: "Manage Services",
     isNavItem: true,
     icon: IconUserShield,
   },
-  OutreachScheduler: {
-    level: "1",
-    group: EGroup.leadsManagement,
-    hasChildren: false,
-    url: "/leads-management/outreach-scheduler",
-    title: "Outreach Scheduler",
-    isNavItem: true,
-    icon: IconCalendarCog,
-  },
-  QualifyingAlgorithm: {
-    level: "1",
-    group: EGroup.leadsManagement,
-    hasChildren: false,
-    url: "/leads-management/qualifying-algorithm",
-    title: "Qualifying Algorithm",
-    isNavItem: true,
-    icon: IconRouteSquare2,
-  },
-  SetupScraper: {
-    level: "1",
-    group: EGroup.leadsManagement,
-    hasChildren: false,
-    url: "/leads-management/setup-scraper",
-    title: "Setup scraper",
-    isNavItem: true,
-    icon: IconClock,
-  },
+  // LeadSources: {
+  //   level: "1",
+  //   group: EGroup.leadsManagement,
+  //   hasChildren: false,
+  //   url: "/leads-management/lead-sources",
+  //   title: "Lead Sources",
+  //   isNavItem: true,
+  //   icon: IconUserShield,
+  // },
+  // OutreachScheduler: {
+  //   level: "1",
+  //   group: EGroup.leadsManagement,
+  //   hasChildren: false,
+  //   url: "/leads-management/outreach-scheduler",
+  //   title: "Outreach Scheduler",
+  //   isNavItem: true,
+  //   icon: IconCalendarCog,
+  // },
+  // QualifyingAlgorithm: {
+  //   level: "1",
+  //   group: EGroup.leadsManagement,
+  //   hasChildren: false,
+  //   url: "/leads-management/qualifying-algorithm",
+  //   title: "Qualifying Algorithm",
+  //   isNavItem: true,
+  //   icon: IconRouteSquare2,
+  // },
+  // SetupScraper: {
+  //   level: "1",
+  //   group: EGroup.leadsManagement,
+  //   hasChildren: false,
+  //   url: "/leads-management/setup-scraper",
+  //   title: "Setup scraper",
+  //   isNavItem: true,
+  //   icon: IconClock,
+  // },
 };
