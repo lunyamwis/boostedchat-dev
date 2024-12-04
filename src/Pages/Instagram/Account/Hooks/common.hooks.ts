@@ -1,10 +1,15 @@
 // import { useState } from "react";
 import React from "react";
-import { getInfiniteAccountsByStageWithFilters, useGetAccountThreadDetails, useGetStageStats } from "./accounts.hook";
+import { getInfiniteAccountsByStageWithFilters, useGetAccountThreadDetails, useGetStageStats, useGetStageStatsWithDateFilters } from "./accounts.hook";
 
 export type AccountFilterParams = {
   stage: string;
   q: string;
+  start_date: string;
+  end_date: string;
+};
+
+export type StatsFilterParams = {
   start_date: string;
   end_date: string;
 };
@@ -49,6 +54,18 @@ const formatFilterParams = (params: AccountFilterParams) => {
 
   return { api: mApiParams.join("&"), search: mSearchParams.join("&") };
 };
+
+const formatStatsFilterParams = (params: StatsFilterParams) => {
+  const mApiParams = [];
+   if (
+    params.start_date &&
+    params.end_date
+  ) {
+    mApiParams.push(`start_date=${params.start_date}`);
+    mApiParams.push(`end_date=${params.end_date}`);
+  }
+  return { api: mApiParams.join("&") };
+};
 export const useCommonState = () => {
   const [formattedFilterParams, setFormattedFilterParams] =
     React.useState<string>("");
@@ -89,8 +106,27 @@ export const useCommonStateForAccountThreads = (id: string) => {
 };
 
 export const useCommonStateForStageStats = () => {
-  const stageStatsQR = useGetStageStats()
+  
+  const [formattedFilterParams, setFormatStatsFilterParams] =
+    React.useState<string>("");
+
+  const [filterParams, setFilterParams] = React.useState<StatsFilterParams>({
+    start_date: "",
+    end_date: "",
+  });
+
+  React.useEffect(() => {
+    const params = formatStatsFilterParams(filterParams);
+    setFormatStatsFilterParams(params.api);
+  }, [filterParams]);
+
+  // const stageStatsQR = useGetStageStats(formattedFilterParams)
+  const stageStatsQR =  useGetStageStatsWithDateFilters(formattedFilterParams)
+
+
   return {
-    stageStatsQR
+    stageStatsQR,
+    filterParams,
+    setFilterParams
   };
 };

@@ -76,6 +76,14 @@ export const useGetStageStats = () => {
   });
 };
 
+export const useGetStageStatsWithDateFilters = (filterParams: string) => {
+  const { getActiveStageStatsWithFilters } = useAccountsApi();
+  return useQuery({
+    queryKey: [queryKeys.instagram.stages.getStageStats, filterParams],
+    queryFn: () => getActiveStageStatsWithFilters(filterParams),
+  });
+};
+
 
 export const useGetAccountThreadDetailsDirectly = (id: string) => {
   const { getOneWithThreadDetails } = useAccountsApi();

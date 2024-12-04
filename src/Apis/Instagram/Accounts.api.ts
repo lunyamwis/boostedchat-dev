@@ -48,6 +48,11 @@ export const useAccountsApi = () => {
         .get(`/active-stage-stats/`)
         .then(handleRestResponse)
         .catch(handleRestError),
+    getActiveStageStatsWithFilters: (filterParams:string): Promise<Stat[]> =>
+      axiosInstance
+        .get(`/active-stage-stats/?${filterParams}`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
     getOneWithThreadDetails: (id: string): Promise<GetSingleAccountWithThreadDetails> =>
       axiosInstance
         .get(`/${id}/threads_with_messages/`)
