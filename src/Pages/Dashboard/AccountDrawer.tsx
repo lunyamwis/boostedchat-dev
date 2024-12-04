@@ -167,7 +167,7 @@ const AccountDrawer: React.FC<AccountDrawerProps> = ({ isOpen, onClose, messageD
     notifications.show({
       id: "SAVE_NOTES_NOTIFICATION",
       loading: true,
-      message: "Deleting messages",
+      message: "Adding notes...",
       autoClose: false,
       withCloseButton: false,
     });
