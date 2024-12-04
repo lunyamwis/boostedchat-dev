@@ -134,7 +134,7 @@ export function ManageServices() {
         paginationOptions={{ isManual: false }}
         loading={false}
         tableName="Manage Services"
-        data={["Mqtt","Conversations"]}
+        data={["Mqtt"]}
         columns={columns}
       />
     </>

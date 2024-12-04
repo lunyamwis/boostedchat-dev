@@ -1,6 +1,6 @@
 // AccountDrawer.tsx
 import React from 'react';
-import { Drawer, Text, Title, Stack, Divider, Box, ScrollArea, Group, Avatar, Badge } from '@mantine/core';
+import { Drawer, Text, Title, Stack, Divider, Box, ScrollArea, Group, Avatar, Badge, Button } from '@mantine/core';
 import { Loading } from '@/Components/UIState/Loading';
 import { ChatItem } from '../Instagram/Threads/ChatItem';
 import { EDateFormats } from '@/Interfaces/general.interface';
@@ -8,9 +8,11 @@ import { format, parseISO } from "date-fns";
 import { useCommonStateForAccountThreads } from '../Instagram/Account/Hooks/common.hooks';
 import { Link } from 'react-router-dom';
 import { FollowStat } from '@/Components/Containers/ParentContainer';
-import { Icon, IconMail, IconMapPin, IconPhone } from '@tabler/icons-react';
-
-
+import { Icon, IconCheck, IconMail, IconMapPin, IconPhone, IconX } from '@tabler/icons-react';
+import { openConfirmModal } from "@mantine/modals";
+import { notifications, showNotification } from "@mantine/notifications";
+import { useMutation } from "@tanstack/react-query";
+import { useAccountsApi } from '@/Apis/Instagram/Accounts.api';
 type ContactDetailsProps = {
   Icon: Icon;
   value: string;
@@ -69,7 +71,57 @@ interface AccountDrawerProps {
 const AccountDrawer: React.FC<AccountDrawerProps> = ({ isOpen, onClose, messageDetails }) => {
   if (!messageDetails) return null;
 
+
   const { accountDetailsQR } = useCommonStateForAccountThreads(messageDetails.id);
+  const { clearConversation } = useAccountsApi()
+
+  const resetConversation = useMutation({
+    mutationFn: (params: string) => clearConversation(params),
+    onSuccess: () => {
+      accountDetailsQR.refetch()
+      notifications.update({
+        id: "RESET_CONVERSATION_NOTIFICATION",
+        color: "teal",
+        icon: <IconCheck />,
+        message: "Messages cleared successfully.",
+        loading: false,
+        autoClose: 3000,
+        
+      });
+    },
+    onError: (err) => {
+      showNotification({
+        color: "red",
+        icon: <IconX />,
+        title: "Error",
+        message: err.message,
+      });
+    },
+  });
+
+  const handleOnClick = (id: any) => {
+    openConfirmModal({
+      title: "Alert",
+      children: (
+        <Text>
+          Are you sure you want to delete all messages? This
+          action is irreversible.
+        </Text>
+      ),
+      onConfirm: () => {
+        notifications.show({
+          id: "RESET_CONVERSATION_NOTIFICATION",
+          loading: true,
+          message: "Deleting messages",
+          autoClose: false,
+          withCloseButton: false,
+        });
+
+        resetConversation.mutate(id)
+      },
+      labels: { confirm: "Confirm", cancel: "Cancel" },
+    });
+  }
 
   if (accountDetailsQR.isError) return <>Error</>;
 
@@ -85,107 +137,112 @@ const AccountDrawer: React.FC<AccountDrawerProps> = ({ isOpen, onClose, messageD
     >
       <Stack gap="sm">
 
-      <Box px={24}>
-        <Stack align="center">
-          <Avatar size="xl" color={'brand'}>
-            {accountDetailsQR?.data?.igname?.charAt(0).toUpperCase()}
-          </Avatar>
-          <Stack gap={2} align="center">
-            <Text
-              style={{
-                "&:hover": { color: "yellow" },
-              }}
-              fz={16}
-              component={Link}
-              target="_blank"
-              to={`https://instagram.com/${accountDetailsQR.data?.igname}`}
-            >
-              {accountDetailsQR.data?.igname}
-            </Text>
-            <Text fz={14} fw={600}>
-              {accountDetailsQR?.data?.account?.full_name}
-            </Text>
-            <Group>
+        <Box px={24}>
+          <Stack align="center">
+            <Avatar size="xl" color={'brand'}>
+              {accountDetailsQR?.data?.igname?.charAt(0).toUpperCase()}
+            </Avatar>
+            <Stack gap={2} align="center">
               <Text
+                style={{
+                  "&:hover": { color: "yellow" },
+                }}
+                fz={16}
                 component={Link}
                 target="_blank"
-                c="blue"
-                fz={14}
-                fw={500}
-                to={accountDetailsQR.data?.account?.outsourced?.external_url || ''}
+                to={`https://instagram.com/${accountDetailsQR.data?.igname}`}
               >
-                {accountDetailsQR.data?.account?.outsourced?.external_url}
+                {accountDetailsQR.data?.igname}
               </Text>
+              <Text fz={14} fw={600}>
+                {accountDetailsQR?.data?.account?.full_name}
+              </Text>
+              <Group>
+                <Text
+                  component={Link}
+                  target="_blank"
+                  c="blue"
+                  fz={14}
+                  fw={500}
+                  to={accountDetailsQR.data?.account?.outsourced?.external_url || ''}
+                >
+                  {accountDetailsQR.data?.account?.outsourced?.external_url}
+                </Text>
+              </Group>
+            </Stack>
+            <Text style={{ textAlign: "center", fontSize: 14 }}>
+              {accountDetailsQR.data?.account?.outsourced?.biography}
+            </Text>
+            <Group>
+              <FollowStat
+                title="followers"
+                count={accountDetailsQR.data?.account?.outsourced?.follower_count || 0}
+              />
+              <FollowStat
+                title="following"
+                count={accountDetailsQR.data?.account?.outsourced?.following_count || 0}
+              />
+              <FollowStat
+                title="posts"
+                count={accountDetailsQR.data?.account?.outsourced?.media_count || 0}
+              />
+            </Group>
+
+            <Group my={24} justify="center">
+              <PropertyBadge
+                value={accountDetailsQR.data?.account?.outsourced?.is_verified || false}
+                trueVal="Verified"
+                falseVal="Not Verified"
+              />
+              <PropertyBadge
+                value={accountDetailsQR.data?.account?.outsourced?.is_business || false}
+                trueVal="Business"
+                falseVal="Not a business"
+              />
+              <PropertyBadge
+                value={accountDetailsQR.data?.account?.outsourced?.is_popular || false}
+                trueVal="Popular"
+                falseVal="Not popular"
+              />
+              <PropertyBadge
+                value={accountDetailsQR.data?.account?.outsourced?.is_posting_actively || false}
+                trueVal="Posts actively"
+                falseVal="Posts rarely"
+              />
+              <PropertyBadge
+                value={accountDetailsQR.data?.account?.outsourced?.is_private || false}
+                trueVal="Private Account"
+                falseVal="Public account"
+              />
+              <PropertyBadge
+                value={accountDetailsQR.data?.account?.outsourced?.book_button || false}
+                trueVal="Book Button"
+                falseVal="No Book Button"
+              />
             </Group>
           </Stack>
-          <Text style={{ textAlign: "center", fontSize: 14 }}>
-            {accountDetailsQR.data?.account?.outsourced?.biography}
-          </Text>
-          <Group>
-            <FollowStat
-              title="followers"
-              count={accountDetailsQR.data?.account?.outsourced?.follower_count || 0}
+          <Stack>
+            <ContactDetails
+              Icon={IconPhone}
+              value={accountDetailsQR.data?.account?.outsourced?.public_phone_number || ''}
             />
-            <FollowStat
-              title="following"
-              count={accountDetailsQR.data?.account?.outsourced?.following_count || 0}
+            <ContactDetails
+              Icon={IconMail}
+              value={accountDetailsQR.data?.account?.outsourced?.public_email || ''}
             />
-            <FollowStat
-              title="posts"
-              count={accountDetailsQR.data?.account?.outsourced?.media_count || 0}
+            <ContactDetails
+              Icon={IconMapPin}
+              value={accountDetailsQR.data?.account?.outsourced?.city_name || ''}
             />
-          </Group>
+            <Button color='red' onClick={() => {
+              handleOnClick(accountDetailsQR.data?.id)
+            }}>
+              Reset Conversation
+            </Button>
+          </Stack>
+        </Box>
 
-          <Group my={24} justify="center">
-            <PropertyBadge
-              value={accountDetailsQR.data?.account?.outsourced?.is_verified || false} 
-              trueVal="Verified"
-              falseVal="Not Verified"
-            />
-            <PropertyBadge
-              value={accountDetailsQR.data?.account?.outsourced?.is_business || false}
-              trueVal="Business"
-              falseVal="Not a business"
-            />
-            <PropertyBadge
-              value={accountDetailsQR.data?.account?.outsourced?.is_popular || false}
-              trueVal="Popular"
-              falseVal="Not popular"
-            />
-            <PropertyBadge
-              value={accountDetailsQR.data?.account?.outsourced?.is_posting_actively || false}
-              trueVal="Posts actively"
-              falseVal="Posts rarely"
-            />
-            <PropertyBadge
-              value={accountDetailsQR.data?.account?.outsourced?.is_private || false}
-              trueVal="Private Account"
-              falseVal="Public account"
-            />
-            <PropertyBadge
-              value={accountDetailsQR.data?.account?.outsourced?.book_button || false}
-              trueVal="Book Button"
-              falseVal="No Book Button"
-            />
-          </Group>
-        </Stack>
-        <Stack>
-          <ContactDetails
-            Icon={IconPhone}
-            value={accountDetailsQR.data?.account?.outsourced?.public_phone_number || ''}
-          />
-          <ContactDetails
-            Icon={IconMail}
-            value={accountDetailsQR.data?.account?.outsourced?.public_email || ''}
-          />
-          <ContactDetails
-            Icon={IconMapPin}
-            value={accountDetailsQR.data?.account?.outsourced?.city_name || ''}
-          />
-        </Stack>
-      </Box>
-
-        <Divider/>
+        <Divider />
         <Title order={5}>Username: {messageDetails.username}</Title>
         <Text><strong>Message Sent By:</strong> {messageDetails.msgSentBy}</Text>
         <Text><strong>Last Message Sent At:</strong> {messageDetails.lastMsgSentAt}</Text>

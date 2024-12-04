@@ -48,7 +48,7 @@ export const useAccountsApi = () => {
         .get(`/active-stage-stats/`)
         .then(handleRestResponse)
         .catch(handleRestError),
-    getActiveStageStatsWithFilters: (filterParams:string): Promise<Stat[]> =>
+    getActiveStageStatsWithFilters: (filterParams: string): Promise<Stat[]> =>
       axiosInstance
         .get(`/active-stage-stats/?${filterParams}`)
         .then(handleRestResponse)
@@ -71,6 +71,11 @@ export const useAccountsApi = () => {
     getFollowers: (id: string): Promise<Lead> =>
       axiosInstance
         .get(`/${id}/extract-followers`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    clearConversation: (id: string): Promise<any> =>
+      axiosInstance
+        .post(`/${id}/clear-convo/`)
         .then(handleRestResponse)
         .catch(handleRestError),
     create: (params: CreateAccount) =>
