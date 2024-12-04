@@ -7,6 +7,7 @@ interface AccountPrimary {
   profile_url: null | string;
   status_id: null | string;
   full_name: string | null;
+  notes: string | null;
 }
 
 export interface Stat {

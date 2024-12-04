@@ -1,6 +1,19 @@
 // AccountDrawer.tsx
 import React from 'react';
-import { Drawer, Text, Title, Stack, Divider, Box, ScrollArea, Group, Avatar, Badge, Button } from '@mantine/core';
+import {
+  Drawer,
+  Text,
+  Title,
+  Stack,
+  Divider,
+  Box,
+  ScrollArea,
+  Group,
+  Avatar,
+  Badge,
+  Button,
+  Textarea
+} from '@mantine/core';
 import { Loading } from '@/Components/UIState/Loading';
 import { ChatItem } from '../Instagram/Threads/ChatItem';
 import { EDateFormats } from '@/Interfaces/general.interface';
@@ -73,7 +86,9 @@ const AccountDrawer: React.FC<AccountDrawerProps> = ({ isOpen, onClose, messageD
 
 
   const { accountDetailsQR } = useCommonStateForAccountThreads(messageDetails.id);
-  const { clearConversation } = useAccountsApi()
+  const { clearConversation, addNotes } = useAccountsApi()
+  const [notes, setNotes] = React.useState('');
+  const [showButtons, setShowButtons] = React.useState(false);
 
   const resetConversation = useMutation({
     mutationFn: (params: string) => clearConversation(params),
@@ -86,7 +101,7 @@ const AccountDrawer: React.FC<AccountDrawerProps> = ({ isOpen, onClose, messageD
         message: "Messages cleared successfully.",
         loading: false,
         autoClose: 3000,
-        
+
       });
     },
     onError: (err) => {
@@ -96,6 +111,31 @@ const AccountDrawer: React.FC<AccountDrawerProps> = ({ isOpen, onClose, messageD
         title: "Error",
         message: err.message,
       });
+    },
+  });
+
+  const addLeadNotes = useMutation({
+    mutationFn: (id: string) => addNotes(id, notes),
+    onSuccess: () => {
+      accountDetailsQR.refetch()
+      notifications.update({
+        id: "SAVE_NOTES_NOTIFICATION",
+        color: "teal",
+        icon: <IconCheck />,
+        message: "Notes saved successfully.",
+        loading: false,
+        autoClose: 3000,
+      });
+      setShowButtons(false);
+    },
+    onError: (err) => {
+      showNotification({
+        color: "red",
+        icon: <IconX />,
+        title: "Error",
+        message: err.message,
+      });
+      setShowButtons(false);
     },
   });
 
@@ -122,6 +162,34 @@ const AccountDrawer: React.FC<AccountDrawerProps> = ({ isOpen, onClose, messageD
       labels: { confirm: "Confirm", cancel: "Cancel" },
     });
   }
+
+  const handleAddNotes = (id: any) => {
+    notifications.show({
+      id: "SAVE_NOTES_NOTIFICATION",
+      loading: true,
+      message: "Deleting messages",
+      autoClose: false,
+      withCloseButton: false,
+    });
+
+    addLeadNotes.mutate(id)
+  }
+
+  const handleCancelAddNotes = () => {
+    notifications.show({
+      id: "CANCEL_ADD_NOTES_NOTIFICATION",
+      loading: true,
+      message: "Note discarded",
+      autoClose: 1000,
+      withCloseButton: false,
+    });
+    setNotes(accountDetailsQR.data?.account.notes || '');
+    setShowButtons(false);
+  }
+
+  React.useEffect(() => {
+    setNotes(accountDetailsQR.data?.account.notes || '');
+  }, [accountDetailsQR.data])
 
   if (accountDetailsQR.isError) return <>Error</>;
 
@@ -247,6 +315,29 @@ const AccountDrawer: React.FC<AccountDrawerProps> = ({ isOpen, onClose, messageD
         <Text><strong>Message Sent By:</strong> {messageDetails.msgSentBy}</Text>
         <Text><strong>Last Message Sent At:</strong> {messageDetails.lastMsgSentAt}</Text>
         <Text><strong>Assigned To:</strong> {messageDetails.assignedTo}</Text>
+        <Textarea
+          placeholder="Something to remember..."
+          label="Add notes on this lead"
+          autosize
+          minRows={2}
+          value={notes}
+          onChange={(event) => {
+            setNotes(event.currentTarget.value)
+            setShowButtons(true)
+          }}
+        />
+        <div hidden={!showButtons}>
+          <Group justify="left">
+            <Button onClick={handleCancelAddNotes} variant="default" style={{ padding: '4px 8px', fontSize: '12px', height: '30px' }} >Cancel</Button>
+            <Button onClick={() => {
+              setShowButtons(false);
+              handleAddNotes(accountDetailsQR.data?.id)
+            }} style={{ padding: '4px 8px', fontSize: '12px', height: '30px' }}>
+              Save
+            </Button>
+          </Group>
+        </div>
+
         <Divider />
         <Box
           // viewportRef={viewport}

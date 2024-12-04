@@ -78,6 +78,11 @@ export const useAccountsApi = () => {
         .post(`/${id}/clear-convo/`)
         .then(handleRestResponse)
         .catch(handleRestError),
+    addNotes: (id: string, notes:string): Promise<any> =>
+      axiosInstance
+        .post(`/${id}/add-notes/`,{"notes": notes})
+        .then(handleRestResponse)
+        .catch(handleRestError),
     create: (params: CreateAccount) =>
       axiosInstance
         .post("/", params)
