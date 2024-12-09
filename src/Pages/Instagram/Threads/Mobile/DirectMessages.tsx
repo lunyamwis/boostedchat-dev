@@ -166,6 +166,7 @@ export function MobileDirectMessages({ avatarColor }: Props) {
                               avatarColor={avatarColor}
                               profilePicture={null}
                               content={formattedThreadBody.text}
+                              content_type={null}
                               userInitials={formattedThreadBody?.username?.charAt(
                                 0,
                               )}

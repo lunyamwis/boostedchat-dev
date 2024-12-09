@@ -93,6 +93,7 @@ export function ThreadsBody({
                           content={formattedThreadBody?.text}
                           userInitials={formattedThreadBody?.username?.charAt(0)}
                           userNames={formattedThreadBody?.username}
+                          content_type={null}
                           date={format(
                             parseISO(formattedThreadBody?.date),
                             EDateFormats.time,
