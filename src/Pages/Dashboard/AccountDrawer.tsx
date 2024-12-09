@@ -365,6 +365,7 @@ const AccountDrawer: React.FC<AccountDrawerProps> = ({ isOpen, onClose, messageD
                       avatarColor={'#ff4115'}
                       profilePicture={null}
                       content={message?.content}
+                      content_type={message.content_type}
                       userInitials={message?.sent_by?.charAt(0)}
                       userNames={accountDetailsQR.data.igname}
                       date={format(
