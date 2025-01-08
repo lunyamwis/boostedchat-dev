@@ -2,7 +2,7 @@ const DOMAIN1 = import.meta.env.DOMAIN1
 const DOMAIN2 = import.meta.env.DOMAIN2
 
 
-// console.log(DOMAIN1)
+console.log(DOMAIN1)
 // console.log("import.meta.env")
 // console.log(import.meta.env)
 // export const API_URL = import.meta.env.PROD
