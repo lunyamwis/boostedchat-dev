@@ -7,6 +7,7 @@ import {
   GetSingleAccountWithThreadDetails,
   Stat,
   UpdateAccountParams,
+  MqttStatus
 } from "../../Interfaces/Instagram/account.interface";
 import { Lead, PaginatedQuery } from "../../Interfaces/general.interface";
 import { UploadCSV } from "../../Interfaces/Instagram/upload.interface";
@@ -15,6 +16,21 @@ export const useAccountsApi = () => {
   const axiosInstance = useAPIGlobalAxios("instagram/account");
 
   return {
+    getMqttHealth: (): Promise<MqttStatus> =>
+      axiosInstance
+        .get(`/check-mqtt-health/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    getLoggedInAccounts: (): Promise<MqttStatus> =>
+      axiosInstance
+        .get(`/get-loggedin-accounts/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    getConnectedAccounts: (): Promise<MqttStatus> =>
+      axiosInstance
+        .get(`/get-connected-accounts/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
     getAll: (page: number): Promise<PaginatedQuery<GetAccount>> =>
       axiosInstance
         .get(`/?page=${page}`)
@@ -78,9 +94,9 @@ export const useAccountsApi = () => {
         .post(`/${id}/clear-convo/`)
         .then(handleRestResponse)
         .catch(handleRestError),
-    addNotes: (id: string, notes:string): Promise<any> =>
+    addNotes: (id: string, notes: string): Promise<any> =>
       axiosInstance
-        .post(`/${id}/add-notes/`,{"notes": notes})
+        .post(`/${id}/add-notes/`, { "notes": notes })
         .then(handleRestResponse)
         .catch(handleRestError),
     create: (params: CreateAccount) =>

@@ -86,6 +86,13 @@ export interface GetSingleAccount extends AccountPrimary {
   };
 }
 
+export interface MqttStatus {
+  status: Number,
+  mqtt_running: boolean;
+  mqtt_connected: boolean;
+  connected_accounts:[];
+  success: boolean;
+}
 export interface GetSingleAccountWithThreadDetails extends AccountPrimary {
   account: GetSingleAccount,
   threads: [

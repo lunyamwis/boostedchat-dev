@@ -150,6 +150,24 @@ export const useGetActiveStages = () => {
   });
 };
 
+export const useGetMqttHealth = () => {
+  const { getMqttHealth } = useAccountsApi();
+  return useQuery({
+    queryKey: [queryKeys.instagram.mqttHealth.healthStatus],
+    queryFn: () => getMqttHealth(),
+    refetchInterval: 300000
+  });
+};
+
+export const useGetMqttLoggedInAccounts = () => {
+  const { getLoggedInAccounts } = useAccountsApi();
+  return useQuery({
+    queryKey: [queryKeys.instagram.mqttHealth.loggedInAccounts],
+    queryFn: () => getLoggedInAccounts(),
+    refetchInterval: 300000
+  });
+};
+
 export const useGetAccount = (accountId: string) => {
   const { getOne } = useAccountsApi();
   return useQuery({

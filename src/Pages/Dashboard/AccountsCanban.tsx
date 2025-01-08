@@ -7,9 +7,14 @@ import {
   Popover,
   Button,
   TextInput,
-  Space
+  Space,
+  Indicator,
+  Avatar
 } from "@mantine/core";
-import { useGetActiveStages } from "../Instagram/Account/Hooks/accounts.hook";
+import {
+  IconBrandInstagram
+} from "@tabler/icons-react";
+import { useGetActiveStages, useGetMqttHealth, useGetMqttLoggedInAccounts } from "../Instagram/Account/Hooks/accounts.hook";
 
 import { StageColumn2 } from "./StageColumn2";
 import { DatePicker } from "@mantine/dates";
@@ -18,7 +23,10 @@ import { StatsRingCardsRow } from "./StatsHeader";
 
 export function AccountsCanban() {
   const [stages, setStages] = useState<string[]>([]);
-  const stagesQR = useGetActiveStages()
+  const stagesQR = useGetActiveStages();
+  const mqttHealthQR = useGetMqttHealth();
+  const mqttLoggedInAccountsQR = useGetMqttLoggedInAccounts();
+  const [connected_accounts, setConnectedAccounts] = useState<string[]>([]);
 
   const [opened, setOpened] = useState(false);
   // const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -27,7 +35,6 @@ export function AccountsCanban() {
   const [stringStartDate, setStringStartDate] = useState('');
   const [stringEndDate, setStringEndDate] = useState('');
   const [dateError, setDateError] = useState(false);
-
 
 
   const handleFilterClick = () => {
@@ -50,10 +57,10 @@ export function AccountsCanban() {
 
   const handleClearFilters = () => {
     // Execute your query here with startDate and endDate
-    
+
     setStartDate(null);
     setEndDate(null);
-   
+
     setStringStartDate('');
     setStringEndDate('');
     setOpened(false);
@@ -80,12 +87,25 @@ export function AccountsCanban() {
     }
   }, [stagesQR.data])
 
+  useEffect(() => {
+    if (mqttHealthQR.data?.mqtt_connected) {
+      let accounts = mqttLoggedInAccountsQR.data?.connected_accounts || [];
+      if (accounts?.length > 0) {
+        setConnectedAccounts(accounts);
+      }
+
+    }
+  }, [mqttHealthQR.data, mqttLoggedInAccountsQR.data]);
+
+
+
   return (
 
     <Container fluid style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }} >
-       <StatsRingCardsRow stringEndDate={stringEndDate} stringStartDate={stringStartDate}/>
-       <Space h="xl" />
-      <Group style={{ marginBottom: "1rem" }}>
+      <StatsRingCardsRow stringEndDate={stringEndDate} stringStartDate={stringStartDate} />
+      <Space h="xl" />
+      <Group style={{ justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+        {/* Left Section: Filter Popover */}
         <Popover
           opened={opened}
           onClose={() => setOpened(false)}
@@ -94,7 +114,7 @@ export function AccountsCanban() {
           trapFocus
         >
           <Popover.Target>
-            <Button  variant="outline" onClick={() => setOpened((prev) => !prev)}>Filter</Button>
+            <Button variant="outline" onClick={() => setOpened((prev) => !prev)}>Filter</Button>
           </Popover.Target>
           <Popover.Dropdown>
             {/* Form with Start and End Date Inputs */}
@@ -126,6 +146,29 @@ export function AccountsCanban() {
             <Button onClick={handleClearFilters}>Clear filters</Button>
           </Popover.Dropdown>
         </Popover>
+        {/* Right Section: Indicators */}
+        <Group >
+          <Indicator inline label={mqttHealthQR.data?.mqtt_connected ? "connected" : "Disconnected"} processing size={16} offset={7} position="bottom-end" color={mqttHealthQR.data?.mqtt_connected ? "green" : "red"} withBorder>
+            <Avatar
+              size="lg"
+              radius="xl"
+              key="mqtt"
+            >
+              MQTT
+            </Avatar>
+          </Indicator>
+          <Space w="xl" />
+          <Indicator inline label={connected_accounts.length > 0 ? `${connected_accounts[0]}` : "Not loggedin"} processing size={16} offset={7} position="bottom-end" color={connected_accounts.length > 0 ? "green" : "red"} withBorder>
+            <Avatar
+              size="lg"
+              radius="xl"
+            >
+              <IconBrandInstagram size="1.5rem" />
+            </Avatar>
+
+          </Indicator>
+        </Group>
+
       </Group>
 
       <ScrollArea

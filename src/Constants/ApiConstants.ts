@@ -65,6 +65,11 @@ export const queryKeys = {
       getMessages: "get-direct-messages",
       checkResponse: "check-response",
     },
+    mqttHealth:{
+      loggedInAccounts: "logged-in-accounts",
+      connectedccounts: "connected-accounts",
+      healthStatus: "health-status",
+    }
   },
   auditLogs: {
     getAll: "all-audit-logs",
