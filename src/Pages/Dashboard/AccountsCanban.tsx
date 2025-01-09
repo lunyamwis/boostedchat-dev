@@ -12,7 +12,8 @@ import {
   Avatar
 } from "@mantine/core";
 import {
-  IconBrandInstagram
+  IconBrandInstagram,
+  IconSearch
 } from "@tabler/icons-react";
 import { useGetActiveStages, useGetMqttHealth, useGetMqttLoggedInAccounts } from "../Instagram/Account/Hooks/accounts.hook";
 
@@ -20,13 +21,17 @@ import { StageColumn2 } from "./StageColumn2";
 import { DatePicker } from "@mantine/dates";
 // import { StatsRingCard } from "./StatsCard";
 import { StatsRingCardsRow } from "./StatsHeader";
+import { useDebouncedValue } from "@mantine/hooks";
 
 export function AccountsCanban() {
   const [stages, setStages] = useState<string[]>([]);
   const stagesQR = useGetActiveStages();
+  const [searchQuery, setSearchQuery] = React.useState("");
   const mqttHealthQR = useGetMqttHealth();
   const mqttLoggedInAccountsQR = useGetMqttLoggedInAccounts();
   const [connected_accounts, setConnectedAccounts] = useState<string[]>([]);
+
+  const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 700);
 
   const [opened, setOpened] = useState(false);
   // const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -34,6 +39,7 @@ export function AccountsCanban() {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [stringStartDate, setStringStartDate] = useState('');
   const [stringEndDate, setStringEndDate] = useState('');
+  const [stringUsername, setStringUsername] = useState('');
   const [dateError, setDateError] = useState(false);
 
 
@@ -54,6 +60,13 @@ export function AccountsCanban() {
     setStringEndDate(formattedEndDate);
     setOpened(false);
   };
+
+  useEffect(() => {
+    console.log(debouncedSearchQuery);
+    setStringUsername(debouncedSearchQuery);
+  }, [debouncedSearchQuery]);
+
+
 
   const handleClearFilters = () => {
     // Execute your query here with startDate and endDate
@@ -106,6 +119,15 @@ export function AccountsCanban() {
       <Space h="xl" />
       <Group style={{ justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
         {/* Left Section: Filter Popover */}
+        <Box px={24}>
+          <TextInput
+            variant="filled"
+            leftSection={<IconSearch size={17} />}
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </Box>
         <Popover
           opened={opened}
           onClose={() => setOpened(false)}
@@ -146,6 +168,7 @@ export function AccountsCanban() {
             <Button onClick={handleClearFilters}>Clear filters</Button>
           </Popover.Dropdown>
         </Popover>
+
         {/* Right Section: Indicators */}
         <Group >
           <Indicator inline label={mqttHealthQR.data?.mqtt_connected ? "connected" : "Disconnected"} processing size={16} offset={7} position="bottom-end" color={mqttHealthQR.data?.mqtt_connected ? "green" : "red"} withBorder>
@@ -187,7 +210,7 @@ export function AccountsCanban() {
             minHeight: "100%",
           }}>
           {stages.map((stage, index) => (
-            <StageColumn2 stage={stage} stringEndDate={stringEndDate} stringStartDate={stringStartDate} index={index} />
+            <StageColumn2 stage={stage} stringUsername={stringUsername} stringEndDate={stringEndDate} stringStartDate={stringStartDate} index={index} />
           ))}
 
         </Box>

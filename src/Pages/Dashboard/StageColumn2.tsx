@@ -14,11 +14,12 @@ import { Loading } from "@/Components/UIState/Loading";
 import AccountDrawer from "./AccountDrawer";
 
 
-export function StageColumn2({ stage, index, stringStartDate, stringEndDate }: { stage: string, index: number, stringStartDate: string, stringEndDate: string }) {
+export function StageColumn2({ stage, stringUsername, index, stringStartDate, stringEndDate }: { stage: string, stringUsername: string, index: number, stringStartDate: string, stringEndDate: string }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [currentStage] = useState(stage);
   const { fetQR, filterParams, setFilterParams } = useCommonState();
   const [debouncedStartdate] = useDebouncedValue(stringStartDate, 1000);
+  const [debouncedUsername] = useDebouncedValue(stringStartDate, 1000);
   const [selectedMessage, setSelectedMessage] = useState<{
     id: string;
     username: string;
@@ -48,14 +49,26 @@ export function StageColumn2({ stage, index, stringStartDate, stringEndDate }: {
     threshold: 0.5,
   });
 
+  console.log("query", stringUsername)
+
   useEffect(() => {
     setFilterParams({
       ...filterParams,
       end_date: stringEndDate,
+      q: stringUsername,
       start_date: stringStartDate,
       stage: stage,
     });
   }, [debouncedStartdate]);
+
+
+  useEffect(() => {
+    console.log("Debouncedquery", debouncedUsername)
+    setFilterParams({
+      ...filterParams,
+      q: stringUsername,
+    });
+  }, [debouncedUsername]);
 
 
   React.useEffect(() => {
