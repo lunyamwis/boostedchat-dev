@@ -19,7 +19,7 @@ export function StageColumn2({ stage, stringUsername, index, stringStartDate, st
   const [currentStage] = useState(stage);
   const { fetQR, filterParams, setFilterParams } = useCommonState();
   const [debouncedStartdate] = useDebouncedValue(stringStartDate, 1000);
-  const [debouncedUsername] = useDebouncedValue(stringStartDate, 1000);
+  const [debouncedUsername] = useDebouncedValue(stringUsername, 1000);
   const [selectedMessage, setSelectedMessage] = useState<{
     id: string;
     username: string;
@@ -64,9 +64,13 @@ export function StageColumn2({ stage, stringUsername, index, stringStartDate, st
 
   useEffect(() => {
     console.log("Debouncedquery", debouncedUsername)
+   
     setFilterParams({
       ...filterParams,
+      end_date: stringEndDate,
       q: stringUsername,
+      start_date: stringStartDate,
+      stage: stage,
     });
   }, [debouncedUsername]);
 

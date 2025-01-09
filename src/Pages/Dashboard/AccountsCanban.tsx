@@ -119,56 +119,57 @@ export function AccountsCanban() {
       <Space h="xl" />
       <Group style={{ justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
         {/* Left Section: Filter Popover */}
-        <Box px={24}>
-          <TextInput
-            variant="filled"
-            leftSection={<IconSearch size={17} />}
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </Box>
-        <Popover
-          opened={opened}
-          onClose={() => setOpened(false)}
-          position="bottom-start"
-          withArrow
-          trapFocus
-        >
-          <Popover.Target>
-            <Button variant="outline" onClick={() => setOpened((prev) => !prev)}>Filter</Button>
-          </Popover.Target>
-          <Popover.Dropdown>
-            {/* Form with Start and End Date Inputs */}
-            <Group gap="sm">
-              <TextInput label="Start Date" readOnly value={startDate?.toLocaleDateString()} onClick={() => setOpened(true)} />
-              <TextInput label="End Date" readOnly value={endDate?.toLocaleDateString()} onClick={() => setOpened(true)} />
-            </Group>
+        <Group gap={"xs"}>
+          <Box px={24}>
+            <TextInput
+              variant="filled"
+              leftSection={<IconSearch size={17} />}
+              placeholder="Search by igname..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </Box>
+          <Popover
+            opened={opened}
+            onClose={() => setOpened(false)}
+            position="bottom-start"
+            withArrow
+            trapFocus
+          >
+            <Popover.Target>
+              <Button variant="outline" onClick={() => setOpened((prev) => !prev)}>Filter by date</Button>
+            </Popover.Target>
+            <Popover.Dropdown>
+              {/* Form with Start and End Date Inputs */}
+              <Group gap="sm">
+                <TextInput label="Start Date" readOnly value={startDate?.toLocaleDateString()} onClick={() => setOpened(true)} />
+                <TextInput label="End Date" readOnly value={endDate?.toLocaleDateString()} onClick={() => setOpened(true)} />
+              </Group>
 
-            {/* Date Pickers for Selecting Dates */}
-            <Group gap="sm">
-              <DatePicker
-                // label="Select Start Date"
-                value={startDate}
-                onChange={setStartDate}
-              // placeholder="Pick start date"
-              />
-              <DatePicker
-                // label="Select End Date"
-                value={endDate}
-                onChange={setEndDate}
-                minDate={startDate || undefined} // Disable dates earlier than the start date
-              // placeholder="Pick end date"
-              />
-            </Group>
+              {/* Date Pickers for Selecting Dates */}
+              <Group gap="sm">
+                <DatePicker
+                  // label="Select Start Date"
+                  value={startDate}
+                  onChange={setStartDate}
+                // placeholder="Pick start date"
+                />
+                <DatePicker
+                  // label="Select End Date"
+                  value={endDate}
+                  onChange={setEndDate}
+                  minDate={startDate || undefined} // Disable dates earlier than the start date
+                // placeholder="Pick end date"
+                />
+              </Group>
 
-            {/* Filter Button */}
-            <Button onClick={handleFilterClick}>Filter</Button>
-            {" "}
-            <Button onClick={handleClearFilters}>Clear filters</Button>
-          </Popover.Dropdown>
-        </Popover>
-
+              {/* Filter Button */}
+              <Button onClick={handleFilterClick}>Filter</Button>
+              {" "}
+              <Button onClick={handleClearFilters}>Clear filters</Button>
+            </Popover.Dropdown>
+          </Popover>
+        </Group>
         {/* Right Section: Indicators */}
         <Group >
           <Indicator inline label={mqttHealthQR.data?.mqtt_connected ? "connected" : "Disconnected"} processing size={16} offset={7} position="bottom-end" color={mqttHealthQR.data?.mqtt_connected ? "green" : "red"} withBorder>
