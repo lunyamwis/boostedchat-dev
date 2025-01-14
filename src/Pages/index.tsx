@@ -3,7 +3,7 @@ import {
   Icon,
   IconBrandInstagram,
   IconBrandMessenger,
-  // IconCalendarCog,
+  IconCalendarCog,
   IconChartInfographic,
   // IconClock,
   IconGraph,
@@ -45,7 +45,7 @@ export type ParentKeys =
   | "Prompts"
   | "Roles"
   // | "QualifyingAlgorithm"
-  // | "OutreachScheduler"
+  | "OutreachList"
   // | "LeadSources"
   | "ManageServices"
   // | "SetupScraper";
@@ -132,16 +132,16 @@ export const componentData: {
         })),
       ),
     },
-    // {
-    //   key: "OutreachScheduler",
-    //   component: React.lazy(() =>
-    //     import("./LeadsGeneration/OutreachScheduler/").then(
-    //       ({ OutreachSchedules }) => ({
-    //         default: OutreachSchedules,
-    //       }),
-    //     ),
-    //   ),
-    // },
+    {
+      key: "OutreachList",
+      component: React.lazy(() =>
+        import("./Instagram/Outreach/index").then(
+          ({ OutreachList }) => ({
+            default: OutreachList,
+          }),
+        ),
+      ),
+    },
     // {
     //   key: "QualifyingAlgorithm",
     //   component: React.lazy(() =>
@@ -262,15 +262,15 @@ export const pageData: TMPageData = {
   //   isNavItem: true,
   //   icon: IconUserShield,
   // },
-  // OutreachScheduler: {
-  //   level: "1",
-  //   group: EGroup.leadsManagement,
-  //   hasChildren: false,
-  //   url: "/leads-management/outreach-scheduler",
-  //   title: "Outreach Scheduler",
-  //   isNavItem: true,
-  //   icon: IconCalendarCog,
-  // },
+  OutreachList: {
+    level: "1",
+    group: EGroup.leadsManagement,
+    hasChildren: false,
+    url: "/leads-management/outreach-list",
+    title: "Outreach Scheduler",
+    isNavItem: true,
+    icon: IconCalendarCog,
+  },
   // QualifyingAlgorithm: {
   //   level: "1",
   //   group: EGroup.leadsManagement,
