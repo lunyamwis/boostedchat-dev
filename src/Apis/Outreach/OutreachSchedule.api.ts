@@ -6,7 +6,9 @@ import {
   Outreach
   // UpdateOutreachScheduleParams,
 } from "@/Interfaces/Outreach/outreach.interface";
-import { Lead, PaginatedQuery } from "../../Interfaces/general.interface";
+import { 
+  // Lead, 
+  PaginatedQuery } from "../../Interfaces/general.interface";
 
 export const useOutreachApi = () => {
   const axiosInstance = useAPIGlobalAxios("outreaches/periodic-tasks");

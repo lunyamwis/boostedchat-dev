@@ -1,22 +1,28 @@
 import { useOutreachApi } from "@/Apis/Outreach/OutreachSchedule.api";
 import { DataGrid } from "@/Components/Datagrid";
-import { Affix } from "@/Components/Widgets/Affix";
+// import { Affix } from "@/Components/Widgets/Affix";
 import { queryKeys } from "@/Constants/ApiConstants";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  // useMutation,
+  useQuery,
+  // useQueryClient 
+} from "@tanstack/react-query";
 import React from "react";
 import { ColDef } from "@/Components/Datagrid/datagrid.interface";
-import { Outreach  } from "@/Interfaces/Outreach/outreach.interface";
+import { Outreach } from "@/Interfaces/Outreach/outreach.interface";
 
-import { Row } from "@tanstack/react-table";
-import { ActionIcon, Group, Text, Tooltip } from "@mantine/core";
-import { IconCheck, IconPencil, IconTrash, IconX } from "@tabler/icons-react";
-import { openConfirmModal } from "@mantine/modals";
-import { notifications, showNotification } from "@mantine/notifications";
-import { format, parse, parseISO } from "date-fns";
+// import { Row } from "@tanstack/react-table";
+// import { ActionIcon, Group, Text, Tooltip } from "@mantine/core";
+// import { IconCheck, IconPencil, IconTrash, IconX } from "@tabler/icons-react";
+// import { openConfirmModal } from "@mantine/modals";
+// import { notifications, showNotification } from "@mantine/notifications";
+import { format, 
+  // parse,
+   parseISO } from "date-fns";
 import { EDateFormats } from "@/Interfaces/general.interface";
 
 export function OutreachList() {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   const { getAll } = useOutreachApi();
   // const [createOutreachScheduleModalOpen, setCreateOutreachScheduleModalOpen] =
@@ -58,55 +64,55 @@ export function OutreachList() {
   //   },
   // });
 
-  const ActionColumn = React.useCallback(
-    (props: { row: Row<Outreach> }) => (
-      <Group>
-        <Tooltip label="View Details">
-          <ActionIcon
-            color="brand"
-            variant="light"
-            onClick={() => {
-              // setSelectedOutreachScheduleId(props.row.original.id);
-              // setEditOutreachScheduleModalOpen(true);
-            }}
-          >
-            <IconPencil size={17} strokeWidth={1.4} />
-          </ActionIcon>
-        </Tooltip>
-        <Tooltip label="Delete outreach schedule">
-          <ActionIcon
-            color="red"
-            variant="light"
-            onClick={() => {
-              openConfirmModal({
-                title: "Alert",
-                children: (
-                  <Text>
-                    Are you sure you want to delete this outreach schedule? This
-                    action is irreversible.
-                  </Text>
-                ),
-                onConfirm: () => {
-                  notifications.show({
-                    id: "DELETE_OUTREACH_SCHEDULE_NOTIFICATION",
-                    loading: true,
-                    message: "Deleting the outreach schedule",
-                    autoClose: false,
-                    withCloseButton: false,
-                  });
-                  // deleteOutreachSchedule.mutate(props.row.original.id);
-                },
-                labels: { confirm: "Confirm", cancel: "Cancel" },
-              });
-            }}
-          >
-            <IconTrash size={17} strokeWidth={1.4} />
-          </ActionIcon>
-        </Tooltip>
-      </Group>
-    ),
-    [],
-  );
+  // const ActionColumn = React.useCallback(
+  //   (props: { row: Row<Outreach> }) => (
+  //     <Group>
+  //       <Tooltip label="View Details">
+  //         <ActionIcon
+  //           color="brand"
+  //           variant="light"
+  //           onClick={() => {
+  //             // setSelectedOutreachScheduleId(props.row.original.id);
+  //             // setEditOutreachScheduleModalOpen(true);
+  //           }}
+  //         >
+  //           <IconPencil size={17} strokeWidth={1.4} />
+  //         </ActionIcon>
+  //       </Tooltip>
+  //       <Tooltip label="Delete outreach schedule">
+  //         <ActionIcon
+  //           color="red"
+  //           variant="light"
+  //           onClick={() => {
+  //             openConfirmModal({
+  //               title: "Alert",
+  //               children: (
+  //                 <Text>
+  //                   Are you sure you want to delete this outreach schedule? This
+  //                   action is irreversible.
+  //                 </Text>
+  //               ),
+  //               onConfirm: () => {
+  //                 notifications.show({
+  //                   id: "DELETE_OUTREACH_SCHEDULE_NOTIFICATION",
+  //                   loading: true,
+  //                   message: "Deleting the outreach schedule",
+  //                   autoClose: false,
+  //                   withCloseButton: false,
+  //                 });
+  //                 // deleteOutreachSchedule.mutate(props.row.original.id);
+  //               },
+  //               labels: { confirm: "Confirm", cancel: "Cancel" },
+  //             });
+  //           }}
+  //         >
+  //           <IconTrash size={17} strokeWidth={1.4} />
+  //         </ActionIcon>
+  //       </Tooltip>
+  //     </Group>
+  //   ),
+  //   [],
+  // );
   const columns: ColDef<Outreach>[] = React.useMemo(
     () => [
       {
@@ -188,12 +194,12 @@ export function OutreachList() {
       //     );
       //   },
       // },
-      {
-        id: "expander",
-        header: "Actions",
-        visible: true,
-        cell: ActionColumn,
-      },
+      // {
+      //   id: "expander",
+      //   header: "Actions",
+      //   visible: true,
+      //   cell: ActionColumn,
+      // },
     ],
     [],
   );
