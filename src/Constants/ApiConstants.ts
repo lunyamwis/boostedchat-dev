@@ -64,7 +64,7 @@ export const queryKeys = {
       getMessages: "get-direct-messages",
       checkResponse: "check-response",
     },
-    mqttHealth:{
+    mqttHealth: {
       loggedInAccounts: "logged-in-accounts",
       connectedccounts: "connected-accounts",
       healthStatus: "health-status",
@@ -96,5 +96,9 @@ export const queryKeys = {
       allOutreachSchedules: "all-outreach-schedules",
       outreachScheduleById: "outreach-schedule-by-id",
     },
+  },
+  outreach: {
+    allOutreaches: "all-outreach",
+    // outreachScheduleById: "outreach-schedule-by-id",
   },
 };
