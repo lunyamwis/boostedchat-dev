@@ -64,7 +64,7 @@ export function StageColumn2({ stage, stringUsername, index, stringStartDate, st
 
   useEffect(() => {
     console.log("Debouncedquery", debouncedUsername)
-   
+
     setFilterParams({
       ...filterParams,
       end_date: stringEndDate,
@@ -89,8 +89,6 @@ export function StageColumn2({ stage, stringUsername, index, stringStartDate, st
       />
     );
   }
-
-
 
 
   return (
@@ -160,16 +158,7 @@ export function StageColumn2({ stage, stringUsername, index, stringStartDate, st
                 }
                 )
 
-
-
-
               )
-
-
-
-
-
-
           }
 
 
@@ -181,11 +170,7 @@ export function StageColumn2({ stage, stringUsername, index, stringStartDate, st
               </Text>
             </Stack>
           )}
-
         </Stack>
-
-
-
       </Box>
     </>
   );
