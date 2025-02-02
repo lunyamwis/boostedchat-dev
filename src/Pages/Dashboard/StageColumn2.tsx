@@ -49,8 +49,6 @@ export function StageColumn2({ stage, stringUsername, index, stringStartDate, st
     threshold: 0.5,
   });
 
-  console.log("query", stringUsername)
-
   useEffect(() => {
     setFilterParams({
       ...filterParams,
@@ -63,7 +61,7 @@ export function StageColumn2({ stage, stringUsername, index, stringStartDate, st
 
 
   useEffect(() => {
-    console.log("Debouncedquery", debouncedUsername)
+    // console.log("Debouncedquery", debouncedUsername)
 
     setFilterParams({
       ...filterParams,
@@ -111,15 +109,17 @@ export function StageColumn2({ stage, stringUsername, index, stringStartDate, st
         ref={containerRef}
       >
 
-        <Box style={{
-          position: 'sticky',
-          top: 0, backgroundColor: '#dee2e6',//color, //['#f8f9fa', '#f1f3f5', '#e9ecef', '#dee2e6'][index],
-          zIndex: 2,
-          padding: '10px',
-          borderRadius: '8px',
-          textAlign: 'center'
-        }}>
-          <Title order={4} >{currentStage}</Title>
+        <Box
+          key={currentStage}
+          style={{
+            position: 'sticky',
+            top: 0, backgroundColor: '#dee2e6',//color, //['#f8f9fa', '#f1f3f5', '#e9ecef', '#dee2e6'][index],
+            zIndex: 2,
+            padding: '10px',
+            borderRadius: '8px',
+            textAlign: 'center'
+          }}>
+          <Title key={currentStage} order={4} >{currentStage}</Title>
         </Box>
 
         <Stack gap="sm"
@@ -140,7 +140,7 @@ export function StageColumn2({ stage, stringUsername, index, stringStartDate, st
                     return (
 
                       <AccountCard
-                        key={cardIndex}
+                        key={cardIndex+result.id}
                         username={result.igname}
                         assignedTo={result.assigned_to}
                         lastMsgSentAt={result.last_message_at}
@@ -153,6 +153,7 @@ export function StageColumn2({ stage, stringUsername, index, stringStartDate, st
                           msgSentBy: result.last_message_sent_by
                         })}
                       />
+                      // <></>
                     );
                   })
                 }

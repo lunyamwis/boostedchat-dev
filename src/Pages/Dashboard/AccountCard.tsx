@@ -18,7 +18,7 @@ const AccountCard: React.FC<MessageCardProps> = ({ username, msgSentBy, lastMsgS
   );
 
   return (
-    <Card shadow="sm" p="lg" radius="md" onClick={onClick} withBorder style={{ cursor: 'pointer', backgroundColor: 'white' }}>
+    <Card key={lastMsgSentAt} shadow="sm" p="lg" radius="md" onClick={onClick} withBorder style={{ cursor: 'pointer', backgroundColor: 'white' }}>
       <Text fw={500} size="lg" mb="sm">
         Username: {username}
       </Text>
