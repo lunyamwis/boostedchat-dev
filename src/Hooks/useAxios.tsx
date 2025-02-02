@@ -25,10 +25,14 @@ export const usePromptGlobalAxios = (url: string) => {
 };
 
 export const useLeadsGenerationGlobalAxios = (url: string) => {
-  const { accessToken } = useAuth();
+  // const { accessToken } = useAuth();
   const axiosInstance = axios.create({
     baseURL: `${LEADS_GENERATION_URL}/${url}/`,
-    headers: { Authorization: `Bearer ${accessToken}` },
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'Access-Control-Allow-Origin': '*'
+    }
+    // headers: { Authorization: `Bearer ${accessToken}` },
   });
   return axiosInstance;
 };

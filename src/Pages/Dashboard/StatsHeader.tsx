@@ -11,7 +11,7 @@ export function StatsRingCardsRow({stringStartDate, stringEndDate} : {stringStar
   const { stageStatsQR, setFilterParams, filterParams } = useCommonStateForStageStats()
   const [debouncedStartdate] = useDebouncedValue(stringStartDate, 1000);
 
-  console.log(stringStartDate, stringEndDate)
+  // console.log(stringStartDate, stringEndDate)
 
 
   useEffect(() => {

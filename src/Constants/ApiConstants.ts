@@ -23,8 +23,8 @@ export const PROMPT_URL = import.meta.env.PROD
 //   : "http://localhost:8000";
 
 export const LEADS_GENERATION_URL = import.meta.env.PROD
-  ? `https://scrapper.${DOMAIN2}.boostedchat.com`
-  : "http://127.0.0.1:8002";
+  ? `https://scrapper.${DOMAIN1}.boostedchat.com`
+  : `https://scrapper.${DOMAIN1}.boostedchat.com`;// "http://127.0.0.1:8002";
 
 export const MQTT_API_URL = import.meta.env.PROD
   ? `https://mqtt.booksy.us.boostedchat.com`

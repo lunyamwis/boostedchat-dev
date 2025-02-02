@@ -9,23 +9,27 @@ import {
   TextInput,
   Space,
   Indicator,
-  Avatar
+  Avatar,
+  Text
 } from "@mantine/core";
 import {
   IconBrandInstagram,
   IconSearch
 } from "@tabler/icons-react";
+import { modals } from '@mantine/modals';
 import { useGetActiveStages, useGetMqttHealth, useGetMqttLoggedInAccounts } from "../Instagram/Account/Hooks/accounts.hook";
-
+import { useCreateMedia } from "../LeadsGeneration/Media/hooks/media.hook";
 import { StageColumn2 } from "./StageColumn2";
 import { DatePicker } from "@mantine/dates";
 // import { StatsRingCard } from "./StatsCard";
 import { StatsRingCardsRow } from "./StatsHeader";
 import { useDebouncedValue } from "@mantine/hooks";
+import { Media } from "@/Interfaces/Instagram/media.interface";
 
 export function AccountsCanban() {
   const [stages, setStages] = useState<string[]>([]);
   const stagesQR = useGetActiveStages();
+  const mediaQR = useCreateMedia();
   const [searchQuery, setSearchQuery] = React.useState("");
   const mqttHealthQR = useGetMqttHealth();
   const mqttLoggedInAccountsQR = useGetMqttLoggedInAccounts();
@@ -41,6 +45,34 @@ export function AccountsCanban() {
   const [stringEndDate, setStringEndDate] = useState('');
   const [stringUsername, setStringUsername] = useState('');
   const [dateError, setDateError] = useState(false);
+  const [value, setValue] = useState('');
+
+  const openDeleteModal = () =>
+    modals.open({
+      title: 'Delete your profile',
+      centered: true,
+      children: (
+        <>
+          <TextInput label="Media url"
+            // value={value}
+            type="url"
+            onChange={(event) => {
+              console.log(event.target.value);
+              setValue(event.target.value)
+            }}
+            placeholder="https://www.instagram.com/p/DFdDnu3glrM/" data-autofocus />
+          <Button fullWidth onClick={() => {
+            const meda = { media_type: 'image', media_url: `${value}` } as Media
+            mediaQR.createAccount.mutate(meda)
+            console.log(value)
+            // modals.closeAll()
+          }} mt="md">
+            Generate download link
+          </Button>
+        </>
+      )
+    });
+
 
 
   const handleFilterClick = () => {
@@ -79,7 +111,7 @@ export function AccountsCanban() {
     setOpened(false);
   };
 
-  console.log(dateError)
+  // console.log(dateError)
 
   useEffect(() => {
     if (stagesQR.data) {
@@ -172,6 +204,7 @@ export function AccountsCanban() {
         </Group>
         {/* Right Section: Indicators */}
         <Group >
+          <Button onClick={openDeleteModal}>Download Media</Button>
           <Indicator inline label={mqttHealthQR.data?.mqtt_connected ? "connected" : "Disconnected"} processing size={16} offset={7} position="bottom-end" color={mqttHealthQR.data?.mqtt_connected ? "green" : "red"} withBorder>
             <Avatar
               size="lg"
