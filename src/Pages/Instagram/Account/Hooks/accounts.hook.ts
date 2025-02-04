@@ -106,7 +106,7 @@ export const getInfiniteAccountsByStage = (stage: string | null) => {
         return lastPageParam + 1;
       },
       getPreviousPageParam: (_, p, firstPageParam) => {
-        // console.log(p)
+        console.log(p)
         if (firstPageParam <= 1) {
           return undefined;
         }
@@ -132,6 +132,7 @@ export const getInfiniteAccountsByStageWithFilters = (filterParams: string) => {
         return lastPageParam + 1;
       },
       getPreviousPageParam: (_, p, firstPageParam) => {
+        console.log(p)
         if (firstPageParam <= 1) {
           return undefined;
         }

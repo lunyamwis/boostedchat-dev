@@ -29,8 +29,8 @@ export function StatsRingCard(stat: Stat) {
   //   if(stat.status_param == '')
   // },[stat]);
 
-  // console.log(show_ring)
-  // console.log(stat_progress)
+  console.log(show_ring)
+  console.log(stat_progress)
 
   switch (stat.status_param) {
     case "Committed":

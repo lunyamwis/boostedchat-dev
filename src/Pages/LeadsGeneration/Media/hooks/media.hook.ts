@@ -1,5 +1,4 @@
-import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
-import { queryKeys } from "../../../../Constants/ApiConstants";
+import { useMutation } from "@tanstack/react-query";
 import { useMediaApi } from "../../../../Apis/Instagram/Media.api";
 import {
   Media
