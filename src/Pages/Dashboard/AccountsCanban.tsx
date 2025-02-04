@@ -10,15 +10,15 @@ import {
   Space,
   Indicator,
   Avatar,
-  Text
+  Text,
+  Modal,
 } from "@mantine/core";
 import {
   IconBrandInstagram,
   IconSearch
 } from "@tabler/icons-react";
-import { modals } from '@mantine/modals';
 import { useGetActiveStages, useGetMqttHealth, useGetMqttLoggedInAccounts } from "../Instagram/Account/Hooks/accounts.hook";
-import { useCreateMedia } from "../LeadsGeneration/Media/hooks/media.hook";
+import { useCreateMedia, useDownloadMedia } from "../LeadsGeneration/Media/hooks/media.hook";
 import { StageColumn2 } from "./StageColumn2";
 import { DatePicker } from "@mantine/dates";
 // import { StatsRingCard } from "./StatsCard";
@@ -30,6 +30,7 @@ export function AccountsCanban() {
   const [stages, setStages] = useState<string[]>([]);
   const stagesQR = useGetActiveStages();
   const mediaQR = useCreateMedia();
+  const mediaDownload = useDownloadMedia();
   const [searchQuery, setSearchQuery] = React.useState("");
   const mqttHealthQR = useGetMqttHealth();
   const mqttLoggedInAccountsQR = useGetMqttLoggedInAccounts();
@@ -46,33 +47,37 @@ export function AccountsCanban() {
   const [stringUsername, setStringUsername] = useState('');
   const [dateError, setDateError] = useState(false);
   const [value, setValue] = useState('');
+  const [showDownloadStatus, setShowDownloadStatus] = useState(false)
+  const [downloadErrorMsg, setDownloadErrorMsg] = useState('');
+  // const [donwloadStatusError, setDownloadStatusError] = useState(false)
+  const [openDownload, setOpenDownload] = useState(false)
 
-  const openDeleteModal = () =>
-    modals.open({
-      title: 'Delete your profile',
-      centered: true,
-      children: (
-        <>
-          <TextInput label="Media url"
-            // value={value}
-            type="url"
-            onChange={(event) => {
-              console.log(event.target.value);
-              setValue(event.target.value)
-            }}
-            placeholder="https://www.instagram.com/p/DFdDnu3glrM/" data-autofocus />
-          <Button fullWidth onClick={() => {
-            const meda = { media_type: 'image', media_url: `${value}` } as Media
-            mediaQR.createAccount.mutate(meda)
-            console.log(value)
-            // modals.closeAll()
-          }} mt="md">
-            Generate download link
-          </Button>
-        </>
-      )
-    });
+  const downloadMedianow = (media_id: string) => {
+    // let media_id = data?.id
+    mediaDownload.mutateAsync(media_id).then((data2) => {
+      console.log("console.log(data2 miutata) dat2amutatt")
+      console.log(data2)
+      setShowDownloadStatus(true);
+      // setDownloadStatusError(false);
+      let downloadlink = data2?.download_url
+      setDownloadErrorMsg(downloadlink);
+      mediaDownload.reset()
+    }).catch((error) => {
+      console.log("CAUGHTTHE ERROR", error)
+      console.log(error.message)
+      setShowDownloadStatus(true)
+      // setDownloadStatusError(true);
+      let downloadError = error.message
+      setDownloadErrorMsg(downloadError);
+      mediaQR.createAccount.reset();
+    })
+  }
 
+  console.log(dateError);
+
+  const openDonwloadMoal = () => {
+    setOpenDownload(true);
+  }
 
 
   const handleFilterClick = () => {
@@ -111,7 +116,7 @@ export function AccountsCanban() {
     setOpened(false);
   };
 
-  // console.log(dateError)
+
 
   useEffect(() => {
     if (stagesQR.data) {
@@ -143,7 +148,6 @@ export function AccountsCanban() {
   }, [mqttHealthQR.data, mqttLoggedInAccountsQR.data]);
 
 
-
   return (
 
     <Container fluid style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }} >
@@ -151,6 +155,32 @@ export function AccountsCanban() {
       <Space h="xl" />
       <Group style={{ justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
         {/* Left Section: Filter Popover */}
+        <Modal opened={openDownload} onClose={() => { setOpenDownload(false); setShowDownloadStatus(false); }} size="md" title="Modal size auto">
+          <>
+            <TextInput label="Media url"
+              // value={value}
+              type="url"
+              onChange={(event) => {
+                console.log(event.target.value);
+                setValue(event.target.value)
+              }}
+              placeholder="https://www.instagram.com/p/DFdDnu3glrM/" data-autofocus />
+            <Button loading={mediaQR.createAccount.isPending || mediaDownload.isPending} fullWidth onClick={() => {
+              const meda = { media_type: 'image', media_url: `${value}` } as Media
+              mediaQR.createAccount.mutateAsync(meda).then((data) => {
+                console.log("console.log(data) data")
+                console.log(data)
+                downloadMedianow(data.id);
+              })
+            }} mt="md">
+              Generate download link
+            </Button>
+
+            {showDownloadStatus && <Text>
+              {downloadErrorMsg}
+            </Text>}
+          </>
+        </Modal>
         <Group gap={"xs"}>
           <Box px={24}>
             <TextInput
@@ -204,7 +234,7 @@ export function AccountsCanban() {
         </Group>
         {/* Right Section: Indicators */}
         <Group >
-          <Button onClick={openDeleteModal}>Download Media</Button>
+          <Button onClick={openDonwloadMoal}>Download Media</Button>
           <Indicator inline label={mqttHealthQR.data?.mqtt_connected ? "connected" : "Disconnected"} processing size={16} offset={7} position="bottom-end" color={mqttHealthQR.data?.mqtt_connected ? "green" : "red"} withBorder>
             <Avatar
               size="lg"

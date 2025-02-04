@@ -22,9 +22,13 @@ export const PROMPT_URL = import.meta.env.PROD
 //   ? `https://promptemplate.staging.boostedchat.com`
 //   : "http://localhost:8000";
 
+// export const LEADS_GENERATION_URL = import.meta.env.PROD
+//   ? `https://scrapper.${DOMAIN1}.boostedchat.com`
+//   :  "http://lunyamwi.localhost";
+
 export const LEADS_GENERATION_URL = import.meta.env.PROD
-  ? `https://scrapper.${DOMAIN1}.boostedchat.com`
-  : `https://scrapper.${DOMAIN1}.boostedchat.com`;// "http://127.0.0.1:8002";
+  ? `https://scrapper.staging.boostedchat.com`
+  :  "http://lunyamwi.localhost";
 
 export const MQTT_API_URL = import.meta.env.PROD
   ? `https://mqtt.booksy.us.boostedchat.com`
