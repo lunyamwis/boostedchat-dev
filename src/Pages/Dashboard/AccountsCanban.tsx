@@ -12,10 +12,12 @@ import {
   Avatar,
   Text,
   Modal,
+  Alert
 } from "@mantine/core";
 import {
   IconBrandInstagram,
-  IconSearch
+  IconSearch,
+  IconInfoCircle
 } from "@tabler/icons-react";
 import { useGetActiveStages, useGetMqttHealth, useGetMqttLoggedInAccounts } from "../Instagram/Account/Hooks/accounts.hook";
 import { useCreateMedia, useDownloadMedia } from "../LeadsGeneration/Media/hooks/media.hook";
@@ -25,6 +27,7 @@ import { DatePicker } from "@mantine/dates";
 import { StatsRingCardsRow } from "./StatsHeader";
 import { useDebouncedValue } from "@mantine/hooks";
 import { Media } from "@/Interfaces/Instagram/media.interface";
+import { Link } from "react-router-dom";
 
 export function AccountsCanban() {
   const [stages, setStages] = useState<string[]>([]);
@@ -49,7 +52,7 @@ export function AccountsCanban() {
   const [value, setValue] = useState('');
   const [showDownloadStatus, setShowDownloadStatus] = useState(false)
   const [downloadErrorMsg, setDownloadErrorMsg] = useState('');
-  // const [donwloadStatusError, setDownloadStatusError] = useState(false)
+  const [donwloadStatusError, setDownloadStatusError] = useState(false)
   const [openDownload, setOpenDownload] = useState(false)
 
   const downloadMedianow = (media_id: string) => {
@@ -64,10 +67,11 @@ export function AccountsCanban() {
       mediaDownload.reset()
     }).catch((error) => {
       console.log("CAUGHTTHE ERROR", error)
+      console.log(error.data)
       console.log(error.message)
       setShowDownloadStatus(true)
-      // setDownloadStatusError(true);
-      let downloadError = error.message
+      setDownloadStatusError(true);
+      let downloadError = error.data || error.message
       setDownloadErrorMsg(downloadError);
       mediaQR.createAccount.reset();
     })
@@ -155,9 +159,13 @@ export function AccountsCanban() {
       <Space h="xl" />
       <Group style={{ justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
         {/* Left Section: Filter Popover */}
-        <Modal opened={openDownload} onClose={() => { setOpenDownload(false); setShowDownloadStatus(false); }} size="md" title="Modal size auto">
+        <Modal centered opened={openDownload} onClose={() => {
+          setOpenDownload(false); setShowDownloadStatus(false);
+          setDownloadStatusError(true);
+        }
+        } size="md" title="Generate image download url">
           <>
-            <TextInput label="Media url"
+            <TextInput label="Enter Media url"
               // value={value}
               type="url"
               onChange={(event) => {
@@ -176,9 +184,23 @@ export function AccountsCanban() {
               Generate download link
             </Button>
 
-            {showDownloadStatus && <Text>
-              {downloadErrorMsg}
-            </Text>}
+            <Box w={{ base: 200, sm: 400, lg: 500 }}
+              py={{ base: 'xs', sm: 'md', lg: 'xl' }}
+              ta="center"
+              mx="auto">
+
+              {
+                (showDownloadStatus && donwloadStatusError) &&
+                <Alert variant="light" color="red" title={downloadErrorMsg} icon={<IconInfoCircle />} />
+              }
+
+              {
+                (showDownloadStatus && !donwloadStatusError)
+                && <Link target="_blank" to={downloadErrorMsg}>
+                  Click here to download
+                </Link>}
+
+            </Box>
           </>
         </Modal>
         <Group gap={"xs"}>
