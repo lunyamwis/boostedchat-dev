@@ -60,10 +60,10 @@ export function AccountsCanban() {
       console.log("console.log(data2 miutata) dat2amutatt")
       console.log(data2)
       setShowDownloadStatus(true);
-      // setDownloadStatusError(false);
+      setDownloadStatusError(false);
       let downloadlink = data2?.download_url
       setDownloadErrorMsg(downloadlink);
-      mediaDownload.reset()
+      mediaDownload.reset();
     }).catch((error) => {
       console.log("CAUGHTTHE ERROR", error)
       console.log(error.data)
