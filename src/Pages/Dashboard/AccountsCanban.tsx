@@ -10,7 +10,6 @@ import {
   Space,
   Indicator,
   Avatar,
-  Text,
   Modal,
   Alert
 } from "@mantine/core";
