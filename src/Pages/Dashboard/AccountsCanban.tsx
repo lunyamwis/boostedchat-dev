@@ -162,7 +162,7 @@ export function AccountsCanban() {
           setOpenDownload(false); setShowDownloadStatus(false);
           setDownloadStatusError(true);
         }
-        } size="md" title="Generate image download url">
+        } size="auto" title="Generate image download url">
           <>
             <TextInput label="Enter Media url"
               // value={value}
