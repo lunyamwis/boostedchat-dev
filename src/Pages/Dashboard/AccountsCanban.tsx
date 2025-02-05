@@ -60,17 +60,12 @@ export function AccountsCanban() {
   const downloadMedianow = (media_id: string) => {
     // let media_id = data?.id
     mediaDownload.mutateAsync(media_id).then((data2) => {
-      console.log("console.log(data2 miutata) dat2amutatt")
-      console.log(data2)
       setShowDownloadStatus(true);
       setDownloadStatusError(false);
       let downloadlink = data2?.download_url
       setDownloadErrorMsg(downloadlink);
       mediaDownload.reset();
     }).catch((error) => {
-      console.log("CAUGHTTHE ERROR", error)
-      console.log(error.data)
-      console.log(error.message)
       setShowDownloadStatus(true)
       setDownloadStatusError(true);
       let downloadError = error.data || error.message
