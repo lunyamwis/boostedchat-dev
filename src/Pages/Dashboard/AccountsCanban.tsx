@@ -11,7 +11,8 @@ import {
   Indicator,
   Avatar,
   Modal,
-  Alert
+  Alert,
+  Select
 } from "@mantine/core";
 import {
   IconBrandInstagram,
@@ -48,11 +49,13 @@ export function AccountsCanban() {
   const [stringEndDate, setStringEndDate] = useState('');
   const [stringUsername, setStringUsername] = useState('');
   const [dateError, setDateError] = useState(false);
-  const [value, setValue] = useState('');
+  const [mediaUrl, setValue] = useState('');
+  const [mediaType, setMediaType] = useState<string | null>('');
   const [showDownloadStatus, setShowDownloadStatus] = useState(false)
   const [downloadErrorMsg, setDownloadErrorMsg] = useState('');
   const [donwloadStatusError, setDownloadStatusError] = useState(false)
   const [openDownload, setOpenDownload] = useState(false)
+  const [disableDownload, setDisableDownload] = useState(true);
 
   const downloadMedianow = (media_id: string) => {
     // let media_id = data?.id
@@ -150,6 +153,24 @@ export function AccountsCanban() {
     }
   }, [mqttHealthQR.data, mqttLoggedInAccountsQR.data]);
 
+  useEffect(() => {
+    enableButton()
+  }, [mediaType, mediaUrl])
+
+
+
+  const enableButton = () => {
+    console.log('mediaType', mediaType);
+    console.log('mediaUrl', mediaUrl);
+    if ((mediaType != '' || mediaType != null) && mediaUrl != '') {
+      console.log('DISABLE BTN', false);
+
+      setDisableDownload(false);
+    } else {
+      console.log('DISABLE BTN', true);
+      setDisableDownload(true);
+    }
+  }
 
   return (
 
@@ -161,19 +182,27 @@ export function AccountsCanban() {
         <Modal centered opened={openDownload} onClose={() => {
           setOpenDownload(false); setShowDownloadStatus(false);
           setDownloadStatusError(true);
+          setDisableDownload(true);
         }
         } size="auto" title="Generate image download url">
           <>
             <TextInput label="Enter Media url"
-              // value={value}
               type="url"
               onChange={(event) => {
                 console.log(event.target.value);
                 setValue(event.target.value)
               }}
               placeholder="https://www.instagram.com/p/DFdDnu3glrM/" data-autofocus />
-            <Button loading={mediaQR.createAccount.isPending || mediaDownload.isPending} fullWidth onClick={() => {
-              const meda = { media_type: 'image', media_url: `${value}` } as Media
+            <Select
+              label="Media type"
+              placeholder="Pick value"
+              data={['image', 'video']}
+              onChange={(event) => {
+                setMediaType(event)
+              }}
+            />
+            <Button disabled={disableDownload} loading={mediaQR.createAccount.isPending || mediaDownload.isPending} fullWidth onClick={() => {
+              const meda = { media_type: mediaType, media_url: `${mediaUrl?.trim()}` } as Media
               mediaQR.createAccount.mutateAsync(meda).then((data) => {
                 console.log("console.log(data) data")
                 console.log(data)
