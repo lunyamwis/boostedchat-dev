@@ -1,16 +1,19 @@
 import React from "react";
 import { ColDef } from "../../../Components/Datagrid/datagrid.interface";
-import { CommentItem } from "../../../Interfaces/Instagram/commentItem.interface";
+import { LikeItem } from "../../../Interfaces/Instagram/likeItem.interface";
 import { DataGrid } from "../../../Components/Datagrid";
-import { useGetComments } from "./Hooks/commenters.hook";
+import { useGetLikes } from "./Hooks/commenters.hook";
 
 
-export function Commenters() {
+
+export function Likes() {
   const [page, setPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState(50);
-  const commentQR = useGetComments(page);
 
-  const columns: ColDef<CommentItem>[] = React.useMemo(
+
+  const likeQR = useGetLikes(page);
+
+  const columns: ColDef<LikeItem>[] = React.useMemo(
     () => [
       {
         accessorFn: (row) => row.id,
@@ -60,8 +63,8 @@ export function Commenters() {
     <>
       <DataGrid
         loading={false}
-        tableName="Commenters"
-        data={commentQR.data?.results ?? []}
+        tableName="Likers"
+        data={likeQR.data?.results ?? []}
         columns={columns}
         paginationOptions={{
           isManual: true,
@@ -69,7 +72,7 @@ export function Commenters() {
           pageSize: pageSize,
           setPageSize: setPageSize,
           setPageIndex: setPage,
-          totalRows: commentQR.data?.count ?? 0,
+          totalRows: likeQR.data?.count ?? 0,
         }}
       />
     </>

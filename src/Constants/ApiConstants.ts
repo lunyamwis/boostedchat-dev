@@ -29,7 +29,7 @@ export const PROMPT_URL = import.meta.env.PROD
 
 export const LEADS_GENERATION_URL = import.meta.env.PROD
   ? `https://scrapper.staging.boostedchat.com`
-  :  "http://lunyamwi.localhost";
+  : "http://lunyamwi.localhost";
 
 export const MQTT_API_URL = import.meta.env.PROD
   ? `https://mqtt.booksy.us.boostedchat.com`
@@ -58,6 +58,12 @@ export const queryKeys = {
       getById: "get-account-by-id",
       getByIgThreadId: "get-account-by-ig-thread-id",
       getAccountThreadDetails: "get-account-details",
+    },
+    comments: {
+      getComments: "get-all-comments",
+    },
+    likes: {
+      getLikes: "get-all-likes",
     },
     stages: {
       getAllStages: "get-all-stages",

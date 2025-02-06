@@ -38,12 +38,13 @@ export type TPageData = PrimaryPageData & ({ level: "1" } & Level1);
 
 export type ParentKeys =
   | "AccountsCanban"
-  | "Snapshot"
+  // | "Snapshot"
   | "Accounts"
   | "AccountDetails"
   | "Threads"
   | "Prompts"
   | "Roles"
+  | "LikersCommenters"
   // | "QualifyingAlgorithm"
   | "OutreachList"
   // | "LeadSources"
@@ -83,13 +84,21 @@ export const componentData: {
       ),
     },
     {
-      key: "Snapshot",
+      key: "LikersCommenters",
       component: React.lazy(() =>
-        import("./Dashboard/index").then(({ Summary }) => ({
-          default: Summary,
+        import("./Instagram/Comment/index").then(({ LikersCommenters }) => ({
+          default: LikersCommenters,
         })),
       ),
     },
+    // {
+    //   key: "Snapshot",
+    //   component: React.lazy(() =>
+    //     import("./Dashboard/index").then(({ Summary }) => ({
+    //       default: Summary,
+    //     })),
+    //   ),
+    // },
     {
       key: "Threads",
       component: React.lazy(() =>
@@ -190,15 +199,25 @@ export const pageData: TMPageData = {
     icon: IconChartInfographic,
     url: "/dashboard/accounts",
   },
-  Snapshot: {
+  LikersCommenters: {
     level: "1",
     group: EGroup.summaries,
     hasChildren: false,
-    title: "Snapshot",
+    title: "Commenters & likers",
     isNavItem: true,
     icon: IconChartInfographic,
-    url: "/dashboard/snapshot",
+    url: "/dashboard/likersCommenters",
   },
+  
+  // Snapshot: {
+  //   level: "1",
+  //   group: EGroup.summaries,
+  //   hasChildren: false,
+  //   title: "Snapshot",
+  //   isNavItem: true,
+  //   icon: IconChartInfographic,
+  //   url: "/dashboard/snapshot",
+  // },
   Threads: {
     level: "1",
     group: EGroup.instagram,
