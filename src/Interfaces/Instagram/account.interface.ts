@@ -43,6 +43,10 @@ export interface GetAccount extends AccountPrimary {
   last_message_sent_at: string;
   full_name: string;
   last_message_sent_by: 'Robot' | 'Human';
+  outreach_time: string;
+  created_at: string;
+  qualified: boolean;
+  outreach_success: boolean;
 }
 export interface GetSingleAccount extends AccountPrimary {
   id: string;

@@ -62,6 +62,7 @@ export function Likes() {
   return (
     <>
       <DataGrid
+        fn={() => { }}
         loading={false}
         tableName="Likers"
         data={likeQR.data?.results ?? []}

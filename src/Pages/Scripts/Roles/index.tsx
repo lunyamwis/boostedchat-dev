@@ -90,6 +90,7 @@ export function ScriptRoles() {
         tableName="Roles"
         data={roleQR.data ?? []}
         columns={columns}
+        fn={()=>{}}
       />
       <Affix
         tooltipLabel="Create new Role"

@@ -59,6 +59,7 @@ export function Commenters() {
   return (
     <>
       <DataGrid
+        fn={() => { }}
         loading={false}
         tableName="Commenters"
         data={commentQR.data?.results ?? []}

@@ -36,6 +36,11 @@ export const useAccountsApi = () => {
         .get(`/?page=${page}`)
         .then(handleRestResponse)
         .catch(handleRestError),
+    getAllWithFilters: (filterParams: any): Promise<PaginatedQuery<GetAccount>> =>
+      axiosInstance
+        .get(`/?${filterParams}`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
     getByStage: (stage: string, page: number): Promise<PaginatedQuery<GetAccount>> => {
       console.log("stage IN THE QUERY");
       console.log(stage);
@@ -102,6 +107,11 @@ export const useAccountsApi = () => {
     create: (params: CreateAccount) =>
       axiosInstance
         .post("/", params)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    removeDuplicateAccounts: (): Promise<any> =>
+      axiosInstance
+        .get(`/handle-duplicates/`)
         .then(handleRestResponse)
         .catch(handleRestError),
     upload: (params: UploadCSV) =>

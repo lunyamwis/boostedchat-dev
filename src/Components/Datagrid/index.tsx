@@ -11,7 +11,7 @@ import {
   GroupingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { IconSettings } from "@tabler/icons-react";
+import { IconSettings, IconCopyOff } from "@tabler/icons-react";
 import { useDidUpdate } from "@mantine/hooks";
 import React, { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -53,10 +53,12 @@ interface Props<T> {
   loading: boolean;
   tableName: string;
   paginationOptions: PaginationProps;
+  fn: () => void;
 }
 
 function MDataGrid<T>({
   columns: tableColumns,
+  fn,
   data,
   tableName,
   loading,
@@ -354,6 +356,9 @@ function MDataGrid<T>({
                 <ActionIcon onClick={() => setIsSettingsOpen(!isSettingsOpen)}>
                   <IconSettings />
                 </ActionIcon>
+                {tableName == "Accounts" && <ActionIcon onClick={fn}>
+                  <IconCopyOff />
+                </ActionIcon>}
               </Group>}
             </Group>
             <Box style={{ height: 600, overflowX: "auto" }}>
@@ -361,7 +366,7 @@ function MDataGrid<T>({
             </Box>
           </Stack>
         </Box>
-        { tableName != "Manage Services" && paginationOptions.isManual ? (
+        {tableName != "Manage Services" && paginationOptions.isManual ? (
           <ManualPagination
             totalRows={paginationOptions.totalRows}
             pageIndex={paginationOptions.pageIndex}
@@ -399,6 +404,7 @@ export function DataGrid<T>({
   statusProps,
   loading,
   paginationOptions,
+  fn,
 }: Props<T>) {
   return (
     <DataGridProvider>
@@ -410,6 +416,7 @@ export function DataGrid<T>({
         loading={loading}
         tableName={tableName}
         statusProps={statusProps}
+        fn={fn}
       />
     </DataGridProvider>
   );

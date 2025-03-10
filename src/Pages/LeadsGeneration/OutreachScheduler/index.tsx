@@ -202,6 +202,7 @@ export function OutreachSchedules() {
   return (
     <>
       <DataGrid
+        fn={() => { }}
         paginationOptions={{ isManual: false }}
         loading={outreachSchedulesQR.isLoading}
         tableName="Outreach Schedules"

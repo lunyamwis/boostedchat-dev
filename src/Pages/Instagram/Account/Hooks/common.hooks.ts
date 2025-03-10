@@ -1,6 +1,6 @@
 // import { useState } from "react";
 import React from "react";
-import { getInfiniteAccountsByStageWithFilters, useGetAccountThreadDetails, useGetStageStatsWithDateFilters } from "./accounts.hook";
+import { getInfiniteAccountsByStageWithFilters, useGetAccountThreadDetails, useGetStageStatsWithDateFilters, useGetAccountList } from "./accounts.hook";
 
 export type AccountFilterParams = {
   stage: string;
@@ -12,6 +12,18 @@ export type AccountFilterParams = {
 export type StatsFilterParams = {
   start_date: string;
   end_date: string;
+};
+
+export type AccountListFilterParams = {
+  created_at_gte: string;
+  created_at_lt: string;
+  outreach_time_gte: string;
+  outreach_time_lt: string;
+  q: string;
+  status: string;
+  qualified: boolean;
+  page: number;
+  outreach_success: boolean;
 };
 const formatFilterParams = (params: AccountFilterParams) => {
   const mApiParams = [];
@@ -57,13 +69,61 @@ const formatFilterParams = (params: AccountFilterParams) => {
 
 const formatStatsFilterParams = (params: StatsFilterParams) => {
   const mApiParams = [];
-   if (
+  if (
     params.start_date &&
     params.end_date
   ) {
     mApiParams.push(`start_date=${params.start_date}`);
     mApiParams.push(`end_date=${params.end_date}`);
   }
+  return { api: mApiParams.join("&") };
+};
+
+const formatAccountListFilterParams = (params: AccountListFilterParams) => {
+  const mApiParams = [];
+  if (
+    params.created_at_gte
+  ) {
+    mApiParams.push(`created_at_gte=${params.created_at_gte}`);
+    mApiParams.push(`created_at_lt=${params.created_at_lt}`);
+  }
+
+  if (
+    params.outreach_time_gte
+  ) {
+    mApiParams.push(`outreach_time_gte=${params.outreach_time_gte}`);
+    mApiParams.push(`outreach_time_lt=${params.outreach_time_lt}`);
+  }
+
+  if (
+    params.status
+  ) {
+    mApiParams.push(`status=${params.status}`);
+  }
+
+  console.log("Checking this qualified: ", params.qualified)
+  if (
+    params.qualified
+  ) {
+    mApiParams.push(`qualified=${params.qualified}`);
+  }
+
+  if (
+    params.outreach_success
+  ) {
+    mApiParams.push(`qualified=${params.outreach_success}`);
+  }
+
+  if (
+    params.q
+  ) {
+    mApiParams.push(`qualified=${params.q}`);
+  }
+
+  // add page
+  mApiParams.push(`page=${params.page}`);
+
+
   return { api: mApiParams.join("&") };
 };
 export const useCommonState = () => {
@@ -106,7 +166,7 @@ export const useCommonStateForAccountThreads = (id: string) => {
 };
 
 export const useCommonStateForStageStats = () => {
-  
+
   const [formattedFilterParams, setFormatStatsFilterParams] =
     React.useState<string>("");
 
@@ -121,7 +181,7 @@ export const useCommonStateForStageStats = () => {
   }, [filterParams]);
 
   // const stageStatsQR = useGetStageStats(formattedFilterParams)
-  const stageStatsQR =  useGetStageStatsWithDateFilters(formattedFilterParams)
+  const stageStatsQR = useGetStageStatsWithDateFilters(formattedFilterParams)
 
 
   return {
@@ -130,3 +190,47 @@ export const useCommonStateForStageStats = () => {
     setFilterParams
   };
 };
+
+export const useCommonStateForAccountList = () => {
+
+  const [formattedFilterParams, setFormatAccountListFilterParams] =
+    React.useState<string>("");
+
+  const [filterParams, setFilterParams] = React.useState<AccountListFilterParams>({
+    created_at_gte: "",
+    created_at_lt: "",
+    outreach_time_lt: "",
+    outreach_time_gte: "",
+    outreach_success: false, 
+    q: "",
+    qualified: false,
+    status: "",
+    page: 1,
+  });
+
+  console.log("YAAAAAAAAAAAAAy ", filterParams)
+  React.useEffect(() => {
+    console.log("Effecct run")
+    const params = formatAccountListFilterParams(filterParams);
+    setFormatAccountListFilterParams(params.api);
+
+  }, [filterParams]);
+
+  // const stageStatsQR = useGetStageStats(formattedFilterParams)
+  // accountsQR = useGetAccounts(page);
+  const accountsQR = useGetAccountList(formattedFilterParams);
+
+  React.useEffect(() => {
+    console.log("Effecct run")
+    accountsQR.refetch()
+
+  }, [formattedFilterParams]);
+
+
+  return {
+    accountsQR,
+    filterParams,
+    setFilterParams
+  };
+};
+

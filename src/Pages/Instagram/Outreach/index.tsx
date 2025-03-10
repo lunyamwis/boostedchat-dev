@@ -16,9 +16,11 @@ import { Outreach } from "@/Interfaces/Outreach/outreach.interface";
 // import { IconCheck, IconPencil, IconTrash, IconX } from "@tabler/icons-react";
 // import { openConfirmModal } from "@mantine/modals";
 // import { notifications, showNotification } from "@mantine/notifications";
-import { format, 
+import {
+  format,
   // parse,
-   parseISO } from "date-fns";
+  parseISO
+} from "date-fns";
 import { EDateFormats } from "@/Interfaces/general.interface";
 
 export function OutreachList() {
@@ -209,6 +211,7 @@ export function OutreachList() {
   return (
     <>
       <DataGrid
+        fn={() => { }}
         paginationOptions={{ isManual: false }}
         loading={outreachListQR.isLoading}
         tableName="Outreach List"

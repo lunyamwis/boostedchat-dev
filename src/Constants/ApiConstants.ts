@@ -6,22 +6,22 @@ console.log(DOMAIN1)
 console.log(DOMAIN2)
 // console.log("import.meta.env")
 // console.log(import.meta.env)
-// export const API_URL = import.meta.env.PROD
-//   ? `https://api.${DOMAIN1}.boostedchat.com/v1`
-//   : "http://127.0.0.1:8001/v1";
-
 export const API_URL = import.meta.env.PROD
-  ? `https://api.staging.boostedchat.com/v1`
+  ? `https://api.${DOMAIN1}.boostedchat.com/v1`
   : "http://127.0.0.1:8001/v1";
 
-console.log(API_URL)
-// export const PROMPT_URL = import.meta.env.PROD
-//   ? `https://promptemplate.${DOMAIN2}.boostedchat.com`
-//   : "http://localhost:8000";
+// export const API_URL = import.meta.env.PROD
+//   ? `https://api.staging.boostedchat.com/v1`
+//   : "http://127.0.0.1:8001/v1";
 
+console.log(API_URL)
 export const PROMPT_URL = import.meta.env.PROD
-  ? `https://promptemplate.staging.boostedchat.com`
+  ? `https://promptemplate.${DOMAIN2}.boostedchat.com`
   : "http://localhost:8000";
+
+// export const PROMPT_URL = import.meta.env.PROD
+//   ? `https://promptemplate.staging.boostedchat.com`
+//   : "http://localhost:8000";
 
 // export const LEADS_GENERATION_URL = import.meta.env.PROD
 //   ? `https://scrapper.${DOMAIN1}.boostedchat.com`
@@ -58,6 +58,7 @@ export const queryKeys = {
       getById: "get-account-by-id",
       getByIgThreadId: "get-account-by-ig-thread-id",
       getAccountThreadDetails: "get-account-details",
+      removeDuplicates:"handle-duplicates"
     },
     comments: {
       getComments: "get-all-comments",

@@ -77,8 +77,8 @@ export function ManageServices() {
                   </Text>
                 ),
                 onConfirm: () => {
-                  
-                  if(props.row.original == 'Mqtt'){
+
+                  if (props.row.original == 'Mqtt') {
                     console.log("hhshhhshhs")
                     notifications.show({
                       id: "RESTART_MQTT_NOTIFICATION",
@@ -87,15 +87,15 @@ export function ManageServices() {
                       autoClose: false,
                       withCloseButton: false,
                     });
-                    restartMqtt.mutate({container_id: "boostedchat-site-mqtt-1"});
-                  }else{
+                    restartMqtt.mutate({ container_id: "boostedchat-site-mqtt-1" });
+                  } else {
                     // restartMqtt.mutate(props.row.original.id);
                     // reset conversation
                     resetConversations.mutate();
                     console.log("dddd")
 
                   }
-                  
+
                 },
                 labels: { confirm: "Confirm", cancel: "Cancel" },
               });
@@ -115,9 +115,9 @@ export function ManageServices() {
         header: "Name",
         visible: true,
         type: "string",
-        cell:  ({ row }) => (row.original),
+        cell: ({ row }) => (row.original),
       },
-     
+
       {
         id: "expander",
         header: "Actions",
@@ -131,6 +131,7 @@ export function ManageServices() {
   return (
     <>
       <DataGrid
+        fn={() => { }}
         paginationOptions={{ isManual: false }}
         loading={false}
         tableName="Manage Services"

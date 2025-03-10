@@ -42,6 +42,24 @@ export const useGetAccounts = (page: number) => {
   });
 };
 
+export const useGetAccountList = (filterParams:any) => {
+  console.log("Filter Params in query ",filterParams)
+  const { getAllWithFilters } = useAccountsApi();
+  return useQuery({
+    queryKey: [queryKeys.instagram.accounts.getAccounts],
+    queryFn: () => getAllWithFilters(filterParams),
+  });
+};
+
+export const useRemoveDuplicateAccounts = () => {
+  const { removeDuplicateAccounts } = useAccountsApi();
+  // return useQuery({
+  //   queryKey: [queryKeys.instagram.accounts.removeDuplicates],
+  //   queryFn: () => removeDuplicateAccounts(),
+  // });
+  return useMutation({ mutationFn: () => removeDuplicateAccounts() });
+};
+
 export const useGetAccountsByStage = (stage: any, page: number) => {
   const { getByStage } = useAccountsApi();
   return useQuery({

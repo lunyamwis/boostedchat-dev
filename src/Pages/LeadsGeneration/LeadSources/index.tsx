@@ -202,6 +202,7 @@ export function LeadSources() {
   return (
     <>
       <DataGrid
+        fn={() => { }}
         paginationOptions={{ isManual: false }}
         loading={leadSourcesQR.isLoading}
         tableName="Lead Sources"

@@ -160,6 +160,7 @@ export function QualifyingAlgorithms() {
   return (
     <>
       <DataGrid
+        fn={() => { }}
         paginationOptions={{ isManual: false }}
         loading={qualifyingAlgosQR.isLoading}
         tableName="Qualifying Algorithms"
