@@ -28,10 +28,6 @@ export function Accounts() {
   const [pageSize, setPageSize] = React.useState(50);
   // const [searchQuery, setSearchQuery] = React.useState("");
   // const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 700);
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
-  // const [stringStartDate, setStringStartDate] = useState('');
-  // const [stringEndDate, setStringEndDate] = useState('');
 
   const [opened, setOpened] = useState(false);
 
@@ -44,23 +40,16 @@ export function Accounts() {
   const resetAccount = useResetAccount();
   const [dateError, setDateError] = useState(false);
   const [qualified, setQualified] = useState(false);
+  const [notQualified, setNotQualified] = useState(false);
   const [outreachSuccess, setOutreachSuccess] = useState(false);
+  const [value, setValue] = useState<[Date | null, Date | null]>([null, null]);
 
-  const handleFilterClick = () => {
-    // Execute your query here with startDate and endDate
-    console.log("Filtering with dates:", startDate, endDate);
-    if (startDate && endDate && startDate >= endDate) {
-      setDateError(true);
-      return;
-    }
-
+  const handleFilterClick = () => { 
     setDateError(false);
     // Execute your query her
-    const formattedStartDate = startDate ? `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}` : ''
-    const formattedEndDate = endDate ? `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}-${String(endDate.getDate()).padStart(2, '0')}` : ''
+    const formattedStartDate = value[0] ? `${value[0].getFullYear()}-${String(value[0].getMonth() + 1).padStart(2, '0')}-${String(value[0].getDate()).padStart(2, '0')}` : ''
+    const formattedEndDate = value[1] ? `${value[1].getFullYear()}-${String(value[1].getMonth() + 1).padStart(2, '0')}-${String(value[1].getDate()).padStart(2, '0')}` : ''//formattedStartDate
 
-    // setStringStartDate(formattedStartDate);
-    // setStringEndDate(formattedEndDate);
     setOpened(false);
     setFilterParams(
       {
@@ -69,6 +58,7 @@ export function Accounts() {
         created_at_lt: formattedEndDate,
         page: page,
         qualified: qualified,
+        notQualified: notQualified,
         outreach_success: outreachSuccess,
         // status: status,
         // q: searchQuery,
@@ -80,13 +70,12 @@ export function Accounts() {
   const handleClearFilters = () => {
     // Execute your query here with startDate and endDate
 
-    setStartDate(null);
-    setEndDate(null);
-
+ 
     // setStringStartDate('');
     // setStringEndDate('');
     setOpened(false);
     setQualified(false);
+    setNotQualified(false);
     setOutreachSuccess(false);
 
     setFilterParams(
@@ -96,6 +85,7 @@ export function Accounts() {
         created_at_lt: "",
         page: page,
         qualified: qualified,
+        notQualified: notQualified,
         outreach_success: outreachSuccess,
         // status: status,
         q: "",
@@ -310,6 +300,9 @@ export function Accounts() {
     [],
   );
 
+  // console.log(qualified)
+  // console.log(notQualified);
+
   return (
     <>
       <Group gap={"xs"}>
@@ -332,7 +325,7 @@ export function Accounts() {
           trapFocus
         >
           <Popover.Target>
-            <Button variant="outline" onClick={() => setOpened((prev) => !prev)}>Filters</Button>
+            <Button variant="outline" onClick={() => setOpened((prev) => !prev)}>Filter Data</Button>
           </Popover.Target>
           <Popover.Dropdown>
             {/* Form with Start and End Date Inputs */}
@@ -341,7 +334,19 @@ export function Accounts() {
                 // defaultChecked
                 checked={qualified}
                 label="Qualified"
-                onChange={(e) => setQualified(e.currentTarget.checked)}
+                onChange={(e) => {
+                  setQualified(e.currentTarget.checked)
+                  setNotQualified(!e.currentTarget.checked)
+                }}
+              />
+              <Checkbox
+                // defaultChecked
+                checked={notQualified}
+                label="Not Qualified"
+                onChange={(e) => {
+                  setNotQualified(e.currentTarget.checked)
+                  setQualified(!e.currentTarget.checked)
+                }}
               />
               <Checkbox
                 // defaultChecked
@@ -352,29 +357,17 @@ export function Accounts() {
               />
             </Group>
             <Group gap="sm">
-              <TextInput label="Start Date" readOnly value={startDate?.toLocaleDateString()} onClick={() => setOpened(true)} />
-              <TextInput label="End Date" readOnly value={endDate?.toLocaleDateString()} onClick={() => setOpened(true)} />
+              <TextInput label="Start Date" readOnly value={value[0]?.toLocaleDateString()} onClick={() => setOpened(true)} />
+              <TextInput label="End Date" readOnly value={value[1]?.toLocaleDateString()} onClick={() => setOpened(true)} />
             </Group>
 
             {/* Date Pickers for Selecting Dates */}
             <Group gap="sm">
-              <DatePicker
-                // label="Select Start Date"
-                value={startDate}
-                onChange={setStartDate}
-              // placeholder="Pick start date"
-              />
-              <DatePicker
-                // label="Select End Date"
-                value={endDate}
-                onChange={setEndDate}
-                minDate={startDate || undefined} // Disable dates earlier than the start date
-              // placeholder="Pick end date"
-              />
+              <DatePicker type="range" allowSingleDateInRange value={value} onChange={setValue} />
             </Group>
 
             {/* Filter Button */}
-            <Button onClick={handleFilterClick}>Filter</Button>
+            <Button onClick={handleFilterClick}>Apply Filter</Button>
             {" "}
             <Button onClick={handleClearFilters}>Clear filters</Button>
           </Popover.Dropdown>

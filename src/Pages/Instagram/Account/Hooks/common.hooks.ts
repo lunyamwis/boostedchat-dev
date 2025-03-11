@@ -22,6 +22,7 @@ export type AccountListFilterParams = {
   q: string;
   status: string;
   qualified: boolean;
+  notQualified: boolean;
   page: number;
   outreach_success: boolean;
 };
@@ -81,43 +82,39 @@ const formatStatsFilterParams = (params: StatsFilterParams) => {
 
 const formatAccountListFilterParams = (params: AccountListFilterParams) => {
   const mApiParams = [];
-  if (
-    params.created_at_gte
-  ) {
+  if (params.created_at_gte) {
     mApiParams.push(`created_at_gte=${params.created_at_gte}`);
+    // mApiParams.push(`created_at_lt=${params.created_at_lt}`);
+  }
+
+  if (params.created_at_lt.length > 0) {
+    // mApiParams.push(`created_at_gte=${params.created_at_gte}`);
     mApiParams.push(`created_at_lt=${params.created_at_lt}`);
   }
 
-  if (
-    params.outreach_time_gte
-  ) {
+  if (params.outreach_time_gte) {
     mApiParams.push(`outreach_time_gte=${params.outreach_time_gte}`);
     mApiParams.push(`outreach_time_lt=${params.outreach_time_lt}`);
   }
 
-  if (
-    params.status
-  ) {
+  if (params.status) {
     mApiParams.push(`status=${params.status}`);
   }
 
-  console.log("Checking this qualified: ", params.qualified)
-  if (
-    params.qualified
-  ) {
+  if (params.qualified) {
     mApiParams.push(`qualified=${params.qualified}`);
   }
-
-  if (
-    params.outreach_success
-  ) {
-    mApiParams.push(`qualified=${params.outreach_success}`);
+  
+  if (params.notQualified) {
+    mApiParams.push(`qualified=false`);
   }
 
-  if (
-    params.q
-  ) {
-    mApiParams.push(`qualified=${params.q}`);
+  if (params.outreach_success) {
+    mApiParams.push(`outreach_success=${params.outreach_success}`);
+  }
+
+  if (params.q) {
+    mApiParams.push(`q=${params.q}`);
   }
 
   // add page
@@ -201,16 +198,16 @@ export const useCommonStateForAccountList = () => {
     created_at_lt: "",
     outreach_time_lt: "",
     outreach_time_gte: "",
-    outreach_success: false, 
+    outreach_success: false,
     q: "",
     qualified: false,
+    notQualified: false,
     status: "",
     page: 1,
   });
 
-  console.log("YAAAAAAAAAAAAAy ", filterParams)
   React.useEffect(() => {
-    console.log("Effecct run")
+
     const params = formatAccountListFilterParams(filterParams);
     setFormatAccountListFilterParams(params.api);
 
@@ -218,11 +215,13 @@ export const useCommonStateForAccountList = () => {
 
   // const stageStatsQR = useGetStageStats(formattedFilterParams)
   // accountsQR = useGetAccounts(page);
+  console.log("Formatted Filter Params")
+  console.log(formattedFilterParams);
   const accountsQR = useGetAccountList(formattedFilterParams);
 
   React.useEffect(() => {
     console.log("Effecct run")
-    accountsQR.refetch()
+    accountsQR.refetch();
 
   }, [formattedFilterParams]);
 
