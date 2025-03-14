@@ -90,7 +90,7 @@ export function AccountInformation({ account }: ComponentProps) {
           align="left"
           type="text"
           title="Category"
-          value={account?.outsourced.category}
+          value={account?.outsourced?.category}
         />
       </DetailsRow>
       <Divider />
@@ -103,19 +103,19 @@ export function AccountInformation({ account }: ComponentProps) {
           align="left"
           type="text"
           title="External URL"
-          value={account?.outsourced.external_url}
+          value={account?.outsourced?.external_url}
         />
         <Text
           align="left"
           type="text"
           title="Email"
-          value={account?.outsourced.public_email}
+          value={account?.outsourced?.public_email}
         />
         <Text
           align="left"
           type="text"
           title="Phone Number"
-          value={account?.outsourced.contact_phone_number}
+          value={account?.outsourced?.contact_phone_number}
         />
       </DetailsRow>
     </>

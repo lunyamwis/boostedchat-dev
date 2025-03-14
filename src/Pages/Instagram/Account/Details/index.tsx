@@ -1,7 +1,7 @@
 import { Box, Grid, Tabs } from "@mantine/core";
 import React from "react";
 import { AccountInformation } from "./AccountInformation";
-import { useGetAccount } from "../Hooks/accounts.hook";
+import { useGetAccountThreadDetails } from "../Hooks/accounts.hook";
 import { useNavigate, useParams } from "react-router-dom";
 import { pageData } from "../../..";
 import { Loading } from "../../../../Components/UIState/Loading";
@@ -11,7 +11,8 @@ import { EditDetails } from "./EditDetails";
 
 export function AccountDetails() {
   const [accountId, setAccountId] = React.useState("");
-  const accountQR = useGetAccount(accountId);
+  // const accountQR = useGetAccount(accountId);
+  const accountQR =  useGetAccountThreadDetails(accountId);
   const params = useParams();
   const navigate = useNavigate();
 
@@ -45,12 +46,12 @@ export function AccountDetails() {
       titleProps={{
         igname: accountQR.data.igname,
         fullName: accountQR.data.full_name ?? "",
-        bio: accountQR.data.outsourced.biography,
+        bio: accountQR.data.account.outsourced?.biography,
       }}
       statProps={{
-        following: accountQR.data.outsourced.following_count,
-        followers: accountQR.data.outsourced.follower_count,
-        posts: accountQR.data.outsourced.media_count,
+        following: accountQR.data.account.outsourced?.following_count,
+        followers: accountQR.data.account.outsourced?.follower_count,
+        posts: accountQR.data.account.outsourced?.media_count,
       }}
     >
       <Grid justify="center" m={0}>
@@ -62,7 +63,7 @@ export function AccountDetails() {
             }}
             className="detail-container"
           >
-            <AccountInformation account={accountQR.data} />
+            <AccountInformation account={accountQR.data.account} />
           </Box>
         </Grid.Col>
         <Grid.Col span={8}>
@@ -83,7 +84,7 @@ export function AccountDetails() {
               </Tabs.List>
 
               <Tabs.Panel value="Details">
-                <EditDetails account={accountQR.data} />
+                <EditDetails account={accountQR.data.account} />
               </Tabs.Panel>
             </Tabs>
           </Box>

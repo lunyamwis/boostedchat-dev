@@ -8,7 +8,8 @@ import {
   Button,
   TextInput,
   Divider,
-  Checkbox,
+  Box,
+  Radio
 } from "@mantine/core";
 import { IconPencil, IconX } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
@@ -38,14 +39,13 @@ export function Accounts() {
   const { accountsQR, filterParams, setFilterParams } = useCommonStateForAccountList();
   const removeDuplicateAccountsQR = useRemoveDuplicateAccounts()
   const resetAccount = useResetAccount();
-  const [dateError, setDateError] = useState(false);
-  const [qualified, setQualified] = useState(false);
-  const [notQualified, setNotQualified] = useState(false);
-  const [outreachSuccess, setOutreachSuccess] = useState(false);
+  // const [dateError, setDateError] = useState(false);
   const [value, setValue] = useState<[Date | null, Date | null]>([null, null]);
+  const [qualified_radio, setQualifiedRadio] = useState('all');
+  const [outreach_radio, setOutreachRadio] = useState('all');
 
-  const handleFilterClick = () => { 
-    setDateError(false);
+  const handleFilterClick = () => {
+    // setDateError(false);
     // Execute your query her
     const formattedStartDate = value[0] ? `${value[0].getFullYear()}-${String(value[0].getMonth() + 1).padStart(2, '0')}-${String(value[0].getDate()).padStart(2, '0')}` : ''
     const formattedEndDate = value[1] ? `${value[1].getFullYear()}-${String(value[1].getMonth() + 1).padStart(2, '0')}-${String(value[1].getDate()).padStart(2, '0')}` : ''//formattedStartDate
@@ -57,26 +57,27 @@ export function Accounts() {
         created_at_gte: formattedStartDate,
         created_at_lt: formattedEndDate,
         page: page,
-        qualified: qualified,
-        notQualified: notQualified,
-        outreach_success: outreachSuccess,
+        qualified: qualified_radio,
+        // notQualified: notQualified,
+        outreach_success: outreach_radio,
+        // outreach_failure: outreachFailure,
+        // all_outreach: all_outreach,
+        // all_qualified: all_qualified,
         // status: status,
         // q: searchQuery,
       }
     );
   };
 
-  console.log(dateError)
   const handleClearFilters = () => {
     // Execute your query here with startDate and endDate
 
- 
+
     // setStringStartDate('');
     // setStringEndDate('');
     setOpened(false);
-    setQualified(false);
-    setNotQualified(false);
-    setOutreachSuccess(false);
+    setQualifiedRadio('all');
+    setOutreachRadio('all');
 
     setFilterParams(
       {
@@ -84,9 +85,9 @@ export function Accounts() {
         created_at_gte: "",
         created_at_lt: "",
         page: page,
-        qualified: qualified,
-        notQualified: notQualified,
-        outreach_success: outreachSuccess,
+        qualified: qualified_radio,
+        // notQualified: notQualified,
+        outreach_success: outreach_radio,
         // status: status,
         q: "",
       }
@@ -300,9 +301,6 @@ export function Accounts() {
     [],
   );
 
-  // console.log(qualified)
-  // console.log(notQualified);
-
   return (
     <>
       <Group gap={"xs"}>
@@ -329,33 +327,47 @@ export function Accounts() {
           </Popover.Target>
           <Popover.Dropdown>
             {/* Form with Start and End Date Inputs */}
-            <Group>
-              <Checkbox
-                // defaultChecked
-                checked={qualified}
-                label="Qualified"
-                onChange={(e) => {
-                  setQualified(e.currentTarget.checked)
-                  setNotQualified(!e.currentTarget.checked)
-                }}
-              />
-              <Checkbox
-                // defaultChecked
-                checked={notQualified}
-                label="Not Qualified"
-                onChange={(e) => {
-                  setNotQualified(e.currentTarget.checked)
-                  setQualified(!e.currentTarget.checked)
-                }}
-              />
-              <Checkbox
-                // defaultChecked
-                checked={outreachSuccess}
-                label="Successfully reached out"
-                onChange={(e) => setOutreachSuccess(e.currentTarget.checked)}
 
-              />
-            </Group>
+            <Box style={{ margin: "10px" }}>
+              <Radio.Group
+                value={qualified_radio}
+                onChange={setQualifiedRadio}
+                name="QualifedStatus"
+                label="Qualifed status"
+              // description="This is anonymous"
+              // withAsterisk
+
+              >
+                <Group>
+                  <Radio value="all" label="All" />
+                  <Radio value="qualified" label="Qualifeid" />
+                  <Radio value="not_qualified" label="Not qualified" />
+                </Group>
+
+
+              </Radio.Group>
+
+            </Box>
+            <Box title="Outreach status" style={{ margin: "10px" }}>
+              <Radio.Group
+                value={outreach_radio}
+                onChange={setOutreachRadio}
+                name="OutreachStatus"
+                label="Outreach status"
+              // description="This is anonymous"
+              // withAsterisk
+
+              >
+                <Group>
+                  <Radio value="all" label="All" />
+                  <Radio value="reached_out" label="Successfully reached out"/>
+                  <Radio value="not_reached_out" label="Not reached out" />
+                </Group>
+
+
+              </Radio.Group>
+            </Box>
+
             <Group gap="sm">
               <TextInput label="Start Date" readOnly value={value[0]?.toLocaleDateString()} onClick={() => setOpened(true)} />
               <TextInput label="End Date" readOnly value={value[1]?.toLocaleDateString()} onClick={() => setOpened(true)} />

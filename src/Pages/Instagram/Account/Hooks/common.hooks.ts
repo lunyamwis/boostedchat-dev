@@ -21,10 +21,13 @@ export type AccountListFilterParams = {
   outreach_time_lt: string;
   q: string;
   status: string;
-  qualified: boolean;
+  qualified: string;
   notQualified: boolean;
   page: number;
-  outreach_success: boolean;
+  outreach_success: string;
+  outreach_failure: boolean | undefined;
+  all_outreach: boolean;
+  all_qualified: boolean;
 };
 const formatFilterParams = (params: AccountFilterParams) => {
   const mApiParams = [];
@@ -81,7 +84,9 @@ const formatStatsFilterParams = (params: StatsFilterParams) => {
 };
 
 const formatAccountListFilterParams = (params: AccountListFilterParams) => {
-  const mApiParams = [];
+  let mApiParams = [];
+  // let mApiParamsToRemove = [];
+
   if (params.created_at_gte) {
     mApiParams.push(`created_at_gte=${params.created_at_gte}`);
     // mApiParams.push(`created_at_lt=${params.created_at_lt}`);
@@ -101,21 +106,57 @@ const formatAccountListFilterParams = (params: AccountListFilterParams) => {
     mApiParams.push(`status=${params.status}`);
   }
 
-  if (params.qualified) {
-    mApiParams.push(`qualified=${params.qualified}`);
-  }
-  
-  if (params.notQualified) {
-    mApiParams.push(`qualified=false`);
+  switch (params.qualified) {
+    case "all":
+      // mApiParams.push(`qualified=true`);
+      break;
+    case "qualified":
+      mApiParams.push(`qualified=true`);
+      break;
+    case "not_qualified":
+      mApiParams.push(`qualified=false`);
+      break;
   }
 
-  if (params.outreach_success) {
-    mApiParams.push(`outreach_success=${params.outreach_success}`);
+  switch (params.outreach_success) {
+    case "all":
+      // mApiParams.push(`qualified=true`);
+      break;
+    case "reached_out":
+      mApiParams.push(`outreach_success=true`);
+      break;
+    case "not_reached_out":
+      mApiParams.push(`outreach_success=false`);
+      break;
   }
+
+  // if (params.all_qualified) {
+  //   mApiParamsToRemove.push(`qualified=true`);
+  //   mApiParamsToRemove.push(`qualified=false`);
+  // }
+
+  // if (params.all_outreach) {
+  //   mApiParamsToRemove.push(`outreach_success=false`);
+  //   mApiParamsToRemove.push(`outreach_success=true`);
+  // }
+
+  // console.log("Outreach Success")
+  // console.log(params.outreach_success)
+
+  // if (params.outreach_success) {
+  //   mApiParams.push(`outreach_success=${params.outreach_success}`);
+  // }
+  // console.log("Outreach Failure")
+  // console.log(params.outreach_failure)
+  // if (params.outreach_failure) {
+  //   mApiParams.push(`outreach_success=false`);
+  // }
 
   if (params.q) {
     mApiParams.push(`q=${params.q}`);
   }
+
+  // mApiParams = mApiParams.filter(param => !mApiParamsToRemove.includes(param));
 
   // add page
   mApiParams.push(`page=${params.page}`);
@@ -198,9 +239,12 @@ export const useCommonStateForAccountList = () => {
     created_at_lt: "",
     outreach_time_lt: "",
     outreach_time_gte: "",
-    outreach_success: false,
+    outreach_success: 'all',
+    outreach_failure: false,
+    all_outreach: false,
+    all_qualified: false,
     q: "",
-    qualified: false,
+    qualified: 'all',
     notQualified: false,
     status: "",
     page: 1,
