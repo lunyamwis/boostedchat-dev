@@ -46,8 +46,6 @@ export function Accounts() {
   const [outreach_radio, setOutreachRadio] = useState('all');
 
   const handleFilterClick = () => {
-    // setDateError(false);
-    // Execute your query her
     const formattedStartDate = value[0] ? `${value[0].getFullYear()}-${String(value[0].getMonth() + 1).padStart(2, '0')}-${String(value[0].getDate()).padStart(2, '0')}` : ''
     const formattedEndDate = value[1] ? `${value[1].getFullYear()}-${String(value[1].getMonth() + 1).padStart(2, '0')}-${String(value[1].getDate()).padStart(2, '0')}` : ''//formattedStartDate
 
@@ -71,6 +69,7 @@ export function Accounts() {
     setOpened(false);
     setQualifiedRadio('all');
     setOutreachRadio('all');
+    setValue([null, null]);
 
     setFilterParams(
       {
@@ -221,8 +220,6 @@ export function Accounts() {
         visible: true,
         type: "string",
         cell: (params) => {
-          // console.log(params.row.original.created_at);
-          new Date().toLocaleString
 
           if (params.row.original.created_at == null) {
             return <></>;
@@ -355,17 +352,12 @@ export function Accounts() {
                 onChange={setOutreachRadio}
                 name="OutreachStatus"
                 label="Outreach status"
-              // description="This is anonymous"
-              // withAsterisk
-
               >
                 <Group>
                   <Radio value="all" label="All" />
                   <Radio value="reached_out" label="Successfully reached out" />
                   <Radio value="not_reached_out" label="Not reached out" />
                 </Group>
-
-
               </Radio.Group>
             </Box>
 
@@ -385,9 +377,27 @@ export function Accounts() {
             <Button onClick={handleClearFilters}>Clear filters</Button>
           </Popover.Dropdown>
         </Popover>
+        <Group>
+          <Text fw={700} size="xl" >Qualified: </Text> <Text fw={500} size="xl" > {qualified_radio} </Text>
+          <Text fw={700} size="xl" >Outreach: </Text> <Text fw={500} size="xl" > {outreach_radio} </Text>
+          <Text fw={700} size="xl" >Date: </Text>
+          <Text fw={500} size="xl" >{value[0]?.toLocaleDateString()}</Text> - <Text fw={500} size="xl">{value[1]?.toLocaleDateString()}</Text>
+        </Group>
       </Group>
       <Divider my="md" />
-      <Text></Text>
+      <Flex
+        gap="md"
+        justify="center"
+        align="stretch"
+      >
+        {/* <Group>
+          <Text fw={700} size="xl" >Qualified: </Text> <Text fw={500} size="xl" > {qualified_radio} </Text>
+          <Text fw={700} size="xl" >Outreach: </Text> <Text fw={500} size="xl" > {outreach_radio} </Text>
+          <Text fw={700} size="xl" >Date: </Text>
+          <Text fw={500} size="xl" >{value[0]?.toLocaleDateString()}</Text> - <Text fw={500} size="xl">{value[1]?.toLocaleDateString()}</Text>
+        </Group> */}
+      </Flex>
+
       <Flex
         gap="md"
         justify="center"
@@ -427,7 +437,7 @@ export function Accounts() {
             message: "message",
           });
         }}
-        loading={accountsQR.isLoading || isLoading } 
+        loading={accountsQR.isLoading || isLoading}
         tableName="Accounts"
         data={accountsQR.data?.results ?? []}
         columns={columns}
