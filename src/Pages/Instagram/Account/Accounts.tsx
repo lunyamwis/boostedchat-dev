@@ -35,7 +35,6 @@ export function Accounts() {
   const [isCreateAccountModalOpen, setIsCreateAccountModalOpen] =
     React.useState(false);
   const navigate = useNavigate();
-  // const accountsQR = useGetAccounts(page);
   const { accountsQR, filterParams, setFilterParams } = useCommonStateForAccountList();
   const removeDuplicateAccountsQR = useRemoveDuplicateAccounts()
   const resetAccount = useResetAccount();
@@ -58,11 +57,7 @@ export function Accounts() {
         created_at_lt: formattedEndDate,
         page: page,
         qualified: qualified_radio,
-        // notQualified: notQualified,
         outreach_success: outreach_radio,
-        // outreach_failure: outreachFailure,
-        // all_outreach: all_outreach,
-        // all_qualified: all_qualified,
         // status: status,
         // q: searchQuery,
       }
@@ -71,10 +66,6 @@ export function Accounts() {
 
   const handleClearFilters = () => {
     // Execute your query here with startDate and endDate
-
-
-    // setStringStartDate('');
-    // setStringEndDate('');
     setOpened(false);
     setQualifiedRadio('all');
     setOutreachRadio('all');
@@ -86,7 +77,6 @@ export function Accounts() {
         created_at_lt: "",
         page: page,
         qualified: qualified_radio,
-        // notQualified: notQualified,
         outreach_success: outreach_radio,
         // status: status,
         q: "",
@@ -235,8 +225,8 @@ export function Accounts() {
           if (params.row.original.created_at == null) {
             return <></>;
           }
-          let formattedDate = new Date(params.row.original.created_at).toLocaleDateString()
           let formattedTime = new Date(params.row.original.created_at).toLocaleTimeString()
+          let formattedDate = new Date(params.row.original.created_at).toLocaleDateString()
           // console.log(k);
           return (
             `${formattedDate} at ${formattedTime}`

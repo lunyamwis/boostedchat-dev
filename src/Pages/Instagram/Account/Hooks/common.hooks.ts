@@ -85,15 +85,12 @@ const formatStatsFilterParams = (params: StatsFilterParams) => {
 
 const formatAccountListFilterParams = (params: AccountListFilterParams) => {
   let mApiParams = [];
-  // let mApiParamsToRemove = [];
 
   if (params.created_at_gte) {
     mApiParams.push(`created_at_gte=${params.created_at_gte}`);
-    // mApiParams.push(`created_at_lt=${params.created_at_lt}`);
   }
 
   if (params.created_at_lt.length > 0) {
-    // mApiParams.push(`created_at_gte=${params.created_at_gte}`);
     mApiParams.push(`created_at_lt=${params.created_at_lt}`);
   }
 
@@ -130,37 +127,12 @@ const formatAccountListFilterParams = (params: AccountListFilterParams) => {
       break;
   }
 
-  // if (params.all_qualified) {
-  //   mApiParamsToRemove.push(`qualified=true`);
-  //   mApiParamsToRemove.push(`qualified=false`);
-  // }
-
-  // if (params.all_outreach) {
-  //   mApiParamsToRemove.push(`outreach_success=false`);
-  //   mApiParamsToRemove.push(`outreach_success=true`);
-  // }
-
-  // console.log("Outreach Success")
-  // console.log(params.outreach_success)
-
-  // if (params.outreach_success) {
-  //   mApiParams.push(`outreach_success=${params.outreach_success}`);
-  // }
-  // console.log("Outreach Failure")
-  // console.log(params.outreach_failure)
-  // if (params.outreach_failure) {
-  //   mApiParams.push(`outreach_success=false`);
-  // }
-
   if (params.q) {
     mApiParams.push(`q=${params.q}`);
   }
 
-  // mApiParams = mApiParams.filter(param => !mApiParamsToRemove.includes(param));
-
   // add page
   mApiParams.push(`page=${params.page}`);
-
 
   return { api: mApiParams.join("&") };
 };
