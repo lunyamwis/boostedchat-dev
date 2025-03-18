@@ -50,7 +50,9 @@ export function StatsRingCardsRow({stringStartDate, stringEndDate} : {stringStar
           percentage_sales_qualified_to_committed={stat.percentage_sales_qualified_to_committed}
           prequalified_to_sales_qualified_count={stat.prequalified_to_sales_qualified_count}
           sales_qualified_to_committed_count={stat.sales_qualified_to_committed_count}
-          key={index} />
+          key={index} 
+          description={stat.description}
+          />
       })}
       {/* {cards} */}
     </Flex>

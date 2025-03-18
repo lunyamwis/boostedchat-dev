@@ -13,10 +13,11 @@ interface AccountPrimary {
 export interface Stat {
   status_param: string | null;
   total_accounts: number | null;
-  sales_qualified_to_committed_count: number,
-  percentage_sales_qualified_to_committed: number,
-  prequalified_to_sales_qualified_count: number,
-  percentage_prequalified_to_sales_qualified: number,
+  sales_qualified_to_committed_count?: number | 0,
+  percentage_sales_qualified_to_committed?: number | 0,
+  prequalified_to_sales_qualified_count?: number | 0,
+  percentage_prequalified_to_sales_qualified?: number | 0,
+  description?: string | null;
 
 }
 

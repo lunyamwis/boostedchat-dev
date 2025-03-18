@@ -9,9 +9,19 @@ import { Stat } from "@/Interfaces/Instagram/account.interface";
 // ];
 
 
-export function StatsRingCard(stat: Stat) {
+const defaultStat: Stat = {
+  status_param: null,
+  total_accounts: 0,
+  sales_qualified_to_committed_count: 0,
+  percentage_sales_qualified_to_committed: 0,
+  prequalified_to_sales_qualified_count: 0,
+  percentage_prequalified_to_sales_qualified: 0,
+  description: "",
+};
+
+export function StatsRingCard(stat: Stat = defaultStat) {
   const theme = useMantineTheme();
-  const [stat_progress, setStatProgress] = useState<number>(0);
+  // const [stat_progress, setStatProgress] = useState<number>(0);
   const [stat_percentage, setStatPercentage] = useState<number>(0);
   const [stat_lable, setStatLable] = useState<string>("");
   const [show_ring, setShowRing] = useState<boolean>(false);
@@ -28,15 +38,11 @@ export function StatsRingCard(stat: Stat) {
   // useEffect(() =>{
   //   if(stat.status_param == '')
   // },[stat]);
-
-  console.log(show_ring)
-  console.log(stat_progress)
-
   switch (stat.status_param) {
     case "Committed":
       useEffect(() => {
-        setStatProgress(stat?.sales_qualified_to_committed_count)
-        setStatPercentage(stat?.percentage_sales_qualified_to_committed)
+        // setStatProgress(stat?.sales_qualified_to_committed_count || 0)
+        setStatPercentage(stat?.percentage_sales_qualified_to_committed || 0)
         setStatLable("From Sales qualified")
         setShowRing(true)
       }, [])
@@ -44,8 +50,8 @@ export function StatsRingCard(stat: Stat) {
       break;
     case "Sales Qualified":
       useEffect(() => {
-        setStatProgress(stat?.prequalified_to_sales_qualified_count);
-        setStatPercentage(stat?.percentage_prequalified_to_sales_qualified)
+        // setStatProgress(stat?.prequalified_to_sales_qualified_count || 0);
+        setStatPercentage(stat?.percentage_prequalified_to_sales_qualified || 0)
         setStatLable("From Prequalified")
         setShowRing(true)
       }, [])
@@ -69,7 +75,8 @@ export function StatsRingCard(stat: Stat) {
               {stat.total_accounts}
             </Text>
             <Text fz="xs" c="dimmed">
-              Leads in this stage
+              {/* Leads in this stage */}
+              {stat.description}
             </Text>
           </div>
           {/* <Group mt="lg">
@@ -80,7 +87,7 @@ export function StatsRingCard(stat: Stat) {
           </Group> */}
         </div>
 
-        <div className={classes.ring}>
+        {show_ring && <div className={classes.ring}>
           <RingProgress
             roundCaps
             thickness={6}
@@ -98,7 +105,7 @@ export function StatsRingCard(stat: Stat) {
               </div>
             }
           />
-        </div>
+        </div>}
       </div>
     </Card>
   );

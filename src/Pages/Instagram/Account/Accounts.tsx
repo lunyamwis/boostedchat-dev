@@ -9,7 +9,8 @@ import {
   TextInput,
   Divider,
   Box,
-  Radio
+  Radio,
+  Flex
 } from "@mantine/core";
 import { IconPencil, IconX } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +23,7 @@ import { CreateAccount } from "./CreateAccount";
 import { showNotification } from "@mantine/notifications";
 import { DatePicker } from "@mantine/dates";
 import { useCommonStateForAccountList } from "./Hooks/common.hooks";
+import { StatsRingCard } from "@/Pages/Dashboard/StatsCard";
 
 
 export function Accounts() {
@@ -35,7 +37,7 @@ export function Accounts() {
   const [isCreateAccountModalOpen, setIsCreateAccountModalOpen] =
     React.useState(false);
   const navigate = useNavigate();
-  const { accountsQR, filterParams, setFilterParams } = useCommonStateForAccountList();
+  const { isLoading, accountsQR, filterParams, setFilterParams } = useCommonStateForAccountList();
   const removeDuplicateAccountsQR = useRemoveDuplicateAccounts()
   const resetAccount = useResetAccount();
   // const [dateError, setDateError] = useState(false);
@@ -291,6 +293,15 @@ export function Accounts() {
     [],
   );
 
+  let scheduledAndNotReachedOut = accountsQR.data?.results.filter((account) => {
+    return account.qualified == true && account.outreach_success == false;
+  })
+
+  let reachedOut = accountsQR.data?.results.filter((account) => {
+    return account.qualified == true && account.outreach_success == true;
+  })
+
+
   return (
     <>
       <Group gap={"xs"}>
@@ -350,7 +361,7 @@ export function Accounts() {
               >
                 <Group>
                   <Radio value="all" label="All" />
-                  <Radio value="reached_out" label="Successfully reached out"/>
+                  <Radio value="reached_out" label="Successfully reached out" />
                   <Radio value="not_reached_out" label="Not reached out" />
                 </Group>
 
@@ -376,6 +387,27 @@ export function Accounts() {
         </Popover>
       </Group>
       <Divider my="md" />
+      <Text></Text>
+      <Flex
+        gap="md"
+        justify="center"
+        align="stretch"
+        wrap="wrap"
+      >
+
+        <StatsRingCard
+          status_param={'Scheduled'}
+          total_accounts={scheduledAndNotReachedOut?.length ?? 0}
+          description={"Qualified, Scheduled but not reached out"}
+        />
+        <StatsRingCard
+          status_param={'Reached out'}
+          total_accounts={reachedOut?.length ?? 0}
+          description={"Qualifed Scheduled & reached out"}
+        />
+
+      </Flex>
+      <Divider my="md" />
       <DataGrid
         fn={() => {
           removeDuplicateAccountsQR.mutate();
@@ -395,7 +427,7 @@ export function Accounts() {
             message: "message",
           });
         }}
-        loading={accountsQR.isPending}
+        loading={accountsQR.isLoading || isLoading } 
         tableName="Accounts"
         data={accountsQR.data?.results ?? []}
         columns={columns}

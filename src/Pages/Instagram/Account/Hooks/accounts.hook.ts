@@ -43,11 +43,14 @@ export const useGetAccounts = (page: number) => {
 };
 
 export const useGetAccountList = (filterParams:any) => {
-  console.log("Filter Params in query ",filterParams)
   const { getAllWithFilters } = useAccountsApi();
   return useQuery({
     queryKey: [queryKeys.instagram.accounts.getAccounts],
     queryFn: () => getAllWithFilters(filterParams),
+    // keepPreviousData: true,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 };
 

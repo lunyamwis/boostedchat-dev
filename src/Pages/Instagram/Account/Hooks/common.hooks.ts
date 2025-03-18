@@ -205,6 +205,7 @@ export const useCommonStateForAccountList = () => {
 
   const [formattedFilterParams, setFormatAccountListFilterParams] =
     React.useState<string>("");
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
   const [filterParams, setFilterParams] = React.useState<AccountListFilterParams>({
     created_at_gte: "",
@@ -231,19 +232,18 @@ export const useCommonStateForAccountList = () => {
 
   // const stageStatsQR = useGetStageStats(formattedFilterParams)
   // accountsQR = useGetAccounts(page);
-  console.log("Formatted Filter Params")
-  console.log(formattedFilterParams);
   const accountsQR = useGetAccountList(formattedFilterParams);
 
   React.useEffect(() => {
-    console.log("Effecct run")
-    accountsQR.refetch();
-
+    setIsLoading(true);
+    accountsQR.refetch().finally(() => setIsLoading(false));
+    // console.log(accountsQR.isFetching)
   }, [formattedFilterParams]);
 
 
   return {
     accountsQR,
+    isLoading,
     filterParams,
     setFilterParams
   };
