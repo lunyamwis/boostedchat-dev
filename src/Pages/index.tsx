@@ -197,7 +197,16 @@ export const pageData: TMPageData = {
     title: "Accounts canban",
     isNavItem: true,
     icon: IconChartInfographic,
-    url: "/dashboard/accounts",
+    url: "/dashboard/accounts_canban",
+  },
+  Accounts: {
+    level: "1",
+    group: EGroup.summaries,
+    hasChildren: false,
+    url: "/instagram/accounts",
+    title: "Accounts",
+    isNavItem: true,
+    icon: IconUsersGroup,
   },
   LikersCommenters: {
     level: "1",
@@ -227,15 +236,7 @@ export const pageData: TMPageData = {
     icon: IconBrandMessenger,
     url: "/instagram/threads",
   },
-  Accounts: {
-    level: "1",
-    group: EGroup.instagram,
-    hasChildren: false,
-    url: "/instagram/accounts",
-    title: "Accounts",
-    isNavItem: true,
-    icon: IconUsersGroup,
-  },
+
   AccountDetails: {
     level: "1",
     group: EGroup.instagram,
