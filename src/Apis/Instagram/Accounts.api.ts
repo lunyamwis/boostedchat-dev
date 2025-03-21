@@ -1,5 +1,5 @@
 import { handleRestError, handleRestResponse } from "../response";
-import { useAPIGlobalAxios } from "../../Hooks/useAxios";
+import { useAPIGlobalAxios, useLeadsGenerationGlobalAxios } from "../../Hooks/useAxios";
 import {
   CreateAccount,
   GetAccount,
@@ -9,11 +9,12 @@ import {
   UpdateAccountParams,
   MqttStatus
 } from "../../Interfaces/Instagram/account.interface";
-import { Lead, PaginatedQuery } from "../../Interfaces/general.interface";
+import { Lead, PaginatedQuery,ChartData } from "../../Interfaces/general.interface";
 import { UploadCSV } from "../../Interfaces/Instagram/upload.interface";
 
 export const useAccountsApi = () => {
   const axiosInstance = useAPIGlobalAxios("instagram/account");
+  const lunyamwiAxiosInstance = useLeadsGenerationGlobalAxios("api/dashboard")
 
   return {
     getMqttHealth: (): Promise<MqttStatus> =>
@@ -50,6 +51,11 @@ export const useAccountsApi = () => {
         .then(handleRestResponse)
         .catch(handleRestError)
     },
+    getOutreachLineChart: (filterParams: any): Promise<ChartData> =>
+      lunyamwiAxiosInstance
+        .post(`/?${filterParams}`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
     getByStageWithFilters: (filterParams: string, page: number): Promise<PaginatedQuery<GetAccount>> => {
       // console.log("filterParams IN THE QUERY");
       // console.log(filterParams);

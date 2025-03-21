@@ -37,7 +37,11 @@ export function Accounts() {
   const [isCreateAccountModalOpen, setIsCreateAccountModalOpen] =
     React.useState(false);
   const navigate = useNavigate();
-  const { isLoading, accountsQR, filterParams, setFilterParams } = useCommonStateForAccountList();
+  const { isLoading,
+    accountsQR,
+    filterParams,
+    outreachLineChart,
+    setFilterParams } = useCommonStateForAccountList();
   const removeDuplicateAccountsQR = useRemoveDuplicateAccounts()
   const resetAccount = useResetAccount();
   // const [dateError, setDateError] = useState(false);
@@ -297,8 +301,7 @@ export function Accounts() {
   let reachedOut = accountsQR.data?.results.filter((account) => {
     return account.qualified == true && account.outreach_success == true;
   })
-
-
+  
   return (
     <>
       <Group gap={"xs"}>
@@ -390,12 +393,6 @@ export function Accounts() {
         justify="center"
         align="stretch"
       >
-        {/* <Group>
-          <Text fw={700} size="xl" >Qualified: </Text> <Text fw={500} size="xl" > {qualified_radio} </Text>
-          <Text fw={700} size="xl" >Outreach: </Text> <Text fw={500} size="xl" > {outreach_radio} </Text>
-          <Text fw={700} size="xl" >Date: </Text>
-          <Text fw={500} size="xl" >{value[0]?.toLocaleDateString()}</Text> - <Text fw={500} size="xl">{value[1]?.toLocaleDateString()}</Text>
-        </Group> */}
       </Flex>
 
       <Flex
@@ -417,6 +414,22 @@ export function Accounts() {
         />
 
       </Flex>
+      <Divider my="md" />
+      <Flex
+        gap="md"
+        justify="center"
+        align="stretch"
+        wrap="wrap"
+      >
+        {
+          outreachLineChart.isLoading ? <Loader color="blue" /> : outreachLineChart.isError ? '' : <img
+            src={`data:image/png;base64,${outreachLineChart.data?.charts.mpl}`}
+            alt="Decoded"
+            style={{ maxWidth: "100%", height: "auto" }}
+          />
+        }
+      </Flex>
+
       <Divider my="md" />
       <DataGrid
         fn={() => {

@@ -1,6 +1,12 @@
 // import { useState } from "react";
 import React from "react";
-import { getInfiniteAccountsByStageWithFilters, useGetAccountThreadDetails, useGetStageStatsWithDateFilters, useGetAccountList } from "./accounts.hook";
+import {
+  getInfiniteAccountsByStageWithFilters,
+  useGetAccountThreadDetails,
+  useGetStageStatsWithDateFilters,
+  useGetAccountList,
+  useGetOutreachLineChart
+} from "./accounts.hook";
 
 export type AccountFilterParams = {
   stage: string;
@@ -233,6 +239,7 @@ export const useCommonStateForAccountList = () => {
   // const stageStatsQR = useGetStageStats(formattedFilterParams)
   // accountsQR = useGetAccounts(page);
   const accountsQR = useGetAccountList(formattedFilterParams);
+  const outreachLineChart = useGetOutreachLineChart("");
 
   React.useEffect(() => {
     setIsLoading(true);
@@ -243,6 +250,7 @@ export const useCommonStateForAccountList = () => {
 
   return {
     accountsQR,
+    outreachLineChart,
     isLoading,
     filterParams,
     setFilterParams
