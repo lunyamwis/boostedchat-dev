@@ -42,7 +42,7 @@ export const useGetAccounts = (page: number) => {
   });
 };
 
-export const useGetAccountList = (filterParams:any) => {
+export const useGetAccountList = (filterParams: any) => {
   const { getAllWithFilters } = useAccountsApi();
   return useQuery({
     queryKey: [queryKeys.instagram.accounts.getAccounts],
@@ -54,7 +54,7 @@ export const useGetAccountList = (filterParams:any) => {
   });
 };
 
-export const useGetOutreachLineChart = (filterParams:any) => {
+export const useGetOutreachLineChart = (filterParams: any) => {
   const { getOutreachLineChart } = useAccountsApi();
   return useQuery({
     queryKey: [queryKeys.instagram.accounts.getOutreachLineChart],

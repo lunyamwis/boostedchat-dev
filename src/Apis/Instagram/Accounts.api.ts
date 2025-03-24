@@ -9,12 +9,14 @@ import {
   UpdateAccountParams,
   MqttStatus
 } from "../../Interfaces/Instagram/account.interface";
-import { Lead, PaginatedQuery,ChartData } from "../../Interfaces/general.interface";
+import { Lead, PaginatedQuery, LineChartData, ChartList } from "../../Interfaces/general.interface";
 import { UploadCSV } from "../../Interfaces/Instagram/upload.interface";
 
 export const useAccountsApi = () => {
   const axiosInstance = useAPIGlobalAxios("instagram/account");
-  const lunyamwiAxiosInstance = useLeadsGenerationGlobalAxios("api/dashboard")
+ 
+  const lunyamwiAxiosInstanceLineChartData = useLeadsGenerationGlobalAxios("api/dashboard") 
+  const lunyamwiAxiosInstanceChartList = useLeadsGenerationGlobalAxios("api/dashboard")
 
   return {
     getMqttHealth: (): Promise<MqttStatus> =>
@@ -51,8 +53,13 @@ export const useAccountsApi = () => {
         .then(handleRestResponse)
         .catch(handleRestError)
     },
-    getOutreachLineChart: (filterParams: any): Promise<ChartData> =>
-      lunyamwiAxiosInstance
+    getOutreachLineChart: (filterParams: any): Promise<LineChartData> =>
+      lunyamwiAxiosInstanceLineChartData
+        .post(`/?${filterParams}`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    getOutreachChartList: (filterParams: any): Promise<ChartList> =>
+      lunyamwiAxiosInstanceChartList
         .post(`/?${filterParams}`)
         .then(handleRestResponse)
         .catch(handleRestError),

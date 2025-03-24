@@ -57,11 +57,18 @@ export interface LoginState {
   title: string;
 }
 
-export interface ChartData {
+export interface LineChartData {
   dataframe: string,
   charts: {
     mpl: string,
   }
+}
+
+export interface ChartList {
+  id: number,
+  name: string,
+  query: string,
+  chart_type: string,
 }
 
 export interface Lead {
