@@ -1,4 +1,5 @@
 import { MantineColor } from "@mantine/core";
+import { result } from "lodash";
 
 export enum httpErrorTypes {
   unknown = "UNKNOWN",
@@ -65,10 +66,12 @@ export interface LineChartData {
 }
 
 export interface ChartList {
-  id: number,
-  name: string,
-  query: string,
-  chart_type: string,
+  result: [{
+    id: number,
+    name: string,
+    query: string,
+    chart_type: string
+  }];
 }
 
 export interface Lead {

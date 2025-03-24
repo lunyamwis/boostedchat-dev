@@ -63,6 +63,14 @@ export const useGetOutreachLineChart = (filterParams: any) => {
 };
 
 
+export const useGetOutreachChartList = (filterParams: any) => {
+  const { getOutreachChartList } = useAccountsApi();
+  return useQuery({
+    queryKey: [queryKeys.instagram.accounts.getOutreachChartList],
+    queryFn: () => getOutreachChartList(filterParams),
+  });
+};
+
 export const useRemoveDuplicateAccounts = () => {
   const { removeDuplicateAccounts } = useAccountsApi();
   // return useQuery({

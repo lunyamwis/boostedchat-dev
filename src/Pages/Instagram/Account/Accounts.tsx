@@ -10,7 +10,8 @@ import {
   Divider,
   Box,
   Radio,
-  Flex
+  Flex, 
+  Select,
 } from "@mantine/core";
 import { IconPencil, IconX } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
@@ -24,6 +25,7 @@ import { showNotification } from "@mantine/notifications";
 import { DatePicker } from "@mantine/dates";
 import { useCommonStateForAccountList } from "./Hooks/common.hooks";
 import { StatsRingCard } from "@/Pages/Dashboard/StatsCard";
+import { set } from "lodash";
 
 
 export function Accounts() {
@@ -40,14 +42,22 @@ export function Accounts() {
   const { isLoading,
     accountsQR,
     filterParams,
-    outreachLineChart,
-    setFilterParams } = useCommonStateForAccountList();
+    outreachLineChart, setChartType,
+    setFilterParams, outreachChartList } = useCommonStateForAccountList();
   const removeDuplicateAccountsQR = useRemoveDuplicateAccounts()
   const resetAccount = useResetAccount();
   // const [dateError, setDateError] = useState(false);
   const [value, setValue] = useState<[Date | null, Date | null]>([null, null]);
   const [qualified_radio, setQualifiedRadio] = useState('all');
   const [outreach_radio, setOutreachRadio] = useState('all');
+  const [chartId, setChartId] = useState('1');
+
+  const getChartNames = (data: any[]) => {
+
+    return data.map(
+      (item: any) => {
+        return {"value":item.id.toString(), "label":item.name}});
+  };
 
   const handleFilterClick = () => {
     const formattedStartDate = value[0] ? `${value[0].getFullYear()}-${String(value[0].getMonth() + 1).padStart(2, '0')}-${String(value[0].getDate()).padStart(2, '0')}` : ''
@@ -421,11 +431,23 @@ export function Accounts() {
         align="stretch"
         wrap="wrap"
       >
+        <Select
+          label="Choose chart"
+          placeholder="Choose chart.."
+          data={getChartNames(outreachChartList.data ?? [])}
+          onChange={(value) => {
+            console.log(value)
+            setChartId(value ?? '')
+            setChartType(`id=${value}`)
+          }}
+          
+        />
         {
           outreachLineChart.isLoading ? <Loader color="blue" /> : outreachLineChart.isError ? '' : <img
             src={`data:image/png;base64,${outreachLineChart.data?.charts.mpl}`}
             alt="Decoded"
             style={{ maxWidth: "100%", height: "auto" }}
+            
           />
         }
       </Flex>

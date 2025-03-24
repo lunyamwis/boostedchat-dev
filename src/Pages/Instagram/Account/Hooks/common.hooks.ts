@@ -5,7 +5,8 @@ import {
   useGetAccountThreadDetails,
   useGetStageStatsWithDateFilters,
   useGetAccountList,
-  useGetOutreachLineChart
+  useGetOutreachLineChart,
+  useGetOutreachChartList
 } from "./accounts.hook";
 
 export type AccountFilterParams = {
@@ -212,6 +213,7 @@ export const useCommonStateForAccountList = () => {
   const [formattedFilterParams, setFormatAccountListFilterParams] =
     React.useState<string>("");
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const [chart_type, setChartType] = React.useState<string>("");
 
   const [filterParams, setFilterParams] = React.useState<AccountListFilterParams>({
     created_at_gte: "",
@@ -239,7 +241,8 @@ export const useCommonStateForAccountList = () => {
   // const stageStatsQR = useGetStageStats(formattedFilterParams)
   // accountsQR = useGetAccounts(page);
   const accountsQR = useGetAccountList(formattedFilterParams);
-  const outreachLineChart = useGetOutreachLineChart("");
+  const outreachLineChart = useGetOutreachLineChart(chart_type);
+  const outreachChartList = useGetOutreachChartList("");
 
   React.useEffect(() => {
     setIsLoading(true);
@@ -247,10 +250,19 @@ export const useCommonStateForAccountList = () => {
     // console.log(accountsQR.isFetching)
   }, [formattedFilterParams]);
 
+  React.useEffect(() => {
+    setIsLoading(true);
+    outreachLineChart.refetch().finally(() => setIsLoading(false));
+    // console.log(accountsQR.isFetching)
+  }, [chart_type]);
+
 
   return {
     accountsQR,
+    chart_type,
+    setChartType,
     outreachLineChart,
+    outreachChartList,
     isLoading,
     filterParams,
     setFilterParams

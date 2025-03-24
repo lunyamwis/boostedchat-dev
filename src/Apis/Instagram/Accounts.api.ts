@@ -16,7 +16,7 @@ export const useAccountsApi = () => {
   const axiosInstance = useAPIGlobalAxios("instagram/account");
  
   const lunyamwiAxiosInstanceLineChartData = useLeadsGenerationGlobalAxios("api/dashboard") 
-  const lunyamwiAxiosInstanceChartList = useLeadsGenerationGlobalAxios("api/dashboard")
+  const lunyamwiAxiosInstanceChartList = useLeadsGenerationGlobalAxios("api/get_sql_records")
 
   return {
     getMqttHealth: (): Promise<MqttStatus> =>
@@ -55,7 +55,7 @@ export const useAccountsApi = () => {
     },
     getOutreachLineChart: (filterParams: any): Promise<LineChartData> =>
       lunyamwiAxiosInstanceLineChartData
-        .post(`/?${filterParams}`)
+        .post(`/`, filterParams)
         .then(handleRestResponse)
         .catch(handleRestError),
     getOutreachChartList: (filterParams: any): Promise<ChartList> =>

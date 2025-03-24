@@ -60,6 +60,7 @@ export const queryKeys = {
       getAccountThreadDetails: "get-account-details",
       removeDuplicates:"handle-duplicates",
       getOutreachLineChart: "get-outreach-line-chart",
+      getOutreachChartList: "get-outreach-chart-list",
     },
     comments: {
       getComments: "get-all-comments",
