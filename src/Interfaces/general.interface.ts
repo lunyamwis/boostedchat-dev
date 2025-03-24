@@ -1,5 +1,4 @@
 import { MantineColor } from "@mantine/core";
-import { result } from "lodash";
 
 export enum httpErrorTypes {
   unknown = "UNKNOWN",

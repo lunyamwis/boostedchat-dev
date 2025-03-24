@@ -253,7 +253,6 @@ export const useCommonStateForAccountList = () => {
   React.useEffect(() => {
     setIsLoading(true);
     outreachLineChart.refetch().finally(() => setIsLoading(false));
-    // console.log(accountsQR.isFetching)
   }, [chart_type]);
 
 

@@ -10,7 +10,7 @@ import {
   Divider,
   Box,
   Radio,
-  Flex, 
+  Flex,
   Select,
 } from "@mantine/core";
 import { IconPencil, IconX } from "@tabler/icons-react";
@@ -25,7 +25,6 @@ import { showNotification } from "@mantine/notifications";
 import { DatePicker } from "@mantine/dates";
 import { useCommonStateForAccountList } from "./Hooks/common.hooks";
 import { StatsRingCard } from "@/Pages/Dashboard/StatsCard";
-import { set } from "lodash";
 
 
 export function Accounts() {
@@ -50,13 +49,12 @@ export function Accounts() {
   const [value, setValue] = useState<[Date | null, Date | null]>([null, null]);
   const [qualified_radio, setQualifiedRadio] = useState('all');
   const [outreach_radio, setOutreachRadio] = useState('all');
-  const [chartId, setChartId] = useState('1');
 
   const getChartNames = (data: any[]) => {
-
     return data.map(
       (item: any) => {
-        return {"value":item.id.toString(), "label":item.name}});
+        return { "value": item.id.toString(), "label": item.name }
+      });
   };
 
   const handleFilterClick = () => {
@@ -240,60 +238,17 @@ export function Accounts() {
           }
           let formattedTime = new Date(params.row.original.created_at).toLocaleTimeString()
           let formattedDate = new Date(params.row.original.created_at).toLocaleDateString()
-          // console.log(k);
           return (
             `${formattedDate} at ${formattedTime}`
           );
         },
       },
-      // {
-      //   accessorFn: (row) => row.outreach_time,
-      //   id: "outreach_time",
-      //   header: "Outreach Time",
-      //   visible: false,
-      //   type: "string",
-      //   cell: (params) => {
-      //     // console.log(params.row.original.outreach_time);
-      //     new Date().toLocaleString
-
-      //     if (params.row.original.outreach_time == null) {
-      //       return <></>;
-      //     }
-      //     let formattedDate = new Date(params.row.original.outreach_time).toLocaleDateString()
-      //     let formattedTime = new Date(params.row.original.outreach_time).toLocaleTimeString()
-      //     // console.log(k);
-      //     return (
-      //       `${formattedDate} at ${formattedTime}`
-      //     );
-      //   },
-      // },
       {
         accessorFn: (row) => (row.assigned_to === "Robot" ? "Bot" : "Human"),
         id: "robot",
         header: "Assigned to",
         visible: true,
       },
-      // {
-      //   accessorFn: (row) => row.outsourced_data?.[0]?.results.media_count,
-      //   id: "media_count",
-      //   header: "Posts",
-      //   visible: false,
-      //   type: "number",
-      // },
-      // {
-      //   accessorFn: (row) => row.outsourced_data?.[0]?.results.follower_count,
-      //   id: "followers",
-      //   header: "Followers",
-      //   visible: false,
-      //   type: "number",
-      // },
-      // {
-      //   accessorFn: (row) => row.outsourced_data?.[0]?.results.following_count,
-      //   id: "following",
-      //   header: "Following",
-      //   visible: false,
-      //   type: "number",
-      // },
       {
         id: "expander",
         header: "Actions",
@@ -311,7 +266,7 @@ export function Accounts() {
   let reachedOut = accountsQR.data?.results.filter((account) => {
     return account.qualified == true && account.outreach_success == true;
   })
-  
+
   return (
     <>
       <Group gap={"xs"}>
@@ -434,20 +389,18 @@ export function Accounts() {
         <Select
           label="Choose chart"
           placeholder="Choose chart.."
-          data={getChartNames(outreachChartList.data ?? [])}
+          data={getChartNames(Array.isArray(outreachChartList.data) ? outreachChartList.data : [])}
           onChange={(value) => {
-            console.log(value)
-            setChartId(value ?? '')
             setChartType(`id=${value}`)
           }}
-          
+
         />
         {
           outreachLineChart.isLoading ? <Loader color="blue" /> : outreachLineChart.isError ? '' : <img
             src={`data:image/png;base64,${outreachLineChart.data?.charts.mpl}`}
             alt="Decoded"
             style={{ maxWidth: "100%", height: "auto" }}
-            
+
           />
         }
       </Flex>
