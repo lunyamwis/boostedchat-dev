@@ -20,6 +20,7 @@
     "storybook:build": "storybook build"
   },
   "dependencies": {
+    "@bokeh/bokehjs": "^3.7.0",
     "@mantine/core": "^7.4.0",
     "@mantine/dates": "^7.4.0",
     "@mantine/dropzone": "^7.4.0",

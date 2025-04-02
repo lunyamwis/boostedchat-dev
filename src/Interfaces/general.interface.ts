@@ -60,7 +60,10 @@ export interface LoginState {
 export interface LineChartData {
   dataframe: string,
   charts: {
-    mpl: string,
+    mpl?: string,
+    bokeh_div?: string,
+    bokeh_script?: string,
+    chart_type: string,
   }
 }
 

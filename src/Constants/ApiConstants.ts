@@ -29,7 +29,7 @@ export const PROMPT_URL = import.meta.env.PROD
 
 export const LEADS_GENERATION_URL = import.meta.env.PROD
   ? `https://scrapper.staging.boostedchat.com`
-  : 'https://scrapper.staging.boostedchat.com';//"http://lunyamwi.localhost";
+  : "http://lunyamwi.localhost";
 
 export const MQTT_API_URL = import.meta.env.PROD
   ? `https://mqtt.booksy.us.boostedchat.com`

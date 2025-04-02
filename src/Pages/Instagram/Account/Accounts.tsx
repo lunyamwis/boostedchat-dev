@@ -25,6 +25,8 @@ import { showNotification } from "@mantine/notifications";
 import { DatePicker } from "@mantine/dates";
 import { useCommonStateForAccountList } from "./Hooks/common.hooks";
 import { StatsRingCard } from "@/Pages/Dashboard/StatsCard";
+import BokehChart from "./BokehCharts";
+import { ChartTypes } from "@/Utils/constants";
 
 
 export function Accounts() {
@@ -49,6 +51,7 @@ export function Accounts() {
   const [value, setValue] = useState<[Date | null, Date | null]>([null, null]);
   const [qualified_radio, setQualifiedRadio] = useState('all');
   const [outreach_radio, setOutreachRadio] = useState('all');
+
 
   const getChartNames = (data: any[]) => {
     return data.map(
@@ -267,6 +270,43 @@ export function Accounts() {
     return account.qualified == true && account.outreach_success == true;
   })
 
+  const renderChart = () => {
+
+    if (outreachLineChart.isLoading || isLoading) {
+      return <Loader color="blue" />;
+    }
+
+    if (outreachLineChart.isError) {
+      return null; // Or any fallback UI
+    }
+
+    switch (outreachLineChart.data?.charts.chart_type) {
+      case ChartTypes.MATPLOTLIB:
+        return (
+          <img
+            src={`data:image/png;base64,${outreachLineChart.data?.charts.mpl}`}
+            alt="Decoded"
+            style={{ maxWidth: "100%", height: "auto" }}
+          />
+        );
+
+      case ChartTypes.BOKEH:
+        return (
+          <BokehChart
+            chartData={{
+              bokeh_script: outreachLineChart.data?.charts.bokeh_script || '',
+              bokehDiv: outreachLineChart.data?.charts.bokeh_div || '',
+            }}
+          />
+        );
+      default:
+        return null;
+    }
+
+
+
+  };
+
   return (
     <>
       <Group gap={"xs"}>
@@ -395,13 +435,16 @@ export function Accounts() {
           }}
 
         />
+      </Flex>
+      <Flex
+        gap="md"
+        justify="center"
+        align="stretch"
+      >
         {
-          outreachLineChart.isLoading ? <Loader color="blue" /> : outreachLineChart.isError ? '' : <img
-            src={`data:image/png;base64,${outreachLineChart.data?.charts.mpl}`}
-            alt="Decoded"
-            style={{ maxWidth: "100%", height: "auto" }}
 
-          />
+          renderChart()
+
         }
       </Flex>
 

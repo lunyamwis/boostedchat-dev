@@ -214,6 +214,7 @@ export const useCommonStateForAccountList = () => {
     React.useState<string>("");
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [chart_type, setChartType] = React.useState<string>("");
+  const [reload_chats, setReloadCharts] = React.useState<boolean>(false);
 
   const [filterParams, setFilterParams] = React.useState<AccountListFilterParams>({
     created_at_gte: "",
@@ -252,7 +253,11 @@ export const useCommonStateForAccountList = () => {
 
   React.useEffect(() => {
     setIsLoading(true);
-    outreachLineChart.refetch().finally(() => setIsLoading(false));
+    setReloadCharts(true);
+    outreachLineChart.refetch().finally(() => {
+      setIsLoading(false)
+      setReloadCharts(false);
+    });
   }, [chart_type]);
 
 
@@ -264,6 +269,7 @@ export const useCommonStateForAccountList = () => {
     outreachChartList,
     isLoading,
     filterParams,
+    reload_chats,
     setFilterParams
   };
 };
