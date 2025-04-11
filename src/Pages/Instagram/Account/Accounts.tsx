@@ -262,14 +262,6 @@ export function Accounts() {
     [],
   );
 
-  let scheduledAndNotReachedOut = accountsQR.data?.results.filter((account) => {
-    return account.qualified == true && account.outreach_success == false;
-  })
-
-  let reachedOut = accountsQR.data?.results.filter((account) => {
-    return account.qualified == true && account.outreach_success == true;
-  })
-
   const renderChart = () => {
 
     if (outreachLineChart.isLoading || isLoading) {
@@ -302,9 +294,6 @@ export function Accounts() {
       default:
         return null;
     }
-
-
-
   };
 
   return (
@@ -409,12 +398,12 @@ export function Accounts() {
 
         <StatsRingCard
           status_param={'Scheduled'}
-          total_accounts={scheduledAndNotReachedOut?.length ?? 0}
+          total_accounts={accountsQR.data?.total_scheduled ?? 0}
           description={"Qualified, Scheduled but not reached out"}
         />
         <StatsRingCard
           status_param={'Reached out'}
-          total_accounts={reachedOut?.length ?? 0}
+          total_accounts={accountsQR.data?.total_outreach ?? 0}
           description={"Qualifed Scheduled & reached out"}
         />
 

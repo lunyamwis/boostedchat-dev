@@ -89,5 +89,7 @@ export interface PaginatedQuery<T> {
   count: number;
   next: string | null;
   previous: string | null;
+  total_outreach: number | null;
+  total_scheduled: number | null;
   results: T[];
 }
