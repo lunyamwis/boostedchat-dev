@@ -12,6 +12,7 @@ import {
   Radio,
   Flex,
   Select,
+  Tabs
 } from "@mantine/core";
 import { IconPencil, IconX } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +28,8 @@ import { useCommonStateForAccountList } from "./Hooks/common.hooks";
 import { StatsRingCard } from "@/Pages/Dashboard/StatsCard";
 import BokehChart from "./BokehCharts";
 import { ChartTypes } from "@/Utils/constants";
+import { IconPhoto, IconMessageCircle, IconSettings } from '@tabler/icons-react';
+
 
 
 export function Accounts() {
@@ -126,7 +129,7 @@ export function Accounts() {
                   title: "Alert",
                   children: (
                     <Text size="sm">
-                      Resetting the account will delete its thread, messages and
+                      Resetting the account will delete its thread, scheduled and
                       status. Are you sure you want to proceed?
                     </Text>
                   ),
@@ -156,7 +159,41 @@ export function Accounts() {
         accessorFn: (_, idx) => pageSize * page + idx + 1,
         id: "accountNo",
         header: "#",
-        visible: false,
+        type: "string",
+        visible: true,
+      },
+      {
+        accessorFn: (row) => row.igname,
+        id: "igname",
+        header: "Instagram Name",
+        visible: true,
+        type: "string",
+      },
+      {
+        accessorFn: (row) => row.created_at,
+        id: "created_at",
+        header: "Outreach Date",
+        visible: true,
+        type: "string",
+        cell: (params) => {
+
+          if (params.row.original.created_at == null) {
+            return <></>;
+          }
+          if (params.row.original.outreach_success) {
+            let formattedTime = new Date(params.row.original.created_at).toLocaleTimeString()
+            let formattedDate = new Date(params.row.original.created_at).toLocaleDateString()
+            return (
+              `${formattedDate} at ${formattedTime}`
+            );
+
+          } else {
+            return (
+              '-'
+            );
+          }
+
+        },
       },
       {
         accessorFn: (row) => row.qualified,
@@ -189,24 +226,18 @@ export function Accounts() {
           if (params.row.original.outreach_success) {
             return <Badge
               color="green"
-              text={params.row.original.outreach_success.toString()}
+              text={params.row.original.outreach_success?.toString()}
             />
           }
           return (
             <Badge
               color="red"
-              text={params.row.original.outreach_success.toString()}
+              text={params.row.original.outreach_success?.toString()}
             />
           );
         },
       },
-      {
-        accessorFn: (row) => row.igname,
-        id: "igname",
-        header: "Instagram Name",
-        visible: true,
-        type: "string",
-      },
+
       // {
       //   accessorFn: (row) => row.outsourced_data?.[0]?.results.category ?? "-",
       //   id: "category",
@@ -228,24 +259,7 @@ export function Accounts() {
         type: "string",
         visible: true,
       },
-      {
-        accessorFn: (row) => row.created_at,
-        id: "created_at",
-        header: "Created At",
-        visible: true,
-        type: "string",
-        cell: (params) => {
 
-          if (params.row.original.created_at == null) {
-            return <></>;
-          }
-          let formattedTime = new Date(params.row.original.created_at).toLocaleTimeString()
-          let formattedDate = new Date(params.row.original.created_at).toLocaleDateString()
-          return (
-            `${formattedDate} at ${formattedTime}`
-          );
-        },
-      },
       {
         accessorFn: (row) => (row.assigned_to === "Robot" ? "Bot" : "Human"),
         id: "robot",
@@ -295,6 +309,17 @@ export function Accounts() {
         return null;
     }
   };
+
+  // const scheduled = accountsQR.data?.results.filter((account) => {
+  //   return account.qualified == true && account.outreach_success != false;
+  // })
+  // const reachedOut = accountsQR.data?.results.filter((account) => {
+  //   return account.outreach_success == true;
+  // })
+  // const qualified = accountsQR.data?.results.filter((account) => {
+  //   return account.qualified == true;
+  // })
+
 
   return (
     <>
@@ -438,46 +463,126 @@ export function Accounts() {
       </Flex>
 
       <Divider my="md" />
-      <DataGrid
-        fn={() => {
-          removeDuplicateAccountsQR.mutate();
-          // notifications.update({
-          //   id: "REMOVE_DUPLICATES",
-          //   color: "teal",
-          //   // icon: <IconCheck />,
-          //   message: "duplicates cleared successfully.",
-          //   loading: false,
-          //   autoClose: 3000,
 
-          // });
-          showNotification({
-            color: "red",
-            icon: <IconX />,
-            title: "Error",
-            message: "message",
-          });
-        }}
-        loading={accountsQR.isLoading || isLoading}
-        tableName="Accounts"
-        data={accountsQR.data?.results ?? []}
-        columns={columns}
-        paginationOptions={{
-          isManual: true,
-          pageIndex: page,
-          pageSize: pageSize,
-          setPageSize: setPageSize,
-          setPageIndex: setPage,
-          totalRows: accountsQR.data?.count ?? 0,
-        }}
-      />
-      <Affix
-        tooltipLabel="Create New Account"
-        onClickAction={() => setIsCreateAccountModalOpen(true)}
-      />
-      <CreateAccount
-        isOpen={isCreateAccountModalOpen}
-        setIsOpen={setIsCreateAccountModalOpen}
-      />
+      <Tabs variant="pills" radius="lg" defaultValue="outreach_success">
+        <Tabs.List>
+          <Tabs.Tab value="outreach_success" leftSection={<IconPhoto size={12} />}>
+            Successfully reached out
+          </Tabs.Tab>
+          <Tabs.Tab value="scheduled" leftSection={<IconMessageCircle size={12} />}>
+            Scheduled Today
+          </Tabs.Tab>
+          <Tabs.Tab value="all" leftSection={<IconSettings size={12} />}>
+            All
+          </Tabs.Tab>
+        </Tabs.List>
+
+        <Tabs.Panel value="outreach_success">
+          <DataGrid
+            fn={() => {
+              removeDuplicateAccountsQR.mutate();
+              showNotification({
+                color: "red",
+                icon: <IconX />,
+                title: "Error",
+                message: "message",
+              });
+            }}
+            loading={accountsQR.isLoading || isLoading}
+            tableName="Outreach Tracker"
+            data={accountsQR.data?.outreach_success ?? []}
+            columns={columns}
+            paginationOptions={{
+              isManual: true,
+              pageIndex: page,
+              pageSize: pageSize,
+              setPageSize: setPageSize,
+              setPageIndex: setPage,
+              totalRows: accountsQR.data?.count ?? 0,
+            }}
+          />
+        </Tabs.Panel>
+
+        <Tabs.Panel value="scheduled">
+          <DataGrid
+            fn={() => {
+              removeDuplicateAccountsQR.mutate();
+              // notifications.update({
+              //   id: "REMOVE_DUPLICATES",
+              //   color: "teal",
+              //   // icon: <IconCheck />,
+              //   message: "duplicates cleared successfully.",
+              //   loading: false,
+              //   autoClose: 3000,
+
+              // });
+              showNotification({
+                color: "red",
+                icon: <IconX />,
+                title: "Error",
+                message: "message",
+              });
+            }}
+            loading={accountsQR.isLoading || isLoading}
+            tableName="Outreach Tracker"
+            data={accountsQR.data?.scheduled ?? []}
+            columns={columns}
+            paginationOptions={{
+              isManual: true,
+              pageIndex: page,
+              pageSize: pageSize,
+              setPageSize: setPageSize,
+              setPageIndex: setPage,
+              totalRows: accountsQR.data?.count ?? 0,
+            }}
+          />
+        </Tabs.Panel>
+
+        <Tabs.Panel value="all">
+          <DataGrid
+            fn={() => {
+              removeDuplicateAccountsQR.mutate();
+              // notifications.update({
+              //   id: "REMOVE_DUPLICATES",
+              //   color: "teal",
+              //   // icon: <IconCheck />,
+              //   message: "duplicates cleared successfully.",
+              //   loading: false,
+              //   autoClose: 3000,
+
+              // });
+              showNotification({
+                color: "red",
+                icon: <IconX />,
+                title: "Error",
+                message: "message",
+              });
+            }}
+            loading={accountsQR.isLoading || isLoading}
+            tableName="Outreach Tracker"
+            data={accountsQR.data?.results ?? []}
+            columns={columns}
+            paginationOptions={{
+              isManual: true,
+              pageIndex: page,
+              pageSize: pageSize,
+              setPageSize: setPageSize,
+              setPageIndex: setPage,
+              totalRows: accountsQR.data?.count ?? 0,
+            }}
+          />
+          <Affix
+            tooltipLabel="Create New Account"
+            onClickAction={() => setIsCreateAccountModalOpen(true)}
+          />
+          <CreateAccount
+            isOpen={isCreateAccountModalOpen}
+            setIsOpen={setIsCreateAccountModalOpen}
+          />
+        </Tabs.Panel>
+      </Tabs>
+
+
     </>
   );
 }

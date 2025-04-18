@@ -91,5 +91,8 @@ export interface PaginatedQuery<T> {
   previous: string | null;
   total_outreach: number | null;
   total_scheduled: number | null;
+  qualified: T[];
+  outreach_success: T[];
+  scheduled: T[];
   results: T[];
 }
