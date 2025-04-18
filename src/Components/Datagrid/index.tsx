@@ -356,7 +356,7 @@ function MDataGrid<T>({
                 <ActionIcon onClick={() => setIsSettingsOpen(!isSettingsOpen)}>
                   <IconSettings />
                 </ActionIcon>
-                {tableName == "Accounts" && <ActionIcon onClick={fn}>
+                {tableName == "Outreach Tracker" && <ActionIcon onClick={fn}>
                   <IconCopyOff />
                 </ActionIcon>}
               </Group>}

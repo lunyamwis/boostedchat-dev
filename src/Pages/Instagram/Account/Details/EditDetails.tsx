@@ -6,6 +6,7 @@ import { Row } from "../../../../Components/Containers/Row";
 import { Column } from "../../../../Components/Containers/Column";
 import { Select } from "../../../../Components/Containers/Select";
 import { TextField } from "../../../../Components/Containers/TextField";
+import { DateField } from "../../../../Components/Containers/DateField";
 import { ButtonRow } from "../../../../Components/FormComponents/ButtonRow";
 import { Button } from "@mantine/core";
 import { useUpdateAccount } from "../Hooks/accounts.hook";
@@ -21,6 +22,7 @@ type Props = {
 export function EditDetails({ account }: Props) {
   const queryClient = useQueryClient();
 
+
   const {
     isLoadingDialogOpen,
     setIsLoadingDialogOpen,
@@ -34,6 +36,13 @@ export function EditDetails({ account }: Props) {
   const [igname, setIgname] = React.useState("");
   const [fullName, setFullName] = React.useState("");
   const [accountStatus, setAccountStatus] = React.useState<null | string>(null);
+  const [outReachDate, setoutReachDate] = React.useState<Date | null>(null);
+  const [respondedDate, setRespondedDate] = React.useState<Date | null>(null);
+  const [callScheduleDate, setCallScheduleDate] = React.useState<Date | null>(null);
+  const [closingDate, setClosingDate] = React.useState<Date | null>(null);
+  const [wonDate, setWonDate] = React.useState<Date | null>(null);
+  const [lostDate, setLostDate] = React.useState<Date | null>(null);
+  const [successDate, setSuccessDate] = React.useState<Date | null>(null);
 
   const updateAccount = useUpdateAccount();
 
@@ -136,7 +145,51 @@ export function EditDetails({ account }: Props) {
               searchable: true,
             }}
           />
+
+          <DateField
+            title="Outreach Date"
+            // date={outReachDate}
+            value={outReachDate}
+            setDate={setoutReachDate} />
+
+          <DateField
+            title="Responded Date"
+            // date={respondedDate}
+            value={respondedDate}
+            setDate={setRespondedDate} />
+
+          <DateField
+            title="Call scheduled Date"
+            // date={respondedDate}
+            value={callScheduleDate}
+            setDate={setCallScheduleDate} />
+
+          <DateField
+            title="Closing Date"
+            // date={respondedDate}
+            value={closingDate}
+            setDate={setClosingDate} />
+
+          <DateField
+            title="Won Date"
+            // date={respondedDate}
+            value={wonDate}
+            setDate={setWonDate} />
+
+          <DateField
+            title="Success Story Date"
+            // date={respondedDate}
+            value={successDate}
+            setDate={setSuccessDate} />
+
+          <DateField
+            title="Lost Date"
+            // date={respondedDate}
+            value={lostDate}
+            setDate={setLostDate} />
+
         </Column>
+
       </Row>
 
       <ButtonRow>
