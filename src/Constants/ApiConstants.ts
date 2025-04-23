@@ -1,4 +1,4 @@
-const DOMAIN1 = import.meta.env.DOMAIN1
+const DOMAIN1 = import.meta.env.VITE_DOMAIN1
 const DOMAIN2 = import.meta.env.DOMAIN2
 
 
@@ -7,8 +7,8 @@ console.log(DOMAIN2)
 // console.log("import.meta.env")
 // console.log(import.meta.env)
 export const API_URL = import.meta.env.PROD
-  ? `https://api.${DOMAIN1}.boostedchat.com/v1`
-  : "http://127.0.0.1:8001/v1";
+  ? `https://api.${DOMAIN1}.boostedchat.com/`
+  :  "http://lunyamwi.localhost"
 
 // export const API_URL = import.meta.env.PROD
 //   ? `https://api.staging.boostedchat.com/v1`
