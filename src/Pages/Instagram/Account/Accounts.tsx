@@ -156,7 +156,7 @@ export function Accounts() {
         visible: false,
       },
       {
-        accessorFn: (_, idx) => pageSize * page + idx + 1,
+        accessorFn: (_, idx) => idx + 1,
         id: "accountNo",
         header: "#",
         type: "string",
@@ -183,6 +183,162 @@ export function Accounts() {
           if (params.row.original.outreach_success) {
             let formattedTime = new Date(params.row.original.created_at).toLocaleTimeString()
             let formattedDate = new Date(params.row.original.created_at).toLocaleDateString()
+            return (
+              `${formattedDate} at ${formattedTime}`
+            );
+
+          } else {
+            return (
+              '-'
+            );
+          }
+
+        },
+      },
+      {
+        accessorFn: (row) => row.responded_date,
+        id: "responded_date",
+        header: "Engaged Date",
+        visible: true,
+        type: "string",
+        cell: (params) => {
+
+          if (params.row.original.responded_date == null) {
+            return <></>;
+          }
+          if (params.row.original.outreach_success) {
+            let formattedTime = new Date(params.row.original.responded_date).toLocaleTimeString()
+            let formattedDate = new Date(params.row.original.responded_date).toLocaleDateString()
+            return (
+              `${formattedDate} at ${formattedTime}`
+            );
+
+          } else {
+            return (
+              '-'
+            );
+          }
+
+        },
+      },
+      {
+        accessorFn: (row) => row.call_scheduled_date,
+        id: "call_scheduled_date",
+        header: "Call Scheduled Date",
+        visible: true,
+        type: "string",
+        cell: (params) => {
+
+          if (params.row.original.call_scheduled_date == null) {
+            return <></>;
+          }
+          if (params.row.original.outreach_success) {
+            let formattedTime = new Date(params.row.original.call_scheduled_date).toLocaleTimeString()
+            let formattedDate = new Date(params.row.original.call_scheduled_date).toLocaleDateString()
+            return (
+              `${formattedDate} at ${formattedTime}`
+            );
+
+          } else {
+            return (
+              '-'
+            );
+          }
+
+        },
+      },
+      {
+        accessorFn: (row) => row.closing_date,
+        id: "closing_date",
+        header: "Closing Date",
+        visible: true,
+        type: "string",
+        cell: (params) => {
+
+          if (params.row.original.closing_date == null) {
+            return <></>;
+          }
+          if (params.row.original.outreach_success) {
+            let formattedTime = new Date(params.row.original.closing_date).toLocaleTimeString()
+            let formattedDate = new Date(params.row.original.closing_date).toLocaleDateString()
+            return (
+              `${formattedDate} at ${formattedTime}`
+            );
+
+          } else {
+            return (
+              '-'
+            );
+          }
+
+        },
+      },
+      {
+        accessorFn: (row) => row.won_date,
+        id: "won_date",
+        header: "Won Date",
+        visible: true,
+        type: "string",
+        cell: (params) => {
+
+          if (params.row.original.won_date == null) {
+            return <></>;
+          }
+          if (params.row.original.outreach_success) {
+            let formattedTime = new Date(params.row.original.won_date).toLocaleTimeString()
+            let formattedDate = new Date(params.row.original.won_date).toLocaleDateString()
+            return (
+              `${formattedDate} at ${formattedTime}`
+            );
+
+          } else {
+            return (
+              '-'
+            );
+          }
+
+        },
+      },
+      {
+        accessorFn: (row) => row.success_story_date,
+        id: "success_story_date",
+        header: "Success Story Date",
+        visible: true,
+        type: "string",
+        cell: (params) => {
+
+          if (params.row.original.success_story_date == null) {
+            return <></>;
+          }
+          if (params.row.original.outreach_success) {
+            let formattedTime = new Date(params.row.original.success_story_date).toLocaleTimeString()
+            let formattedDate = new Date(params.row.original.success_story_date).toLocaleDateString()
+            return (
+              `${formattedDate} at ${formattedTime}`
+            );
+
+          } else {
+            return (
+              '-'
+            );
+          }
+
+        },
+      },
+      {
+        accessorFn: (row) => row.lost_date,
+        id: "lost_date",
+        header: "Lost Date",
+        visible: true,
+        type: "string",
+        cell: (params) => {
+
+          if (params.row.original.lost_date == null) {
+            return <></>;
+          }
+          if (params.row.original.outreach_success) {
+            let formattedTime = new Date(params.row.original.lost_date).toLocaleTimeString()
+            let formattedDate = new Date(params.row.original.lost_date).toLocaleDateString()
             return (
               `${formattedDate} at ${formattedTime}`
             );
@@ -466,14 +622,14 @@ export function Accounts() {
 
       <Tabs variant="pills" radius="lg" defaultValue="outreach_success">
         <Tabs.List>
-          <Tabs.Tab value="outreach_success" leftSection={<IconPhoto size={12} />}>
-            Successfully reached out
+          <Tabs.Tab value="all" leftSection={<IconSettings size={12} />}>
+            All
           </Tabs.Tab>
           <Tabs.Tab value="scheduled" leftSection={<IconMessageCircle size={12} />}>
             Scheduled Today
           </Tabs.Tab>
-          <Tabs.Tab value="all" leftSection={<IconSettings size={12} />}>
-            All
+          <Tabs.Tab value="outreach_success" leftSection={<IconPhoto size={12} />}>
+            Successfully reached out
           </Tabs.Tab>
         </Tabs.List>
 
