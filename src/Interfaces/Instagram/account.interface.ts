@@ -24,8 +24,8 @@ export interface Stat {
 export type CreateAccount = Pick<AccountPrimary, "igname" | "full_name">;
 
 export type UpdateAccount = Pick<
-  AccountPrimary,
-  "igname" | "full_name" | "status_id"
+GetAccount,
+  | "igname" | "full_name" | "status_id" | "responded_date" | "call_scheduled_date" | "closing_date" | "won_date" | "success_story_date" | "lost_date" | "outreach_time"
 >;
 
 export type UpdateAccountParams = {
@@ -44,12 +44,19 @@ export interface GetAccount extends AccountPrimary {
   last_message_sent_at: string;
   full_name: string;
   last_message_sent_by: 'Robot' | 'Human';
-  outreach_time: string;
+  outreach_time: string | null;
   created_at: string;
   qualified: boolean;
   outreach_success: boolean;
+  responded_date: string | null;
+  call_scheduled_date: string | null;
+  closing_date: string | null;
+  won_date: string | null;
+  success_story_date:string | null;
+  lost_date: string | null;
+  // outreach_time: Date | null;
 }
-export interface GetSingleAccount extends AccountPrimary {
+export interface GetSingleAccount extends GetAccount {
   id: string;
   assigned_to: "Robot" | "Human";
   status: AccountStatus;

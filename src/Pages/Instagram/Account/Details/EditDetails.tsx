@@ -8,12 +8,13 @@ import { Select } from "../../../../Components/Containers/Select";
 import { TextField } from "../../../../Components/Containers/TextField";
 import { DateField } from "../../../../Components/Containers/DateField";
 import { ButtonRow } from "../../../../Components/FormComponents/ButtonRow";
-import { Button } from "@mantine/core";
+import { Button, Space,SimpleGrid } from "@mantine/core";
 import { useUpdateAccount } from "../Hooks/accounts.hook";
 import { showNotification } from "@mantine/notifications";
 import { IconAlertTriangle } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../../../../Constants/ApiConstants";
+import dayjs from 'dayjs';
 
 type Props = {
   account: GetSingleAccount;
@@ -73,6 +74,13 @@ export function EditDetails({ account }: Props) {
           full_name: fullName,
           igname,
           status_id: accountStatus === "" ? null : account.status_id,
+          won_date: wonDate == null ? null : dayjs(wonDate).format('YYYY-MM-DD'),
+          lost_date: lostDate == null ? null : dayjs(lostDate).format('YYYY-MM-DD'),
+          success_story_date: successDate == null ? null : dayjs(successDate).format('YYYY-MM-DD'),
+          outreach_time: outReachDate == null ? null : dayjs(outReachDate).format('YYYY-MM-DD'),
+          responded_date: respondedDate == null ? null : dayjs(respondedDate).format('YYYY-MM-DD'),
+          call_scheduled_date: callScheduleDate == null ? null : dayjs(callScheduleDate).format('YYYY-MM-DD'),
+          closing_date: closingDate == null ? null : dayjs(closingDate).format('YYYY-MM-DD'),
         },
       },
       {
@@ -107,8 +115,17 @@ export function EditDetails({ account }: Props) {
     setIgname(account?.igname ?? "");
     setFullName(account?.full_name ?? "");
     setAccountStatus(account?.status ?? null);
+    setoutReachDate(account?.outreach_time ? new Date(account.outreach_time) : null);
+    setRespondedDate(account?.responded_date ? new Date(account.responded_date) : null);
+    setCallScheduleDate(account?.call_scheduled_date ? new Date(account.call_scheduled_date) : null);
+    setClosingDate(account?.closing_date ? new Date(account.closing_date) : null);
+    setWonDate(account?.won_date ? new Date(account.won_date) : null);
+    setSuccessDate(account?.success_story_date ? new Date(account.success_story_date) : null);
+    setLostDate(account?.lost_date ? new Date(account.lost_date) : null);
+
   }, [account]);
 
+  console.log(account)
   return (
     <EditDetailsContainer
       loadingDialogProps={{
@@ -121,73 +138,83 @@ export function EditDetails({ account }: Props) {
     >
       <Row>
         <Column single>
-          <TextField
-            title="Instagram Username"
-            textFieldProps={{
-              value: igname,
-              onChange: (e) => setIgname(e.target.value),
-            }}
-          />
-          <TextField
-            title="Full name"
-            textFieldProps={{
-              value: fullName,
-              onChange: (e) => setFullName(e.target.value),
-            }}
-          />
-          <Select
-            title="Status"
-            selectProps={{
-              value: accountStatus,
-              onChange: setAccountStatus,
-              data: [{ value: "", label: "None" }],
-              placeholder: "Choose",
-              searchable: true,
-            }}
-          />
+          <SimpleGrid cols={3}>
 
-          <DateField
-            title="Outreach Date"
-            // date={outReachDate}
-            value={outReachDate}
-            setDate={setoutReachDate} />
+            <TextField
+              title="Instagram Username"
+              textFieldProps={{
+                value: igname,
+                onChange: (e) => setIgname(e.target.value),
+              }}
+            />
 
-          <DateField
-            title="Responded Date"
-            // date={respondedDate}
-            value={respondedDate}
-            setDate={setRespondedDate} />
-
-          <DateField
-            title="Call scheduled Date"
-            // date={respondedDate}
-            value={callScheduleDate}
-            setDate={setCallScheduleDate} />
-
-          <DateField
-            title="Closing Date"
-            // date={respondedDate}
-            value={closingDate}
-            setDate={setClosingDate} />
-
-          <DateField
-            title="Won Date"
-            // date={respondedDate}
-            value={wonDate}
-            setDate={setWonDate} />
-
-          <DateField
-            title="Success Story Date"
-            // date={respondedDate}
-            value={successDate}
-            setDate={setSuccessDate} />
-
-          <DateField
-            title="Lost Date"
-            // date={respondedDate}
-            value={lostDate}
-            setDate={setLostDate} />
-
+            <TextField
+              title="Full name"
+              textFieldProps={{
+                value: fullName,
+                onChange: (e) => setFullName(e.target.value),
+              }}
+            />
+            <Select
+              title="Status"
+              selectProps={{
+                value: accountStatus,
+                onChange: setAccountStatus,
+                data: [{ value: "", label: "None" }],
+                placeholder: "Choose",
+                searchable: true,
+              }}
+            />
+            
+            <DateField
+              title="Outreach Date"
+              // date={outReachDate}
+              value={outReachDate}
+              valueFormat="YYYY-MM-DD"
+              setDate={setoutReachDate} />
+            
+            <DateField
+              title="Responded Date"
+              // date={respondedDate}
+              valueFormat="YYYY-MM-DD"
+              value={respondedDate}
+              setDate={setRespondedDate} />
+            
+            <DateField
+              title="Call scheduled Date"
+              // date={respondedDate}
+              valueFormat="YYYY-MM-DD"
+              value={callScheduleDate}
+              setDate={setCallScheduleDate} />
+            
+            <DateField
+              title="Closing Date"
+              // date={respondedDate}
+              valueFormat="YYYY-MM-DD"
+              value={closingDate}
+              setDate={setClosingDate} />
+            
+            <DateField
+              title="Won Date"
+              // date={respondedDate}
+              valueFormat="YYYY-MM-DD"
+              value={wonDate}
+              setDate={setWonDate} />
+            
+            <DateField
+              title="Success Story Date"
+              // date={respondedDate}
+              valueFormat="YYYY-MM-DD"
+              value={successDate}
+              setDate={setSuccessDate} />
+            
+            <DateField
+              title="Lost Date"
+              // date={respondedDate}
+              valueFormat="YYYY-MM-DD"
+              value={lostDate}
+              setDate={setLostDate} />
+          </SimpleGrid>
         </Column>
 
       </Row>
