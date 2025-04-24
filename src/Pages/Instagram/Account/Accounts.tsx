@@ -474,17 +474,6 @@ export function Accounts() {
     }
   };
 
-  // const scheduled = accountsQR.data?.results.filter((account) => {
-  //   return account.qualified == true && account.outreach_success != false;
-  // })
-  // const reachedOut = accountsQR.data?.results.filter((account) => {
-  //   return account.outreach_success == true;
-  // })
-  // const qualified = accountsQR.data?.results.filter((account) => {
-  //   return account.qualified == true;
-  // })
-
-
   return (
     <>
       {/* <Divider my="md" /> */}
