@@ -487,6 +487,63 @@ export function Accounts() {
 
   return (
     <>
+      {/* <Divider my="md" /> */}
+      <Flex
+        gap="md"
+        justify="center"
+        align="stretch"
+      >
+      </Flex>
+
+      <Flex
+        gap="md"
+        justify="center"
+        align="stretch"
+        wrap="wrap"
+      >
+
+        <StatsRingCard
+          status_param={'Scheduled'}
+          total_accounts={accountsQR.data?.total_scheduled ?? 0}
+          description={"Qualified, Scheduled but not reached out"}
+        />
+        <StatsRingCard
+          status_param={'Reached out'}
+          total_accounts={accountsQR.data?.total_outreach ?? 0}
+          description={"Qualifed Scheduled & reached out"}
+        />
+
+      </Flex>
+      <Divider my="md" />
+      <Flex
+        gap="md"
+        justify="center"
+        align="stretch"
+        wrap="wrap"
+      >
+        <Select
+          label="Choose chart"
+          placeholder="Choose chart.."
+          data={getChartNames(Array.isArray(outreachChartList.data) ? outreachChartList.data : [])}
+          onChange={(value) => {
+            setChartType(`id=${value}`)
+          }}
+
+        />
+      </Flex>
+      <Flex
+        gap="md"
+        justify="center"
+        align="stretch"
+      >
+        {
+
+          renderChart()
+
+        }
+      </Flex>
+
+      <Divider my="md" />
       <Group gap={"xs"}>
         <Box px={24}>
           <TextInput
@@ -570,62 +627,6 @@ export function Accounts() {
           <Text fw={500} size="xl" >{value[0]?.toLocaleDateString()}</Text> - <Text fw={500} size="xl">{value[1]?.toLocaleDateString()}</Text>
         </Group>
       </Group>
-      <Divider my="md" />
-      <Flex
-        gap="md"
-        justify="center"
-        align="stretch"
-      >
-      </Flex>
-
-      <Flex
-        gap="md"
-        justify="center"
-        align="stretch"
-        wrap="wrap"
-      >
-
-        <StatsRingCard
-          status_param={'Scheduled'}
-          total_accounts={accountsQR.data?.total_scheduled ?? 0}
-          description={"Qualified, Scheduled but not reached out"}
-        />
-        <StatsRingCard
-          status_param={'Reached out'}
-          total_accounts={accountsQR.data?.total_outreach ?? 0}
-          description={"Qualifed Scheduled & reached out"}
-        />
-
-      </Flex>
-      <Divider my="md" />
-      <Flex
-        gap="md"
-        justify="center"
-        align="stretch"
-        wrap="wrap"
-      >
-        <Select
-          label="Choose chart"
-          placeholder="Choose chart.."
-          data={getChartNames(Array.isArray(outreachChartList.data) ? outreachChartList.data : [])}
-          onChange={(value) => {
-            setChartType(`id=${value}`)
-          }}
-
-        />
-      </Flex>
-      <Flex
-        gap="md"
-        justify="center"
-        align="stretch"
-      >
-        {
-
-          renderChart()
-
-        }
-      </Flex>
-
       <Divider my="md" />
 
       <Tabs variant="pills" radius="lg" defaultValue="all">
