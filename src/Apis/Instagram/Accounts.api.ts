@@ -119,7 +119,7 @@ export const useAccountsApi = () => {
         .catch(handleRestError),
     create: (params: CreateAccount) =>
       axiosInstance
-        .post("/", params)
+        .post("/create-account-manually/", params)
         .then(handleRestResponse)
         .catch(handleRestError),
     removeDuplicateAccounts: (): Promise<any> =>
