@@ -12,9 +12,10 @@ import {
   Radio,
   Flex,
   Select,
-  Tabs
+  Tabs,
+  Space
 } from "@mantine/core";
-import { IconPencil, IconX } from "@tabler/icons-react";
+import { IconPencil, IconX, IconSearch } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { DataGrid } from "../../../Components/Datagrid";
 import { useResetAccount, useRemoveDuplicateAccounts } from "./Hooks/accounts.hook";
@@ -29,15 +30,13 @@ import { StatsRingCard } from "@/Pages/Dashboard/StatsCard";
 import BokehChart from "./BokehCharts";
 import { ChartTypes } from "@/Utils/constants";
 import { IconPhoto, IconMessageCircle, IconSettings } from '@tabler/icons-react';
+import { useDebouncedValue } from "@mantine/hooks";
 
 
 
 export function Accounts() {
   const [page, setPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState(50);
-  // const [searchQuery, setSearchQuery] = React.useState("");
-  // const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 700);
-
   const [opened, setOpened] = useState(false);
 
   const [isCreateAccountModalOpen, setIsCreateAccountModalOpen] =
@@ -54,6 +53,8 @@ export function Accounts() {
   const [value, setValue] = useState<[Date | null, Date | null]>([null, null]);
   const [qualified_radio, setQualifiedRadio] = useState('all');
   const [outreach_radio, setOutreachRadio] = useState('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 700);
 
 
   const getChartNames = (data: any[]) => {
@@ -81,6 +82,13 @@ export function Accounts() {
       }
     );
   };
+
+  React.useEffect(() => {
+    setFilterParams({
+      ...filterParams,
+      q: searchQuery,
+    })
+  }, [debouncedSearchQuery]);
 
   const handleClearFilters = () => {
     // Execute your query here with startDate and endDate
@@ -480,7 +488,7 @@ export function Accounts() {
   return (
     <>
       <Group gap={"xs"}>
-        {/* <Box px={24}>
+        <Box px={24}>
           <TextInput
             variant="filled"
             leftSection={<IconSearch size={17} />}
@@ -490,7 +498,7 @@ export function Accounts() {
               (e) => setSearchQuery(e.target.value)
             }
           />
-        </Box> */}
+        </Box>
         <Popover
           opened={opened}
           onClose={() => setOpened(false)}
@@ -620,7 +628,7 @@ export function Accounts() {
 
       <Divider my="md" />
 
-      <Tabs variant="pills" radius="lg" defaultValue="outreach_success">
+      <Tabs variant="pills" radius="lg" defaultValue="all">
         <Tabs.List>
           <Tabs.Tab value="all" leftSection={<IconSettings size={12} />}>
             All
@@ -632,6 +640,7 @@ export function Accounts() {
             Successfully reached out
           </Tabs.Tab>
         </Tabs.List>
+        <Space h="md" />
 
         <Tabs.Panel value="outreach_success">
           <DataGrid
