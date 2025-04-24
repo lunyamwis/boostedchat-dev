@@ -7,7 +7,7 @@ console.log(DOMAIN2)
 // console.log("import.meta.env")
 // console.log(import.meta.env)
 export const API_URL = import.meta.env.PROD
-  ? `https://scrapper.staging.boostedchat.com/` //`https://scrapper.${DOMAIN1}.boostedchat.com/`
+  ? `https://scrapper.staging.boostedchat.com` //`https://scrapper.${DOMAIN1}.boostedchat.com/`
   :  "http://lunyamwi.localhost"
 
 // export const API_URL = import.meta.env.PROD
