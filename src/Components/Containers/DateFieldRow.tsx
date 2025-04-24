@@ -10,7 +10,7 @@ type Props = {
   setDate: React.Dispatch<React.SetStateAction<Date | null>>;
 };
 
-export function DateField({ title, value, setDate, valueFormat }: Props) {
+export function DateField({ title, value, setDate }: Props) {
   return (
     <Grid gutter={16} style={{ margin: 0 }} align="center">
       <Grid.Col py={0} pl={16} pr={0} span={5}>
