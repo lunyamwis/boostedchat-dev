@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ColDef } from "../../../Components/Datagrid/datagrid.interface";
-import { GetAccount } from "../../../Interfaces/Instagram/account.interface";
+import { GetAccount, WeeklyReport } from "../../../Interfaces/Instagram/account.interface";
 import { Row } from "@tanstack/react-table";
 import {
   ActionIcon, Group, Loader, Text, Tooltip,
@@ -45,6 +45,7 @@ export function Accounts() {
   const { isLoading,
     accountsQR,
     filterParams,
+    weeklyReportQR,
     outreachLineChart, setChartType,
     setFilterParams, outreachChartList } = useCommonStateForAccountList();
   const removeDuplicateAccountsQR = useRemoveDuplicateAccounts()
@@ -440,6 +441,90 @@ export function Accounts() {
     [],
   );
 
+  const reportingColumns: ColDef<WeeklyReport>[] = React.useMemo(
+    () => [
+
+      {
+        accessorFn: (_, idx) => idx + 1,
+        id: "accountNo",
+        header: "#",
+        type: "string",
+        visible: true,
+      },
+      {
+        accessorFn: (row) => row.week_start,
+        id: "week_start",
+        header: "Week Start Date",
+        visible: true,
+        type: "string",
+      },
+      {
+        accessorFn: (row) => row.outreach,
+        id: "outreach",
+        header: "Total Outreach",
+        visible: true,
+        type: "string",
+      },
+      {
+        accessorFn: (row) => row.responded,
+        id: "responded",
+        header: "Total Engaged",
+        visible: true,
+        type: "string",
+      },
+      // {
+      //   accessorFn: (row) => row.responded_ignames,
+      //   id: "week_start_date",
+      //   header: "Total Engaged Ignames",
+      //   visible: true,
+      //   type: "string",
+      // },
+      {
+        accessorFn: (row) => row.call_scheduled_date,
+        id: "call_scheduled_date",
+        header: "Call Scheduled Date",
+        visible: true,
+        type: "string",
+      },
+      {
+        accessorFn: (row) => row.closing_date,
+        id: "closing_date",
+        header: "Total Closed",
+        visible: true,
+        type: "string",
+      },
+      {
+        accessorFn: (row) => row.won_date,
+        id: "won_date",
+        header: "Total Won",
+        visible: true,
+        type: "string",
+      },
+      {
+        accessorFn: (row) => row.success_story_date,
+        id: "success_story_date",
+        header: "Success Story",
+        visible: true,
+        type: "string",
+      },
+      {
+        accessorFn: (row) => row.lost_date,
+        id: "lost_date",
+        header: "Total Lost",
+        visible: true,
+        type: "string",
+      },
+      {
+        accessorFn: (row) => row.responded_date,
+        id: "responded_date",
+        header: "Total responded",
+        visible: true,
+        type: "string",
+      },
+    ],
+    [],
+
+  );
   const renderChart = () => {
 
     if (outreachLineChart.isLoading || isLoading) {
@@ -476,7 +561,6 @@ export function Accounts() {
 
   return (
     <>
-      {/* <Divider my="md" /> */}
       <Flex
         gap="md"
         justify="center"
@@ -629,6 +713,9 @@ export function Accounts() {
           <Tabs.Tab value="outreach_success" leftSection={<IconPhoto size={12} />}>
             Successfully reached out
           </Tabs.Tab>
+          <Tabs.Tab value="weekly_reporting" leftSection={<IconPhoto size={12} />}>
+            Weekly Reports
+          </Tabs.Tab>
         </Tabs.List>
         <Space h="md" />
 
@@ -733,6 +820,25 @@ export function Accounts() {
           <CreateAccount
             isOpen={isCreateAccountModalOpen}
             setIsOpen={setIsCreateAccountModalOpen}
+          />
+        </Tabs.Panel>
+
+        <Tabs.Panel value="weekly_reporting">
+          <DataGrid
+            fn={() => {
+            }}
+            loading={weeklyReportQR.isLoading || isLoading}
+            tableName="Outreach Tracker"
+            data={weeklyReportQR.data?.results ?? []}
+            columns={reportingColumns}
+            paginationOptions={{
+              isManual: true,
+              pageIndex: page,
+              pageSize: pageSize,
+              setPageSize: setPageSize,
+              setPageIndex: setPage,
+              totalRows: weeklyReportQR.data?.count ?? 0,
+            }}
           />
         </Tabs.Panel>
       </Tabs>

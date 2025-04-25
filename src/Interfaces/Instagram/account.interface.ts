@@ -1,5 +1,5 @@
 interface AccountPrimary {
-  id:string;
+  id: string;
   igname: string;
   email: null | string;
   outsourced_id: null | string;
@@ -21,12 +21,12 @@ export interface Stat {
 
 }
 
-export type CreateAccount = Pick<GetAccount, 
-| "igname" | "full_name" | "status_id" | "responded_date" | "call_scheduled_date" | "closing_date" | "won_date" | "success_story_date" | "lost_date" | "outreach_time"
+export type CreateAccount = Pick<GetAccount,
+  | "igname" | "full_name" | "status_id" | "responded_date" | "call_scheduled_date" | "closing_date" | "won_date" | "success_story_date" | "lost_date" | "outreach_time"
 >;
 
 export type UpdateAccount = Pick<
-GetAccount,
+  GetAccount,
   | "igname" | "full_name" | "status_id" | "responded_date" | "call_scheduled_date" | "closing_date" | "won_date" | "success_story_date" | "lost_date" | "outreach_time"
 >;
 
@@ -54,9 +54,23 @@ export interface GetAccount extends AccountPrimary {
   call_scheduled_date: string | null;
   closing_date: string | null;
   won_date: string | null;
-  success_story_date:string | null;
+  success_story_date: string | null;
   lost_date: string | null;
   // outreach_time: Date | null;
+}
+
+export interface WeeklyReport {
+  week: string;
+  week_start: string;
+  outreach: number;
+  responded: number;
+  responded_ignames: number;
+  call_scheduled_date: number;
+  closing_date: number;
+  won_date: number;
+  success_story_date: number;
+  lost_date: number;
+  responded_date: number;
 }
 export interface GetSingleAccount extends GetAccount {
   id: string;
@@ -104,7 +118,7 @@ export interface MqttStatus {
   status: Number,
   mqtt_running: boolean;
   mqtt_connected: boolean;
-  connected_accounts:[];
+  connected_accounts: [];
   success: boolean;
 }
 export interface GetSingleAccountWithThreadDetails extends AccountPrimary {

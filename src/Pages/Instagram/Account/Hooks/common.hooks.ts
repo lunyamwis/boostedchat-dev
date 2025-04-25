@@ -6,7 +6,8 @@ import {
   useGetStageStatsWithDateFilters,
   useGetAccountList,
   useGetOutreachLineChart,
-  useGetOutreachChartList
+  useGetOutreachChartList,
+  useGetWeeklyreport
 } from "./accounts.hook";
 
 export type AccountFilterParams = {
@@ -244,6 +245,7 @@ export const useCommonStateForAccountList = () => {
   const accountsQR = useGetAccountList(formattedFilterParams);
   const outreachLineChart = useGetOutreachLineChart(chart_type);
   const outreachChartList = useGetOutreachChartList("");
+  const weeklyReportQR = useGetWeeklyreport();
 
   React.useEffect(() => {
     setIsLoading(true);
@@ -260,6 +262,10 @@ export const useCommonStateForAccountList = () => {
     });
   }, [chart_type]);
 
+  // React.useEffect(() => {
+  //   weeklyReportQR
+  // },[])
+
 
   return {
     accountsQR,
@@ -270,6 +276,7 @@ export const useCommonStateForAccountList = () => {
     isLoading,
     filterParams,
     reload_chats,
+    weeklyReportQR,
     setFilterParams
   };
 };

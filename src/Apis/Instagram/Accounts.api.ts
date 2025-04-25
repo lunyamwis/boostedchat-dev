@@ -7,15 +7,16 @@ import {
   GetSingleAccountWithThreadDetails,
   Stat,
   UpdateAccountParams,
-  MqttStatus
+  MqttStatus,
+  WeeklyReport
 } from "../../Interfaces/Instagram/account.interface";
 import { Lead, PaginatedQuery, LineChartData, ChartList } from "../../Interfaces/general.interface";
 import { UploadCSV } from "../../Interfaces/Instagram/upload.interface";
 
 export const useAccountsApi = () => {
   const axiosInstance = useAPIGlobalAxios("instagram/account");
- 
-  const lunyamwiAxiosInstanceLineChartData = useLeadsGenerationGlobalAxios("api/dashboard") 
+
+  const lunyamwiAxiosInstanceLineChartData = useLeadsGenerationGlobalAxios("api/dashboard")
   const lunyamwiAxiosInstanceChartList = useLeadsGenerationGlobalAxios("api/get_sql_records")
 
   return {
@@ -37,6 +38,11 @@ export const useAccountsApi = () => {
     getAll: (page: number): Promise<PaginatedQuery<GetAccount>> =>
       axiosInstance
         .get(`/?page=${page}`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    getWeeklyReport: (): Promise<PaginatedQuery<WeeklyReport>> =>
+      axiosInstance
+        .get(`/weekly-reporting/`)
         .then(handleRestResponse)
         .catch(handleRestError),
     getAllWithFilters: (filterParams: any): Promise<PaginatedQuery<GetAccount>> =>
