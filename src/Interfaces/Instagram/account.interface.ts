@@ -21,7 +21,9 @@ export interface Stat {
 
 }
 
-export type CreateAccount = Pick<AccountPrimary, "igname" | "full_name">;
+export type CreateAccount = Pick<GetAccount, 
+| "igname" | "full_name" | "status_id" | "responded_date" | "call_scheduled_date" | "closing_date" | "won_date" | "success_story_date" | "lost_date" | "outreach_time"
+>;
 
 export type UpdateAccount = Pick<
 GetAccount,

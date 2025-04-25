@@ -24,6 +24,8 @@ import {
 } from "@tabler/icons-react";
 import { useAlert } from "../../../Hooks/useAlert";
 import { Link } from "react-router-dom";
+import { DateField } from "@/Components/Containers/DateField";
+import dayjs from 'dayjs';
 
 type Props = {
   isOpen: boolean;
@@ -34,6 +36,13 @@ export function CreateAccount({ isOpen, setIsOpen }: Props) {
   const { alertInfo, setAlertInfo, showAlert, setShowAlert } = useAlert();
   const [igName, setIgName] = React.useState("");
   const [fullName, setFullName] = React.useState("");
+  const [outReachDate, setoutReachDate] = React.useState<Date | null>(null);
+  const [respondedDate, setRespondedDate] = React.useState<Date | null>(null);
+  const [callScheduleDate, setCallScheduleDate] = React.useState<Date | null>(null);
+  const [closingDate, setClosingDate] = React.useState<Date | null>(null);
+  const [wonDate, setWonDate] = React.useState<Date | null>(null);
+  const [lostDate, setLostDate] = React.useState<Date | null>(null);
+  const [successDate, setSuccessDate] = React.useState<Date | null>(null);
   const [csvFile, setCsvFile] = React.useState<null | File>(null);
   const [accountTab, setAccountTab] = React.useState<string | null>("single");
   const bulkUploadAccounts = useBulkUploadAccounts();
@@ -53,8 +62,16 @@ export function CreateAccount({ isOpen, setIsOpen }: Props) {
 
     createAccount.mutate(
       {
-        full_name: fullName === "" ? null : fullName,
+        full_name: fullName === "" ? "" : fullName,
         igname: igName,
+        won_date: wonDate == null ? null : dayjs(wonDate).format('YYYY-MM-DD'),
+        lost_date: lostDate == null ? null : dayjs(lostDate).format('YYYY-MM-DD'),
+        success_story_date: successDate == null ? null : dayjs(successDate).format('YYYY-MM-DD'),
+        outreach_time: outReachDate == null ? null : dayjs(outReachDate).format('YYYY-MM-DD'),
+        responded_date: respondedDate == null ? null : dayjs(respondedDate).format('YYYY-MM-DD'),
+        call_scheduled_date: callScheduleDate == null ? null : dayjs(callScheduleDate).format('YYYY-MM-DD'),
+        closing_date: closingDate == null ? null : dayjs(closingDate).format('YYYY-MM-DD'),
+        status_id: null
       },
       {
         onSuccess: () => {
@@ -122,6 +139,14 @@ export function CreateAccount({ isOpen, setIsOpen }: Props) {
     setFullName("");
     setAccountTab("single");
     setIsOpen(false);
+    setoutReachDate(null);
+    setRespondedDate(null);
+    setCallScheduleDate(null);
+    setClosingDate(null);
+    setWonDate(null);
+    setLostDate(null);
+    setSuccessDate(null);
+
   }
   return (
     <Modal
@@ -172,6 +197,54 @@ export function CreateAccount({ isOpen, setIsOpen }: Props) {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
             />
+            <DateField
+              title="Outreach Date"
+              // date={outReachDate}
+              value={outReachDate}
+              valueFormat="YYYY-MM-DD"
+              setDate={setoutReachDate} />
+
+            <DateField
+              title="Responded Date"
+              // date={respondedDate}
+              valueFormat="YYYY-MM-DD"
+              value={respondedDate}
+              setDate={setRespondedDate} />
+
+            <DateField
+              title="Call scheduled Date"
+              // date={respondedDate}
+              valueFormat="YYYY-MM-DD"
+              value={callScheduleDate}
+              setDate={setCallScheduleDate} />
+
+            <DateField
+              title="Closing Date"
+              // date={respondedDate}
+              valueFormat="YYYY-MM-DD"
+              value={closingDate}
+              setDate={setClosingDate} />
+
+            <DateField
+              title="Won Date"
+              // date={respondedDate}
+              valueFormat="YYYY-MM-DD"
+              value={wonDate}
+              setDate={setWonDate} />
+
+            <DateField
+              title="Success Story Date"
+              // date={respondedDate}
+              valueFormat="YYYY-MM-DD"
+              value={successDate}
+              setDate={setSuccessDate} />
+
+            <DateField
+              title="Lost Date"
+              // date={respondedDate}
+              valueFormat="YYYY-MM-DD"
+              value={lostDate}
+              setDate={setLostDate} />
             <Group justify="center">
               <Button
                 loading={createAccount.isPending}
