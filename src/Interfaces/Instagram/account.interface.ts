@@ -71,6 +71,12 @@ export interface WeeklyReport {
   success_story_date: number;
   lost_date: number;
   responded_date: number;
+  responded_rate: number 
+  call_scheduled_rate: number 
+  closing_rate: number 
+  won_rate: number 
+  success_story_rate: number 
+  lost_rate: number 
 }
 export interface GetSingleAccount extends GetAccount {
   id: string;
