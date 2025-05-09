@@ -77,6 +77,8 @@ export interface WeeklyReport {
   won_rate: number 
   success_story_rate: number 
   lost_rate: number 
+  sq_conversion_rate: number
+  sales_qualified_count: number
 }
 export interface GetSingleAccount extends GetAccount {
   id: string;
