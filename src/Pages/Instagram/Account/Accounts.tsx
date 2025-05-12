@@ -493,13 +493,6 @@ export function Accounts() {
       //   visible: true,
       //   type: "string",
       // },
-      {
-        accessorFn: (row) => row.won_date > 0 ? `${row.won_date} (${row.won_rate})%` : row.won_date,
-        id: "won_date",
-        header: "Total Won",
-        visible: true,
-        type: "string",
-      },
       // {
       //   accessorFn: (row) => row.success_story_date > 0 ? `${row.success_story_date} (${row.success_story_rate})%` : row.success_story_date,
       //   id: "success_story_date",
@@ -511,6 +504,13 @@ export function Accounts() {
         accessorFn: (row) => row.sales_qualified_count,
         id: "sales_qualified",
         header: "sales qualified",
+        visible: true,
+        type: "string",
+      },
+      {
+        accessorFn: (row) => row.won_date > 0 ? `${row.won_date} (${row.won_rate})%` : row.won_date,
+        id: "won_date",
+        header: "Total Won",
         visible: true,
         type: "string",
       },
