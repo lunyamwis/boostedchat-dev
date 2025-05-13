@@ -158,12 +158,12 @@ export function Accounts() {
 
   const columns: ColDef<GetAccount>[] = React.useMemo(
     () => [
-      {
-        accessorFn: (row) => row.id,
-        id: "accountId",
-        header: "Id",
-        visible: false,
-      },
+      // {
+      //   accessorFn: (row) => row.id,
+      //   id: "accountId",
+      //   header: "Id",
+      //   visible: false,
+      // },
       {
         accessorFn: (_, idx) => idx + 1,
         id: "accountNo",
@@ -230,136 +230,136 @@ export function Accounts() {
 
         },
       },
-      {
-        accessorFn: (row) => row.call_scheduled_date,
-        id: "call_scheduled_date",
-        header: "Call Scheduled Date",
-        visible: true,
-        type: "string",
-        cell: (params) => {
+      // {
+      //   accessorFn: (row) => row.call_scheduled_date,
+      //   id: "call_scheduled_date",
+      //   header: "Call Scheduled Date",
+      //   visible: true,
+      //   type: "string",
+      //   cell: (params) => {
 
-          if (params.row.original.call_scheduled_date == null) {
-            return <></>;
-          }
-          if (params.row.original.outreach_success) {
-            let formattedTime = new Date(params.row.original.call_scheduled_date).toLocaleTimeString()
-            let formattedDate = new Date(params.row.original.call_scheduled_date).toLocaleDateString()
-            return (
-              `${formattedDate} at ${formattedTime}`
-            );
+      //     if (params.row.original.call_scheduled_date == null) {
+      //       return <></>;
+      //     }
+      //     if (params.row.original.outreach_success) {
+      //       let formattedTime = new Date(params.row.original.call_scheduled_date).toLocaleTimeString()
+      //       let formattedDate = new Date(params.row.original.call_scheduled_date).toLocaleDateString()
+      //       return (
+      //         `${formattedDate} at ${formattedTime}`
+      //       );
 
-          } else {
-            return (
-              '-'
-            );
-          }
+      //     } else {
+      //       return (
+      //         '-'
+      //       );
+      //     }
 
-        },
-      },
-      {
-        accessorFn: (row) => row.closing_date,
-        id: "closing_date",
-        header: "Closing Date",
-        visible: true,
-        type: "string",
-        cell: (params) => {
+      //   },
+      // },
+      // {
+      //   accessorFn: (row) => row.closing_date,
+      //   id: "closing_date",
+      //   header: "Closing Date",
+      //   visible: true,
+      //   type: "string",
+      //   cell: (params) => {
 
-          if (params.row.original.closing_date == null) {
-            return <></>;
-          }
-          if (params.row.original.outreach_success) {
-            let formattedTime = new Date(params.row.original.closing_date).toLocaleTimeString()
-            let formattedDate = new Date(params.row.original.closing_date).toLocaleDateString()
-            return (
-              `${formattedDate} at ${formattedTime}`
-            );
+      //     if (params.row.original.closing_date == null) {
+      //       return <></>;
+      //     }
+      //     if (params.row.original.outreach_success) {
+      //       let formattedTime = new Date(params.row.original.closing_date).toLocaleTimeString()
+      //       let formattedDate = new Date(params.row.original.closing_date).toLocaleDateString()
+      //       return (
+      //         `${formattedDate} at ${formattedTime}`
+      //       );
 
-          } else {
-            return (
-              '-'
-            );
-          }
+      //     } else {
+      //       return (
+      //         '-'
+      //       );
+      //     }
 
-        },
-      },
-      {
-        accessorFn: (row) => row.won_date,
-        id: "won_date",
-        header: "Won Date",
-        visible: true,
-        type: "string",
-        cell: (params) => {
+      //   },
+      // },
+      // {
+      //   accessorFn: (row) => row.won_date,
+      //   id: "won_date",
+      //   header: "Won Date",
+      //   visible: true,
+      //   type: "string",
+      //   cell: (params) => {
 
-          if (params.row.original.won_date == null) {
-            return <></>;
-          }
-          if (params.row.original.outreach_success) {
-            let formattedTime = new Date(params.row.original.won_date).toLocaleTimeString()
-            let formattedDate = new Date(params.row.original.won_date).toLocaleDateString()
-            return (
-              `${formattedDate} at ${formattedTime}`
-            );
+      //     if (params.row.original.won_date == null) {
+      //       return <></>;
+      //     }
+      //     if (params.row.original.outreach_success) {
+      //       let formattedTime = new Date(params.row.original.won_date).toLocaleTimeString()
+      //       let formattedDate = new Date(params.row.original.won_date).toLocaleDateString()
+      //       return (
+      //         `${formattedDate} at ${formattedTime}`
+      //       );
 
-          } else {
-            return (
-              '-'
-            );
-          }
+      //     } else {
+      //       return (
+      //         '-'
+      //       );
+      //     }
 
-        },
-      },
-      {
-        accessorFn: (row) => row.success_story_date,
-        id: "success_story_date",
-        header: "Success Story Date",
-        visible: true,
-        type: "string",
-        cell: (params) => {
+      //   },
+      // },
+      // {
+      //   accessorFn: (row) => row.success_story_date,
+      //   id: "success_story_date",
+      //   header: "Success Story Date",
+      //   visible: true,
+      //   type: "string",
+      //   cell: (params) => {
 
-          if (params.row.original.success_story_date == null) {
-            return <></>;
-          }
-          if (params.row.original.outreach_success) {
-            let formattedTime = new Date(params.row.original.success_story_date).toLocaleTimeString()
-            let formattedDate = new Date(params.row.original.success_story_date).toLocaleDateString()
-            return (
-              `${formattedDate} at ${formattedTime}`
-            );
+      //     if (params.row.original.success_story_date == null) {
+      //       return <></>;
+      //     }
+      //     if (params.row.original.outreach_success) {
+      //       let formattedTime = new Date(params.row.original.success_story_date).toLocaleTimeString()
+      //       let formattedDate = new Date(params.row.original.success_story_date).toLocaleDateString()
+      //       return (
+      //         `${formattedDate} at ${formattedTime}`
+      //       );
 
-          } else {
-            return (
-              '-'
-            );
-          }
+      //     } else {
+      //       return (
+      //         '-'
+      //       );
+      //     }
 
-        },
-      },
-      {
-        accessorFn: (row) => row.lost_date,
-        id: "lost_date",
-        header: "Lost Date",
-        visible: true,
-        type: "string",
-        cell: (params) => {
+      //   },
+      // },
+      // {
+      //   accessorFn: (row) => row.lost_date,
+      //   id: "lost_date",
+      //   header: "Lost Date",
+      //   visible: true,
+      //   type: "string",
+      //   cell: (params) => {
 
-          if (params.row.original.lost_date == null) {
-            return <></>;
-          }
-          if (params.row.original.outreach_success) {
-            let formattedTime = new Date(params.row.original.lost_date).toLocaleTimeString()
-            let formattedDate = new Date(params.row.original.lost_date).toLocaleDateString()
-            return (
-              `${formattedDate} at ${formattedTime}`
-            );
+      //     if (params.row.original.lost_date == null) {
+      //       return <></>;
+      //     }
+      //     if (params.row.original.outreach_success) {
+      //       let formattedTime = new Date(params.row.original.lost_date).toLocaleTimeString()
+      //       let formattedDate = new Date(params.row.original.lost_date).toLocaleDateString()
+      //       return (
+      //         `${formattedDate} at ${formattedTime}`
+      //       );
 
-          } else {
-            return (
-              '-'
-            );
-          }
+      //     } else {
+      //       return (
+      //         '-'
+      //       );
+      //     }
 
-        },
-      },
+      //   },
+      // },
       {
         accessorFn: (row) => row.qualified,
         id: "qualified",
