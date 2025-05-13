@@ -56,14 +56,14 @@ export function EditDetails({ account }: Props) {
       });
       return;
     }
-    if (fullName === "") {
-      showNotification({
-        message: "The full name cannot be empty",
-        color: "orange",
-        icon: <IconAlertTriangle />,
-      });
-      return;
-    }
+    // if (fullName === "") {
+    //   showNotification({
+    //     message: "The full name cannot be empty",
+    //     color: "orange",
+    //     icon: <IconAlertTriangle />,
+    //   });
+    //   return;
+    // }
 
     setIsDialogLoading(true);
     setIsLoadingDialogOpen(true);
