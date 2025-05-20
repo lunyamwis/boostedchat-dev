@@ -65,7 +65,9 @@ function MDataGrid<T>({
   statusProps,
   paginationOptions,
 }: Props<T>) {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, //setSearchParams
+
+  ] = useSearchParams();
   const {
     limit,
     offset,
@@ -278,16 +280,16 @@ function MDataGrid<T>({
       });
 
       const paramsObj: { st?: string; ds?: string; de?: string } = {};
-      const cols: { s: string[]; r: string[]; g: string[] } = {
-        s: selectColumns,
-        r: relationColumns,
-        g: generatedColumns,
-      };
-      const filterParams = {
-        s: pFilters.selectColumns,
-        r: pFilters.relationColumns,
-        g: pFilters.generatedColumns,
-      };
+      // const cols: { s: string[]; r: string[]; g: string[] } = {
+      //   s: selectColumns,
+      //   r: relationColumns,
+      //   g: generatedColumns,
+      // };
+      // const filterParams = {
+      //   s: pFilters.selectColumns,
+      //   r: pFilters.relationColumns,
+      //   g: pFilters.generatedColumns,
+      // };
       if (dateRangeTypeParam !== "All Time") {
         paramsObj.ds =
           startDateParam ??
