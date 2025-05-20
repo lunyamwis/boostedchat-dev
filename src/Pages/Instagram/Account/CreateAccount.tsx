@@ -71,7 +71,8 @@ export function CreateAccount({ isOpen, setIsOpen }: Props) {
         responded_date: respondedDate == null ? null : dayjs(respondedDate).format('YYYY-MM-DD'),
         call_scheduled_date: callScheduleDate == null ? null : dayjs(callScheduleDate).format('YYYY-MM-DD'),
         closing_date: closingDate == null ? null : dayjs(closingDate).format('YYYY-MM-DD'),
-        status_id: null
+        status_id: null,
+        status_param: null,
       },
       {
         onSuccess: () => {
