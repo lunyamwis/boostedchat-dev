@@ -62,6 +62,7 @@ export interface GetAccount extends AccountPrimary {
 export interface WeeklyReport {
   week: string;
   week_start: string;
+  week_end: string;
   outreach: number;
   responded: number;
   responded_ignames: number;

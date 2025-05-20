@@ -36,6 +36,7 @@ export type AccountListFilterParams = {
   outreach_failure: boolean | undefined;
   all_outreach: boolean;
   all_qualified: boolean;
+  list_type: string;
 };
 const formatFilterParams = (params: AccountFilterParams) => {
   const mApiParams = [];
@@ -105,6 +106,14 @@ const formatAccountListFilterParams = (params: AccountListFilterParams) => {
   if (params.outreach_time_gte) {
     mApiParams.push(`outreach_time_gte=${params.outreach_time_gte}`);
     mApiParams.push(`outreach_time_lt=${params.outreach_time_lt}`);
+  }
+
+  if (params.outreach_success) {
+    mApiParams.push(`outreach_success=${params.outreach_success}`);
+  }
+
+  if (params.list_type) {
+    mApiParams.push(`list_type=${params.list_type}`);
   }
 
   if (params.status) {
@@ -209,7 +218,10 @@ export const useCommonStateForStageStats = () => {
   };
 };
 
-export const useCommonStateForAccountList = () => {
+export const useCommonStateForAccountList = (initiParams: any) => {
+
+  console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
+  console.log("initiParams", initiParams);
 
   const [formattedFilterParams, setFormatAccountListFilterParams] =
     React.useState<string>("page=1");
@@ -218,11 +230,11 @@ export const useCommonStateForAccountList = () => {
   const [reload_chats, setReloadCharts] = React.useState<boolean>(false);
 
   const [filterParams, setFilterParams] = React.useState<AccountListFilterParams>({
-    created_at_gte: "",
-    created_at_lt: "",
+    created_at_gte: initiParams?.created_at_gte || "",
+    created_at_lt: initiParams?.created_at_lt || "",
     outreach_time_lt: "",
     outreach_time_gte: "",
-    outreach_success: 'all',
+    outreach_success: initiParams?.outreach_success || 'all',
     outreach_failure: false,
     all_outreach: false,
     all_qualified: false,
@@ -231,7 +243,10 @@ export const useCommonStateForAccountList = () => {
     notQualified: false,
     status: "",
     page: 1,
+    list_type: initiParams?.list_type || "",
   });
+
+  console.log("filterParams ------------", filterParams);
 
   React.useEffect(() => {
     const params = formatAccountListFilterParams(filterParams);

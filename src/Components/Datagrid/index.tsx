@@ -306,14 +306,14 @@ function MDataGrid<T>({
         paramsObj.st = statusProps.defaultValue;
       }
 
-      setSearchParams({
-        ...paramsObj,
-        drt: dateRangeTypeParam,
-        c: JSON.stringify(cols),
-        f: JSON.stringify(filterParams),
-        l: limit,
-        o: offset,
-      });
+      // setSearchParams({
+      //   ...paramsObj,
+      //   drt: dateRangeTypeParam,
+      //   c: JSON.stringify(cols),
+      //   f: JSON.stringify(filterParams),
+      //   l: limit,
+      //   o: offset,
+      // });
     }
   }, []);
 

@@ -5,7 +5,7 @@ import {
   rankItem,
 } from "@tanstack/match-sorter-utils";
 import {
-  IApiSearchParams,
+  // IApiSearchParams,
   IDGFilter,
   TFilterOperatorAndType,
 } from "./datagrid.interface";
@@ -77,23 +77,23 @@ export const mapFilterOperator = (payload: TFilterOperatorAndType) => {
   return "is";
 };
 
-export const formatApiSearchParams = (params: IApiSearchParams) => {
-  const { columns, filters, status, startDate, endDate } = params;
-  let filterStr = "";
-  let statusStr = "";
-  let dateStr = "";
+// export const formatApiSearchParams = (params: IApiSearchParams) => {
+//   const { columns, filters, status, startDate, endDate } = params;
+//   let filterStr = "";
+//   let statusStr = "";
+//   let dateStr = "";
 
-  if (filters) {
-    filterStr = `&f=${filters}`;
-  }
-  if (status) {
-    statusStr = `&st=${status}`;
-  }
-  if (startDate && endDate) {
-    dateStr = `&ds=${startDate}&de=${endDate}`;
-  }
-  return `?c=${columns}${filterStr}${statusStr}${dateStr}`;
-};
+//   if (filters) {
+//     filterStr = `&f=${filters}`;
+//   }
+//   if (status) {
+//     statusStr = `&st=${status}`;
+//   }
+//   if (startDate && endDate) {
+//     dateStr = `&ds=${startDate}&de=${endDate}`;
+//   }
+//   return `?c=${columns}${filterStr}${statusStr}${dateStr}`;
+// };
 
 export const rowMatchesFilter = (
   filter: IDGFilter,

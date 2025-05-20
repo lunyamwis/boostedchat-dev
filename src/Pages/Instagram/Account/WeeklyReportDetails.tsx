@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ColDef } from "../../../Components/Datagrid/datagrid.interface";
-import { GetAccount, WeeklyReport } from "../../../Interfaces/Instagram/account.interface";
+import { GetAccount } from "../../../Interfaces/Instagram/account.interface";
 import { Row } from "@tanstack/react-table";
 import {
   ActionIcon, Group, Loader, Text, Tooltip,
@@ -10,8 +10,6 @@ import {
   Divider,
   Box,
   Radio,
-  Flex,
-  Select,
   Tabs,
   Space
 } from "@mantine/core";
@@ -26,15 +24,21 @@ import { CreateAccount } from "./CreateAccount";
 import { showNotification } from "@mantine/notifications";
 import { DatePicker } from "@mantine/dates";
 import { useCommonStateForAccountList } from "./Hooks/common.hooks";
-import { StatsRingCard } from "@/Pages/Dashboard/StatsCard";
-import BokehChart from "./BokehCharts";
-import { ChartTypes } from "@/Utils/constants";
-import { IconPhoto, IconMessageCircle, IconSettings } from '@tabler/icons-react';
+import { IconSettings } from '@tabler/icons-react';
 import { useDebouncedValue } from "@mantine/hooks";
+import { useLocation } from 'react-router-dom';
 
 
 
-export function Accounts() {
+export function WeeklyReportDetails() {
+  const { search, state } = useLocation();
+  const listFromState = state?.list;
+  const outreachSuccessFromState = state?.outreach_success;
+  const queryParams = new URLSearchParams(search);
+
+
+  const weekStart = queryParams.get('week_start');
+  const weekEnd = queryParams.get('week_end');
   const [page, setPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState(50);
   const [opened, setOpened] = useState(false);
@@ -45,9 +49,12 @@ export function Accounts() {
   const { isLoading,
     accountsQR,
     filterParams,
-    weeklyReportQR,
-    outreachLineChart, setChartType,
-    setFilterParams, outreachChartList } = useCommonStateForAccountList({});
+    setFilterParams } = useCommonStateForAccountList({
+      created_at_gte: weekStart || "",
+      created_at_lt: weekEnd || "",
+      list_type: listFromState || undefined,
+      outreach_success: outreachSuccessFromState || "",
+    });
   const removeDuplicateAccountsQR = useRemoveDuplicateAccounts()
   const resetAccount = useResetAccount();
   // const [dateError, setDateError] = useState(false);
@@ -57,21 +64,26 @@ export function Accounts() {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 700);
 
-  const navigateToOutreachlist = (rowData: WeeklyReport) => {
-    navigate(`/instagram/outreach/weekly-report/?week_start=${rowData.week_start}&week_end=${rowData.week_end}`, { state: { list: 'outreach', outreach_success: 'true' } });
-  };
-
-  const navigateToWonList = (rowData: WeeklyReport) => {
-    navigate(`/instagram/outreach/weekly-report/?week_start=${rowData.week_start}&week_end=${rowData.week_end}`, { state: { list: 'won' } });
-  };
 
 
-  const getChartNames = (data: any[]) => {
-    return data.map(
-      (item: any) => {
-        return { "value": item.id.toString(), "label": item.name }
-      });
-  };
+
+  React.useEffect(() => {
+    console.log("checking starff")
+    console.log("#########################################################")
+    console.log("***************", state);
+    console.log("weekStart", weekStart);
+    console.log("weekEnd", weekEnd);
+    console.log("outreachSuccessFromState", outreachSuccessFromState);
+    console.log("listFromState", listFromState);
+
+    setFilterParams({
+      ...filterParams,
+      created_at_gte: weekStart || "",
+      created_at_lt: weekEnd || "",
+      outreach_success: outreachSuccessFromState || "",
+    })
+  }, []);
+
 
   const handleFilterClick = () => {
     const formattedStartDate = value[0] ? `${value[0].getFullYear()}-${String(value[0].getMonth() + 1).padStart(2, '0')}-${String(value[0].getDate()).padStart(2, '0')}` : ''
@@ -456,199 +468,8 @@ export function Accounts() {
     [],
   );
 
-  const reportingColumns: ColDef<WeeklyReport>[] = React.useMemo(
-    () => [
-
-      {
-        accessorFn: (_, idx) => idx + 1,
-        id: "accountNo",
-        header: "#",
-        type: "string",
-        visible: true,
-      },
-      {
-        accessorFn: (row) => row.week_start,
-        id: "week_start",
-        header: "Week Start Date",
-        visible: true,
-        type: "string",
-      },
-      {
-        accessorFn: (row) => row.outreach,
-        id: "outreach",
-        header: "Outreach volume",
-        visible: true,
-        type: "string",
-        cell: ({ row }) => (
-          <button
-            onClick={() => navigateToOutreachlist(row.original)}
-            className="text-blue-600 underline cursor-pointer"
-          >
-            {row.original.outreach}
-          </button>
-        ),
-      },
-      {
-        accessorFn: (row) => `${row.responded} ${row.responded_rate}%`,
-        id: "responded",
-        header: "Total Engaged",
-        visible: true,
-        type: "string",
-      },
-      // {
-      //   accessorFn: (row) => row.responded_ignames,
-      //   id: "week_start_date",
-      //   header: "Total Engaged Ignames",
-      //   visible: true,
-      //   type: "string",
-      // },
-      // {
-      //   accessorFn: (row) => row.call_scheduled_date > 0 ? `${row.call_scheduled_date} (${row.call_scheduled_rate})%` : row.call_scheduled_date,
-      //   id: "call_scheduled_date",
-      //   header: "Call Scheduled Date",
-      //   visible: true,
-      //   type: "string",
-      // },
-      // {
-      //   accessorFn: (row) => row.closing_date > 0 ? `${row.closing_date} (${row.closing_rate})%` : row.closing_date,
-      //   id: "closing_date",
-      //   header: "Total Closed",
-      //   visible: true,
-      //   type: "string",
-      // },
-      // {
-      //   accessorFn: (row) => row.success_story_date > 0 ? `${row.success_story_date} (${row.success_story_rate})%` : row.success_story_date,
-      //   id: "success_story_date",
-      //   header: "Success Story",
-      //   visible: true,
-      //   type: "string",
-      // },
-      {
-        accessorFn: (row) => row.sales_qualified_count,
-        id: "sales_qualified",
-        header: "sales qualified",
-        visible: true,
-        type: "string",
-      },
-      {
-        accessorFn: (row) => row.won_date > 0 ? `${row.won_date} (${row.won_rate})%` : row.won_date,
-        id: "won_date",
-        header: "Total Won",
-        visible: true,
-        type: "string",
-        cell: ({ row }) => (
-          <button
-            onClick={() => navigateToWonList(row.original)}
-            className="text-blue-600 underline cursor-pointer"
-          >
-            {row.original.won_date}
-          </button>
-        ),
-      },
-      {
-        accessorFn: (row) => {
-          return `${row.sq_conversion_rate}%`
-        },
-        id: "conversion_rate",
-        header: "SQ Conversion Rate",
-        visible: true,
-        type: "string",
-      },
-    ],
-    [],
-
-  );
-  const renderChart = () => {
-
-    if (outreachLineChart.isLoading || isLoading) {
-      return <Loader color="blue" />;
-    }
-
-    if (outreachLineChart.isError) {
-      return null; // Or any fallback UI
-    }
-
-    switch (outreachLineChart.data?.charts.chart_type) {
-      case ChartTypes.MATPLOTLIB:
-        return (
-          <img
-            src={`data:image/png;base64,${outreachLineChart.data?.charts.mpl}`}
-            alt="Decoded"
-            style={{ maxWidth: "100%", height: "auto" }}
-          />
-        );
-
-      case ChartTypes.BOKEH:
-        return (
-          <BokehChart
-            chartData={{
-              bokeh_script: outreachLineChart.data?.charts.bokeh_script || '',
-              bokehDiv: outreachLineChart.data?.charts.bokeh_div || '',
-            }}
-          />
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
     <>
-      <Flex
-        gap="md"
-        justify="center"
-        align="stretch"
-      >
-      </Flex>
-
-      <Flex
-        gap="md"
-        justify="center"
-        align="stretch"
-        wrap="wrap"
-      >
-
-        <StatsRingCard
-          status_param={'Scheduled'}
-          total_accounts={accountsQR.data?.total_scheduled ?? 0}
-          description={"Qualified, Scheduled but not reached out"}
-        />
-        <StatsRingCard
-          status_param={'Reached out'}
-          total_accounts={accountsQR.data?.total_outreach ?? 0}
-          description={"Qualifed Scheduled & reached out"}
-        />
-
-      </Flex>
-      <Divider my="md" />
-      <Flex
-        gap="md"
-        justify="center"
-        align="stretch"
-        wrap="wrap"
-      >
-        <Select
-          label="Choose chart"
-          placeholder="Choose chart.."
-          data={getChartNames(Array.isArray(outreachChartList.data) ? outreachChartList.data : [])}
-          onChange={(value) => {
-            setChartType(`id=${value}`)
-          }}
-
-        />
-      </Flex>
-      <Flex
-        gap="md"
-        justify="center"
-        align="stretch"
-      >
-        {
-
-          renderChart()
-
-        }
-      </Flex>
-
       <Divider my="md" />
       <Group gap={"xs"}>
         <Box px={24}>
@@ -735,97 +556,17 @@ export function Accounts() {
       </Group>
       <Divider my="md" />
 
-      <Tabs variant="pills" radius="lg" defaultValue="weekly_reporting">
+      <Tabs variant="pills" radius="lg" defaultValue="all">
         <Tabs.List>
-          <Tabs.Tab value="weekly_reporting" leftSection={<IconPhoto size={12} />}>
-            Weekly Reports
-          </Tabs.Tab>
-          <Tabs.Tab value="scheduled" leftSection={<IconMessageCircle size={12} />}>
-            Scheduled Today
-          </Tabs.Tab>
-          <Tabs.Tab value="outreach_success" leftSection={<IconPhoto size={12} />}>
-            Successfully reached out
-          </Tabs.Tab>
           <Tabs.Tab value="all" leftSection={<IconSettings size={12} />}>
             All
           </Tabs.Tab>
         </Tabs.List>
         <Space h="md" />
-
-        <Tabs.Panel value="outreach_success">
-          <DataGrid
-            fn={() => {
-              removeDuplicateAccountsQR.mutate();
-              showNotification({
-                color: "red",
-                icon: <IconX />,
-                title: "Error",
-                message: "message",
-              });
-            }}
-            loading={accountsQR.isLoading || isLoading}
-            tableName="Outreach Tracker"
-            data={accountsQR.data?.outreach_success ?? []}
-            columns={columns}
-            paginationOptions={{
-              isManual: true,
-              pageIndex: page,
-              pageSize: pageSize,
-              setPageSize: setPageSize,
-              setPageIndex: setPage,
-              totalRows: accountsQR.data?.count ?? 0,
-            }}
-          />
-        </Tabs.Panel>
-
-        <Tabs.Panel value="scheduled">
-          <DataGrid
-            fn={() => {
-              removeDuplicateAccountsQR.mutate();
-              // notifications.update({
-              //   id: "REMOVE_DUPLICATES",
-              //   color: "teal",
-              //   // icon: <IconCheck />,
-              //   message: "duplicates cleared successfully.",
-              //   loading: false,
-              //   autoClose: 3000,
-
-              // });
-              showNotification({
-                color: "red",
-                icon: <IconX />,
-                title: "Error",
-                message: "message",
-              });
-            }}
-            loading={accountsQR.isLoading || isLoading}
-            tableName="Outreach Tracker"
-            data={accountsQR.data?.scheduled ?? []}
-            columns={columns}
-            paginationOptions={{
-              isManual: true,
-              pageIndex: page,
-              pageSize: pageSize,
-              setPageSize: setPageSize,
-              setPageIndex: setPage,
-              totalRows: accountsQR.data?.count ?? 0,
-            }}
-          />
-        </Tabs.Panel>
-
         <Tabs.Panel value="all">
           <DataGrid
             fn={() => {
               removeDuplicateAccountsQR.mutate();
-              // notifications.update({
-              //   id: "REMOVE_DUPLICATES",
-              //   color: "teal",
-              //   // icon: <IconCheck />,
-              //   message: "duplicates cleared successfully.",
-              //   loading: false,
-              //   autoClose: 3000,
-
-              // });
               showNotification({
                 color: "red",
                 icon: <IconX />,
@@ -855,28 +596,7 @@ export function Accounts() {
             setIsOpen={setIsCreateAccountModalOpen}
           />
         </Tabs.Panel>
-
-        <Tabs.Panel value="weekly_reporting">
-          <DataGrid
-            fn={() => {
-            }}
-            loading={weeklyReportQR.isLoading || isLoading}
-            tableName="Outreach Tracker"
-            data={weeklyReportQR.data?.results ?? []}
-            columns={reportingColumns}
-            paginationOptions={{
-              isManual: true,
-              pageIndex: page,
-              pageSize: pageSize,
-              setPageSize: setPageSize,
-              setPageIndex: setPage,
-              totalRows: weeklyReportQR.data?.count ?? 0,
-            }}
-          />
-        </Tabs.Panel>
       </Tabs>
-
-
     </>
   );
 }

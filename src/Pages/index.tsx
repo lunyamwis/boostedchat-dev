@@ -50,6 +50,7 @@ export type ParentKeys =
   // | "LeadSources"
   | "ManageServices"
   // | "SetupScraper";
+  | "WeeklyReportDetails";
 
 export type ChildKeys = "";
 
@@ -187,6 +188,16 @@ export const componentData: {
     //     ),
     //   ),
     // },
+    {
+      key: "WeeklyReportDetails",
+      component: React.lazy(() =>
+        import("./Instagram/Account/WeeklyReportDetails").then(
+          ({ WeeklyReportDetails }) => ({
+            default: WeeklyReportDetails,
+          }),
+        ),
+      ),
+    },
   ];
 
 export const pageData: TMPageData = {
@@ -309,4 +320,13 @@ export const pageData: TMPageData = {
   //   isNavItem: true,
   //   icon: IconClock,
   // },
+  WeeklyReportDetails:{
+    level: "1",
+    group: EGroup.summaries,
+    hasChildren: false,
+    url: "/instagram/outreach/weekly-report",
+    title: "Weekly Report Details",
+    isNavItem: false,
+    icon: IconChartInfographic,
+  }
 };
