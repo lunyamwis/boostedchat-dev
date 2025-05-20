@@ -74,6 +74,7 @@ export function EditDetails({ account }: Props) {
           full_name: fullName,
           igname,
           status_id: accountStatus === "" ? null : account.status_id,
+          status_param: accountStatus,
           won_date: wonDate == null ? null : dayjs(wonDate).format('YYYY-MM-DD'),
           lost_date: lostDate == null ? null : dayjs(lostDate).format('YYYY-MM-DD'),
           success_story_date: successDate == null ? null : dayjs(successDate).format('YYYY-MM-DD'),
@@ -160,7 +161,10 @@ export function EditDetails({ account }: Props) {
               selectProps={{
                 value: accountStatus,
                 onChange: setAccountStatus,
-                data: [{ value: "", label: "None" }],
+                data: [
+                  { value: "Prequalified", label: "Prequalified" },
+                  { value: "Sales Qualifed", label: "Sales Qualifed" },
+                  { value: "Won", label: "Won" }],
                 placeholder: "Choose",
                 searchable: true,
               }}

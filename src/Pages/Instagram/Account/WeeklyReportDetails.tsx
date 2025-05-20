@@ -148,7 +148,7 @@ export function WeeklyReportDetails() {
             color="brand"
             variant="light"
             onClick={() => {
-              navigate(`${props.row.original.id}`);
+              navigate(`/instagram/accounts/${props.row.original.id}`);
             }}
           >
             <IconPencil size={17} strokeWidth={1.4} />
