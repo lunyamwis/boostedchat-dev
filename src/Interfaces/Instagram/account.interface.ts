@@ -22,12 +22,12 @@ export interface Stat {
 }
 
 export type CreateAccount = Pick<GetAccount,
-  | "igname" | "full_name" | "status_id" | "responded_date" | "call_scheduled_date" | "closing_date" | "won_date" | "success_story_date" | "lost_date" | "outreach_time"
+  | "igname" | "full_name" | "status_id" | "responded_date" | "call_scheduled_date" | "closing_date" | "won_date" | "success_story_date" | "lost_date" | "outreach_time" | "status_param"
 >;
 
 export type UpdateAccount = Pick<
   GetAccount,
-  | "igname" | "full_name" | "status_id" | "responded_date" | "call_scheduled_date" | "closing_date" | "won_date" | "success_story_date" | "lost_date" | "outreach_time"
+  | "igname" | "full_name" | "status_id" | "responded_date" | "call_scheduled_date" | "closing_date" | "won_date" | "success_story_date" | "lost_date" | "outreach_time" | "status_param"
 >;
 
 export type UpdateAccountParams = {
@@ -56,6 +56,7 @@ export interface GetAccount extends AccountPrimary {
   won_date: string | null;
   success_story_date: string | null;
   lost_date: string | null;
+  status_param: string | null;
   // outreach_time: Date | null;
 }
 
