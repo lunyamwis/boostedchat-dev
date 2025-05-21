@@ -1,5 +1,5 @@
 import React from "react";
-import { GetSingleAccount } from "../../../../Interfaces/Instagram/account.interface";
+import { AccountStatusParam, GetSingleAccount } from "../../../../Interfaces/Instagram/account.interface";
 import { EditDetailsContainer } from "../../../../Components/Containers/EditDetailsContainer";
 import { useLoadingDialog } from "../../../../Hooks/useLoadingDialog";
 import { Row } from "../../../../Components/Containers/Row";
@@ -8,7 +8,7 @@ import { Select } from "../../../../Components/Containers/Select";
 import { TextField } from "../../../../Components/Containers/TextField";
 import { DateField } from "../../../../Components/Containers/DateField";
 import { ButtonRow } from "../../../../Components/FormComponents/ButtonRow";
-import { Button,SimpleGrid } from "@mantine/core";
+import { Button, SimpleGrid } from "@mantine/core";
 import { useUpdateAccount } from "../Hooks/accounts.hook";
 import { showNotification } from "@mantine/notifications";
 import { IconAlertTriangle } from "@tabler/icons-react";
@@ -36,7 +36,7 @@ export function EditDetails({ account }: Props) {
 
   const [igname, setIgname] = React.useState("");
   const [fullName, setFullName] = React.useState("");
-  const [accountStatus, setAccountStatus] = React.useState<null | string>(null);
+  const [accountStatusParam, setAccountStatusParam] = React.useState<null | string>(null);
   const [outReachDate, setoutReachDate] = React.useState<Date | null>(null);
   const [respondedDate, setRespondedDate] = React.useState<Date | null>(null);
   const [callScheduleDate, setCallScheduleDate] = React.useState<Date | null>(null);
@@ -44,6 +44,9 @@ export function EditDetails({ account }: Props) {
   const [wonDate, setWonDate] = React.useState<Date | null>(null);
   const [lostDate, setLostDate] = React.useState<Date | null>(null);
   const [successDate, setSuccessDate] = React.useState<Date | null>(null);
+  const [qualified, setQualified] = React.useState<null | string>(null);
+  const [outreach_success, setOutreachSuccess] = React.useState<null | string>(null)
+  const [engagementVersion, setEngagementVersion] = React.useState("")
 
   const updateAccount = useUpdateAccount();
 
@@ -64,6 +67,16 @@ export function EditDetails({ account }: Props) {
     //   });
     //   return;
     // }
+    let  stparam = AccountStatusParam.none;
+    if(accountStatusParam == 'prequalified'){
+      stparam = AccountStatusParam.prequalified;
+    } else if(accountStatusParam == 'sales_qualified'){
+      stparam = AccountStatusParam.sales_qualified;
+    } else if(accountStatusParam == 'won'){
+      stparam = AccountStatusParam.won;
+    } else if(accountStatusParam == 'lost'){
+      stparam = AccountStatusParam.lost;
+    }
 
     setIsDialogLoading(true);
     setIsLoadingDialogOpen(true);
@@ -73,8 +86,8 @@ export function EditDetails({ account }: Props) {
         data: {
           full_name: fullName,
           igname,
-          status_id: accountStatus === "" ? null : account.status_id,
-          status_param: accountStatus,
+          status_id: accountStatusParam == null ? null : account.status_id,
+          status_param: stparam,
           won_date: wonDate == null ? null : dayjs(wonDate).format('YYYY-MM-DD'),
           lost_date: lostDate == null ? null : dayjs(lostDate).format('YYYY-MM-DD'),
           success_story_date: successDate == null ? null : dayjs(successDate).format('YYYY-MM-DD'),
@@ -82,6 +95,7 @@ export function EditDetails({ account }: Props) {
           responded_date: respondedDate == null ? null : dayjs(respondedDate).format('YYYY-MM-DD'),
           call_scheduled_date: callScheduleDate == null ? null : dayjs(callScheduleDate).format('YYYY-MM-DD'),
           closing_date: closingDate == null ? null : dayjs(closingDate).format('YYYY-MM-DD'),
+          outreach_success: outreach_success,
         },
       },
       {
@@ -115,7 +129,7 @@ export function EditDetails({ account }: Props) {
   React.useEffect(() => {
     setIgname(account?.igname ?? "");
     setFullName(account?.full_name ?? "");
-    setAccountStatus(account?.status ?? null);
+    setAccountStatusParam(account?.status_param ?? null);
     setoutReachDate(account?.outreach_time ? new Date(account.outreach_time) : null);
     setRespondedDate(account?.responded_date ? new Date(account.responded_date) : null);
     setCallScheduleDate(account?.call_scheduled_date ? new Date(account.call_scheduled_date) : null);
@@ -123,6 +137,9 @@ export function EditDetails({ account }: Props) {
     setWonDate(account?.won_date ? new Date(account.won_date) : null);
     setSuccessDate(account?.success_story_date ? new Date(account.success_story_date) : null);
     setLostDate(account?.lost_date ? new Date(account.lost_date) : null);
+    setQualified(account?.qualified ? account.qualified.toString() : null);
+    setOutreachSuccess(account?.outreach_success ? account.outreach_success.toString() : null);
+    setEngagementVersion(account?.engagement_version ?? "")
 
   }, [account]);
 
@@ -157,10 +174,10 @@ export function EditDetails({ account }: Props) {
               }}
             />
             <Select
-              title="Status"
+              title="Stage"
               selectProps={{
-                value: accountStatus,
-                onChange: setAccountStatus,
+                value: accountStatusParam,
+                onChange: setAccountStatusParam,
                 data: [
                   { value: "Prequalified", label: "Prequalified" },
                   { value: "Sales Qualifed", label: "Sales Qualifed" },
@@ -169,55 +186,91 @@ export function EditDetails({ account }: Props) {
                 searchable: true,
               }}
             />
-            
+
+            <Select
+              title="Qualified"
+              selectProps={{
+                value: qualified,
+                onChange: setAccountStatusParam,
+                data: [
+                  { value: "true", label: "True" },
+                  { value: "false", label: "False" },
+                ],
+                placeholder: "Choose",
+                // searchable: true,
+              }}
+            />
+
+            <Select
+              title="Outreach success"
+              selectProps={{
+                value: outreach_success,
+                onChange: setOutreachSuccess,
+                data: [
+                  { value: "true", label: "True" },
+                  { value: "false", label: "False" },
+                ],
+                placeholder: "Choose",
+                // searchable: true,
+              }}
+            />
+
             <DateField
               title="Outreach Date"
               // date={outReachDate}
               value={outReachDate}
               valueFormat="YYYY-MM-DD"
               setDate={setoutReachDate} />
-            
+
             <DateField
               title="Responded Date"
               // date={respondedDate}
               valueFormat="YYYY-MM-DD"
               value={respondedDate}
               setDate={setRespondedDate} />
-            
+
             <DateField
               title="Call scheduled Date"
               // date={respondedDate}
               valueFormat="YYYY-MM-DD"
               value={callScheduleDate}
               setDate={setCallScheduleDate} />
-            
+
             <DateField
               title="Closing Date"
               // date={respondedDate}
               valueFormat="YYYY-MM-DD"
               value={closingDate}
               setDate={setClosingDate} />
-            
+
             <DateField
               title="Won Date"
               // date={respondedDate}
               valueFormat="YYYY-MM-DD"
               value={wonDate}
               setDate={setWonDate} />
-            
+
             <DateField
               title="Success Story Date"
               // date={respondedDate}
               valueFormat="YYYY-MM-DD"
               value={successDate}
               setDate={setSuccessDate} />
-            
+
             <DateField
               title="Lost Date"
               // date={respondedDate}
               valueFormat="YYYY-MM-DD"
               value={lostDate}
               setDate={setLostDate} />
+
+            <TextField
+              title="Engagement Version"
+              textFieldProps={{
+                value: engagementVersion,
+                onChange: (e) => setEngagementVersion(e.target.value),
+              }}
+            />
           </SimpleGrid>
         </Column>
 

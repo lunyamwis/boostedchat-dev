@@ -27,7 +27,7 @@ export type CreateAccount = Pick<GetAccount,
 
 export type UpdateAccount = Pick<
   GetAccount,
-  | "igname" | "full_name" | "status_id" | "responded_date" | "call_scheduled_date" | "closing_date" | "won_date" | "success_story_date" | "lost_date" | "outreach_time" | "status_param"
+  | "igname" | "full_name" | "status_id" | "responded_date" | "call_scheduled_date" | "closing_date" | "won_date" | "success_story_date" | "lost_date" | "outreach_time" | "status_param" | "outreach_success"
 >;
 
 export type UpdateAccountParams = {
@@ -49,14 +49,14 @@ export interface GetAccount extends AccountPrimary {
   outreach_time: string | null;
   created_at: string;
   qualified: boolean;
-  outreach_success: boolean;
+  outreach_success: string | null;
   responded_date: string | null;
   call_scheduled_date: string | null;
   closing_date: string | null;
   won_date: string | null;
   success_story_date: string | null;
   lost_date: string | null;
-  status_param: string | null;
+  status_param: AccountStatusParam | null;
   // outreach_time: Date | null;
 }
 
@@ -73,12 +73,12 @@ export interface WeeklyReport {
   success_story_date: number;
   lost_date: number;
   responded_date: number;
-  responded_rate: number 
-  call_scheduled_rate: number 
-  closing_rate: number 
-  won_rate: number 
-  success_story_rate: number 
-  lost_rate: number 
+  responded_rate: number
+  call_scheduled_rate: number
+  closing_rate: number
+  won_rate: number
+  success_story_rate: number
+  lost_rate: number
   sq_conversion_rate: number
   sales_qualified_count: number
 }
@@ -86,6 +86,8 @@ export interface GetSingleAccount extends GetAccount {
   id: string;
   assigned_to: "Robot" | "Human";
   status: AccountStatus;
+  relevant_information: string;
+  engagement_version: string;
   outsourced: {
     pk: string;
     zip: string;
@@ -160,6 +162,14 @@ export enum AccountStatus {
   onHold = "on_hold",
   sentCompliment = "sent_compliment",
   sentFirstQuestion = "sent_first_question",
+}
+
+export enum AccountStatusParam {
+  none = "",
+  prequalified = "prequalified",
+  sales_qualified = "sales qualified",
+  won = "won",
+  lost = "lost",
 }
 
 export interface FullAccount {

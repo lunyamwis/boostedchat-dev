@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Divider } from "@mantine/core";
+import { Box, Divider, Textarea } from "@mantine/core";
 import { IconLoader, IconUser } from "@tabler/icons-react";
 import { useLoadingDialog } from "../../../../Hooks/useLoadingDialog";
 import { LoadingDialog } from "../../../../Components/Widgets/LoadingDialog";
@@ -8,24 +8,47 @@ import { DetailsRow } from "../../../../Components/Containers/DetailsRow";
 import {
   AccountStatus,
   GetSingleAccount,
+  AccountStatusParam
 } from "../../../../Interfaces/Instagram/account.interface";
+import { render } from "@testing-library/react";
 
 type ComponentProps = {
   account: GetSingleAccount | null;
 };
 
-const renderStatus = (accountStatus: AccountStatus | undefined | null) => {
-  if (accountStatus == null) {
+// const renderStatus = (accountStatus: AccountStatus | undefined | null) => {
+//   if (accountStatus == null) {
+//     return { color: "orange", message: "Awaiting engagement" };
+//   }
+//   if (accountStatus === AccountStatus.onHold) {
+//     return { color: "yellow", message: "On Hold" };
+//   }
+//   if (accountStatus === AccountStatus.sentCompliment) {
+//     return { color: "brand2", message: "engaging" };
+//   }
+//   if (accountStatus === AccountStatus.sentFirstQuestion) {
+//     return { color: "teal", message: "Sent Question" };
+//   }
+//   return { color: "yellow", message: "Awaiting Engagement" };
+// };
+
+const renderStatusParam = (accountStatusParam: AccountStatusParam | undefined | null) => {
+  let lower_case_status_param = accountStatusParam?.toLowerCase();
+  if (accountStatusParam == null) {
     return { color: "orange", message: "Awaiting engagement" };
   }
-  if (accountStatus === AccountStatus.onHold) {
-    return { color: "yellow", message: "On Hold" };
+  if (lower_case_status_param === AccountStatusParam.prequalified) {
+    return { color: "yellow", message: "Prequalified" };
   }
-  if (accountStatus === AccountStatus.sentCompliment) {
-    return { color: "brand2", message: "engaging" };
+  if (lower_case_status_param === AccountStatusParam.sales_qualified) {
+    return { color: "brand2", message: "Sales qualified" };
   }
-  if (accountStatus === AccountStatus.sentFirstQuestion) {
-    return { color: "teal", message: "Sent Question" };
+  if (lower_case_status_param === AccountStatusParam.won) {
+    return { color: "teal", message: "Won" };
+  }
+
+  if (lower_case_status_param === AccountStatusParam.lost) {
+    return { color: "red", message: "Lost" };
   }
   return { color: "yellow", message: "Awaiting Engagement" };
 };
@@ -59,7 +82,9 @@ export function AccountInformation({ account }: ComponentProps) {
           align="left"
           type="status"
           title="Status"
-          value={renderStatus(account?.status)}
+          value={
+            renderStatusParam(account?.status_param)
+          }
         />
         <Text
           align="left"
@@ -117,6 +142,18 @@ export function AccountInformation({ account }: ComponentProps) {
           title="Phone Number"
           value={account?.outsourced?.contact_phone_number}
         />
+
+        <Textarea
+          placeholder="{}"
+          label="Relevant Information"
+          autosize
+          minRows={2}
+          value={account?.relevant_information}
+          onChange={(event) => {
+            console.log(event.currentTarget.value);
+          }}
+        />
+
       </DetailsRow>
     </>
   );
