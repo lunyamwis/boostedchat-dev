@@ -447,9 +447,9 @@ export function WeeklyReportDetails() {
       //   type: "string",
       // },
       {
-        accessorFn: (row) => row.status,
+        accessorFn: (row) => row.status_param,
         id: "status",
-        header: "Status",
+        header: "Stage",
         type: "string",
         visible: true,
       },

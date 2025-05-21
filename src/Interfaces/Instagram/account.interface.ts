@@ -166,10 +166,10 @@ export enum AccountStatus {
 
 export enum AccountStatusParam {
   none = "",
-  prequalified = "prequalified",
-  sales_qualified = "sales qualified",
-  won = "won",
-  lost = "lost",
+  prequalified = "Prequalified",
+  sales_qualified = "Sales Qualified",
+  won = "Won",
+  lost = "Lost",
 }
 
 export interface FullAccount {

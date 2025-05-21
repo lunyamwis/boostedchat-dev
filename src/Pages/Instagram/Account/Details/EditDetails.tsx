@@ -68,13 +68,13 @@ export function EditDetails({ account }: Props) {
     //   return;
     // }
     let  stparam = AccountStatusParam.none;
-    if(accountStatusParam == 'prequalified'){
+    if(accountStatusParam == 'Prequalified'){
       stparam = AccountStatusParam.prequalified;
-    } else if(accountStatusParam == 'sales_qualified'){
+    } else if(accountStatusParam == 'Sales Qualifed'){
       stparam = AccountStatusParam.sales_qualified;
-    } else if(accountStatusParam == 'won'){
+    } else if(accountStatusParam == 'Won'){
       stparam = AccountStatusParam.won;
-    } else if(accountStatusParam == 'lost'){
+    } else if(accountStatusParam == 'Lost'){
       stparam = AccountStatusParam.lost;
     }
 
@@ -127,6 +127,7 @@ export function EditDetails({ account }: Props) {
   };
 
   React.useEffect(() => {
+    console.log("9999999999999999999",account?.status_param)
     setIgname(account?.igname ?? "");
     setFullName(account?.full_name ?? "");
     setAccountStatusParam(account?.status_param ?? null);
@@ -180,7 +181,7 @@ export function EditDetails({ account }: Props) {
                 onChange: setAccountStatusParam,
                 data: [
                   { value: "Prequalified", label: "Prequalified" },
-                  { value: "Sales Qualifed", label: "Sales Qualifed" },
+                  { value: "Sales Qualified", label: "Sales Qualified" },
                   { value: "Won", label: "Won" }],
                 placeholder: "Choose",
                 searchable: true,
