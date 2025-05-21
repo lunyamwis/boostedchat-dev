@@ -424,7 +424,9 @@ export function WeeklyReportDetails() {
           return (
             <Badge
               color="red"
-              text={params.row.original.outreach_success?.toString()}
+              text={
+                params.row.original.outreach_success ?  params.row.original.outreach_success?.toString() : '-'
+               }
             />
           );
         },
@@ -445,9 +447,9 @@ export function WeeklyReportDetails() {
       //   type: "string",
       // },
       {
-        accessorFn: (row) => row.status,
+        accessorFn: (row) => row.status_param,
         id: "status",
-        header: "Status",
+        header: "Stage",
         type: "string",
         visible: true,
       },

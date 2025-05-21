@@ -5,7 +5,7 @@ import { useLoadingDialog } from "../../../../Hooks/useLoadingDialog";
 import { LoadingDialog } from "../../../../Components/Widgets/LoadingDialog";
 import { Text } from "../../../../Components/Containers/Text";
 import { DetailsRow } from "../../../../Components/Containers/DetailsRow";
-import {,
+import {
   GetSingleAccount,
   AccountStatusParam
 } from "../../../../Interfaces/Instagram/account.interface";
