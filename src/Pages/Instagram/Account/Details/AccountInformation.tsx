@@ -6,11 +6,10 @@ import { LoadingDialog } from "../../../../Components/Widgets/LoadingDialog";
 import { Text } from "../../../../Components/Containers/Text";
 import { DetailsRow } from "../../../../Components/Containers/DetailsRow";
 import {
-  AccountStatus,
+  // AccountStatus,
   GetSingleAccount,
   AccountStatusParam
 } from "../../../../Interfaces/Instagram/account.interface";
-import { render } from "@testing-library/react";
 
 type ComponentProps = {
   account: GetSingleAccount | null;

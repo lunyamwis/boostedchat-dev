@@ -424,7 +424,9 @@ export function WeeklyReportDetails() {
           return (
             <Badge
               color="red"
-              text={params.row.original.outreach_success?.toString()}
+              text={
+                params.row.original.outreach_success ?  params.row.original.outreach_success?.toString() : '-'
+               }
             />
           );
         },

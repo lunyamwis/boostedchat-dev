@@ -412,7 +412,7 @@ export function Accounts() {
           return (
             <Badge
               color="red"
-              text={params.row.original.outreach_success?.toString()}
+              text={params.row.original.outreach_success?.toString() || '-'}
             />
           );
         },
