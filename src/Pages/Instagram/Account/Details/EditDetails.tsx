@@ -127,7 +127,6 @@ export function EditDetails({ account }: Props) {
   };
 
   React.useEffect(() => {
-    console.log("9999999999999999999",account?.status_param)
     setIgname(account?.igname ?? "");
     setFullName(account?.full_name ?? "");
     setAccountStatusParam(account?.status_param ?? null);
