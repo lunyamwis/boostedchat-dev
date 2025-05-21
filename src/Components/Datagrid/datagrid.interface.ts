@@ -29,8 +29,8 @@ interface IDGSort {
   direction: "ASC" | "DESC";
 }
 
-interface IVisibleColumns extends Record<TColumnTypeKey, string[]> {}
-interface IFilteredColumns extends Record<TColumnTypeKey, IDGFilter[]> {}
+interface IVisibleColumns extends Record<TColumnTypeKey, string[]> { }
+interface IFilteredColumns extends Record<TColumnTypeKey, IDGFilter[]> { }
 export type TColumnType = "select" | "generated" | "relation";
 
 export type TColumnTypeKey =
@@ -40,31 +40,31 @@ export type TColumnTypeKey =
 
 export type TDataGridActions =
   | {
-      type: "ADD_VISIBLE_COLUMN";
-      payload: {
-        columnType: TColumnType;
-        columnId: string;
-      };
-    }
+    type: "ADD_VISIBLE_COLUMN";
+    payload: {
+      columnType: TColumnType;
+      columnId: string;
+    };
+  }
   | {
-      type: "REMOVE_VISIBLE_COLUMN";
-      payload: {
-        columnType: TColumnType;
-        columnId: string;
-      };
-    }
+    type: "REMOVE_VISIBLE_COLUMN";
+    payload: {
+      columnType: TColumnType;
+      columnId: string;
+    };
+  }
   | { type: "SET_VISIBLE_COLUMNS"; payload: { columns: IVisibleColumns } }
   | { type: "STATUS_CHANGE"; payload: { status: string } }
   | { type: "START_DATE_CHANGE"; payload: { startDate: string } }
   | { type: "END_DATE_CHANGE"; payload: { endDate: string } }
   | {
-      type: "ADD_FILTER";
-      payload: { columnType: TColumnType; filter: IDGFilter };
-    }
+    type: "ADD_FILTER";
+    payload: { columnType: TColumnType; filter: IDGFilter };
+  }
   | {
-      type: "REMOVE_FILTER";
-      payload: { columnType: TColumnType; columnId: string };
-    }
+    type: "REMOVE_FILTER";
+    payload: { columnType: TColumnType; columnId: string };
+  }
   | { type: "SET_FILTERS"; payload: { filters: IFilteredColumns } }
   | { type: "SEARCH_CHANGE"; payload: { val: string } }
   | { type: "REPORT_MODE_CHANGE"; payload: boolean }
@@ -77,17 +77,19 @@ export type TDataGridActions =
   | { type: "SET_ORIGINAL_TABLE_ROWS"; payload: { originalTableRows: any[] } }
   | { type: "SET_STATUS"; payload: { status: string | null | "All" } }
   | {
-      type: "SET_DATE_RANGE";
-      payload: {
-        dateRangeType: TDataGridDateRangeTypes;
-        startDate: null | Date | "All";
-        endDate: Date | null | "All";
-      };
+    type: "SET_DATE_RANGE";
+    payload: {
+      dateRangeType: TDataGridDateRangeTypes;
+      startDate: null | Date | "All";
+      endDate: Date | null | "All";
     };
+  };
 
 export type ColDef<T> = ColumnDefResolved<T> &
   (SingleSelectColDef | PrimitiveColDef);
-export type TValueOptions = { value: string | boolean | number; label: string };
+export type TValueOptions =
+  | { value: string | boolean | number; label: string }
+  | { value: Record<string, any>; label: JSON };
 
 type SingleSelectColDef = {
   type: Extract<TColumnValueTypes, "singleSelect">;
@@ -112,7 +114,8 @@ export type TColumnValueTypes =
   | "dateTime"
   | "boolean"
   | "actions"
-  | "singleSelect";
+  | "singleSelect"
+  | "json";
 
 export interface TStatusProps {
   columnId: string;

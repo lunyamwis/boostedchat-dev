@@ -40,6 +40,7 @@ export interface GetAccount extends AccountPrimary {
   assigned_to: "Robot" | "Human";
   status: AccountStatus | null;
   outsourced_data: OutsourcedData[];
+  outsourced_info: string;
   // stage: number;
   stage: string;
   last_message_at: string;

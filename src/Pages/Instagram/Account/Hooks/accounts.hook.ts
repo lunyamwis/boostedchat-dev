@@ -44,7 +44,6 @@ export const useGetAccounts = (page: number) => {
 
 export const useGetAccountList = (filterParams: any) => {
   const { getAllWithFilters } = useAccountsApi();
-  console.log("filterParams hook", filterParams);
   return useQuery({
     queryKey: [queryKeys.instagram.accounts.getAccounts],
     queryFn: () => getAllWithFilters(filterParams),

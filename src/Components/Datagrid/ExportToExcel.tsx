@@ -31,10 +31,18 @@ export function ExportToExcel({
         if (column.type === "actions") return;
         if (!column.visible) return;
         if (column.accessorFn) {
+          // newRow = {
+          //   ...newRow,
+          //   [column?.header as string]: column.accessorFn(row, idx)
+          //     ? column.accessorFn(row, idx)
+          //     : "-",
+          // };
           newRow = {
             ...newRow,
             [column?.header as string]: column.accessorFn(row, idx)
-              ? column.accessorFn(row, idx)
+              ? column.type === "json"
+                ? JSON.stringify(column.accessorFn(row, idx), null, 2) // pretty print with 2-space indentation
+                : column.accessorFn(row, idx)
               : "-",
           };
         } else {

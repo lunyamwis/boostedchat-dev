@@ -67,7 +67,7 @@ const formatFilterValue = (payload: FormatFilterValue) => {
         break;
       }
       if (opt.value.toString() === payload.value) {
-        mFilterLabel = opt.label;
+        mFilterLabel = String(opt.label);
         break;
       }
     }

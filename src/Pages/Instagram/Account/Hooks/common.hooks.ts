@@ -220,9 +220,6 @@ export const useCommonStateForStageStats = () => {
 
 export const useCommonStateForAccountList = (initiParams: any) => {
 
-  console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
-  console.log("initiParams", initiParams);
-
   const [formattedFilterParams, setFormatAccountListFilterParams] =
     React.useState<string>("page=1");
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
@@ -246,7 +243,7 @@ export const useCommonStateForAccountList = (initiParams: any) => {
     list_type: initiParams?.list_type || "",
   });
 
-  console.log("filterParams ------------", filterParams);
+
 
   React.useEffect(() => {
     const params = formatAccountListFilterParams(filterParams);
@@ -255,7 +252,6 @@ export const useCommonStateForAccountList = (initiParams: any) => {
 
   // const stageStatsQR = useGetStageStats(formattedFilterParams)
   // accountsQR = useGetAccounts(page);
-  console.log("formattedFilterParams", formattedFilterParams);
   const accountsQR = useGetAccountList(formattedFilterParams);
   const outreachLineChart = useGetOutreachLineChart(chart_type);
   const outreachChartList = useGetOutreachChartList("");

@@ -15,8 +15,8 @@ export function SingleSelectFilters({ setFilterValue, options }: Props) {
       options.map((opt) => {
         if (typeof opt === "string") {
           return opt;
-        }
-        return opt.label;
+        } 
+        return opt.label as string;
       }),
     [options],
   );
@@ -46,7 +46,7 @@ export function SingleSelectFilters({ setFilterValue, options }: Props) {
       placeholder="Choose"
       searchable
       value={selectState}
-      onChange={(val) => setSelectState(val ?? selectOptions[0])}
+      onChange={(val) => setSelectState(val ?? String(selectOptions[0]))}
     />
   );
 }
