@@ -67,15 +67,25 @@ export function EditDetails({ account }: Props) {
     //   });
     //   return;
     // }
-    let  stparam = AccountStatusParam.none;
-    if(accountStatusParam == 'prequalified'){
-      stparam = AccountStatusParam.prequalified;
-    } else if(accountStatusParam == 'sales_qualified'){
-      stparam = AccountStatusParam.sales_qualified;
-    } else if(accountStatusParam == 'won'){
-      stparam = AccountStatusParam.won;
-    } else if(accountStatusParam == 'lost'){
-      stparam = AccountStatusParam.lost;
+
+    let stparam = AccountStatusParam.none;
+
+    switch (accountStatusParam) {
+      case 'Prequalified':
+        stparam = AccountStatusParam.prequalified;
+        break;
+      case 'Sales Qualified':
+        stparam = AccountStatusParam.sales_qualified;
+        break;
+      case 'Won':
+        stparam = AccountStatusParam.won;
+        break;
+      case 'Lost':
+        stparam = AccountStatusParam.lost;
+        break;
+      default:
+        console.log("else", accountStatusParam);
+        stparam = AccountStatusParam.none;
     }
 
     setIsDialogLoading(true);
@@ -143,7 +153,7 @@ export function EditDetails({ account }: Props) {
 
   }, [account]);
 
-  console.log(account)
+
   return (
     <EditDetailsContainer
       loadingDialogProps={{
@@ -178,10 +188,14 @@ export function EditDetails({ account }: Props) {
               selectProps={{
                 value: accountStatusParam,
                 onChange: setAccountStatusParam,
+                // (event)=>{
+                //   // setAccountStatusParam(event);
+                //   console.log("event", event)
+                // },
                 data: [
-                  { value: "Prequalified", label: "Prequalified" },
-                  { value: "Sales Qualifed", label: "Sales Qualifed" },
-                  { value: "Won", label: "Won" }],
+                  { value: AccountStatusParam.prequalified, label: AccountStatusParam.prequalified },
+                  { value: AccountStatusParam.sales_qualified, label: AccountStatusParam.sales_qualified },
+                  { value: AccountStatusParam.won, label: AccountStatusParam.won }],
                 placeholder: "Choose",
                 searchable: true,
               }}

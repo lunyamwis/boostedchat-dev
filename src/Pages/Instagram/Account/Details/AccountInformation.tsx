@@ -1,16 +1,15 @@
 import React from "react";
-import { Box, Divider, Textarea } from "@mantine/core";
+import { Box, Divider } from "@mantine/core";
 import { IconLoader, IconUser } from "@tabler/icons-react";
 import { useLoadingDialog } from "../../../../Hooks/useLoadingDialog";
 import { LoadingDialog } from "../../../../Components/Widgets/LoadingDialog";
 import { Text } from "../../../../Components/Containers/Text";
 import { DetailsRow } from "../../../../Components/Containers/DetailsRow";
-import {
-  AccountStatus,
+import {,
   GetSingleAccount,
   AccountStatusParam
 } from "../../../../Interfaces/Instagram/account.interface";
-import { render } from "@testing-library/react";
+// import RelevantInfoViewer from "./RelevantInfoViewer";
 
 type ComponentProps = {
   account: GetSingleAccount | null;
@@ -53,6 +52,7 @@ const renderStatusParam = (accountStatusParam: AccountStatusParam | undefined | 
   return { color: "yellow", message: "Awaiting Engagement" };
 };
 
+
 export function AccountInformation({ account }: ComponentProps) {
   const {
     isLoadingDialogOpen,
@@ -60,6 +60,8 @@ export function AccountInformation({ account }: ComponentProps) {
     dialogMessage,
     closeLoadingDialog,
   } = useLoadingDialog();
+
+  // let relevant_info_Json = JSON.parse(JSON.stringify((account?.relevant_information)) || "{}");
 
   return (
     <>
@@ -142,17 +144,10 @@ export function AccountInformation({ account }: ComponentProps) {
           title="Phone Number"
           value={account?.outsourced?.contact_phone_number}
         />
-
-        <Textarea
-          placeholder="{}"
-          label="Relevant Information"
-          autosize
-          minRows={2}
-          value={account?.relevant_information}
-          onChange={(event) => {
-            console.log(event.currentTarget.value);
-          }}
-        />
+        <div>
+      {/* <h1>User Profile</h1> */}
+      {/* <RelevantInfoViewer data={relevant_info_Json} /> */}
+    </div>
 
       </DetailsRow>
     </>
