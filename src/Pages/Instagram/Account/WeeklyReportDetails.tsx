@@ -68,14 +68,6 @@ export function WeeklyReportDetails() {
 
 
   React.useEffect(() => {
-    console.log("checking starff")
-    console.log("#########################################################")
-    console.log("***************", state);
-    console.log("weekStart", weekStart);
-    console.log("weekEnd", weekEnd);
-    console.log("outreachSuccessFromState", outreachSuccessFromState);
-    console.log("listFromState", listFromState);
-
     setFilterParams({
       ...filterParams,
       created_at_gte: weekStart || "",
@@ -359,7 +351,7 @@ export function WeeklyReportDetails() {
       //   },
       // },
       {
-        accessorFn: (row) => row.outreach_success,
+        accessorFn: (row) => row.outreach_success?.toString(),
         id: "outreach_success",
         header: "Reached out",
         visible: true,
