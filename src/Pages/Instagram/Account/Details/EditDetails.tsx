@@ -195,7 +195,8 @@ export function EditDetails({ account }: Props) {
                 data: [
                   { value: AccountStatusParam.prequalified, label: AccountStatusParam.prequalified },
                   { value: AccountStatusParam.sales_qualified, label: AccountStatusParam.sales_qualified },
-                  { value: AccountStatusParam.won, label: AccountStatusParam.won }],
+                  { value: AccountStatusParam.won, label: AccountStatusParam.won },
+                  { value: AccountStatusParam.lost, label: AccountStatusParam.lost }],
                 placeholder: "Choose",
                 searchable: true,
               }}

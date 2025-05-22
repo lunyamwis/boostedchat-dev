@@ -65,6 +65,10 @@ export function Accounts() {
     navigate(`/instagram/outreach/weekly-report/?week_start=${rowData.week_start}&week_end=${rowData.week_end}`, { state: { list: 'won' } });
   };
 
+  const navigateToSalesQualifiedlist = (rowData: WeeklyReport) => {
+    navigate(`/instagram/outreach/weekly-report/?week_start=${rowData.week_start}&week_end=${rowData.week_end}`, { state: { list: 'sales_qualified' } });
+  };
+
 
   const getChartNames = (data: any[]) => {
     return data.map(
@@ -205,10 +209,10 @@ export function Accounts() {
             return <></>;
           }
           if (params.row.original.outreach_success) {
-            let formattedTime = new Date(params.row.original.created_at).toLocaleTimeString()
+            // let formattedTime = new Date(params.row.original.created_at).toLocaleTimeString()
             let formattedDate = new Date(params.row.original.created_at).toLocaleDateString()
             return (
-              `${formattedDate} at ${formattedTime}`
+              `${formattedDate}`
             );
 
           } else {
@@ -231,10 +235,10 @@ export function Accounts() {
             return <></>;
           }
           if (params.row.original.outreach_success) {
-            let formattedTime = new Date(params.row.original.responded_date).toLocaleTimeString()
+            // let formattedTime = new Date(params.row.original.responded_date).toLocaleTimeString()
             let formattedDate = new Date(params.row.original.responded_date).toLocaleDateString()
             return (
-              `${formattedDate} at ${formattedTime}`
+              `${formattedDate}`
             );
 
           } else {
@@ -245,136 +249,6 @@ export function Accounts() {
 
         },
       },
-      // {
-      //   accessorFn: (row) => row.call_scheduled_date,
-      //   id: "call_scheduled_date",
-      //   header: "Call Scheduled Date",
-      //   visible: true,
-      //   type: "string",
-      //   cell: (params) => {
-
-      //     if (params.row.original.call_scheduled_date == null) {
-      //       return <></>;
-      //     }
-      //     if (params.row.original.outreach_success) {
-      //       let formattedTime = new Date(params.row.original.call_scheduled_date).toLocaleTimeString()
-      //       let formattedDate = new Date(params.row.original.call_scheduled_date).toLocaleDateString()
-      //       return (
-      //         `${formattedDate} at ${formattedTime}`
-      //       );
-
-      //     } else {
-      //       return (
-      //         '-'
-      //       );
-      //     }
-
-      //   },
-      // },
-      // {
-      //   accessorFn: (row) => row.closing_date,
-      //   id: "closing_date",
-      //   header: "Closing Date",
-      //   visible: true,
-      //   type: "string",
-      //   cell: (params) => {
-
-      //     if (params.row.original.closing_date == null) {
-      //       return <></>;
-      //     }
-      //     if (params.row.original.outreach_success) {
-      //       let formattedTime = new Date(params.row.original.closing_date).toLocaleTimeString()
-      //       let formattedDate = new Date(params.row.original.closing_date).toLocaleDateString()
-      //       return (
-      //         `${formattedDate} at ${formattedTime}`
-      //       );
-
-      //     } else {
-      //       return (
-      //         '-'
-      //       );
-      //     }
-
-      //   },
-      // },
-      // {
-      //   accessorFn: (row) => row.won_date,
-      //   id: "won_date",
-      //   header: "Won Date",
-      //   visible: true,
-      //   type: "string",
-      //   cell: (params) => {
-
-      //     if (params.row.original.won_date == null) {
-      //       return <></>;
-      //     }
-      //     if (params.row.original.outreach_success) {
-      //       let formattedTime = new Date(params.row.original.won_date).toLocaleTimeString()
-      //       let formattedDate = new Date(params.row.original.won_date).toLocaleDateString()
-      //       return (
-      //         `${formattedDate} at ${formattedTime}`
-      //       );
-
-      //     } else {
-      //       return (
-      //         '-'
-      //       );
-      //     }
-
-      //   },
-      // },
-      // {
-      //   accessorFn: (row) => row.success_story_date,
-      //   id: "success_story_date",
-      //   header: "Success Story Date",
-      //   visible: true,
-      //   type: "string",
-      //   cell: (params) => {
-
-      //     if (params.row.original.success_story_date == null) {
-      //       return <></>;
-      //     }
-      //     if (params.row.original.outreach_success) {
-      //       let formattedTime = new Date(params.row.original.success_story_date).toLocaleTimeString()
-      //       let formattedDate = new Date(params.row.original.success_story_date).toLocaleDateString()
-      //       return (
-      //         `${formattedDate} at ${formattedTime}`
-      //       );
-
-      //     } else {
-      //       return (
-      //         '-'
-      //       );
-      //     }
-
-      //   },
-      // },
-      // {
-      //   accessorFn: (row) => row.lost_date,
-      //   id: "lost_date",
-      //   header: "Lost Date",
-      //   visible: true,
-      //   type: "string",
-      //   cell: (params) => {
-
-      //     if (params.row.original.lost_date == null) {
-      //       return <></>;
-      //     }
-      //     if (params.row.original.outreach_success) {
-      //       let formattedTime = new Date(params.row.original.lost_date).toLocaleTimeString()
-      //       let formattedDate = new Date(params.row.original.lost_date).toLocaleDateString()
-      //       return (
-      //         `${formattedDate} at ${formattedTime}`
-      //       );
-
-      //     } else {
-      //       return (
-      //         '-'
-      //       );
-      //     }
-
-      //   },
-      // },
       {
         accessorFn: (row) => row.qualified,
         id: "qualified",
@@ -417,21 +291,6 @@ export function Accounts() {
           );
         },
       },
-
-      // {
-      //   accessorFn: (row) => row.outsourced_data?.[0]?.results.category ?? "-",
-      //   id: "category",
-      //   header: "Category",
-      //   visible: true,
-      //   type: "string",
-      // },
-      // {
-      //   accessorFn: (row) => row.outsourced_data?.[0]?.results.media_id ?? "-",
-      //   id: "media_id",
-      //   header: "Media",
-      //   visible: false,
-      //   type: "string",
-      // },
       {
         accessorFn: (row) => row.status,
         id: "status",
@@ -495,40 +354,20 @@ export function Accounts() {
         visible: true,
         type: "string",
       },
-      // {
-      //   accessorFn: (row) => row.responded_ignames,
-      //   id: "week_start_date",
-      //   header: "Total Engaged Ignames",
-      //   visible: true,
-      //   type: "string",
-      // },
-      // {
-      //   accessorFn: (row) => row.call_scheduled_date > 0 ? `${row.call_scheduled_date} (${row.call_scheduled_rate})%` : row.call_scheduled_date,
-      //   id: "call_scheduled_date",
-      //   header: "Call Scheduled Date",
-      //   visible: true,
-      //   type: "string",
-      // },
-      // {
-      //   accessorFn: (row) => row.closing_date > 0 ? `${row.closing_date} (${row.closing_rate})%` : row.closing_date,
-      //   id: "closing_date",
-      //   header: "Total Closed",
-      //   visible: true,
-      //   type: "string",
-      // },
-      // {
-      //   accessorFn: (row) => row.success_story_date > 0 ? `${row.success_story_date} (${row.success_story_rate})%` : row.success_story_date,
-      //   id: "success_story_date",
-      //   header: "Success Story",
-      //   visible: true,
-      //   type: "string",
-      // },
       {
         accessorFn: (row) => row.sales_qualified_count,
         id: "sales_qualified",
         header: "sales qualified",
         visible: true,
         type: "string",
+        cell: ({ row }) => (
+          <button
+            onClick={() => navigateToSalesQualifiedlist(row.original)}
+            className="text-blue-600 underline cursor-pointer"
+          >
+            {row.original.sales_qualified_count}
+          </button>
+        ),
       },
       {
         accessorFn: (row) => row.won_date > 0 ? `${row.won_date} (${row.won_rate})%` : row.won_date,

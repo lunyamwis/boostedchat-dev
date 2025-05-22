@@ -216,7 +216,7 @@ export function WeeklyReportDetails() {
         cell: (params) => {
 
           if (params.row.original.created_at == null) {
-            return <></>;
+            return '-';
           }
           if (params.row.original.outreach_success) {
             // let formattedTime = new Date(params.row.original.created_at).toLocaleTimeString()
@@ -242,7 +242,7 @@ export function WeeklyReportDetails() {
         cell: (params) => {
 
           if (params.row.original.responded_date == null) {
-            return <></>;
+            return '-' ;
           }
           if (params.row.original.responded_date) {
             // let formattedTime = new Date(params.row.original.responded_date).toLocaleTimeString()
