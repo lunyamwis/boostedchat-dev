@@ -23,7 +23,7 @@ import { Affix } from "../../../Components/Widgets/Affix";
 import { CreateAccount } from "./CreateAccount";
 import { showNotification } from "@mantine/notifications";
 import { DatePicker } from "@mantine/dates";
-import { useCommonStateForAccountList } from "./Hooks/common.hooks";
+import { useCommonStateForWeeklyReportDetailsList } from "./Hooks/common.hooks";
 import { IconSettings } from '@tabler/icons-react';
 import { useDebouncedValue } from "@mantine/hooks";
 import { useLocation } from 'react-router-dom';
@@ -49,7 +49,7 @@ export function WeeklyReportDetails() {
   const { isLoading,
     accountsQR,
     filterParams,
-    setFilterParams } = useCommonStateForAccountList({
+    setFilterParams } = useCommonStateForWeeklyReportDetailsList({
       created_at_gte: weekStart || "",
       created_at_lt: weekEnd || "",
       list_type: listFromState || undefined,

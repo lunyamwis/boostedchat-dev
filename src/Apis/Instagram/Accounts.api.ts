@@ -45,11 +45,18 @@ export const useAccountsApi = () => {
         .get(`/weekly-reporting/`)
         .then(handleRestResponse)
         .catch(handleRestError),
-    getAllWithFilters: (filterParams: any): Promise<PaginatedQuery<GetAccount>> =>{
+    getWeeklyReportDetails: (filterParams: any): Promise<PaginatedQuery<GetAccount>> => {
+      return axiosInstance
+        .get(`/weekly-reporting-details/?${filterParams}`)
+        .then(handleRestResponse)
+        .catch(handleRestError)
+    },
+    getAllWithFilters: (filterParams: any): Promise<PaginatedQuery<GetAccount>> => {
       return axiosInstance
         .get(`/?${filterParams}`)
         .then(handleRestResponse)
-        .catch(handleRestError)},
+        .catch(handleRestError)
+    },
     getByStage: (stage: string, page: number): Promise<PaginatedQuery<GetAccount>> => {
       console.log("stage IN THE QUERY");
       console.log(stage);

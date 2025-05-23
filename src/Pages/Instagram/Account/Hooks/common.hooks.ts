@@ -7,7 +7,8 @@ import {
   useGetAccountList,
   useGetOutreachLineChart,
   useGetOutreachChartList,
-  useGetWeeklyreport
+  useGetWeeklyreport,
+  useGetWeeklyReportDetails
 } from "./accounts.hook";
 
 export type AccountFilterParams = {
@@ -218,7 +219,7 @@ export const useCommonStateForStageStats = () => {
   };
 };
 
-export const useCommonStateForAccountList = (initiParams: any) => {
+export const useCommonStateForAccountList = () => {
 
   const [formattedFilterParams, setFormatAccountListFilterParams] =
     React.useState<string>("page=1");
@@ -227,11 +228,11 @@ export const useCommonStateForAccountList = (initiParams: any) => {
   const [reload_chats, setReloadCharts] = React.useState<boolean>(false);
 
   const [filterParams, setFilterParams] = React.useState<AccountListFilterParams>({
-    created_at_gte: initiParams?.created_at_gte || "",
-    created_at_lt: initiParams?.created_at_lt || "",
+    created_at_gte:"",
+    created_at_lt: "",
     outreach_time_lt: "",
     outreach_time_gte: "",
-    outreach_success: initiParams?.outreach_success || 'all',
+    outreach_success: 'all',
     outreach_failure: false,
     all_outreach: false,
     all_qualified: false,
@@ -240,7 +241,7 @@ export const useCommonStateForAccountList = (initiParams: any) => {
     notQualified: false,
     status: "",
     page: 1,
-    list_type: initiParams?.list_type || "",
+    list_type: "",
   });
 
 
@@ -250,9 +251,8 @@ export const useCommonStateForAccountList = (initiParams: any) => {
     setFormatAccountListFilterParams(params.api);
   }, [filterParams]);
 
-  // const stageStatsQR = useGetStageStats(formattedFilterParams)
-  // accountsQR = useGetAccounts(page);
-  const accountsQR = useGetAccountList(formattedFilterParams);
+
+  const accountsQR =  useGetAccountList(formattedFilterParams);
   const outreachLineChart = useGetOutreachLineChart(chart_type);
   const outreachChartList = useGetOutreachChartList("");
   const weeklyReportQR = useGetWeeklyreport();
@@ -272,11 +272,6 @@ export const useCommonStateForAccountList = (initiParams: any) => {
     });
   }, [chart_type]);
 
-  // React.useEffect(() => {
-  //   weeklyReportQR
-  // },[])
-
-
   return {
     accountsQR,
     chart_type,
@@ -287,6 +282,62 @@ export const useCommonStateForAccountList = (initiParams: any) => {
     filterParams,
     reload_chats,
     weeklyReportQR,
+    setFilterParams
+  };
+};
+
+export const useCommonStateForWeeklyReportList = () => {
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const weeklyReportQR = useGetWeeklyreport();
+  return {
+    setIsLoading,
+    isLoading,
+    weeklyReportQR,
+  };
+};
+export const useCommonStateForWeeklyReportDetailsList = (initiParams: any) => {
+  const [formattedFilterParams, setFormatAccountListFilterParams] =
+    React.useState<string>(`page=1&created_at_gte=${initiParams?.created_at_gte}&created_at_lt=${initiParams?.created_at_lt}`);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+
+
+  const [filterParams, setFilterParams] = React.useState<AccountListFilterParams>({
+    created_at_gte: initiParams?.created_at_gte || "",
+    created_at_lt: initiParams?.created_at_lt || "",
+    outreach_time_lt: "",
+    outreach_time_gte: "",
+    outreach_success: initiParams?.outreach_success || 'all',
+    outreach_failure: false,
+    all_outreach: false,
+    all_qualified: false,
+    q: "",
+    qualified: 'all',
+    notQualified: false,
+    status: "",
+    page: 1,
+    list_type: initiParams?.list_type || "",
+  });
+
+
+  React.useEffect(() => {
+    const params = formatAccountListFilterParams(filterParams);
+    setFormatAccountListFilterParams(params.api);
+  }, [filterParams]);
+
+  const accountsQR = useGetWeeklyReportDetails(formattedFilterParams);
+
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    accountsQR.refetch().finally(() => setIsLoading(false));
+    // console.log(accountsQR.isFetching)
+  }, [formattedFilterParams]);
+
+
+  return {
+    accountsQR,
+    isLoading,
+    filterParams,
     setFilterParams
   };
 };

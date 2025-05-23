@@ -25,7 +25,7 @@ import { Affix } from "../../../Components/Widgets/Affix";
 import { CreateAccount } from "./CreateAccount";
 import { showNotification } from "@mantine/notifications";
 import { DatePicker } from "@mantine/dates";
-import { useCommonStateForAccountList } from "./Hooks/common.hooks";
+import { useCommonStateForAccountList, useCommonStateForWeeklyReportList } from "./Hooks/common.hooks";
 import { StatsRingCard } from "@/Pages/Dashboard/StatsCard";
 import BokehChart from "./BokehCharts";
 import { ChartTypes } from "@/Utils/constants";
@@ -45,9 +45,9 @@ export function Accounts() {
   const { isLoading,
     accountsQR,
     filterParams,
-    weeklyReportQR,
     outreachLineChart, setChartType,
-    setFilterParams, outreachChartList } = useCommonStateForAccountList({});
+    setFilterParams, outreachChartList } = useCommonStateForAccountList();
+  const { weeklyReportQR } = useCommonStateForWeeklyReportList();
   const removeDuplicateAccountsQR = useRemoveDuplicateAccounts()
   const resetAccount = useResetAccount();
   // const [dateError, setDateError] = useState(false);
@@ -370,7 +370,7 @@ export function Accounts() {
         ),
       },
       {
-        accessorFn: (row) => `${row.responded} ${row.responded_rate}%`,
+        accessorFn: (row) => `${row.responded}`,
         id: "responded",
         header: "Total Engaged",
         visible: true,
@@ -394,7 +394,7 @@ export function Accounts() {
         ),
       },
       {
-        accessorFn: (row) => row.won_date > 0 ? `${row.won_date} (${row.won_rate})%` : row.won_date,
+        accessorFn: (row) => row.won_date,
         id: "won_date",
         header: "Total Won",
         visible: true,
@@ -405,7 +405,7 @@ export function Accounts() {
             variant="subtle"
             size="compact-md"
             onClick={() => navigateToWonList(row.original)}
-            // className="text-blue-600 underline cursor-pointer"
+          // className="text-blue-600 underline cursor-pointer"
           >
             {row.original.won_date}
           </Button>
