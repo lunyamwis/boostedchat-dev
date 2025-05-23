@@ -1,4 +1,6 @@
-import { Box, Group, Pagination, Select, Text } from "@mantine/core";
+import { Box, Group, Pagination, 
+  // Select,
+   Text } from "@mantine/core";
 import React from "react";
 
 type Props = {
@@ -14,7 +16,7 @@ export function ManualPagination({
   pageIndex,
   setPageIndex,
   pageSize,
-  setPageSize,
+  // setPageSize,
 }: Props) {
   return (
     <Group
@@ -34,16 +36,16 @@ export function ManualPagination({
       <Box>
         {totalRows > 1 && (
           <Text>
-            {(pageIndex - 1) * pageSize + 1} -{" "}
+            {/* {(pageIndex - 1) * pageSize + 1} -{" "}
             {totalRows <= pageSize * pageIndex
               ? totalRows
-              : pageIndex * pageSize}{" "}
-            of {totalRows}
+              : pageIndex * pageSize}{" "} */}
+            Total {totalRows}
           </Text>
         )}
       </Box>
       <Group>
-        <Group gap={2}>
+        {/* <Group gap={2}>
           <Text>Rows per page:</Text>
           <Select
             w={80}
@@ -54,7 +56,7 @@ export function ManualPagination({
             }}
             data={["10", "25", "50", "100"]}
           />
-        </Group>
+        </Group> */}
         {
           // The pagination uses 1 based indices while react table uses 0-based indices
           // hence the +1 in value and -1 in dispactch

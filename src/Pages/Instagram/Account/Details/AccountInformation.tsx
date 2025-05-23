@@ -32,21 +32,20 @@ type ComponentProps = {
 // };
 
 const renderStatusParam = (accountStatusParam: AccountStatusParam | undefined | null) => {
-  let lower_case_status_param = accountStatusParam?.toLowerCase();
   if (accountStatusParam == null) {
     return { color: "orange", message: "Awaiting engagement" };
   }
-  if (lower_case_status_param === AccountStatusParam.prequalified) {
+  if (accountStatusParam === AccountStatusParam.prequalified) {
     return { color: "yellow", message: "Prequalified" };
   }
-  if (lower_case_status_param === AccountStatusParam.sales_qualified) {
+  if (accountStatusParam === AccountStatusParam.sales_qualified) {
     return { color: "brand2", message: "Sales qualified" };
   }
-  if (lower_case_status_param === AccountStatusParam.won) {
+  if (accountStatusParam === AccountStatusParam.won) {
     return { color: "teal", message: "Won" };
   }
 
-  if (lower_case_status_param === AccountStatusParam.lost) {
+  if (accountStatusParam === AccountStatusParam.lost) {
     return { color: "red", message: "Lost" };
   }
   return { color: "yellow", message: "Awaiting Engagement" };

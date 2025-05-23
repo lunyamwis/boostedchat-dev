@@ -174,9 +174,6 @@ export function WeeklyReportDetails() {
     ),
     [navigate],
   );
-  ['igname', 'Oureach_date', 'sales_qualified_date','Responded_date', 'won_date','outsourced_info']
-  // console.log("Out", accountsQR.data?.results[0].outsourced_info?.toString());
-  // console.log("OUt", JSON.stringify(accountsQR.data?.results[1].outsourced_info));
   const columns: ColDef<GetAccount>[] = React.useMemo(
     () => [
       // {
@@ -200,7 +197,13 @@ export function WeeklyReportDetails() {
         type: "string",
       },
       {
-        accessorFn: (row) => row.created_at,
+        accessorFn: (row) => {
+          try {
+            return new Date(row.created_at).toLocaleDateString()
+          } catch (error) {
+            return row.created_at
+          }
+        },
         id: "created_at",
         header: "Outreach Date",
         visible: true,
@@ -234,7 +237,7 @@ export function WeeklyReportDetails() {
         cell: (params) => {
 
           if (params.row.original.responded_date == null) {
-            return '-' ;
+            return '-';
           }
           if (params.row.original.responded_date) {
             // let formattedTime = new Date(params.row.original.responded_date).toLocaleTimeString()
@@ -367,8 +370,8 @@ export function WeeklyReportDetails() {
             <Badge
               color="red"
               text={
-                params.row.original.outreach_success ?  params.row.original.outreach_success?.toString() : '-'
-               }
+                params.row.original.outreach_success ? params.row.original.outreach_success?.toString() : '-'
+              }
             />
           );
         },
@@ -382,11 +385,11 @@ export function WeeklyReportDetails() {
         type: "json",
         cell: (params) => {
           let sti = JSON.stringify(params.row.original.outsourced_info)
-          return sti 
+          return sti
         }
       },
       {
-        accessorFn: (row) => row.status_param,
+        accessorFn: (row) => row.statusParam, //row.status_param,
         id: "status",
         header: "Stage",
         type: "string",

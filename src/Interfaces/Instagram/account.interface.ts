@@ -58,6 +58,7 @@ export interface GetAccount extends AccountPrimary {
   success_story_date: string | null;
   lost_date: string | null;
   status_param: AccountStatusParam | null;
+  statusParam: AccountStatusParam | null;
   // outreach_time: Date | null;
 }
 

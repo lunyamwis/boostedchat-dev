@@ -1,4 +1,6 @@
-import { Box, Group, Pagination, Select, Text } from "@mantine/core";
+import { Box, Group, Pagination, 
+  // Select, 
+  Text } from "@mantine/core";
 import React, { useEffect } from "react";
 import { useDataGrid } from "./Context/DataGridProvider";
 
@@ -45,16 +47,16 @@ export function ActionButtons({
       <Box>
         {totalRows > 1 && (
           <Text>
-            {pageIndex * pageSize + 1} -{" "}
+            {/* {pageIndex * pageSize + 1} -{" "}
             {totalRows <= pageSize * (pageIndex + 1)
               ? totalRows
-              : (pageIndex + 1) * pageSize}{" "}
-            of {totalRows}
+              : (pageIndex + 1) * pageSize}{" "} */}
+            Total {totalRows}
           </Text>
         )}
       </Box>
       <Group>
-        <Group gap={2}>
+        {/* <Group gap={2}>
           <Text>Rows per page:</Text>
           <Select
             w={80}
@@ -69,7 +71,7 @@ export function ActionButtons({
             }}
             data={["2", "10", "25", "50", "100"]}
           />
-        </Group>
+        </Group> */}
         {
           // The pagination uses 1 based indices while react table uses 0-based indices
           // hence the +1 in value and -1 in dispactch

@@ -15,7 +15,7 @@ import {
   Tabs,
   Space
 } from "@mantine/core";
-import { IconPencil, IconX, IconSearch } from "@tabler/icons-react";
+import { IconPencil, IconX, IconSearch, IconExternalLink } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { DataGrid } from "../../../Components/Datagrid";
 import { useResetAccount, useRemoveDuplicateAccounts } from "./Hooks/accounts.hook";
@@ -67,6 +67,10 @@ export function Accounts() {
 
   const navigateToSalesQualifiedlist = (rowData: WeeklyReport) => {
     navigate(`/instagram/outreach/weekly-report/?week_start=${rowData.week_start}&week_end=${rowData.week_end}`, { state: { list: 'sales_qualified' } });
+  };
+
+  const navigateToEntirelist = (rowData: WeeklyReport) => {
+    navigate(`/instagram/outreach/weekly-report/?week_start=${rowData.week_start}&week_end=${rowData.week_end}`, { state: { list: 'all', outreach_success: 'true' } });
   };
 
 
@@ -331,6 +335,22 @@ export function Accounts() {
         header: "Week Start Date",
         visible: true,
         type: "string",
+        cell: ({ row }) => (
+          // <button
+          //   onClick={() => navigateToEntirelist(row.original)}
+          //   className="text-blue-600 underline cursor-pointer"
+          // >
+          //   {row.original.week_start}
+          // </button>
+          <Button justify="flex-start"
+            onClick={() => navigateToEntirelist(row.original)}
+            rightSection={<IconExternalLink size={16} />}
+            variant="subtle"
+            size="compact-md"
+          >
+            {row.original.week_start}
+          </Button>
+        ),
       },
       {
         accessorFn: (row) => row.outreach,
@@ -339,12 +359,14 @@ export function Accounts() {
         visible: true,
         type: "string",
         cell: ({ row }) => (
-          <button
+          <Button justify="flex-start"
             onClick={() => navigateToOutreachlist(row.original)}
-            className="text-blue-600 underline cursor-pointer"
+            rightSection={<IconExternalLink size={16} />}
+            variant="subtle"
+            size="compact-md"
           >
             {row.original.outreach}
-          </button>
+          </Button>
         ),
       },
       {
@@ -361,12 +383,14 @@ export function Accounts() {
         visible: true,
         type: "string",
         cell: ({ row }) => (
-          <button
+          <Button
             onClick={() => navigateToSalesQualifiedlist(row.original)}
-            className="text-blue-600 underline cursor-pointer"
+            rightSection={<IconExternalLink size={16} />}
+            variant="subtle"
+            size="compact-md"
           >
             {row.original.sales_qualified_count}
-          </button>
+          </Button>
         ),
       },
       {
@@ -376,12 +400,15 @@ export function Accounts() {
         visible: true,
         type: "string",
         cell: ({ row }) => (
-          <button
+          <Button
+            rightSection={<IconExternalLink size={16} />}
+            variant="subtle"
+            size="compact-md"
             onClick={() => navigateToWonList(row.original)}
-            className="text-blue-600 underline cursor-pointer"
+            // className="text-blue-600 underline cursor-pointer"
           >
             {row.original.won_date}
-          </button>
+          </Button>
         ),
       },
       {
