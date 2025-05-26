@@ -197,7 +197,7 @@ export function WeeklyReportDetails() {
         type: "string",
       },
       {
-        accessorFn: (row) => {
+        accessorFn: (row: GetAccount) => {
           try {
             return new Date(row.created_at).toLocaleDateString()
           } catch (error) {
@@ -229,7 +229,29 @@ export function WeeklyReportDetails() {
         },
       },
       {
-        accessorFn: (row) => row.created_at,
+        accessorFn: (row) => {
+          if (row.responded_date == null) {
+            return '-';
+          }
+          if (row.responded_date) {
+            // let formattedTime = new Date(params.row.original.responded_date).toLocaleTimeString()
+            let formattedDate;
+            try {
+              formattedDate = new Date(row.responded_date).toLocaleDateString()
+            } catch (error) {
+              formattedDate = '-';
+            }
+
+            return (
+              `${formattedDate}`
+            );
+
+          } else {
+            return (
+              '-'
+            );
+          }
+        },
         id: "sales_qualified_date",
         header: "Sales Qualified Date",
         visible: true,
