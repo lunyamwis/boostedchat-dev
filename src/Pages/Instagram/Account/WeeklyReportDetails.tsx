@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ColDef } from "../../../Components/Datagrid/datagrid.interface";
-import { GetAccount } from "../../../Interfaces/Instagram/account.interface";
+import { AccountStatusParam, GetAccount } from "../../../Interfaces/Instagram/account.interface";
 import { Row } from "@tanstack/react-table";
 import {
   ActionIcon, Group, Loader, Text, Tooltip,
@@ -63,7 +63,7 @@ export function WeeklyReportDetails() {
   const [outreach_radio, setOutreachRadio] = useState('all');
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 700);
-
+  const [listTitle, setListTitle] = React.useState("All");
 
 
 
@@ -74,6 +74,28 @@ export function WeeklyReportDetails() {
       created_at_lt: weekEnd || "",
       outreach_success: outreachSuccessFromState || "",
     })
+
+    switch (listFromState) {
+      case 'outreach':
+        setListTitle(`Outreach from ${weekStart} to ${weekEnd}`);
+        break;
+      case 'won':
+        setListTitle(`Won from ${weekStart} to ${weekEnd}`);
+        break;
+      case 'sales_qualified':
+        setListTitle(`Sales Qualified from ${weekStart} to ${weekEnd}`);
+        break;
+      case 'lost':
+        setListTitle(`Lost from ${weekStart} to ${weekEnd}`);
+        break;
+      case 'all':
+        setListTitle(`All from ${weekStart} to ${weekEnd}`);
+        break;
+
+      default:
+        setListTitle(`All from ${weekStart} to ${weekEnd}`);
+        break;
+    }
   }, []);
 
 
@@ -229,27 +251,24 @@ export function WeeklyReportDetails() {
         },
       },
       {
-        accessorFn: (row) => {
-          if (row.responded_date == null) {
-            return '-';
-          }
-          if (row.responded_date) {
-            // let formattedTime = new Date(params.row.original.responded_date).toLocaleTimeString()
-            let formattedDate;
-            try {
-              formattedDate = new Date(row.responded_date).toLocaleDateString()
-            } catch (error) {
-              formattedDate = '-';
+        accessorFn: (row: GetAccount) => {
+          if (row.statusParam == AccountStatusParam.sales_qualified) {
+            if (row.responded_date == null) {
+              return '-';
+            }
+            if (row.responded_date) {
+              // let formattedTime = new Date(params.row.original.responded_date).toLocaleTimeString()
+              let formattedDate = new Date(row.responded_date).toLocaleDateString()
+              return (
+                `${formattedDate}`
+              );
+
+            } else {
+              return (
+                '-'
+              );
             }
 
-            return (
-              `${formattedDate}`
-            );
-
-          } else {
-            return (
-              '-'
-            );
           }
         },
         id: "sales_qualified_date",
@@ -257,23 +276,25 @@ export function WeeklyReportDetails() {
         visible: true,
         type: "string",
         cell: (params) => {
+          if (params.row.original.statusParam == AccountStatusParam.sales_qualified) {
 
-          if (params.row.original.responded_date == null) {
-            return '-';
+            if (params.row.original.responded_date == null) {
+              return '-';
+            }
+            if (params.row.original.responded_date) {
+              // let formattedTime = new Date(params.row.original.responded_date).toLocaleTimeString()
+              let formattedDate = new Date(params.row.original.responded_date).toLocaleDateString()
+              return (
+                `${formattedDate}`
+              );
+
+            } else {
+              return (
+                '-'
+              );
+            }
+
           }
-          if (params.row.original.responded_date) {
-            // let formattedTime = new Date(params.row.original.responded_date).toLocaleTimeString()
-            let formattedDate = new Date(params.row.original.responded_date).toLocaleDateString()
-            return (
-              `${formattedDate}`
-            );
-
-          } else {
-            return (
-              '-'
-            );
-          }
-
         },
       },
       // {
@@ -525,7 +546,7 @@ export function WeeklyReportDetails() {
       <Tabs variant="pills" radius="lg" defaultValue="all">
         <Tabs.List>
           <Tabs.Tab value="all" leftSection={<IconSettings size={12} />}>
-            All
+            {listTitle}
           </Tabs.Tab>
         </Tabs.List>
         <Space h="md" />
