@@ -9,7 +9,7 @@ import {
   GetSingleAccount,
   AccountStatusParam
 } from "../../../../Interfaces/Instagram/account.interface";
-// import RelevantInfoViewer from "./RelevantInfoViewer";
+import RelevantInfoViewer from "./RelevantInfoViewer";
 
 type ComponentProps = {
   account: GetSingleAccount | null;
@@ -60,7 +60,7 @@ export function AccountInformation({ account }: ComponentProps) {
     closeLoadingDialog,
   } = useLoadingDialog();
 
-  // let relevant_info_Json = JSON.parse(JSON.stringify((account?.relevant_information)) || "{}");
+  let relevant_info_Json = JSON.parse(JSON.stringify((account?.relevant_information)) || "{}");
 
   return (
     <>
@@ -145,7 +145,7 @@ export function AccountInformation({ account }: ComponentProps) {
         />
         <div>
       {/* <h1>User Profile</h1> */}
-      {/* <RelevantInfoViewer data={relevant_info_Json} /> */}
+      <RelevantInfoViewer data={relevant_info_Json} />
     </div>
 
       </DetailsRow>

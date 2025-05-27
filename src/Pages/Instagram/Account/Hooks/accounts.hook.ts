@@ -76,6 +76,17 @@ export const useGetWeeklyreport = () => {
   });
 };
 
+export const useGetMonthlyreport = () => {
+  const { getMonthlyReport } = useAccountsApi();
+  return useQuery({
+    queryKey: [queryKeys.instagram.accounts.getMonthlyReport],
+    queryFn: () => getMonthlyReport(),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+};
+
 export const useGetOutreachLineChart = (filterParams: any) => {
   const { getOutreachLineChart } = useAccountsApi();
   return useQuery({

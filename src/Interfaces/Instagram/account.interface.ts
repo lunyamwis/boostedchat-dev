@@ -62,6 +62,29 @@ export interface GetAccount extends AccountPrimary {
   // outreach_time: Date | null;
 }
 
+export interface MonthlyReport {
+  week: string;
+  week_start: string;
+  week_end: string;
+  outreach: number;
+  responded: number;
+  responded_ignames: number;
+  call_scheduled_date: number;
+  closing_date: number;
+  won_date: number;
+  success_story_date: number;
+  lost_date: number;
+  responded_date: number;
+  responded_rate: number
+  call_scheduled_rate: number
+  closing_rate: number
+  won_rate: number
+  success_story_rate: number
+  lost_rate: number
+  sq_conversion_rate: number
+  sales_qualified_count: number
+}
+
 export interface WeeklyReport {
   week: string;
   week_start: string;

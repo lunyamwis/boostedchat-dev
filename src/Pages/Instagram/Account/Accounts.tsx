@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ColDef } from "../../../Components/Datagrid/datagrid.interface";
-import { GetAccount, WeeklyReport } from "../../../Interfaces/Instagram/account.interface";
+import { GetAccount, MonthlyReport, WeeklyReport } from "../../../Interfaces/Instagram/account.interface";
 import { Row } from "@tanstack/react-table";
 import {
   ActionIcon, Group, Loader, Text, Tooltip,
@@ -25,7 +25,7 @@ import { Affix } from "../../../Components/Widgets/Affix";
 import { CreateAccount } from "./CreateAccount";
 import { showNotification } from "@mantine/notifications";
 import { DatePicker } from "@mantine/dates";
-import { useCommonStateForAccountList, useCommonStateForWeeklyReportList } from "./Hooks/common.hooks";
+import { useCommonStateForAccountList, useCommonStateForMonthlyReportList, useCommonStateForWeeklyReportList } from "./Hooks/common.hooks";
 import { StatsRingCard } from "@/Pages/Dashboard/StatsCard";
 import BokehChart from "./BokehCharts";
 import { ChartTypes } from "@/Utils/constants";
@@ -48,6 +48,7 @@ export function Accounts() {
     outreachLineChart, setChartType,
     setFilterParams, outreachChartList } = useCommonStateForAccountList();
   const { weeklyReportQR } = useCommonStateForWeeklyReportList();
+  const { monthlyReportQR } = useCommonStateForMonthlyReportList();
   const removeDuplicateAccountsQR = useRemoveDuplicateAccounts()
   const resetAccount = useResetAccount();
   // const [dateError, setDateError] = useState(false);
@@ -319,7 +320,7 @@ export function Accounts() {
     [],
   );
 
-  const reportingColumns: ColDef<WeeklyReport>[] = React.useMemo(
+  const weeklyReportingColumns: ColDef<WeeklyReport>[] = React.useMemo(
     () => [
 
       {
@@ -424,6 +425,114 @@ export function Accounts() {
     [],
 
   );
+
+  const monthlyReportingColumns: ColDef<MonthlyReport>[] = React.useMemo(
+    () => [
+
+      {
+        accessorFn: (_, idx) => idx + 1,
+        id: "accountNo",
+        header: "#",
+        type: "string",
+        visible: true,
+      },
+      {
+        accessorFn: (row) => row.week_start,
+        id: "month_start",
+        header: "Month Start Date",
+        visible: true,
+        type: "string",
+        cell: ({ row }) => (
+          // <button
+          //   onClick={() => navigateToEntirelist(row.original)}
+          //   className="text-blue-600 underline cursor-pointer"
+          // >
+          //   {row.original.week_start}
+          // </button>
+          <Button justify="flex-start"
+            onClick={() => navigateToEntirelist(row.original)}
+            rightSection={<IconExternalLink size={16} />}
+            variant="subtle"
+            size="compact-md"
+          >
+            {row.original.week_start}
+          </Button>
+        ),
+      },
+      {
+        accessorFn: (row) => row.outreach,
+        id: "outreach",
+        header: "Outreach volume",
+        visible: true,
+        type: "string",
+        cell: ({ row }) => (
+          <Button justify="flex-start"
+            onClick={() => navigateToOutreachlist(row.original)}
+            rightSection={<IconExternalLink size={16} />}
+            variant="subtle"
+            size="compact-md"
+          >
+            {row.original.outreach}
+          </Button>
+        ),
+      },
+      {
+        accessorFn: (row) => `${row.responded}`,
+        id: "responded",
+        header: "Total Engaged",
+        visible: true,
+        type: "string",
+      },
+      {
+        accessorFn: (row) => row.sales_qualified_count,
+        id: "sales_qualified",
+        header: "sales qualified",
+        visible: true,
+        type: "string",
+        cell: ({ row }) => (
+          <Button
+            onClick={() => navigateToSalesQualifiedlist(row.original)}
+            rightSection={<IconExternalLink size={16} />}
+            variant="subtle"
+            size="compact-md"
+          >
+            {row.original.sales_qualified_count}
+          </Button>
+        ),
+      },
+      {
+        accessorFn: (row) => row.won_date,
+        id: "won_date",
+        header: "Total Won",
+        visible: true,
+        type: "string",
+        cell: ({ row }) => (
+          <Button
+            rightSection={<IconExternalLink size={16} />}
+            variant="subtle"
+            size="compact-md"
+            onClick={() => navigateToWonList(row.original)}
+          // className="text-blue-600 underline cursor-pointer"
+          >
+            {row.original.won_date}
+          </Button>
+        ),
+      },
+      {
+        accessorFn: (row) => {
+          return `${row.sq_conversion_rate}%`
+        },
+        id: "conversion_rate",
+        header: "SQ Conversion Rate",
+        visible: true,
+        type: "string",
+      },
+    ],
+    [],
+
+  );
+
+
   const renderChart = () => {
 
     if (outreachLineChart.isLoading || isLoading) {
@@ -606,6 +715,9 @@ export function Accounts() {
           <Tabs.Tab value="weekly_reporting" leftSection={<IconPhoto size={12} />}>
             Weekly Reports
           </Tabs.Tab>
+          <Tabs.Tab value="monthly_reporting" leftSection={<IconPhoto size={12} />}>
+            Monthly Reports
+          </Tabs.Tab>
           <Tabs.Tab value="scheduled" leftSection={<IconMessageCircle size={12} />}>
             Scheduled Today
           </Tabs.Tab>
@@ -727,9 +839,9 @@ export function Accounts() {
             fn={() => {
             }}
             loading={weeklyReportQR.isLoading || isLoading}
-            tableName="Outreach Tracker"
+            tableName="Weekly Outreach Tracker"
             data={weeklyReportQR.data?.results ?? []}
-            columns={reportingColumns}
+            columns={weeklyReportingColumns}
             paginationOptions={{
               isManual: true,
               pageIndex: page,
@@ -737,6 +849,24 @@ export function Accounts() {
               setPageSize: setPageSize,
               setPageIndex: setPage,
               totalRows: weeklyReportQR.data?.count ?? 0,
+            }}
+          />
+        </Tabs.Panel>
+                <Tabs.Panel value="monthly_reporting">
+          <DataGrid
+            fn={() => {
+            }}
+            loading={monthlyReportQR.isLoading || isLoading}
+            tableName="Monthly Outreach Tracker"
+            data={monthlyReportQR.data?.results ?? []}
+            columns={monthlyReportingColumns}
+            paginationOptions={{
+              isManual: true,
+              pageIndex: page,
+              pageSize: pageSize,
+              setPageSize: setPageSize,
+              setPageIndex: setPage,
+              totalRows: monthlyReportQR.data?.count ?? 0,
             }}
           />
         </Tabs.Panel>

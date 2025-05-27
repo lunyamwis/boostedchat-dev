@@ -288,7 +288,6 @@ export function EditDetails({ account }: Props) {
             />
           </SimpleGrid>
         </Column>
-
       </Row>
 
       <ButtonRow>

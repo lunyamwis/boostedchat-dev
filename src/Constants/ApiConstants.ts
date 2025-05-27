@@ -61,7 +61,8 @@ export const queryKeys = {
       removeDuplicates:"handle-duplicates",
       getOutreachLineChart: "get-outreach-line-chart",
       getOutreachChartList: "get-outreach-chart-list",
-      getWeeklyReport: "get-weekly-report"
+      getWeeklyReport: "get-weekly-report",
+      getMonthlyReport: "get-monthly-report",
     },
     comments: {
       getComments: "get-all-comments",

@@ -19,8 +19,8 @@ import { DataGrid } from "../../../Components/Datagrid";
 import { useResetAccount, useRemoveDuplicateAccounts } from "./Hooks/accounts.hook";
 import { openConfirmModal } from "@mantine/modals";
 import { Badge } from "../../../Components/MantineWrappers/Badge";
-import { Affix } from "../../../Components/Widgets/Affix";
-import { CreateAccount } from "./CreateAccount";
+// import { Affix } from "../../../Components/Widgets/Affix";
+// import { CreateAccount } from "./CreateAccount";
 import { showNotification } from "@mantine/notifications";
 import { DatePicker } from "@mantine/dates";
 import { useCommonStateForWeeklyReportDetailsList } from "./Hooks/common.hooks";
@@ -40,11 +40,11 @@ export function WeeklyReportDetails() {
   const weekStart = queryParams.get('week_start');
   const weekEnd = queryParams.get('week_end');
   const [page, setPage] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(50);
+  const [pageSize, setPageSize] = React.useState(200);
   const [opened, setOpened] = useState(false);
 
-  const [isCreateAccountModalOpen, setIsCreateAccountModalOpen] =
-    React.useState(false);
+  // const [isCreateAccountModalOpen, setIsCreateAccountModalOpen] =
+  //   React.useState(false);
   const navigate = useNavigate();
   const { isLoading,
     accountsQR,
@@ -93,7 +93,9 @@ export function WeeklyReportDetails() {
         break;
 
       default:
-        setListTitle(`All from ${weekStart} to ${weekEnd}`);
+        // setListTitle(`All from ${weekStart} to ${weekEnd}`);
+        console.log("shoule db redirected to accounts page");
+        navigate('/instagram/accounts');
         break;
     }
   }, []);
@@ -562,7 +564,7 @@ export function WeeklyReportDetails() {
               });
             }}
             loading={accountsQR.isLoading || isLoading}
-            tableName="Outreach Tracker"
+            tableName={listTitle}
             data={accountsQR.data?.results ?? []}
             columns={columns}
             paginationOptions={{
@@ -574,14 +576,14 @@ export function WeeklyReportDetails() {
               totalRows: accountsQR.data?.count ?? 0,
             }}
           />
-          <Affix
+          {/* <Affix
             tooltipLabel="Create New Account"
             onClickAction={() => setIsCreateAccountModalOpen(true)}
-          />
-          <CreateAccount
+          /> */}
+          {/* <CreateAccount
             isOpen={isCreateAccountModalOpen}
             setIsOpen={setIsCreateAccountModalOpen}
-          />
+          /> */}
         </Tabs.Panel>
       </Tabs>
     </>

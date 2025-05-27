@@ -8,7 +8,8 @@ import {
   Stat,
   UpdateAccountParams,
   MqttStatus,
-  WeeklyReport
+  WeeklyReport,
+  MonthlyReport
 } from "../../Interfaces/Instagram/account.interface";
 import { Lead, PaginatedQuery, LineChartData, ChartList } from "../../Interfaces/general.interface";
 import { UploadCSV } from "../../Interfaces/Instagram/upload.interface";
@@ -43,6 +44,11 @@ export const useAccountsApi = () => {
     getWeeklyReport: (): Promise<PaginatedQuery<WeeklyReport>> =>
       axiosInstance
         .get(`/weekly-reporting/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    getMonthlyReport: (): Promise<PaginatedQuery<MonthlyReport>> =>
+      axiosInstance
+        .get(`/monthly-reporting/`)
         .then(handleRestResponse)
         .catch(handleRestError),
     getWeeklyReportDetails: (filterParams: any): Promise<PaginatedQuery<GetAccount>> => {

@@ -8,7 +8,8 @@ import {
   useGetOutreachLineChart,
   useGetOutreachChartList,
   useGetWeeklyreport,
-  useGetWeeklyReportDetails
+  useGetWeeklyReportDetails,
+  useGetMonthlyreport
 } from "./accounts.hook";
 
 export type AccountFilterParams = {
@@ -295,6 +296,17 @@ export const useCommonStateForWeeklyReportList = () => {
     weeklyReportQR,
   };
 };
+
+export const useCommonStateForMonthlyReportList = () => {
+  const [isLoadingMonthly, setIsLoadingMonthly] = React.useState<boolean>(true);
+  const monthlyReportQR = useGetMonthlyreport();
+  return {
+    setIsLoadingMonthly,
+    isLoadingMonthly,
+    monthlyReportQR,
+  };
+};
+
 export const useCommonStateForWeeklyReportDetailsList = (initiParams: any) => {
   const [formattedFilterParams, setFormatAccountListFilterParams] =
     React.useState<string>(`page=1&created_at_gte=${initiParams?.created_at_gte}&created_at_lt=${initiParams?.created_at_lt}`);
