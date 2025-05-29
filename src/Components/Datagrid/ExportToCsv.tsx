@@ -3,10 +3,10 @@ import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import { format } from "date-fns";
 import { ActionIcon } from "@mantine/core";
-import { IconFileSpreadsheet } from "@tabler/icons-react";
+import { IconCsv } from "@tabler/icons-react";
 import { ColDef } from "./datagrid.interface";
 
-export function ExportToExcel({
+export function ExportToCsv({
   rows,
   fileName,
   columns,
@@ -15,9 +15,10 @@ export function ExportToExcel({
   fileName: string;
   columns: ColDef<any>[];
 }) {
-  const fileType =
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
-  const fileExtension = ".xlsx";
+
+  const fileType = "text/csv;charset=utf-8";
+
+  const fileExtension = ".csv";
 
   const exportData = (
     mRows: Array<any>,
@@ -31,12 +32,6 @@ export function ExportToExcel({
         if (column.type === "actions") return;
         if (!column.visible) return;
         if (column.accessorFn) {
-          // newRow = {
-          //   ...newRow,
-          //   [column?.header as string]: column.accessorFn(row, idx)
-          //     ? column.accessorFn(row, idx)
-          //     : "-",
-          // };         
           newRow = {
             ...newRow,
             [column?.header as string]: column.accessorFn(row, idx)
@@ -66,12 +61,8 @@ export function ExportToExcel({
       newRowArray.push(newRow);
     });
     const workSheet = XLSX.utils.json_to_sheet(newRowArray);
-    const workBook = { Sheets: { data: workSheet }, SheetNames: ["data"] };
-    const excelBuffer = XLSX.write(workBook, {
-      bookType: "xlsx",
-      type: "array",
-    });
-    const data = new Blob([excelBuffer], { type: fileType });
+    const csv = XLSX.utils.sheet_to_csv(workSheet);
+    const data = new Blob([csv], { type: fileType });
     const sanitizedFileName = `${mFileName
       .toLowerCase()
       .replace(" ", "_")}_${format(new Date(), "HHmmssddMMyy")}`;
@@ -83,7 +74,7 @@ export function ExportToExcel({
       onClick={() => exportData(rows, fileName, columns)}
       variant="text"
     >
-      <IconFileSpreadsheet />
+      <IconCsv />
     </ActionIcon>
   );
 }
