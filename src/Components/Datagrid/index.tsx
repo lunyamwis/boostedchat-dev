@@ -32,6 +32,7 @@ import { DataGridProvider, useDataGrid } from "./Context/DataGridProvider";
 import { ExportToExcel } from "./ExportToExcel";
 import { LoadingTable } from "./LoadingTable";
 import { ManualPagination } from "./ManualPagination";
+import { ExportToCsv } from "./ExportToCsv";
 
 type PaginationProps =
   | {
@@ -351,6 +352,11 @@ function MDataGrid<T>({
                   placeholder="Search all columns..."
                 />
                 <ExportToExcel
+                  rows={data}
+                  fileName={tableName}
+                  columns={actualTableColumns}
+                />
+                <ExportToCsv
                   rows={data}
                   fileName={tableName}
                   columns={actualTableColumns}

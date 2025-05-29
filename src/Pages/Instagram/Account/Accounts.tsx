@@ -36,7 +36,7 @@ import { useDebouncedValue } from "@mantine/hooks";
 
 export function Accounts() {
   const [page, setPage] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(50);
+  const [pageSize, setPageSize] = React.useState(200);
   const [opened, setOpened] = useState(false);
 
   const [isCreateAccountModalOpen, setIsCreateAccountModalOpen] =

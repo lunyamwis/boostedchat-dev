@@ -7,7 +7,7 @@ import { useGetComments } from "./Hooks/commenters.hook";
 
 export function Commenters() {
   const [page, setPage] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(50);
+  const [pageSize, setPageSize] = React.useState(200);
   const commentQR = useGetComments(page);
 
   const columns: ColDef<CommentItem>[] = React.useMemo(

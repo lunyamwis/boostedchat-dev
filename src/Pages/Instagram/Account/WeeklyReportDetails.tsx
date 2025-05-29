@@ -40,7 +40,7 @@ export function WeeklyReportDetails() {
   const weekStart = queryParams.get('week_start');
   const weekEnd = queryParams.get('week_end');
   const [page, setPage] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(200);
+  const [pageSize, setPageSize] = React.useState(1000);
   const [opened, setOpened] = useState(false);
 
   // const [isCreateAccountModalOpen, setIsCreateAccountModalOpen] =
