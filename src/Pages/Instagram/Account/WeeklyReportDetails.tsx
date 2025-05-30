@@ -299,43 +299,24 @@ export function WeeklyReportDetails() {
           }
         },
       },
-      // {
-      //   accessorFn: (row) => row.responded_date,
-      //   id: "responded_date",
-      //   header: "Engaged Date",
-      //   visible: true,
-      //   type: "string",
-      //   cell: (params) => {
-
-      //     if (params.row.original.responded_date == null) {
-      //       return <></>;
-      //     }
-      //     if (params.row.original.outreach_success) {
-      //       let formattedTime = new Date(params.row.original.responded_date).toLocaleTimeString()
-      //       let formattedDate = new Date(params.row.original.responded_date).toLocaleDateString()
-      //       return (
-      //         `${formattedDate} at ${formattedTime}`
-      //       );
-
-      //     } else {
-      //       return (
-      //         '-'
-      //       );
-      //     }
-
-      //   },
-      // },
       {
-        accessorFn: (row) => row.won_date,
+        accessorFn: (row) => {
+          if (row.won_date) {
+            let formattedDate = new Date(row.won_date).toLocaleDateString()
+            return (
+              `${formattedDate}`
+            );
+          } else {
+            return (
+              '-'
+            );
+          }
+        },
         id: "won_date",
         header: "Won Date",
         visible: true,
         type: "string",
         cell: (params) => {
-
-          if (params.row.original.won_date == null) {
-            return '-';
-          }
           if (params.row.original.won_date) {
             // let formattedTime = new Date(params.row.original.won_date).toLocaleTimeString()
             let formattedDate = new Date(params.row.original.won_date).toLocaleDateString()
@@ -351,53 +332,6 @@ export function WeeklyReportDetails() {
 
         },
       },
-      // {
-      //   accessorFn: (row) => row.lost_date,
-      //   id: "lost_date",
-      //   header: "Lost Date",
-      //   visible: true,
-      //   type: "string",
-      //   cell: (params) => {
-
-      //     if (params.row.original.lost_date == null) {
-      //       return <></>;
-      //     }
-      //     if (params.row.original.outreach_success) {
-      //       let formattedTime = new Date(params.row.original.lost_date).toLocaleTimeString()
-      //       let formattedDate = new Date(params.row.original.lost_date).toLocaleDateString()
-      //       return (
-      //         `${formattedDate} at ${formattedTime}`
-      //       );
-
-      //     } else {
-      //       return (
-      //         '-'
-      //       );
-      //     }
-
-      //   },
-      // },
-      // {
-      //   accessorFn: (row) => row.qualified,
-      //   id: "qualified",
-      //   header: "Qualified",
-      //   visible: true,
-      //   type: "boolean",
-      //   cell: (params) => {
-      //     if (params.row.original.qualified) {
-      //       return <Badge
-      //         color="green"
-      //         text={params.row.original.qualified.toString()}
-      //       />
-      //     }
-      //     return (
-      //       <Badge
-      //         color="red"
-      //         text={params.row.original.qualified.toString()}
-      //       />
-      //     );
-      //   },
-      // },
       {
         accessorFn: (row) => row.outreach_success?.toString(),
         id: "outreach_success",
