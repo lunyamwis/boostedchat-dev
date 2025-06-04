@@ -38,6 +38,7 @@ export function CreateAccount({ isOpen, setIsOpen }: Props) {
   const [fullName, setFullName] = React.useState("");
   const [outReachDate, setoutReachDate] = React.useState<Date | null>(null);
   const [respondedDate, setRespondedDate] = React.useState<Date | null>(null);
+  const [salesQualifiedDate, setSalesQualifiedDate] = React.useState<Date | null>(null);
   const [callScheduleDate, setCallScheduleDate] = React.useState<Date | null>(null);
   const [closingDate, setClosingDate] = React.useState<Date | null>(null);
   const [wonDate, setWonDate] = React.useState<Date | null>(null);
@@ -73,6 +74,7 @@ export function CreateAccount({ isOpen, setIsOpen }: Props) {
         closing_date: closingDate == null ? null : dayjs(closingDate).format('YYYY-MM-DD'),
         status_id: null,
         status_param: null,
+        sales_qualified_date: salesQualifiedDate == null ? null : dayjs(outReachDate).format('YYYY-MM-DD')
       },
       {
         onSuccess: () => {
@@ -204,6 +206,13 @@ export function CreateAccount({ isOpen, setIsOpen }: Props) {
               value={outReachDate}
               valueFormat="YYYY-MM-DD"
               setDate={setoutReachDate} />
+
+            <DateField
+              title="Sales Qualified Date"
+              // date={respondedDate}
+              valueFormat="YYYY-MM-DD"
+              value={salesQualifiedDate}
+              setDate={setSalesQualifiedDate} />
 
             <DateField
               title="Responded Date"
