@@ -39,6 +39,7 @@ export function EditDetails({ account }: Props) {
   const [accountStatusParam, setAccountStatusParam] = React.useState<null | string>(null);
   const [outReachDate, setoutReachDate] = React.useState<Date | null>(null);
   const [respondedDate, setRespondedDate] = React.useState<Date | null>(null);
+  const [salesQualifiedDate, setSalesQualifiedDate] = React.useState<Date | null>(null);
   const [callScheduleDate, setCallScheduleDate] = React.useState<Date | null>(null);
   const [closingDate, setClosingDate] = React.useState<Date | null>(null);
   const [wonDate, setWonDate] = React.useState<Date | null>(null);
@@ -106,6 +107,7 @@ export function EditDetails({ account }: Props) {
           call_scheduled_date: callScheduleDate == null ? null : dayjs(callScheduleDate).format('YYYY-MM-DD'),
           closing_date: closingDate == null ? null : dayjs(closingDate).format('YYYY-MM-DD'),
           outreach_success: outreach_success,
+          sales_qualified_date: salesQualifiedDate == null ? null : dayjs(outReachDate).format('YYYY-MM-DD')
         },
       },
       {
@@ -243,6 +245,12 @@ export function EditDetails({ account }: Props) {
               valueFormat="YYYY-MM-DD"
               value={respondedDate}
               setDate={setRespondedDate} />
+            
+            <DateField
+              title="Sales Qualified Date"
+              valueFormat="YYYY-MM-DD"
+              value={salesQualifiedDate}
+              setDate={setSalesQualifiedDate} />
 
             <DateField
               title="Call scheduled Date"

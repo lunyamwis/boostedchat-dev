@@ -22,12 +22,12 @@ export interface Stat {
 }
 
 export type CreateAccount = Pick<GetAccount,
-  | "igname" | "full_name" | "status_id" | "responded_date" | "call_scheduled_date" | "closing_date" | "won_date" | "success_story_date" | "lost_date" | "outreach_time" | "status_param"
+  | "igname" | "full_name" | "status_id" | "sales_qualified_date" |"responded_date" | "call_scheduled_date" | "closing_date" | "won_date" | "success_story_date" | "lost_date" | "outreach_time" | "status_param"
 >;
 
 export type UpdateAccount = Pick<
   GetAccount,
-  | "igname" | "full_name" | "status_id" | "responded_date" | "call_scheduled_date" | "closing_date" | "won_date" | "success_story_date" | "lost_date" | "outreach_time" | "status_param" | "outreach_success"
+  | "igname" | "full_name" | "status_id" | "sales_qualified_date" | "responded_date" | "call_scheduled_date" | "closing_date" | "won_date" | "success_story_date" | "lost_date" | "outreach_time" | "status_param" | "outreach_success"
 >;
 
 export type UpdateAccountParams = {
@@ -52,6 +52,7 @@ export interface GetAccount extends AccountPrimary {
   qualified: boolean;
   outreach_success: string | null;
   responded_date: string | null;
+  sales_qualified_date: string | null;
   call_scheduled_date: string | null;
   closing_date: string | null;
   won_date: string | null;
