@@ -229,19 +229,18 @@ export function Accounts() {
         },
       },
       {
-        accessorFn: (row) => row.responded_date,
-        id: "responded_date",
-        header: "Engaged Date",
+        accessorFn: (row) => row.sales_qualified_date,
+        id: "sales_qualified_date",
+        header: "Sales Qualified Date",
         visible: true,
         type: "string",
         cell: (params) => {
 
-          if (params.row.original.responded_date == null) {
+          if (params.row.original.sales_qualified_date == null) {
             return <></>;
           }
           if (params.row.original.outreach_success) {
-            // let formattedTime = new Date(params.row.original.responded_date).toLocaleTimeString()
-            let formattedDate = new Date(params.row.original.responded_date).toLocaleDateString()
+            let formattedDate = new Date(params.row.original.sales_qualified_date).toLocaleDateString()
             return (
               `${formattedDate}`
             );

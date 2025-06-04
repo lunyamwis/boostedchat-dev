@@ -255,12 +255,11 @@ export function WeeklyReportDetails() {
       {
         accessorFn: (row: GetAccount) => {
           if (row.statusParam == AccountStatusParam.sales_qualified) {
-            if (row.responded_date == null) {
+            if (row.sales_qualified_date == null) {
               return '-';
             }
-            if (row.responded_date) {
-              // let formattedTime = new Date(params.row.original.responded_date).toLocaleTimeString()
-              let formattedDate = new Date(row.responded_date).toLocaleDateString()
+            if (row.sales_qualified_date) {
+              let formattedDate = new Date(row.sales_qualified_date).toLocaleDateString()
               return (
                 `${formattedDate}`
               );
@@ -280,12 +279,11 @@ export function WeeklyReportDetails() {
         cell: (params) => {
           if (params.row.original.statusParam == AccountStatusParam.sales_qualified) {
 
-            if (params.row.original.responded_date == null) {
+            if (params.row.original.sales_qualified_date == null) {
               return '-';
             }
-            if (params.row.original.responded_date) {
-              // let formattedTime = new Date(params.row.original.responded_date).toLocaleTimeString()
-              let formattedDate = new Date(params.row.original.responded_date).toLocaleDateString()
+            if (params.row.original.sales_qualified_date) {
+              let formattedDate = new Date(params.row.original.sales_qualified_date).toLocaleDateString()
               return (
                 `${formattedDate}`
               );
