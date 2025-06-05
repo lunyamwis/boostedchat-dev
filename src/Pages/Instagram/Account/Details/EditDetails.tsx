@@ -152,6 +152,7 @@ export function EditDetails({ account }: Props) {
     setQualified(account?.qualified ? account.qualified.toString() : null);
     setOutreachSuccess(account?.outreach_success ? account.outreach_success.toString() : null);
     setEngagementVersion(account?.engagement_version ?? "")
+    setSalesQualifiedDate(account?.sales_qualified_date ? new Date(account.sales_qualified_date) : null)
 
   }, [account]);
 
