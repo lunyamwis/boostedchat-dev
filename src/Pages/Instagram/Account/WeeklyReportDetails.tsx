@@ -222,11 +222,20 @@ export function WeeklyReportDetails() {
       },
       {
         accessorFn: (row: GetAccount) => {
-          try {
-            return new Date(row.created_at).toLocaleDateString()
-          } catch (error) {
-            return row.created_at
+          if (row.outreach_time) {
+            try {
+              return new Date(row.outreach_time).toLocaleDateString()
+            } catch (error) {
+              return row.outreach_time
+            }
+          } else {
+            try {
+              return `${new Date(row.created_at).toLocaleDateString()}*`
+            } catch (error) {
+              return `${row.created_at}*`
+            }
           }
+
         },
         id: "created_at",
         header: "Outreach Date",
@@ -234,20 +243,32 @@ export function WeeklyReportDetails() {
         type: "string",
         cell: (params) => {
 
-          if (params.row.original.created_at == null) {
-            return '-';
-          }
-          if (params.row.original.outreach_success) {
-            // let formattedTime = new Date(params.row.original.created_at).toLocaleTimeString()
-            let formattedDate = new Date(params.row.original.created_at).toLocaleDateString()
-            return (
-              `${formattedDate}`
-            );
+          // if (params.row.original.created_at == null) {
+          //   return '-';
+          // }
+          // if (params.row.original.outreach_success) {
+          //   let formattedDate = new Date(params.row.original.created_at).toLocaleDateString()
+          //   return (
+          //     `${formattedDate}`
+          //   );
 
+          // } else {
+          //   return (
+          //     '-'
+          //   );
+          // }
+          if (params.row.original.outreach_time) {
+            try {
+              return new Date(params.row.original.outreach_time).toLocaleDateString()
+            } catch (error) {
+              return params.row.original.outreach_time
+            }
           } else {
-            return (
-              '-'
-            );
+            try {
+              return `${new Date(params.row.original.created_at).toLocaleDateString()}*`
+            } catch (error) {
+              return `${params.row.original.created_at}*`
+            }
           }
 
         },
