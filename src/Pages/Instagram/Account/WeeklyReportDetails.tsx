@@ -257,19 +257,25 @@ export function WeeklyReportDetails() {
           //     '-'
           //   );
           // }
-          if (params.row.original.outreach_time) {
-            try {
-              return new Date(params.row.original.outreach_time).toLocaleDateString()
-            } catch (error) {
-              return params.row.original.outreach_time
+          if (params.row.original.outreach_success) {
+            if (params.row.original.outreach_time) {
+              try {
+                return new Date(params.row.original.outreach_time).toLocaleDateString()
+              } catch (error) {
+                return params.row.original.outreach_time
+              }
+            } else {
+              try {
+                return `${new Date(params.row.original.created_at).toLocaleDateString()} *`
+              } catch (error) {
+                return `${params.row.original.created_at} *`
+              }
             }
+
           } else {
-            try {
-              return `${new Date(params.row.original.created_at).toLocaleDateString()}*`
-            } catch (error) {
-              return `${params.row.original.created_at}*`
-            }
+            return <></>
           }
+
 
         },
       },

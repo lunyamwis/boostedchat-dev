@@ -203,27 +203,26 @@ export function Accounts() {
         type: "string",
       },
       {
-        accessorFn: (row) => row.created_at,
+        accessorFn: (row) => row.outreach_time,
         id: "created_at",
         header: "Outreach Date",
         visible: true,
         type: "string",
         cell: (params) => {
-
-          if (params.row.original.created_at == null) {
-            return <></>;
-          }
           if (params.row.original.outreach_success) {
             // let formattedTime = new Date(params.row.original.created_at).toLocaleTimeString()
             let formattedDate = new Date(params.row.original.created_at).toLocaleDateString()
-            return (
-              `${formattedDate}`
+            
+            if (params.row.original.outreach_time == null) {
+              return `${formattedDate} *`;
+            }else{
+              let formattedOutreachDate = new Date(params.row.original.created_at).toLocaleDateString()
+              return (
+              `${formattedOutreachDate}`
             );
-
+            }
           } else {
-            return (
-              '-'
-            );
+            return (<></>);
           }
 
         },
@@ -851,7 +850,7 @@ export function Accounts() {
             }}
           />
         </Tabs.Panel>
-                <Tabs.Panel value="monthly_reporting">
+        <Tabs.Panel value="monthly_reporting">
           <DataGrid
             fn={() => {
             }}
