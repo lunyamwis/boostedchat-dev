@@ -84,6 +84,10 @@ export const queryKeys = {
       loggedInAccounts: "logged-in-accounts",
       connectedccounts: "connected-accounts",
       healthStatus: "health-status",
+    },
+    experiments:{
+      getAll: "get-all-experiments",
+      getById: "get-experiment-by-id",
     }
   },
   auditLogs: {

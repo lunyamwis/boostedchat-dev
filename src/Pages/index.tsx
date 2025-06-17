@@ -40,6 +40,7 @@ export type ParentKeys =
   | "AccountsCanban"
   // | "Snapshot"
   | "Accounts"
+  | "Experiments"
   | "AccountDetails"
   | "Threads"
   | "Prompts"
@@ -50,7 +51,8 @@ export type ParentKeys =
   // | "LeadSources"
   | "ManageServices"
   // | "SetupScraper";
-  | "WeeklyReportDetails";
+  | "WeeklyReportDetails"
+  | "ExperimentDetails";
 
 export type ChildKeys = "";
 
@@ -113,6 +115,14 @@ export const componentData: {
       component: React.lazy(() =>
         import("./Instagram/Account/Accounts").then(({ Accounts }) => ({
           default: Accounts,
+        })),
+      ),
+    },
+    {
+      key: "Experiments",
+      component: React.lazy(() =>
+        import("./Instagram/Experiment/Experiments").then(({ Experiments }) => ({
+          default: Experiments,
         })),
       ),
     },
@@ -198,6 +208,16 @@ export const componentData: {
         ),
       ),
     },
+    {
+      key: "ExperimentDetails",
+      component: React.lazy(() =>
+        import("./Instagram/Experiment/Details/ExperimentDetails").then(
+          ({ ExperimentDetails }) => ({
+            default: ExperimentDetails,
+          }),
+        ),
+      ),
+    },
   ];
 
 export const pageData: TMPageData = {
@@ -219,6 +239,15 @@ export const pageData: TMPageData = {
     isNavItem: true,
     icon: IconUsersGroup,
   },
+  Experiments: {
+    level: "1",
+    group: EGroup.summaries,
+    hasChildren: false,
+    title: "Experiments",
+    isNavItem: true,
+    icon: IconChartInfographic,
+    url: "/instagram/experiments",
+  },
   LikersCommenters: {
     level: "1",
     group: EGroup.summaries,
@@ -228,7 +257,7 @@ export const pageData: TMPageData = {
     icon: IconChartInfographic,
     url: "/dashboard/likersCommenters",
   },
-  
+
   // Snapshot: {
   //   level: "1",
   //   group: EGroup.summaries,
@@ -320,12 +349,21 @@ export const pageData: TMPageData = {
   //   isNavItem: true,
   //   icon: IconClock,
   // },
-  WeeklyReportDetails:{
+  WeeklyReportDetails: {
     level: "1",
     group: EGroup.summaries,
     hasChildren: false,
     url: "/instagram/outreach/weekly-report",
     title: "Weekly Report Details",
+    isNavItem: false,
+    icon: IconChartInfographic,
+  },
+  ExperimentDetails:{
+    level: "1",
+    group: EGroup.summaries,
+    hasChildren: false,
+    url: "/instagram/experiment/:experimentId",
+    title: "Experiment Details",
     isNavItem: false,
     icon: IconChartInfographic,
   }
