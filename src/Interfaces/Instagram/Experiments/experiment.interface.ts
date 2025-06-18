@@ -25,11 +25,21 @@ export interface ExperimentFieldDefinition {
     options:[];
     field_type: string;
   }
-  is_input: boolean;
-  is_metric: boolean;
+  is_experiment_input: boolean;
+  is_metric_field: boolean;
   is_result_field: boolean;
-  field_value: ExperimentFieldValue;
+  field_value: string; //ExperimentFieldValue;
 }
+
+export type CreateExperimentFieldDefinition = Pick<
+  ExperimentFieldDefinition,
+  | "experiment"
+  | "config"
+  | "is_experiment_input"
+  | "is_metric_field"
+  | "is_result_field"
+  | "field_value"
+>;
 
 interface ExperimentFieldValue {
   id: string;
@@ -59,6 +69,12 @@ export type UpdateExperimentParams = {
   id: string;
   data: UpdateExperiment;
 };
+
+export type UpdateExperimentFieldDefinitionParams = {
+  id: string;
+  data: ExperimentFieldDefinition;
+};
+
 
 // export interface GetExperiment extends Experiment {
 //   created_at: string;

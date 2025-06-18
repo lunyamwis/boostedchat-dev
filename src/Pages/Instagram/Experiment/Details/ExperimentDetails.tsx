@@ -6,11 +6,14 @@ import { DataGrid } from "@/Components/Datagrid";
 import { ColDef } from "@/Components/Datagrid/datagrid.interface";
 import { useCommonStateForExperimentDetails } from "../Hooks/common.hooks";
 import { useLocation } from "react-router-dom";
+import AddFieldDefinitionModal from "./AddFieldDefinitionModal";
+import { Affix } from "@/Components/Widgets/Affix";
 
 export function ExperimentDetails() {
   const [page, setPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState(1000);
   const { pathname } = useLocation();
+  const [addModalOpen, setAddModalOpen] = useState(false);
 
   const id = React.useMemo(() => {
     const pathItems = pathname.split('/');
@@ -21,6 +24,12 @@ export function ExperimentDetails() {
 
   // console.log("Experiment path details", pathname);
   // console.log("Experiment path details", id);
+  
+
+  function refetchFieldDefinitions() {
+    experimentQR.refetch();
+    setAddModalOpen(false);
+  }
 
   const columnDefs: ColDef<ExperimentFieldDefinition>[] = ([
     {
@@ -41,7 +50,7 @@ export function ExperimentDetails() {
     },
     {
       accessorFn: (row) => {
-        row?.field_value?.value;
+        return row?.field_value
       },
       id: "value",
       header: "Value",
@@ -55,6 +64,12 @@ export function ExperimentDetails() {
 
   return (
     <>
+      <AddFieldDefinitionModal
+        experimentId={id}
+        opened={addModalOpen}
+        onClose={() => setAddModalOpen(false)}
+        onSuccess={() => refetchFieldDefinitions()}
+      />
       <DataGrid
         fn={() => {
 
@@ -69,8 +84,12 @@ export function ExperimentDetails() {
           pageSize: pageSize,
           setPageSize: setPageSize,
           setPageIndex: setPage,
-          totalRows: 10//accountsQR.data?.count ?? 0,
+          totalRows: experimentQR.data?.field_definitions?.length ?? 0,
         }}
+      />
+      <Affix
+        tooltipLabel="Add Field Definition"
+        onClickAction={() => setAddModalOpen(true)}
       />
     </>
   );

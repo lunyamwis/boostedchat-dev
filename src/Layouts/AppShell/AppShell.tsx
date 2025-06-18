@@ -66,7 +66,10 @@ export default function AppShell() {
         pt={location.pathname === pageData.Threads.url ? 0 : HEADER_HEIGHT}
       >
         <Box h="100%" p={location.pathname === pageData.Threads.url ? 0 : 16}>
-          {onlineStatus.online ? <Outlet /> : <>No network connection</>}
+          {
+          //  onlineStatus.online 
+          true
+            ? <Outlet /> : <>No network connection</>}
         </Box>
       </MantineAppShell.Main>
     </MantineAppShell>
