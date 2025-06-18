@@ -2,7 +2,7 @@ export interface Experiment {
   id: string;
   name: string;
   description: string | null;
-  primary_metric: boolean;
+  primary_metric: string | null;
   version: string;
   status_id: string;
   status: ExperimentStatus;
@@ -11,7 +11,7 @@ export interface Experiment {
   experiment_results: string;
 }
 
-interface ExperimentStatus {
+export interface ExperimentStatus {
   id: string;
   name: string;
   description: string | null;
@@ -37,6 +37,28 @@ interface ExperimentFieldValue {
   field_definition_id: string;
   value: {}
 }
+
+export type CreateExperiment = Pick<
+  Experiment,
+  | "name"
+  | "description"
+  | "primary_metric"
+  | "status_id"
+>;
+
+export type UpdateExperiment = Pick<
+  Experiment,
+  | "name"
+  | "description"
+  | "primary_metric"
+  | "version"
+  | "status_id"
+>;
+
+export type UpdateExperimentParams = {
+  id: string;
+  data: UpdateExperiment;
+};
 
 // export interface GetExperiment extends Experiment {
 //   created_at: string;

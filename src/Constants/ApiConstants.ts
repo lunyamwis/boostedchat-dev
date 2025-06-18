@@ -1,3 +1,5 @@
+import { get } from "lodash"
+
 const DOMAIN1 = import.meta.env.VITE_DOMAIN1
 const DOMAIN2 = import.meta.env.DOMAIN2
 
@@ -88,6 +90,10 @@ export const queryKeys = {
     experiments:{
       getAll: "get-all-experiments",
       getById: "get-experiment-by-id",
+    },
+    experimentStatus:{
+      getAll: "get-all-experiment-status",
+      getById: "get-experiment-status-by-id",
     }
   },
   auditLogs: {

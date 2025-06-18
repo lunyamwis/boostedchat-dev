@@ -1,5 +1,5 @@
 import { handleRestError, handleRestResponse } from "../response";
-import { Experiment } from "@/Interfaces/Instagram/Experiments/experiment.interface";
+import { Experiment, UpdateExperimentParams, CreateExperiment } from "@/Interfaces/Instagram/Experiments/experiment.interface";
 import { useAPIGlobalAxios } from "../../Hooks/useAxios";
 import { PaginatedQuery } from "../../Interfaces/general.interface";
 export const useExperimentsApi = () => {
@@ -14,6 +14,16 @@ export const useExperimentsApi = () => {
     getOneExperiment: (id: string): Promise<Experiment> =>
       axiosInstance
         .get(`/${id}`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    create: (params: CreateExperiment) =>
+      axiosInstance
+        .post(`/`, params)
+        .then(handleRestResponse)
+        .catch(handleRestError),
+    update: (params: UpdateExperimentParams) =>
+      axiosInstance
+        .put(`/${params.id}/`, params.data)
         .then(handleRestResponse)
         .catch(handleRestError),
   }

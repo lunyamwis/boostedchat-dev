@@ -1,7 +1,8 @@
 import React from "react";
 import {
   useGetExperiments,
-  useGetOneExperiment
+  useGetOneExperiment,
+  useGetExperimentStatuses
 } from "./experiments.hook";
 
 export const useCommonStateForExperiments = () => {
@@ -26,5 +27,19 @@ export const useCommonStateForExperimentDetails = (id: string) => {
     setIsLoadingExperiment,
     isLoadingExperiment,
     experimentQR,
+  };
+};
+
+export const useCommonStateForExperimentStatus = () => {
+  const [isLoadingExperimentStatus, setIsLoadingExperimentStatus] = React.useState<boolean>(true);
+  const experimentStatusQR = useGetExperimentStatuses();
+  React.useEffect(() => {
+    setIsLoadingExperimentStatus(experimentStatusQR.isLoading);
+  }, [experimentStatusQR.isLoading]);
+
+  return {
+    isLoadingExperimentStatus,
+    setIsLoadingExperimentStatus,
+    experimentStatusQR,
   };
 };
