@@ -17,9 +17,9 @@ export const useGetExperiments = () => {
 export const useGetOneExperiment = (id: string) => {
   const { getOneExperiment } = useExperimentsApi();
   return useQuery({
-    queryKey: [queryKeys.instagram.experiments.getById],
+    queryKey: [queryKeys.instagram.experiments.getById, id],
     queryFn: () => getOneExperiment(id),
-    refetchOnMount: false,
+    refetchOnMount: true,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });

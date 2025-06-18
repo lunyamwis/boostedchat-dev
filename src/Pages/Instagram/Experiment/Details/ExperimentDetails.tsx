@@ -11,8 +11,12 @@ export function ExperimentDetails() {
   const [page, setPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState(1000);
   const { pathname } = useLocation();
-  let pathItems = pathname.split('/')
-  const id = pathItems[pathItems.length - 1]
+
+  const id = React.useMemo(() => {
+    const pathItems = pathname.split('/');
+    return pathItems[pathItems.length - 1];
+  }, [pathname]);
+  // const id = pathItems[pathItems.length - 1]
   const { experimentQR } = useCommonStateForExperimentDetails(id);
 
   // console.log("Experiment path details", pathname);
