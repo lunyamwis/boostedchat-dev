@@ -31,5 +31,10 @@ export const useExperimentsApi = () => {
         .put(`/${params.id}/`, params.data)
         .then(handleRestResponse)
         .catch(handleRestError),
+    removeExperiment: (id: string) =>
+      axiosInstance
+        .delete(`/${id}/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
   }
 }

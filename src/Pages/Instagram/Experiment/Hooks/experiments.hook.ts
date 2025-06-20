@@ -54,3 +54,11 @@ export const useUpdateExperimentDetails = () => {
     mutationFn: (params: UpdateExperimentParams) => update(params),
   });
 };
+
+export const useRemoveExperiment = () => {
+  const { removeExperiment } = useExperimentsApi();
+  return useMutation({
+    mutationFn: (id: string) => removeExperiment(id)
+  });
+
+};

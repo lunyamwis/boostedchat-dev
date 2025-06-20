@@ -67,9 +67,8 @@ export default function AppShell() {
       >
         <Box h="100%" p={location.pathname === pageData.Threads.url ? 0 : 16}>
           {
-          //  onlineStatus.online 
-          true
-            ? <Outlet /> : <>No network connection</>}
+            onlineStatus.online
+              ? <Outlet /> : <>No network connection</>}
         </Box>
       </MantineAppShell.Main>
     </MantineAppShell>

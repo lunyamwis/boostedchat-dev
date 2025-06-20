@@ -1,7 +1,7 @@
 import { useExperimentFieldDefinitionApi } from "@/Apis/Instagram/ExperimentFieldDefinition.api";
 import { useExperimentsApi } from "@/Apis/Instagram/Experiments.api";
 import { queryKeys } from "@/Constants/ApiConstants";
-import { CreateExperimentFieldDefinition, UpdateExperimentParams } from "@/Interfaces/Instagram/Experiments/experiment.interface";
+import { CreateExperimentFieldDefinition, UpdateExperimentFieldDefinitionParams, UpdateExperimentParams } from "@/Interfaces/Instagram/Experiments/experiment.interface";
 import { useQuery, useMutation } from "@tanstack/react-query";
 
 
@@ -12,6 +12,16 @@ export const useGetExperimenFieldDefinitionsWrapperApi = () => {
   });
   return {
     createExperimentFieldDefinition,
+  };
+};
+
+export const useRemoveFieldDefinition = () => {
+  const { removeFieldDefinition } = useExperimentFieldDefinitionApi();
+  const deleteFieldDefinition = useMutation({
+    mutationFn: (id: string) => removeFieldDefinition(id)
+  });
+  return {
+    deleteFieldDefinition,
   };
 };
 
@@ -38,10 +48,20 @@ export const useGetOneExperiment = (id: string) => {
 };
 
 
-
 export const useUpdateExperimentDetails = () => {
   const { update } = useExperimentsApi();
   return useMutation({
     mutationFn: (params: UpdateExperimentParams) => update(params),
   });
 };
+
+export const useUpdatetExperimentFieldDefinition = () => {
+  const { update } = useExperimentFieldDefinitionApi();
+  const updateExperimentFieldDefinition = useMutation({
+    mutationFn: (params: UpdateExperimentFieldDefinitionParams) => update(params),
+  })
+
+  return {
+    updateExperimentFieldDefinition,
+  };
+}

@@ -55,6 +55,9 @@ interface Props<T> {
   tableName: string;
   paginationOptions: PaginationProps;
   fn: () => void;
+  showSearch?: boolean;
+  showExportCsv?: boolean;
+  showExportExcel?: boolean;
 }
 
 function MDataGrid<T>({
@@ -65,6 +68,9 @@ function MDataGrid<T>({
   loading,
   statusProps,
   paginationOptions,
+  showSearch = true,
+  showExportCsv = true,
+  showExportExcel = true,
 }: Props<T>) {
   const [searchParams, //setSearchParams
 
@@ -346,21 +352,21 @@ function MDataGrid<T>({
                 <Text fw={500}>{tableName}</Text>
               </Group>
               {tableName != "Manage Services" && <Group justify="left">
-                <DataGridSearch
+                {showSearch && <DataGridSearch
                   value={globalFilter ?? ""}
                   onChange={(value) => setGlobalFilter(String(value))}
                   placeholder="Search all columns..."
-                />
-                <ExportToExcel
+                />}
+                {showExportExcel && <ExportToExcel
                   rows={data}
                   fileName={tableName}
                   columns={actualTableColumns}
-                />
-                <ExportToCsv
+                />}
+                {showExportCsv && <ExportToCsv
                   rows={data}
                   fileName={tableName}
                   columns={actualTableColumns}
-                />
+                />}
                 <ActionIcon onClick={() => setIsSettingsOpen(!isSettingsOpen)}>
                   <IconSettings />
                 </ActionIcon>
@@ -413,6 +419,9 @@ export function DataGrid<T>({
   loading,
   paginationOptions,
   fn,
+  showSearch,
+  showExportCsv,
+  showExportExcel
 }: Props<T>) {
   return (
     <DataGridProvider>
@@ -425,6 +434,9 @@ export function DataGrid<T>({
         tableName={tableName}
         statusProps={statusProps}
         fn={fn}
+        showSearch={showSearch}
+        showExportCsv={showExportCsv}
+        showExportExcel={showExportExcel}
       />
     </DataGridProvider>
   );

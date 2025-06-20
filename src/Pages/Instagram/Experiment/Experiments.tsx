@@ -3,27 +3,21 @@ import { ColDef } from "../../../Components/Datagrid/datagrid.interface";
 import { DataGrid } from "../../../Components/Datagrid";
 import { Experiment, ExperimentStatus } from "@/Interfaces/Instagram/Experiments/experiment.interface";
 import { useCommonStateForExperiments, useCommonStateForExperimentStatus } from "./Hooks/common.hooks";
-// import { Button } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { Row } from "@tanstack/react-table";
 import {
   ActionIcon, Group, Loader, Text, Tooltip,
-  Popover,
   Button,
   TextInput,
-  Divider,
   Box,
-  Radio,
-  Flex,
   Select,
-  Tabs,
-  Space,
-  Modal
+  Modal,
+  Textarea,
+  SimpleGrid
 } from "@mantine/core";
-import { IconPencil, IconX, IconSearch, IconExternalLink } from "@tabler/icons-react";
+import { IconPencil, IconExternalLink, IconTrash } from "@tabler/icons-react";
 import { openConfirmModal } from "@mantine/modals";
-import { set } from "lodash";
-import { useUpdateExperimentDetails } from "./Hooks/experiments.hook";
+import { useRemoveExperiment, useUpdateExperimentDetails } from "./Hooks/experiments.hook";
 import { CreateExperiment } from "./CreateExperiment";
 import { Affix } from "@/Components/Widgets/Affix";
 export function Experiments() {
@@ -37,10 +31,13 @@ export function Experiments() {
   const [selectedExperimentTitle, setSelectedExperimentTitle,] = React.useState<string>('');
   const [selectedExperimentVersion, setSelectedExperimentVersion,] = React.useState<string>('');
   const [selectedExperimentStatus, setSelectedExperimentStatus,] = React.useState<ExperimentStatus>({} as ExperimentStatus);
+  const [selectedExperimentPrimaryMetric, setSelectedExperimentPrimaryMetric,] = React.useState<string>('');
+  const [selectedExperimentDescription, setSelectedExperimentDescription,] = React.useState<string>('');
   const updateExperimentDetails = useUpdateExperimentDetails();
+  const deleteExperiment = useRemoveExperiment()
 
-    const [isCreateExperimentModalOpen, setIsCreateExperimentModalOpen] =
-      React.useState(false);
+  const [isCreateExperimentModalOpen, setIsCreateExperimentModalOpen] =
+    React.useState(false);
 
   const navigateToExperimentDetails = (rowData: Experiment) => {
     navigate(`/instagram/experiment/${rowData.id}`, { state: { list: 'all', outreach_success: 'true' } });
@@ -60,6 +57,8 @@ export function Experiments() {
               setSelectedExperimentTitle(props.row.original.name)
               setSelectedExperimentVersion(props.row.original.version)
               setSelectedExperimentStatus(props.row.original.status);
+              setSelectedExperimentPrimaryMetric(props.row.original.primary_metric ?? '');
+              setSelectedExperimentDescription(props.row.original.description ?? '');
             }}
           >
             <IconPencil size={17} strokeWidth={1.4} />
@@ -70,22 +69,31 @@ export function Experiments() {
         ) : (
           <Tooltip label="Reset Account">
             <ActionIcon
-              color="red"
+
+              color="#FF8282"
               onClick={() => {
                 openConfirmModal({
                   title: "Alert",
                   children: (
                     <Text size="sm">
-                      Resetting the account will delete its thread, scheduled and
-                      status. Are you sure you want to proceed?
+                      This will completely remove this experiment & all it's data. Are you sure you want to proceed?
                     </Text>
                   ),
                   labels: { confirm: "Confirm", cancel: "Cancel" },
-                  onConfirm: () => { },
+                  onConfirm: () => {
+                    deleteExperiment.mutate(props.row.original.id, {
+                      onSuccess: () => {
+                        experimentQR.refetch(); // Refetch the experiments after deletion
+                      },
+                      onError: (error) => {
+                        console.error("Delete Experiment Error:", error);
+                      }
+                    })
+                  },
                 });
               }}
             >
-              <IconX size={17} strokeWidth={1.4} />
+              <IconTrash size={17} strokeWidth={1.4} />
             </ActionIcon>
           </Tooltip>
         )}
@@ -140,18 +148,12 @@ export function Experiments() {
     },
   ]);
 
-  console.log("Selected Experiment:")
-  console.log(selectedExperiment)
-  console.log("Experiment QR Data:")
-  console.log(experimentStatusQR.data?.results)
-
-
   return (
     <>
       {<Modal centered opened={openExperiment} onClose={() => {
         setOpenExperiment(false);
       }
-      } size="auto" title="Generate image download url">
+      } size="xl" title="Edit Experiment">
         <>
           <TextInput label="Name"
             type="text"
@@ -162,38 +164,58 @@ export function Experiments() {
               // setValue(event.target.value)
             }}
             placeholder="Name" data-autofocus />
-          <TextInput label="Version"
-            type="text"
-            value={selectedExperimentVersion}
+          <Textarea label="Description"
+            resize="both"
+            value={selectedExperimentDescription}
             onChange={(event) => {
-              console.log(event.target.value);
-              setSelectedExperimentVersion(event.target.value)
-              // setValue(event.target.value)
+              setSelectedExperimentDescription(event.target.value)
             }}
-            placeholder="Version" data-autofocus />
-          <Select
-            label="Status"
-            placeholder="Pick value"
-            data={experimentStatusQR.data?.results?.map((status) => ({
-              value: status.id,
-              label: status.name,
-            })) ?? []}
-            value={selectedExperimentStatus.id}
-            onChange={(event) => {
-              console.log(event);
-              // setSelectedExperimentStatus(event.target.value);
-              let getStatus = experimentStatusQR.data?.results?.find((status) => {
-                return status.id === event;
-              })
-              if (getStatus) {
-                setSelectedExperimentStatus(getStatus)
-              }
-            }}
-          />
+            placeholder="Experiment description" data-autofocus />
+          <SimpleGrid cols={3}>
+            <TextInput label="Version"
+              type="text"
+              value={selectedExperimentVersion}
+              onChange={(event) => {
+                console.log(event.target.value);
+                setSelectedExperimentVersion(event.target.value)
+                // setValue(event.target.value)
+              }}
+              placeholder="Version" data-autofocus />
+            <Select
+              label="Status"
+              placeholder="Pick value"
+              data={experimentStatusQR.data?.results?.map((status) => ({
+                value: status.id,
+                label: status.name,
+              })) ?? []}
+              value={selectedExperimentStatus.id}
+              onChange={(event) => {
+                console.log(event);
+                let getStatus = experimentStatusQR.data?.results?.find((status) => {
+                  return status.id === event;
+                })
+                if (getStatus) {
+                  setSelectedExperimentStatus(getStatus)
+                }
+              }}
+            />
+            <TextInput label="Primary Metric"
+              type="text"
+              value={selectedExperimentPrimaryMetric}
+              onChange={(event) => {
+                console.log(event.target.value);
+                setSelectedExperimentPrimaryMetric(event.target.value)
+              }}
+              placeholder="Primary Metric" data-autofocus />
+          </SimpleGrid>
+
+
+
           <Button disabled={false} fullWidth loading={false} onClick={() => {
             console.log("Selected Experiment Title:", selectedExperimentTitle);
             console.log("Selected Experiment Version:", selectedExperimentVersion);
             console.log("Selected Experiment Status:", selectedExperimentStatus);
+            console.log("Selected Experiment Primary Metric:", selectedExperimentPrimaryMetric);
             updateExperimentDetails.mutate({
               id: selectedExperiment?.id ?? '',
               data: {
@@ -201,7 +223,7 @@ export function Experiments() {
                 version: selectedExperimentVersion,
                 status_id: selectedExperimentStatus.id,
                 description: selectedExperiment?.description ?? '',
-                primary_metric: selectedExperiment?.primary_metric ?? '',
+                primary_metric: selectedExperimentPrimaryMetric,
               }
             }, {
               onSuccess: (data) => {
@@ -251,7 +273,7 @@ export function Experiments() {
         }}
       />
       <Affix
-        tooltipLabel="Create New Account"
+        tooltipLabel="Create New Experiment"
         onClickAction={() => setIsCreateExperimentModalOpen(true)}
       />
       <CreateExperiment

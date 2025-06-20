@@ -29,5 +29,10 @@ export const useExperimentFieldDefinitionApi = () => {
         .put(`/${params.id}/`, params.data)
         .then(handleRestResponse)
         .catch(handleRestError),
+    removeFieldDefinition: (id: string) =>
+      axiosInstance
+        .delete(`/${id}/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
   }
 }

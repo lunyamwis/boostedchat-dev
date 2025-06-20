@@ -214,7 +214,7 @@ export function WeeklyReportDetails() {
         visible: true,
       },
       {
-        accessorFn: (row) => row.igname,
+        accessorFn: (row: GetAccount) => row.igname,
         id: "igname",
         header: "Igname",
         visible: true,

@@ -22,7 +22,7 @@ export interface ExperimentFieldDefinition {
   experiment: string;
   config: {
     name: string;
-    options:[];
+    options: string | undefined;
     field_type: string;
   }
   is_experiment_input: boolean;

@@ -12,20 +12,21 @@ import {
 import { useForm, Controller } from 'react-hook-form';
 import { useState } from 'react';
 import React from 'react';
-import { useGetExperimenFieldDefinitionsWrapperApi } from '../Hooks/experimentFieldDefinition.hooks';
+import { useGetExperimenFieldDefinitionsWrapperApi, useUpdatetExperimentFieldDefinition } from '../Hooks/experimentFieldDefinition.hooks';
+import { ExperimentFieldDefinition } from '@/Interfaces/Instagram/Experiments/experiment.interface';
 
 const FIELD_TYPES = ['text', 'number', 'boolean', 'dropdown'];
 
-export default function AddFieldDefinitionModal({ experimentId, opened, onClose, onSuccess }: {
+export default function AddFieldDefinitionModal({ experimentId, opened, onClose, onSuccess, fieldDefinition }: {
   experimentId: string;
   opened: boolean;
   onClose: () => void;
   onSuccess?: () => void;
+  fieldDefinition?: ExperimentFieldDefinition | null;
 }) {
   const { createExperimentFieldDefinition } = useGetExperimenFieldDefinitionsWrapperApi();
+  const { updateExperimentFieldDefinition } = useUpdatetExperimentFieldDefinition();
   const [isMetricField, setIsMetricField] = useState(false);
-
-
   const { register, handleSubmit, watch, reset, control } = useForm({
     defaultValues: {
       label: '',
@@ -37,14 +38,10 @@ export default function AddFieldDefinitionModal({ experimentId, opened, onClose,
       is_result_field: false, // Assuming this is not a result field
     },
   });
-
   const type = watch('field_type');
-  const [loading, setLoading] = useState(false);
-
   const onSubmit = async (data: any) => {
     console.log("Form data submitted:", data);
-    console.log("data.type",data.field_type)
-    setLoading(true);
+    console.log("data.type", data.field_type)
     try {
       const payload: any = {
         experiment_id: experimentId,
@@ -53,7 +50,7 @@ export default function AddFieldDefinitionModal({ experimentId, opened, onClose,
       };
 
       if (data.field_type === 'dropdown') {
-        
+
         payload.options = data.options.split(',').map((opt: string) => opt.trim());
         payload.field_value = data.value; // default to first
       } else if (data.field_type === 'boolean') {
@@ -67,34 +64,126 @@ export default function AddFieldDefinitionModal({ experimentId, opened, onClose,
         payload.options = null
       }
       console.log("Form data submitted:", payload);
-      // console.log("Payload to be sent:", payload);
-      // console.log("Submitted Field Definition:", JSON.stringify(payload, null, 2));
-      createExperimentFieldDefinition.mutate({
-        config: {
-          name: payload.name,
-          options: data.options,
-          field_type: payload.field_type,
-        },
-        experiment: experimentId,
-        field_value: payload.field_value,
 
-        is_experiment_input: false, // Assuming this is an input field
-        is_metric_field: data.is_metric_field, // Assuming this is not a metric
-        is_result_field: false, // Assuming this is not a result field
-      })
-      onSuccess?.();
-      reset();
-      onClose();
+
+      if (fieldDefinition) {
+        updateExperimentFieldDefinition.mutate({
+          id: fieldDefinition.id,
+          data: {
+            id: fieldDefinition.id,
+            experiment: experimentId,
+            is_experiment_input: false, // Assuming this is an input field
+            is_metric_field: data.is_metric_field, // Assuming this is not a metric
+            is_result_field: false, // Assuming this is not a result field
+            field_value: payload.field_value,
+            config: {
+              name: payload.name,
+              options: payload.options,
+              field_type: payload.field_type,
+            },
+          },
+
+        },
+          {
+            onSuccess: () => {
+              onSuccess?.();
+              reset({
+                label: '',
+                field_type: 'text',
+                value: '',
+                options: '',
+                is_experiment_input: false, // Assuming this is an input field
+                is_metric_field: false, // Assuming this is not a metric
+                is_result_field: false, // Assuming this is not a result field
+              });
+              onClose();
+            },
+            onError: (error) => {
+              console.error("Error adding field definition:", error);
+
+            },
+          }
+        )
+
+      } else {
+        createExperimentFieldDefinition.mutate({
+          config: {
+            name: payload.name,
+            options: data.options ? data.options.split(',').map((opt: string) => opt.trim()) : data.options,
+            field_type: payload.field_type,
+          },
+          experiment: experimentId,
+          field_value: payload.field_value,
+
+          is_experiment_input: false, // Assuming this is an input field
+          is_metric_field: data.is_metric_field, // Assuming this is not a metric
+          is_result_field: false, // Assuming this is not a result field
+        },
+          {
+            onSuccess: () => {
+              onSuccess?.();
+              reset({
+                label: '',
+                field_type: 'text',
+                value: '',
+                options: '',
+                is_experiment_input: false, // Assuming this is an input field
+                is_metric_field: false, // Assuming this is not a metric
+                is_result_field: false, // Assuming this is not a result field
+              });
+              onClose();
+            },
+            onError: (error) => {
+              console.error("Error adding field definition:", error);
+
+            },
+          }
+        )
+      }
 
     } catch (err) {
       console.error('Failed to add field', err);
-    } finally {
-      setLoading(false);
     }
   };
 
+  React.useEffect(() => {
+    if (fieldDefinition) {
+      reset({
+        label: fieldDefinition.config.name || '',
+        field_type: fieldDefinition.config.field_type || 'text',
+        value: fieldDefinition.field_value ?? '',
+        options: fieldDefinition?.config?.options,
+        is_metric_field: fieldDefinition.is_metric_field || false,
+      });
+      setIsMetricField(fieldDefinition.is_metric_field || false);
+    } else {
+      reset({
+        label: '',
+        field_type: 'text',
+        value: '',
+        options: '',
+        is_experiment_input: false, // Assuming this is an input field
+        is_metric_field: false, // Assuming this is not a metric
+        is_result_field: false, // Assuming this is not a result field
+      });
+    }
+  }, [reset, fieldDefinition]);
+
   return (
-    <Modal opened={opened} onClose={onClose} title="Add Field Definition" centered>
+    <Modal opened={opened} onClose={
+      () => {
+        reset({
+          label: '',
+          field_type: 'text',
+          value: '',
+          options: '',
+          is_experiment_input: false, // Assuming this is an input field
+          is_metric_field: false, // Assuming this is not a metric
+          is_result_field: false, // Assuming this is not a result field
+        });
+        onClose();
+      }
+    } title="Add Field Definition" centered>
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextInput label="Label" required {...register('label')} />
 
@@ -136,11 +225,9 @@ export default function AddFieldDefinitionModal({ experimentId, opened, onClose,
                 label="Value"
                 data={['true', 'false']}
                 value={field.value}
-                
-                onChange={(event)=>{
+
+                onChange={(event) => {
                   field.onChange(event)
-                  console.log(field)
-                  // console.log(event)
                 }}
                 required
               />
@@ -160,10 +247,7 @@ export default function AddFieldDefinitionModal({ experimentId, opened, onClose,
 
 
         <Group mt="md">
-          <Button type="submit" loading={loading} onClick={() => {
-            console.log("Submitting field definition");
-
-          }}>Add Field</Button>
+          <Button type="submit" loading={createExperimentFieldDefinition.isPending} onClick={() => {}}>{fieldDefinition ? "Update Field" : "Add Field"}</Button>
         </Group>
       </form>
     </Modal>

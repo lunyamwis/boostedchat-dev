@@ -8,12 +8,22 @@ import { useCommonStateForExperimentDetails } from "../Hooks/common.hooks";
 import { useLocation } from "react-router-dom";
 import AddFieldDefinitionModal from "./AddFieldDefinitionModal";
 import { Affix } from "@/Components/Widgets/Affix";
+import {
+  Card,
+  ActionIcon, Tooltip, Loader,
+  Text, Badge, Group, Space
+} from '@mantine/core';
+import { IconPencil, IconX, IconSearch, IconExternalLink, IconTrash } from "@tabler/icons-react";
+import { openConfirmModal } from "@mantine/modals";
+import { Row } from "@tanstack/react-table";
+import { useRemoveFieldDefinition } from "../Hooks/experimentFieldDefinition.hooks";
 
 export function ExperimentDetails() {
   const [page, setPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState(1000);
   const { pathname } = useLocation();
   const [addModalOpen, setAddModalOpen] = useState(false);
+  const [editExperimentFieldDefinition, setEditExperimentFieldDefinition] = useState<ExperimentFieldDefinition | null>(null);
 
   const id = React.useMemo(() => {
     const pathItems = pathname.split('/');
@@ -21,15 +31,62 @@ export function ExperimentDetails() {
   }, [pathname]);
   // const id = pathItems[pathItems.length - 1]
   const { experimentQR } = useCommonStateForExperimentDetails(id);
-
-  // console.log("Experiment path details", pathname);
-  // console.log("Experiment path details", id);
-  
+  const {deleteFieldDefinition } = useRemoveFieldDefinition();
 
   function refetchFieldDefinitions() {
     experimentQR.refetch();
     setAddModalOpen(false);
   }
+
+  const ActionColumn = React.useCallback(
+    (props: { row: Row<ExperimentFieldDefinition> }) => (
+      <Group>
+        <Tooltip label="View Details">
+          <ActionIcon
+            color="brand"
+            variant="light"
+            onClick={() => {
+              setEditExperimentFieldDefinition(props.row.original);
+              setAddModalOpen(true);
+            }}
+          >
+            <IconPencil size={17} strokeWidth={1.4} />
+          </ActionIcon>
+        </Tooltip>
+        {false ? (
+          <Loader size="xs" />
+        ) : (
+          <Tooltip label="Remove Field">
+            <ActionIcon
+              color="#FF8282"
+              onClick={() => {
+                openConfirmModal({
+                  title: "Alert",
+                  children: (
+                    <Text size="sm">
+                      This will completely remove this field & it's values. Are you sure you want to proceed?
+                    </Text>
+                  ),
+                  labels: { confirm: "Confirm", cancel: "Cancel" },
+                  onConfirm: () => {
+                    deleteFieldDefinition.mutate(props.row.original.id, {
+                      onSuccess: () => {
+                        refetchFieldDefinitions();
+                        setEditExperimentFieldDefinition(null);
+                      },
+                    });
+                   },
+                });
+              }}
+            >
+              <IconTrash size={17} strokeWidth={1.4} />
+            </ActionIcon>
+          </Tooltip>
+        )}
+      </Group>
+    ), [],
+  );
+
 
   const columnDefs: ColDef<ExperimentFieldDefinition>[] = ([
     {
@@ -57,10 +114,13 @@ export function ExperimentDetails() {
       type: "string",
       visible: true,
     },
+    {
+      id: "expander",
+      header: "Actions",
+      visible: true,
+      cell: ActionColumn,
+    },
   ]);
-
-  console.log(experimentQR.data);
-  console.log(experimentQR.data?.field_definitions);
 
   return (
     <>
@@ -69,13 +129,33 @@ export function ExperimentDetails() {
         opened={addModalOpen}
         onClose={() => setAddModalOpen(false)}
         onSuccess={() => refetchFieldDefinitions()}
+        fieldDefinition={editExperimentFieldDefinition}
       />
+
+      <Card shadow="sm" padding="lg" radius="md" withBorder>
+        <Group justify="space-between" mt="md" mb="xs">
+          <Text fw={500}>{experimentQR?.data?.name}</Text>
+          <Badge color="pink">{experimentQR?.data?.status.name}</Badge>
+        </Group>
+
+        <Text size="sm" c="dimmed">
+          {experimentQR?.data?.description}
+        </Text>
+
+
+      </Card>
+
+      <Space h="md" />
+
       <DataGrid
         fn={() => {
 
         }}
+        showSearch={false}
+        showExportCsv={false}
+        showExportExcel={false}
         loading={false} //{accountsQR.isLoading || isLoading}
-        tableName={"Experiment Field Definitions"}
+        tableName={`Custom Fields`}
         data={experimentQR.data?.field_definitions ?? []}
         columns={columnDefs}
         paginationOptions={{
@@ -89,7 +169,10 @@ export function ExperimentDetails() {
       />
       <Affix
         tooltipLabel="Add Field Definition"
-        onClickAction={() => setAddModalOpen(true)}
+        onClickAction={() => {
+          setEditExperimentFieldDefinition(null);
+          setAddModalOpen(true);
+        }}
       />
     </>
   );

@@ -5,6 +5,7 @@ import {
   IconBrandMessenger,
   IconCalendarCog,
   IconChartInfographic,
+  IconTestPipe,
   // IconClock,
   IconGraph,
   // IconRouteSquare2,
@@ -245,7 +246,7 @@ export const pageData: TMPageData = {
     hasChildren: false,
     title: "Experiments",
     isNavItem: true,
-    icon: IconChartInfographic,
+    icon: IconTestPipe,
     url: "/instagram/experiments",
   },
   LikersCommenters: {
