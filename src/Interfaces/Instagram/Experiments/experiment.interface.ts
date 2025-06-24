@@ -2,13 +2,23 @@ export interface Experiment {
   id: string;
   name: string;
   description: string | null;
+  hypothesis: string | null;
   primary_metric: string | null;
   version: string;
   status_id: string;
   status: ExperimentStatus;
+  expected_result: string | null;
+  actual_result: number | null;
   field_definitions: [ExperimentFieldDefinition];
   inputs: string;
   experiment_results: string;
+  assignees: [ExperimentAssignee];
+}
+
+export interface ExperimentAssignee {
+  id: string;
+  name: string;
+  description: string | null;
 }
 
 export interface ExperimentStatus {
@@ -54,6 +64,8 @@ export type CreateExperiment = Pick<
   | "description"
   | "primary_metric"
   | "status_id"
+  | "expected_result"
+  | "hypothesis"
 >;
 
 export type UpdateExperiment = Pick<
@@ -63,6 +75,8 @@ export type UpdateExperiment = Pick<
   | "primary_metric"
   | "version"
   | "status_id"
+  | "expected_result"
+  | "hypothesis"
 >;
 
 export type UpdateExperimentParams = {

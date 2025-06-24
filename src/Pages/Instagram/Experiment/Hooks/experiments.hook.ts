@@ -1,3 +1,4 @@
+import { useExperimentAssigneeApi } from "@/Apis/Instagram/ExperimentAssignee.api";
 import { useExperimentsApi } from "@/Apis/Instagram/Experiments.api";
 import { useExperimentStatusApi } from "@/Apis/Instagram/ExperimentStatus.api";
 import { queryKeys } from "@/Constants/ApiConstants";
@@ -48,6 +49,17 @@ export const useGetExperimentStatuses = () => {
   });
 };
 
+export const useGetAllExperimentAssignees = () => {
+  const { getAllExperimentAssignees } = useExperimentAssigneeApi();
+  return useQuery({
+    queryKey: [queryKeys.instagram.assignees.getAllAssignees],
+    queryFn: () => getAllExperimentAssignees(),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+};
+
 export const useUpdateExperimentDetails = () => {
   const { update } = useExperimentsApi();
   return useMutation({
@@ -60,5 +72,11 @@ export const useRemoveExperiment = () => {
   return useMutation({
     mutationFn: (id: string) => removeExperiment(id)
   });
+};
 
+export const useDuplicateExperiment = () => {
+  const { duplicateExperiment } = useExperimentsApi();
+  return useMutation({
+    mutationFn: (id: string) => duplicateExperiment(id)
+  });
 };

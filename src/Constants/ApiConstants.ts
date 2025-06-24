@@ -10,7 +10,7 @@ console.log(DOMAIN2)
 // console.log(import.meta.env)
 export const API_URL = import.meta.env.PROD
   ? `https://scrapper.staging.boostedchat.com` //`https://scrapper.${DOMAIN1}.boostedchat.com/`
-  :  "http://lunyamwi.localhost"
+  : "http://lunyamwi.localhost"
 
 // export const API_URL = import.meta.env.PROD
 //   ? `https://api.staging.boostedchat.com/v1`
@@ -60,7 +60,7 @@ export const queryKeys = {
       getById: "get-account-by-id",
       getByIgThreadId: "get-account-by-ig-thread-id",
       getAccountThreadDetails: "get-account-details",
-      removeDuplicates:"handle-duplicates",
+      removeDuplicates: "handle-duplicates",
       getOutreachLineChart: "get-outreach-line-chart",
       getOutreachChartList: "get-outreach-chart-list",
       getWeeklyReport: "get-weekly-report",
@@ -76,6 +76,9 @@ export const queryKeys = {
       getAllStages: "get-all-stages",
       getStageStats: "get-stage-stats",
     },
+    assignees: {
+      getAllAssignees: "get-all-assignees"
+    },
     threads: {
       byIgThreadId: "get-thread-by-ig-thread-id",
       getAll: "get-all-threads",
@@ -87,11 +90,11 @@ export const queryKeys = {
       connectedccounts: "connected-accounts",
       healthStatus: "health-status",
     },
-    experiments:{
+    experiments: {
       getAll: "get-all-experiments",
       getById: "get-experiment-by-id",
     },
-    experimentStatus:{
+    experimentStatus: {
       getAll: "get-all-experiment-status",
       getById: "get-experiment-status-by-id",
     }

@@ -2,7 +2,7 @@ import React from "react";
 import { ColDef } from "../../../Components/Datagrid/datagrid.interface";
 import { DataGrid } from "../../../Components/Datagrid";
 import { Experiment, ExperimentStatus } from "@/Interfaces/Instagram/Experiments/experiment.interface";
-import { useCommonStateForExperiments, useCommonStateForExperimentStatus } from "./Hooks/common.hooks";
+import { useCommonStateForExperimentAssignees, useCommonStateForExperiments, useCommonStateForExperimentStatus } from "./Hooks/common.hooks";
 import { useNavigate } from "react-router-dom";
 import { Row } from "@tanstack/react-table";
 import {
@@ -15,9 +15,9 @@ import {
   Textarea,
   SimpleGrid
 } from "@mantine/core";
-import { IconPencil, IconExternalLink, IconTrash } from "@tabler/icons-react";
+import { IconPencil, IconExternalLink, IconTrash, IconCopy } from "@tabler/icons-react";
 import { openConfirmModal } from "@mantine/modals";
-import { useRemoveExperiment, useUpdateExperimentDetails } from "./Hooks/experiments.hook";
+import { useDuplicateExperiment, useRemoveExperiment, useUpdateExperimentDetails } from "./Hooks/experiments.hook";
 import { CreateExperiment } from "./CreateExperiment";
 import { Affix } from "@/Components/Widgets/Affix";
 export function Experiments() {
@@ -25,16 +25,12 @@ export function Experiments() {
   const [pageSize, setPageSize] = React.useState(1000);
   const { experimentQR } = useCommonStateForExperiments();
   const { experimentStatusQR } = useCommonStateForExperimentStatus();
+  const { experimentAssigneeQR } = useCommonStateForExperimentAssignees();
   const navigate = useNavigate();
-  const [openExperiment, setOpenExperiment] = React.useState(false);
-  const [selectedExperiment, setSelectedExperiment] = React.useState<Experiment | null>(null);
-  const [selectedExperimentTitle, setSelectedExperimentTitle,] = React.useState<string>('');
-  const [selectedExperimentVersion, setSelectedExperimentVersion,] = React.useState<string>('');
-  const [selectedExperimentStatus, setSelectedExperimentStatus,] = React.useState<ExperimentStatus>({} as ExperimentStatus);
-  const [selectedExperimentPrimaryMetric, setSelectedExperimentPrimaryMetric,] = React.useState<string>('');
-  const [selectedExperimentDescription, setSelectedExperimentDescription,] = React.useState<string>('');
-  const updateExperimentDetails = useUpdateExperimentDetails();
+  const [selectedExperiment, setSelectedExperiment] = React.useState<Experiment | undefined>(undefined);
+
   const deleteExperiment = useRemoveExperiment()
+  const duplicateExperiment = useDuplicateExperiment();
 
   const [isCreateExperimentModalOpen, setIsCreateExperimentModalOpen] =
     React.useState(false);
@@ -51,14 +47,8 @@ export function Experiments() {
             color="brand"
             variant="light"
             onClick={() => {
-              // navigate(`${props.row.original.id}`);
-              setOpenExperiment(true);
+              setIsCreateExperimentModalOpen(true);
               setSelectedExperiment(props.row.original);
-              setSelectedExperimentTitle(props.row.original.name)
-              setSelectedExperimentVersion(props.row.original.version)
-              setSelectedExperimentStatus(props.row.original.status);
-              setSelectedExperimentPrimaryMetric(props.row.original.primary_metric ?? '');
-              setSelectedExperimentDescription(props.row.original.description ?? '');
             }}
           >
             <IconPencil size={17} strokeWidth={1.4} />
@@ -97,6 +87,38 @@ export function Experiments() {
             </ActionIcon>
           </Tooltip>
         )}
+
+        <Tooltip label="Duplicate Experiment">
+          <ActionIcon
+
+            color="grape"
+            onClick={() => {
+              openConfirmModal({
+                title: "Alert",
+                children: (
+                  <Text size="sm">
+                    This will duplicate the experiment. Are you sure you want to proceed?
+                  </Text>
+                ),
+                labels: { confirm: "Confirm", cancel: "Cancel" },
+                onConfirm: () => {
+                  duplicateExperiment.mutate(props.row.original.id, {
+                    onSuccess: () => {
+                      experimentQR.refetch(); // Refetch the experiments after deletion
+                    },
+                    onError: (error) => {
+                      console.error("Delete Experiment Error:", error);
+                    }
+                  })
+                },
+              });
+            }}
+          >
+            <IconCopy size={17} strokeWidth={1.4} />
+          </ActionIcon>
+        </Tooltip>
+
+
       </Group>
     ),
     [navigate],
@@ -134,6 +156,27 @@ export function Experiments() {
       visible: true,
     },
     {
+      accessorFn: (row) => row.primary_metric,
+      id: "primary_metric",
+      header: "Primary Metric",
+      type: "string",
+      visible: true,
+    },
+    {
+      accessorFn: (row) => row.expected_result,
+      id: "expected_size",
+      header: "Opt size weekly",
+      type: "string",
+      visible: true,
+    },
+    {
+      accessorFn: (row) => row.actual_result,
+      id: "actual_result",
+      header: "Actual Result",
+      type: "string",
+      visible: true,
+    },
+    {
       accessorFn: (row) => row.status.name,
       id: "status",
       header: "Status",
@@ -150,111 +193,10 @@ export function Experiments() {
 
   return (
     <>
-      {<Modal centered opened={openExperiment} onClose={() => {
-        setOpenExperiment(false);
-      }
-      } size="xl" title="Edit Experiment">
-        <>
-          <TextInput label="Name"
-            type="text"
-            value={selectedExperimentTitle}
-            onChange={(event) => {
-              console.log(event.target.value);
-              setSelectedExperimentTitle(event.target.value)
-              // setValue(event.target.value)
-            }}
-            placeholder="Name" data-autofocus />
-          <Textarea label="Description"
-            resize="both"
-            value={selectedExperimentDescription}
-            onChange={(event) => {
-              setSelectedExperimentDescription(event.target.value)
-            }}
-            placeholder="Experiment description" data-autofocus />
-          <SimpleGrid cols={3}>
-            <TextInput label="Version"
-              type="text"
-              value={selectedExperimentVersion}
-              onChange={(event) => {
-                console.log(event.target.value);
-                setSelectedExperimentVersion(event.target.value)
-                // setValue(event.target.value)
-              }}
-              placeholder="Version" data-autofocus />
-            <Select
-              label="Status"
-              placeholder="Pick value"
-              data={experimentStatusQR.data?.results?.map((status) => ({
-                value: status.id,
-                label: status.name,
-              })) ?? []}
-              value={selectedExperimentStatus.id}
-              onChange={(event) => {
-                console.log(event);
-                let getStatus = experimentStatusQR.data?.results?.find((status) => {
-                  return status.id === event;
-                })
-                if (getStatus) {
-                  setSelectedExperimentStatus(getStatus)
-                }
-              }}
-            />
-            <TextInput label="Primary Metric"
-              type="text"
-              value={selectedExperimentPrimaryMetric}
-              onChange={(event) => {
-                console.log(event.target.value);
-                setSelectedExperimentPrimaryMetric(event.target.value)
-              }}
-              placeholder="Primary Metric" data-autofocus />
-          </SimpleGrid>
 
 
 
-          <Button disabled={false} fullWidth loading={false} onClick={() => {
-            console.log("Selected Experiment Title:", selectedExperimentTitle);
-            console.log("Selected Experiment Version:", selectedExperimentVersion);
-            console.log("Selected Experiment Status:", selectedExperimentStatus);
-            console.log("Selected Experiment Primary Metric:", selectedExperimentPrimaryMetric);
-            updateExperimentDetails.mutate({
-              id: selectedExperiment?.id ?? '',
-              data: {
-                name: selectedExperimentTitle,
-                version: selectedExperimentVersion,
-                status_id: selectedExperimentStatus.id,
-                description: selectedExperiment?.description ?? '',
-                primary_metric: selectedExperimentPrimaryMetric,
-              }
-            }, {
-              onSuccess: (data) => {
-                console.log("Update Experiment Success:", data);
-                setOpenExperiment(false);
-                experimentQR.refetch(); // Refetch the experiments after updating
-              },
-              onError: (error) => {
-                console.error("Update Experiment Error:", error);
-              }
-            })
 
-          }} mt="md">
-            Update
-          </Button>
-
-          <Box w={{ base: 200, sm: 400, lg: 500 }}
-            py={{ base: 'xs', sm: 'md', lg: 'xl' }}
-            ta="center"
-            mx="auto">
-
-            {/* {
-              (showDownloadStatus && donwloadStatusError) &&
-              <Alert variant="light" color="red" title={downloadErrorMsg} icon={<IconInfoCircle />} />
-            } */}
-
-
-
-          </Box>
-        </>
-      </Modal>}
       <DataGrid
         fn={() => {
 
@@ -281,6 +223,8 @@ export function Experiments() {
         setIsOpen={setIsCreateExperimentModalOpen}
         status={experimentStatusQR.data?.results ?? []}
         experimentQR={experimentQR}
+        selectedExperiment={selectedExperiment}
+        assignees = {experimentAssigneeQR.data?.results ?? []}
       />
     </>
   );

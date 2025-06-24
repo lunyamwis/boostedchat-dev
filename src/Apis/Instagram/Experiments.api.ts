@@ -36,5 +36,10 @@ export const useExperimentsApi = () => {
         .delete(`/${id}/`)
         .then(handleRestResponse)
         .catch(handleRestError),
+    duplicateExperiment: (id: string) =>
+      axiosInstance
+        .post(`/${id}/duplicate/`)
+        .then(handleRestResponse)
+        .catch(handleRestError),
   }
 }

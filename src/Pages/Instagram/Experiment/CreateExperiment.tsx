@@ -3,11 +3,10 @@ import {
   Alert,
   Button,
   Collapse,
-  Group,
   Modal,
+  MultiSelect,
   Select,
   SimpleGrid,
-  Stack,
   Textarea,
   TextInput,
 } from "@mantine/core";
@@ -18,7 +17,7 @@ import {
 } from "@tabler/icons-react";
 import { useAlert } from "../../../Hooks/useAlert";
 import { useExperimentsWrapperApi, useUpdateExperimentDetails } from "./Hooks/experiments.hook";
-import { Experiment, ExperimentStatus } from "@/Interfaces/Instagram/Experiments/experiment.interface";
+import { Experiment, ExperimentAssignee, ExperimentStatus } from "@/Interfaces/Instagram/Experiments/experiment.interface";
 import { UseQueryResult } from "@tanstack/react-query";
 import { PaginatedQuery } from "@/Interfaces/general.interface";
 
@@ -26,32 +25,42 @@ type Props = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   status: ExperimentStatus[];
+  assignees: ExperimentAssignee[];
   experimentQR: UseQueryResult<PaginatedQuery<Experiment>, Error>
   selectedExperiment?: Experiment;
 };
 
-export function CreateExperiment({ isOpen, setIsOpen, status, experimentQR, selectedExperiment }: Props) {
+export function CreateExperiment({ isOpen, setIsOpen, status, experimentQR, selectedExperiment, assignees }: Props) {
   const { alertInfo, setAlertInfo, showAlert, setShowAlert } = useAlert();
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [primary_metric, setPrimaryMetric] = React.useState("");
   const [version, setVersion] = React.useState("");
+  const [hypothesis, setHypothesis] = React.useState("");
+  const [expected_result, setExpectedResult] = React.useState('');
   const { createExperiment } = useExperimentsWrapperApi();
   const [selectedExperimentStatus, setSelectedExperimentStatus,] = React.useState<ExperimentStatus>({} as ExperimentStatus);
+  const [selectedExperimentAssignee, setSelectedExperimentAssignee,] = React.useState<string[]>([]);
+
   const updateExperimentDetails = useUpdateExperimentDetails();
 
   // set default status
+  // console.log("Selected Experiment:", selectedExperiment);
   React.useEffect(() => {
     if (selectedExperiment) {
+      console.log("Selected Experiment:", selectedExperiment);
       setName(selectedExperiment.name)
       setVersion(selectedExperiment.version)
       setSelectedExperimentStatus(selectedExperiment.status);
       setPrimaryMetric(selectedExperiment.primary_metric ?? '');
       setDescription(selectedExperiment.description ?? '');
+      setHypothesis(selectedExperiment.hypothesis ?? '');
+      setExpectedResult(selectedExperiment.expected_result ?? '');
+      setSelectedExperimentAssignee(selectedExperiment.assignees.map((assignee)=> assignee.name))
     } else {
       if (status.length > 0) {
         let getDraftStatus = status.find((status) => {
-          return status.name === 'draft';
+          return status.name === 'idea';
         })
         if (getDraftStatus) {
           setSelectedExperimentStatus(getDraftStatus);
@@ -62,9 +71,10 @@ export function CreateExperiment({ isOpen, setIsOpen, status, experimentQR, sele
       }
     }
 
-  }, []
+  }, [selectedExperiment]
+
   );
-  const handleCreateAccount = () => {
+  const handleCreateExperiment = () => {
     setShowAlert(false);
     if (name === "") {
       setShowAlert(true);
@@ -86,6 +96,8 @@ export function CreateExperiment({ isOpen, setIsOpen, status, experimentQR, sele
           status_id: selectedExperimentStatus.id,
           description: selectedExperiment?.description ?? '',
           primary_metric: primary_metric,
+          hypothesis: hypothesis,
+          expected_result: expected_result.trim() === '' ? null : expected_result, // Handle empty expected_result
         }
       }, {
         onSuccess: (data) => {
@@ -110,6 +122,8 @@ export function CreateExperiment({ isOpen, setIsOpen, status, experimentQR, sele
           description: description,
           primary_metric: primary_metric,
           status_id: selectedExperimentStatus.id,
+          hypothesis: hypothesis,
+          expected_result: expected_result,
         },
         {
           onSuccess: () => {
@@ -136,87 +150,9 @@ export function CreateExperiment({ isOpen, setIsOpen, status, experimentQR, sele
     setIsOpen(false);
 
   }
-  // return (
-  //   <Modal
-  //     opened={isOpen}
-  //     onClose={() => {
-  //       onModalClose();
-  //     }}
-  //     title="Create New Experiment"
-  //   >
-  // <Collapse
-  //   in={showAlert}
-  //   style={{
-  //     marginBottom: showAlert ? 2 : 0,
-  //     marginTop: showAlert ? 1 : 0,
-  //   }}
-  // >
-  //   <Alert
-  //     icon={<IconAlertTriangle />}
-  //     color="orange"
-  //     title={alertInfo.title}
-  //   >
-  //     {alertInfo.message}
-  //   </Alert>
-  // </Collapse>
-  //     <Stack p={20}>
-  //       <TextInput
-  //         label="Name"
-  //         withAsterisk={true}
-  //         required
-  //         value={name}
-  //         onChange={(e) => setName(e.target.value)}
-  //       />
-  //       <Textarea
-  //         label="Description"
-  //         placeholder="Your hypothesis or description of the experiment"
-  //         withAsterisk={true}
-  //         value={description}
-  //         resize="both"
-  //         onChange={(e) => setDescription(e.target.value)}
-  //       />
-  //       <TextInput
-  //         label="Prinamy Metric"
-  //         withAsterisk={true}
-  //         required
-  //         value={primary_metric}
-  //         onChange={(e) => setPrimaryMetric(e.target.value)}
-  //       />
-
-  //       <Select
-  //         label="Status"
-  //         placeholder="Pick value"
-  //         data={status.map((status) => ({
-  //           value: status.id,
-  //           label: status.name,
-  //         })) ?? []}
-  //         value={selectedExperimentStatus.id}
-  //         onChange={(event) => {
-  //           console.log(event);
-  //           // setSelectedExperimentStatus(event.target.value);
-  //           let getStatus = status.find((status) => {
-  //             return status.id === event;
-  //           })
-  //           if (getStatus) {
-  //             setSelectedExperimentStatus(getStatus)
-  //           }
-  //         }}
-  //       />
-
-  //       <Group justify="center">
-  //         <Button
-  //           // loading={createAccount.isPending}
-  //           onClick={handleCreateAccount}
-  //         >
-  //           Create Experiment
-  //         </Button>
-  //       </Group>
-  //     </Stack>
-  //   </Modal>
-  // );
 
   return (
-    <Modal centered opened={isOpen} onClose={onModalClose} size="xl" title="Edit Experiment">
+    <Modal centered opened={isOpen} onClose={onModalClose} size="xl" title={selectedExperiment ? "Edit Experiment" : "Create Experiment"}>
       <Collapse
         in={showAlert}
         style={{
@@ -249,6 +185,13 @@ export function CreateExperiment({ isOpen, setIsOpen, status, experimentQR, sele
             setDescription(event.target.value)
           }}
           placeholder="Experiment description" data-autofocus />
+        <Textarea label="Hypothesis"
+          resize="both"
+          value={hypothesis}
+          onChange={(event) => {
+            setHypothesis(event.target.value)
+          }}
+          placeholder="Experiment description" data-autofocus />
         <SimpleGrid cols={3}>
           <TextInput disabled={selectedExperiment ? false : true} label="Version"
             type="text"
@@ -276,18 +219,44 @@ export function CreateExperiment({ isOpen, setIsOpen, status, experimentQR, sele
               }
             }}
           />
-          <TextInput label="Primary Metric"
-            type="text"
+          <Select
+            label="Primary Metric"
+            placeholder="Pick value"
+            data={['Sales Qualified', 'Won']}
             value={primary_metric}
             onChange={(event) => {
-              console.log(event.target.value);
-              setPrimaryMetric(event.target.value)
+              console.log(event);
+              if (event === null) {
+                setPrimaryMetric('Sales Qualified')
+              } else {
+                setPrimaryMetric(event)
+              }
+
             }}
-            placeholder="Primary Metric" data-autofocus />
+          />
+
+
+          <MultiSelect
+            label="Assignees"
+            placeholder="Assign to"
+            // data={['React', 'Angular', 'Vue', 'Svelte']}
+            value={
+              selectedExperimentAssignee.map((assignee) => {
+                return assignee
+              })
+            }
+
+            onChange={setSelectedExperimentAssignee}
+
+            data={assignees.map((assignee) => ({
+              value: assignee.id,
+              label: assignee.name,
+            })) ?? []}
+          />
         </SimpleGrid>
 
         <Button disabled={false} fullWidth loading={false} onClick={() => {
-          handleCreateAccount();
+          handleCreateExperiment();
         }} mt="md">
           {selectedExperiment ? "Update" : "Create"} Experiment
         </Button>
