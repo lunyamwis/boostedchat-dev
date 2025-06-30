@@ -38,6 +38,11 @@ export function ExperimentDetails() {
     setAddModalOpen(false);
   }
 
+  const handleEditFieldDefinition = React.useCallback((fieldDef: ExperimentFieldDefinition) => {
+    setEditExperimentFieldDefinition(fieldDef);
+    setAddModalOpen(true);
+  }, []);
+
   const ActionColumn = React.useCallback(
     (props: { row: Row<ExperimentFieldDefinition> }) => (
       <Group>
@@ -46,8 +51,9 @@ export function ExperimentDetails() {
             color="brand"
             variant="light"
             onClick={() => {
-              setEditExperimentFieldDefinition(props.row.original);
-              setAddModalOpen(true);
+              handleEditFieldDefinition(props.row.original)
+              // setEditExperimentFieldDefinition(props.row.original);
+              // setAddModalOpen(true);
             }}
           >
             <IconPencil size={17} strokeWidth={1.4} />
@@ -87,6 +93,10 @@ export function ExperimentDetails() {
     ), [],
   );
 
+  const closeAndCleanUp = () => {
+    setAddModalOpen(false)
+    setEditExperimentFieldDefinition(null);
+  }
 
   const columnDefs: ColDef<ExperimentFieldDefinition>[] = ([
     {
@@ -127,7 +137,7 @@ export function ExperimentDetails() {
       <AddFieldDefinitionModal
         experimentId={id}
         opened={addModalOpen}
-        onClose={() => setAddModalOpen(false)}
+        onClose={() => closeAndCleanUp()}
         onSuccess={() => refetchFieldDefinitions()}
         fieldDefinition={editExperimentFieldDefinition}
       />
@@ -137,6 +147,18 @@ export function ExperimentDetails() {
           <Text fw={500}>{experimentQR?.data?.name}</Text>
           <Badge color="pink">{experimentQR?.data?.status.name}</Badge>
         </Group>
+
+        <Text fw={500} size="lg" mt="md">
+          Hypothesis:
+        </Text>
+
+        <Text size="sm" c="brand">
+          {experimentQR?.data?.hypothesis}
+        </Text>
+
+         <Text fw={500} size="md" mt="md">
+          Description:
+        </Text>
 
         <Text size="sm" c="dimmed">
           {experimentQR?.data?.description}

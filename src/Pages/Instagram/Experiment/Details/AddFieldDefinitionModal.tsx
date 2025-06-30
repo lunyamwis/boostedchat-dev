@@ -6,11 +6,11 @@ import {
   Button,
   Group,
   Select,
-  Checkbox,
+  // Checkbox,
   Space,
 } from '@mantine/core';
 import { useForm, Controller } from 'react-hook-form';
-import { useState } from 'react';
+// import { useState } from 'react';
 import React from 'react';
 import { useGetExperimenFieldDefinitionsWrapperApi, useUpdatetExperimentFieldDefinition } from '../Hooks/experimentFieldDefinition.hooks';
 import { ExperimentFieldDefinition } from '@/Interfaces/Instagram/Experiments/experiment.interface';
@@ -26,7 +26,7 @@ export default function AddFieldDefinitionModal({ experimentId, opened, onClose,
 }) {
   const { createExperimentFieldDefinition } = useGetExperimenFieldDefinitionsWrapperApi();
   const { updateExperimentFieldDefinition } = useUpdatetExperimentFieldDefinition();
-  const [isMetricField, setIsMetricField] = useState(false);
+  // const [isMetricField, setIsMetricField] = useState(false);
   const { register, handleSubmit, watch, reset, control } = useForm({
     defaultValues: {
       label: '',
@@ -39,6 +39,20 @@ export default function AddFieldDefinitionModal({ experimentId, opened, onClose,
     },
   });
   const type = watch('field_type');
+  const optionsRaw = watch('options');
+  const parsedOptions = React.useMemo(() => {
+    if (Array.isArray(optionsRaw)) {
+      return optionsRaw
+    } else {
+      return optionsRaw
+        ? optionsRaw
+          .split(',')
+          .map((opt: string) => opt.trim().toLowerCase())
+          .filter(Boolean)
+        : [];
+    }
+  }, [optionsRaw]);
+
   const onSubmit = async (data: any) => {
     console.log("Form data submitted:", data);
     console.log("data.type", data.field_type)
@@ -50,8 +64,11 @@ export default function AddFieldDefinitionModal({ experimentId, opened, onClose,
       };
 
       if (data.field_type === 'dropdown') {
-
-        payload.options = data.options.split(',').map((opt: string) => opt.trim());
+        if (Array.isArray(data.options)) {
+          payload.options = data.options.map((option: any) => option.toLowerCase())
+        } else {
+          payload.options = data.options.split(',').map((opt: string) => opt.trim().toLowerCase());
+        }
         payload.field_value = data.value; // default to first
       } else if (data.field_type === 'boolean') {
         payload.options = 'true,false'
@@ -63,8 +80,6 @@ export default function AddFieldDefinitionModal({ experimentId, opened, onClose,
         payload.field_value = data.value;
         payload.options = null
       }
-      console.log("Form data submitted:", payload);
-
 
       if (fieldDefinition) {
         updateExperimentFieldDefinition.mutate({
@@ -82,7 +97,6 @@ export default function AddFieldDefinitionModal({ experimentId, opened, onClose,
               field_type: payload.field_type,
             },
           },
-
         },
           {
             onSuccess: () => {
@@ -100,7 +114,6 @@ export default function AddFieldDefinitionModal({ experimentId, opened, onClose,
             },
             onError: (error) => {
               console.error("Error adding field definition:", error);
-
             },
           }
         )
@@ -135,7 +148,6 @@ export default function AddFieldDefinitionModal({ experimentId, opened, onClose,
             },
             onError: (error) => {
               console.error("Error adding field definition:", error);
-
             },
           }
         )
@@ -155,7 +167,7 @@ export default function AddFieldDefinitionModal({ experimentId, opened, onClose,
         options: fieldDefinition?.config?.options,
         is_metric_field: fieldDefinition.is_metric_field || false,
       });
-      setIsMetricField(fieldDefinition.is_metric_field || false);
+      // setIsMetricField(fieldDefinition.is_metric_field || false);
     } else {
       reset({
         label: '',
@@ -177,9 +189,9 @@ export default function AddFieldDefinitionModal({ experimentId, opened, onClose,
           field_type: 'text',
           value: '',
           options: '',
-          is_experiment_input: false, // Assuming this is an input field
-          is_metric_field: false, // Assuming this is not a metric
-          is_result_field: false, // Assuming this is not a result field
+          is_experiment_input: false,
+          is_metric_field: false,
+          is_result_field: false,
         });
         onClose();
       }
@@ -211,7 +223,20 @@ export default function AddFieldDefinitionModal({ experimentId, opened, onClose,
         )}
 
         {type === 'dropdown' && (
-          <TextInput label="Value" required {...register('value')} />
+          <Controller
+            name="value"
+            control={control}
+            render={({ field }) => (
+              <Select
+                label="Value"
+                placeholder="Pick a value"
+                data={parsedOptions}
+                value={field.value}
+                onChange={field.onChange}
+                required
+              />
+            )}
+          />
         )}
 
         {type === 'boolean' ? (
@@ -241,13 +266,13 @@ export default function AddFieldDefinitionModal({ experimentId, opened, onClose,
 
         <Space h="md" />
 
-        <Checkbox id='is_metric_field' checked={isMetricField} {...register('is_metric_field')}
-          onChange={(event) => setIsMetricField(event.currentTarget.checked)} label={"This is a metric field"} />
+        {/* <Checkbox id='is_metric_field' checked={isMetricField} {...register('is_metric_field')}
+          onChange={(event) => setIsMetricField(event.currentTarget.checked)} label={"This is a metric field"} /> */}
 
 
 
         <Group mt="md">
-          <Button type="submit" loading={createExperimentFieldDefinition.isPending} onClick={() => {}}>{fieldDefinition ? "Update Field" : "Add Field"}</Button>
+          <Button type="submit" loading={createExperimentFieldDefinition.isPending} onClick={() => { }}>{fieldDefinition ? "Update Field" : "Add Field"}</Button>
         </Group>
       </form>
     </Modal>
