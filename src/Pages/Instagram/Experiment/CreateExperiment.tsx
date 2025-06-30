@@ -199,7 +199,6 @@ export function CreateExperiment({ isOpen, status, experimentQR, selectedExperim
           type="text"
           value={name}
           onChange={(event) => {
-            console.log(event.target.value);
             setName(event.target.value)
             // setValue(event.target.value)
           }}
@@ -224,7 +223,6 @@ export function CreateExperiment({ isOpen, status, experimentQR, selectedExperim
             type="text"
             value={version}
             onChange={(event) => {
-              console.log(event.target.value);
               setVersion(event.target.value)
             }}
             placeholder="Version" data-autofocus />
@@ -249,7 +247,6 @@ export function CreateExperiment({ isOpen, status, experimentQR, selectedExperim
             })) ?? []}
             value={selectedExperimentStatus.id}
             onChange={(event) => {
-              console.log(event);
               let getStatus = status.find((status) => {
                 return status.id === event;
               })
@@ -273,7 +270,6 @@ export function CreateExperiment({ isOpen, status, experimentQR, selectedExperim
             data={['Sales Qualified', 'Won']}
             value={primary_metric}
             onChange={(event) => {
-              console.log(event);
               if (event === null) {
                 setPrimaryMetric('Sales Qualified')
               } else {

@@ -54,12 +54,12 @@ export type CreateExperimentFieldDefinition = Pick<
   | "field_value"
 >;
 
-interface ExperimentFieldValue {
-  id: string;
-  experiment: string;
-  field_definition_id: string;
-  value: {}
-}
+// interface ExperimentFieldValue {
+//   id: string;
+//   experiment: string;
+//   field_definition_id: string;
+//   value: {}
+// }
 
 export type CreateExperiment = Pick<
   Experiment,

@@ -13,7 +13,7 @@ import {
   ActionIcon, Tooltip, Loader,
   Text, Badge, Group, Space
 } from '@mantine/core';
-import { IconPencil, IconX, IconSearch, IconExternalLink, IconTrash } from "@tabler/icons-react";
+import { IconPencil, IconTrash } from "@tabler/icons-react";
 import { openConfirmModal } from "@mantine/modals";
 import { Row } from "@tanstack/react-table";
 import { useRemoveFieldDefinition } from "../Hooks/experimentFieldDefinition.hooks";
@@ -31,7 +31,7 @@ export function ExperimentDetails() {
   }, [pathname]);
   // const id = pathItems[pathItems.length - 1]
   const { experimentQR } = useCommonStateForExperimentDetails(id);
-  const {deleteFieldDefinition } = useRemoveFieldDefinition();
+  const { deleteFieldDefinition } = useRemoveFieldDefinition();
 
   function refetchFieldDefinitions() {
     experimentQR.refetch();
@@ -75,7 +75,7 @@ export function ExperimentDetails() {
                         setEditExperimentFieldDefinition(null);
                       },
                     });
-                   },
+                  },
                 });
               }}
             >

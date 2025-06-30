@@ -1,7 +1,7 @@
 import React from "react";
 import { ColDef } from "../../../Components/Datagrid/datagrid.interface";
 import { DataGrid } from "../../../Components/Datagrid";
-import { Experiment, ExperimentStatus } from "@/Interfaces/Instagram/Experiments/experiment.interface";
+import { Experiment } from "@/Interfaces/Instagram/Experiments/experiment.interface";
 import { useCommonStateForExperimentAssignees, useCommonStateForExperiments, useCommonStateForExperimentStatus } from "./Hooks/common.hooks";
 import { useNavigate } from "react-router-dom";
 import { Row } from "@tanstack/react-table";
@@ -9,9 +9,13 @@ import {
   ActionIcon, Group, Loader, Text, Tooltip,
   Button,
 } from "@mantine/core";
-import { IconPencil, IconExternalLink, IconTrash, IconCopy, IconPlayerPlayFilled } from "@tabler/icons-react";
+import { IconPencil, IconExternalLink, IconTrash, IconCopy, 
+  // IconPlayerPlayFilled 
+} from "@tabler/icons-react";
 import { openConfirmModal } from "@mantine/modals";
-import { useDuplicateExperiment, useRemoveExperiment, useUpdateExperimentDetails } from "./Hooks/experiments.hook";
+import { useDuplicateExperiment, useRemoveExperiment, 
+  // useUpdateExperimentDetails 
+} from "./Hooks/experiments.hook";
 import { CreateExperiment } from "./CreateExperiment";
 import { Affix } from "@/Components/Widgets/Affix";
 export function Experiments() {
@@ -25,7 +29,7 @@ export function Experiments() {
   const [experimentStatus, setExperimentStatus] = React.useState<string | undefined>(undefined);
   const deleteExperiment = useRemoveExperiment()
   const duplicateExperiment = useDuplicateExperiment();
-  const updateExperimentDetails = useUpdateExperimentDetails();
+  // const updateExperimentDetails = useUpdateExperimentDetails();
   const [isCreateExperimentModalOpen, setIsCreateExperimentModalOpen] = React.useState(false);
 
   const navigateToExperimentDetails = (rowData: Experiment) => {
@@ -50,7 +54,6 @@ export function Experiments() {
   }
 
   React.useEffect(() => {
-    console.log("experiment status has changed", experimentStatus)
     if (experimentStatus !== null) {
       switch (experimentStatus) {
         case 'edit':
@@ -112,7 +115,7 @@ export function Experiments() {
         </Tooltip>
 
 
-        <Tooltip label="Start Experiment">
+        {/* <Tooltip label="Start Experiment">
           <ActionIcon
             color="brand"
             variant="light"
@@ -134,7 +137,7 @@ export function Experiments() {
           >
             <IconPlayerPlayFilled size={17} strokeWidth={1.4} />
           </ActionIcon>
-        </Tooltip>
+        </Tooltip> */}
 
 
         {false ? (

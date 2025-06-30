@@ -1,5 +1,3 @@
-import { get } from "lodash"
-
 const DOMAIN1 = import.meta.env.VITE_DOMAIN1
 const DOMAIN2 = import.meta.env.DOMAIN2
 
