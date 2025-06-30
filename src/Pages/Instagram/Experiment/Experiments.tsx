@@ -8,14 +8,8 @@ import { Row } from "@tanstack/react-table";
 import {
   ActionIcon, Group, Loader, Text, Tooltip,
   Button,
-  TextInput,
-  Box,
-  Select,
-  Modal,
-  Textarea,
-  SimpleGrid
 } from "@mantine/core";
-import { IconPencil, IconExternalLink, IconTrash, IconCopy } from "@tabler/icons-react";
+import { IconPencil, IconExternalLink, IconTrash, IconCopy, IconPlayerPlayFilled } from "@tabler/icons-react";
 import { openConfirmModal } from "@mantine/modals";
 import { useDuplicateExperiment, useRemoveExperiment, useUpdateExperimentDetails } from "./Hooks/experiments.hook";
 import { CreateExperiment } from "./CreateExperiment";
@@ -28,16 +22,49 @@ export function Experiments() {
   const { experimentAssigneeQR } = useCommonStateForExperimentAssignees();
   const navigate = useNavigate();
   const [selectedExperiment, setSelectedExperiment] = React.useState<Experiment | undefined>(undefined);
-
+  const [experimentStatus, setExperimentStatus] = React.useState<string | undefined>(undefined);
   const deleteExperiment = useRemoveExperiment()
   const duplicateExperiment = useDuplicateExperiment();
-
-  const [isCreateExperimentModalOpen, setIsCreateExperimentModalOpen] =
-    React.useState(false);
+  const updateExperimentDetails = useUpdateExperimentDetails();
+  const [isCreateExperimentModalOpen, setIsCreateExperimentModalOpen] = React.useState(false);
 
   const navigateToExperimentDetails = (rowData: Experiment) => {
     navigate(`/instagram/experiment/${rowData.id}`, { state: { list: 'all', outreach_success: 'true' } });
   };
+
+
+
+  const handleEditExperiment = React.useCallback((experiment: Experiment) => {
+    setExperimentStatus('edit');
+    setSelectedExperiment(experiment);
+    setIsCreateExperimentModalOpen(true);
+  }, []);
+
+  const cleanUp = () => {
+    setExperimentStatus(undefined);
+    setSelectedExperiment(undefined);
+  }
+
+  const handleNewExperiment = () => {
+    setIsCreateExperimentModalOpen(true)
+  }
+
+  React.useEffect(() => {
+    console.log("experiment status has changed", experimentStatus)
+    if (experimentStatus !== null) {
+      switch (experimentStatus) {
+        case 'edit':
+          setIsCreateExperimentModalOpen(true);
+          break;
+        case 'new':
+          setSelectedExperiment(undefined);
+          setIsCreateExperimentModalOpen(true);
+          break;
+        default:
+          break;
+      }
+    }
+  }, [experimentStatus]);
 
   const ActionColumn = React.useCallback(
     (props: { row: Row<Experiment> }) => (
@@ -47,20 +74,76 @@ export function Experiments() {
             color="brand"
             variant="light"
             onClick={() => {
-              setIsCreateExperimentModalOpen(true);
-              setSelectedExperiment(props.row.original);
+              handleEditExperiment(props.row.original)
             }}
           >
             <IconPencil size={17} strokeWidth={1.4} />
           </ActionIcon>
         </Tooltip>
+
+        <Tooltip label="Duplicate Experiment">
+          <ActionIcon
+            color="grape"
+            variant="light"
+            onClick={() => {
+              openConfirmModal({
+                title: "Alert",
+                children: (
+                  <Text size="sm">
+                    This will duplicate the experiment. Are you sure you want to proceed?
+                  </Text>
+                ),
+                labels: { confirm: "Confirm", cancel: "Cancel" },
+                onConfirm: () => {
+                  duplicateExperiment.mutate(props.row.original.id, {
+                    onSuccess: () => {
+                      experimentQR.refetch(); // Refetch the experiments after deletion
+                    },
+                    onError: (error) => {
+                      console.error("Delete Experiment Error:", error);
+                    }
+                  })
+                },
+              });
+            }}
+          >
+            <IconCopy size={17} strokeWidth={1.4} />
+          </ActionIcon>
+        </Tooltip>
+
+
+        <Tooltip label="Start Experiment">
+          <ActionIcon
+            color="brand"
+            variant="light"
+            onClick={() => {
+              openConfirmModal({
+                title: "Alert",
+                children: (
+                  <Text size="sm">
+                    This will start the experiment. Are you sure you want to proceed?
+                  </Text>
+                ),
+                labels: { confirm: "Confirm", cancel: "Cancel" },
+                onConfirm: () => {
+                  console.log("SET THE START DATE");
+                  console.log("SET THE STATUS TO MEASURING");
+                },
+              });
+            }}
+          >
+            <IconPlayerPlayFilled size={17} strokeWidth={1.4} />
+          </ActionIcon>
+        </Tooltip>
+
+
         {false ? (
           <Loader size="xs" />
         ) : (
-          <Tooltip label="Reset Account">
+          <Tooltip label="Delete">
             <ActionIcon
-
               color="#FF8282"
+              variant="light"
               onClick={() => {
                 openConfirmModal({
                   title: "Alert",
@@ -88,35 +171,7 @@ export function Experiments() {
           </Tooltip>
         )}
 
-        <Tooltip label="Duplicate Experiment">
-          <ActionIcon
 
-            color="grape"
-            onClick={() => {
-              openConfirmModal({
-                title: "Alert",
-                children: (
-                  <Text size="sm">
-                    This will duplicate the experiment. Are you sure you want to proceed?
-                  </Text>
-                ),
-                labels: { confirm: "Confirm", cancel: "Cancel" },
-                onConfirm: () => {
-                  duplicateExperiment.mutate(props.row.original.id, {
-                    onSuccess: () => {
-                      experimentQR.refetch(); // Refetch the experiments after deletion
-                    },
-                    onError: (error) => {
-                      console.error("Delete Experiment Error:", error);
-                    }
-                  })
-                },
-              });
-            }}
-          >
-            <IconCopy size={17} strokeWidth={1.4} />
-          </ActionIcon>
-        </Tooltip>
 
 
       </Group>
@@ -149,9 +204,16 @@ export function Experiments() {
         </Button>)
     },
     {
+      accessorFn: (row) => row.experiment_type,
+      id: "type",
+      header: "Exp Type",
+      type: "string",
+      visible: true,
+    },
+    {
       accessorFn: (row) => row.version,
       id: "version",
-      header: "Version",
+      header: "EXP ID",
       type: "string",
       visible: true,
     },
@@ -193,10 +255,6 @@ export function Experiments() {
 
   return (
     <>
-
-
-
-
       <DataGrid
         fn={() => {
 
@@ -211,21 +269,22 @@ export function Experiments() {
           pageSize: pageSize,
           setPageSize: setPageSize,
           setPageIndex: setPage,
-          totalRows: 10//accountsQR.data?.count ?? 0,
+          totalRows: experimentQR.data?.count ?? 0,
         }}
       />
       <Affix
         tooltipLabel="Create New Experiment"
-        onClickAction={() => setIsCreateExperimentModalOpen(true)}
+        onClickAction={() => handleNewExperiment()}
       />
-      <CreateExperiment
+      {<CreateExperiment
         isOpen={isCreateExperimentModalOpen}
         setIsOpen={setIsCreateExperimentModalOpen}
         status={experimentStatusQR.data?.results ?? []}
         experimentQR={experimentQR}
         selectedExperiment={selectedExperiment}
-        assignees = {experimentAssigneeQR.data?.results ?? []}
-      />
+        assignees={experimentAssigneeQR.data?.results ?? []}
+        cleanUp={cleanUp}
+      />}
     </>
   );
 }

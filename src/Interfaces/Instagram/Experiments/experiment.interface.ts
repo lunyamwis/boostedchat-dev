@@ -12,7 +12,10 @@ export interface Experiment {
   field_definitions: [ExperimentFieldDefinition];
   inputs: string;
   experiment_results: string;
-  assignees: [ExperimentAssignee];
+  assignees: string[];
+  experiment_type: string | null;
+  start_date: string | null;
+  end_date: string | null;
 }
 
 export interface ExperimentAssignee {
@@ -66,9 +69,13 @@ export type CreateExperiment = Pick<
   | "status_id"
   | "expected_result"
   | "hypothesis"
+  | "assignees"
+  | "experiment_type"
+  | "start_date"
+  | "end_date"
 >;
 
-export type UpdateExperiment = Pick<
+export type UpdateExperiment = Partial<Pick<
   Experiment,
   | "name"
   | "description"
@@ -77,7 +84,11 @@ export type UpdateExperiment = Pick<
   | "status_id"
   | "expected_result"
   | "hypothesis"
->;
+  | "assignees"
+  | "experiment_type"
+  | "start_date"
+  | "end_date"
+>>;
 
 export type UpdateExperimentParams = {
   id: string;

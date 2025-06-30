@@ -20,6 +20,8 @@ import { useExperimentsWrapperApi, useUpdateExperimentDetails } from "./Hooks/ex
 import { Experiment, ExperimentAssignee, ExperimentStatus } from "@/Interfaces/Instagram/Experiments/experiment.interface";
 import { UseQueryResult } from "@tanstack/react-query";
 import { PaginatedQuery } from "@/Interfaces/general.interface";
+import dayjs from 'dayjs';
+import { DateInput } from "@mantine/dates";
 
 type Props = {
   isOpen: boolean;
@@ -28,35 +30,43 @@ type Props = {
   assignees: ExperimentAssignee[];
   experimentQR: UseQueryResult<PaginatedQuery<Experiment>, Error>
   selectedExperiment?: Experiment;
+  cleanUp: () => void
 };
 
-export function CreateExperiment({ isOpen, setIsOpen, status, experimentQR, selectedExperiment, assignees }: Props) {
+export function CreateExperiment({ isOpen, status, experimentQR, selectedExperiment, assignees, setIsOpen, cleanUp }: Props) {
   const { alertInfo, setAlertInfo, showAlert, setShowAlert } = useAlert();
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [primary_metric, setPrimaryMetric] = React.useState("");
   const [version, setVersion] = React.useState("");
   const [hypothesis, setHypothesis] = React.useState("");
-  const [expected_result, setExpectedResult] = React.useState('');
+  const [expected_result, setExpectedResult] = React.useState<string | null>(null);
   const { createExperiment } = useExperimentsWrapperApi();
   const [selectedExperimentStatus, setSelectedExperimentStatus,] = React.useState<ExperimentStatus>({} as ExperimentStatus);
-  const [selectedExperimentAssignee, setSelectedExperimentAssignee,] = React.useState<string[]>([]);
-
+  const [selectedExperimentType, setSelectedExperimentType,] = React.useState<string | null>('auto');
+  const [selectedExperimentAssignee, setSelectedExperimentAssignee,] = React.useState<string[] | undefined>([]);
+  const [endDate, setEndDate] = React.useState<Date | null>(null);
+  const [startDate, setStartDate] = React.useState<Date | null>(null);
   const updateExperimentDetails = useUpdateExperimentDetails();
 
   // set default status
-  // console.log("Selected Experiment:", selectedExperiment);
   React.useEffect(() => {
     if (selectedExperiment) {
-      console.log("Selected Experiment:", selectedExperiment);
       setName(selectedExperiment.name)
       setVersion(selectedExperiment.version)
       setSelectedExperimentStatus(selectedExperiment.status);
       setPrimaryMetric(selectedExperiment.primary_metric ?? '');
       setDescription(selectedExperiment.description ?? '');
       setHypothesis(selectedExperiment.hypothesis ?? '');
-      setExpectedResult(selectedExperiment.expected_result ?? '');
-      setSelectedExperimentAssignee(selectedExperiment.assignees.map((assignee)=> assignee.name))
+      setExpectedResult(selectedExperiment.expected_result ?? null);
+      setSelectedExperimentType(selectedExperiment.experiment_type)
+      setSelectedExperimentAssignee(
+        selectedExperiment.assignees.map((id) => {
+          const foundAssignee = assignees.find((assignee) => assignee.id === id);
+          return foundAssignee ? foundAssignee.id : '';
+        }));
+      setStartDate(selectedExperiment.start_date ? new Date(selectedExperiment.start_date) : null)
+      setEndDate(selectedExperiment.end_date ? new Date(selectedExperiment.end_date) : null)
     } else {
       if (status.length > 0) {
         let getDraftStatus = status.find((status) => {
@@ -74,6 +84,22 @@ export function CreateExperiment({ isOpen, setIsOpen, status, experimentQR, sele
   }, [selectedExperiment]
 
   );
+
+
+  function onModalClose() {
+    setIsOpen(false);
+    cleanUp();
+    setName('')
+    setVersion('')
+    setPrimaryMetric('');
+    setDescription('');
+    setHypothesis('');
+    setExpectedResult(null);
+    setStartDate(null);
+    setEndDate(null);
+    setSelectedExperimentAssignee(undefined)
+  }
+
   const handleCreateExperiment = () => {
     setShowAlert(false);
     if (name === "") {
@@ -97,11 +123,14 @@ export function CreateExperiment({ isOpen, setIsOpen, status, experimentQR, sele
           description: selectedExperiment?.description ?? '',
           primary_metric: primary_metric,
           hypothesis: hypothesis,
-          expected_result: expected_result.trim() === '' ? null : expected_result, // Handle empty expected_result
+          expected_result: expected_result == undefined ? null : expected_result, // Handle empty expected_result
+          assignees: selectedExperimentAssignee ? selectedExperimentAssignee : [],
+          experiment_type: selectedExperimentType,
+          end_date: endDate == null ? null : dayjs(endDate).format('YYYY-MM-DD'),
+          start_date: startDate == null ? null : dayjs(startDate).format('YYYY-MM-DD')
         }
       }, {
-        onSuccess: (data) => {
-          console.log("Update Experiment Success:", data);
+        onSuccess: () => {
           onModalClose();
           showNotification({
             color: "teal",
@@ -124,6 +153,11 @@ export function CreateExperiment({ isOpen, setIsOpen, status, experimentQR, sele
           status_id: selectedExperimentStatus.id,
           hypothesis: hypothesis,
           expected_result: expected_result,
+          assignees: selectedExperimentAssignee ? selectedExperimentAssignee : [],
+          experiment_type: selectedExperimentType,
+          end_date: endDate == null ? null : dayjs(endDate).format('YYYY-MM-DD'),
+          start_date: startDate == null ? null : dayjs(startDate).format('YYYY-MM-DD')
+
         },
         {
           onSuccess: () => {
@@ -134,7 +168,6 @@ export function CreateExperiment({ isOpen, setIsOpen, status, experimentQR, sele
               icon: <IconCheck />,
             });
             experimentQR.refetch(); // Refetch the experiments list to update the UI
-            // Optionally, you can refetch experiments or perform any other action
           },
         }
       );
@@ -143,13 +176,6 @@ export function CreateExperiment({ isOpen, setIsOpen, status, experimentQR, sele
 
   };
 
-
-  function onModalClose() {
-    setName("");
-    setDescription("");
-    setIsOpen(false);
-
-  }
 
   return (
     <Modal centered opened={isOpen} onClose={onModalClose} size="xl" title={selectedExperiment ? "Edit Experiment" : "Create Experiment"}>
@@ -193,6 +219,7 @@ export function CreateExperiment({ isOpen, setIsOpen, status, experimentQR, sele
           }}
           placeholder="Experiment description" data-autofocus />
         <SimpleGrid cols={3}>
+
           <TextInput disabled={selectedExperiment ? false : true} label="Version"
             type="text"
             value={version}
@@ -201,6 +228,18 @@ export function CreateExperiment({ isOpen, setIsOpen, status, experimentQR, sele
               setVersion(event.target.value)
             }}
             placeholder="Version" data-autofocus />
+          <DateInput
+            label="Start Date"
+            value={startDate}
+            onChange={setStartDate}
+            placeholder="Pick a date"
+          />
+          <DateInput
+            label="Start Date"
+            value={endDate}
+            onChange={setEndDate}
+            placeholder="Pick a date"
+          />
           <Select
             label="Status"
             placeholder="Pick value"
@@ -217,6 +256,15 @@ export function CreateExperiment({ isOpen, setIsOpen, status, experimentQR, sele
               if (getStatus) {
                 setSelectedExperimentStatus(getStatus)
               }
+            }}
+          />
+          <Select
+            label="Type"
+            placeholder="Pick value"
+            data={['auto', 'manual']}
+            value={selectedExperimentType}
+            onChange={(event) => {
+              setSelectedExperimentType(event)
             }}
           />
           <Select
@@ -241,7 +289,7 @@ export function CreateExperiment({ isOpen, setIsOpen, status, experimentQR, sele
             placeholder="Assign to"
             // data={['React', 'Angular', 'Vue', 'Svelte']}
             value={
-              selectedExperimentAssignee.map((assignee) => {
+              selectedExperimentAssignee?.map((assignee) => {
                 return assignee
               })
             }
