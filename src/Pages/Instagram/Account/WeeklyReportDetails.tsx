@@ -281,7 +281,7 @@ export function WeeklyReportDetails() {
       },
       {
         accessorFn: (row: GetAccount) => {
-          if (row.statusParam == AccountStatusParam.sales_qualified) {
+          if (row.statusParam == AccountStatusParam.sales_qualified || row.statusParam == AccountStatusParam.won) {
             if (row.sales_qualified_date == null) {
               return '-';
             }
@@ -304,7 +304,7 @@ export function WeeklyReportDetails() {
         visible: true,
         type: "string",
         cell: (params) => {
-          if (params.row.original.statusParam == AccountStatusParam.sales_qualified) {
+          if (params.row.original.statusParam == AccountStatusParam.sales_qualified || params.row.original.statusParam == AccountStatusParam.won) {
 
             if (params.row.original.sales_qualified_date == null) {
               return '-';
