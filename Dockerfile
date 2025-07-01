@@ -19,7 +19,8 @@ RUN pnpm fetch
 
 COPY . .
 
-RUN pnpm install -r --offline
+#RUN pnpm install -r --offline
+RUN pnpm install -r
 
 RUN pnpm run build
 
