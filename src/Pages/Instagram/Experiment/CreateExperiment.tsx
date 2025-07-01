@@ -204,14 +204,16 @@ export function CreateExperiment({ isOpen, status, experimentQR, selectedExperim
           }}
           placeholder="Name" data-autofocus />
         <Textarea label="Description"
-          resize="both"
+          // resize="both"
+          style={{ resize: "both" }}
           value={description}
           onChange={(event) => {
             setDescription(event.target.value)
           }}
           placeholder="Experiment description" data-autofocus />
         <Textarea label="Hypothesis"
-          resize="both"
+          // resize="both"
+          style={{ resize: "both" }}
           value={hypothesis}
           onChange={(event) => {
             setHypothesis(event.target.value)
