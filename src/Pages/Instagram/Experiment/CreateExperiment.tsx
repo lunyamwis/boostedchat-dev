@@ -232,13 +232,13 @@ export function CreateExperiment({ isOpen, status, experimentQR, selectedExperim
             label="Start Date"
             value={startDate}
             onChange={setStartDate}
-            placeholder="Pick a date"
+            placeholder="Pick a start date"
           />
           <DateInput
-            label="Start Date"
+            label="End Date"
             value={endDate}
             onChange={setEndDate}
-            placeholder="Pick a date"
+            placeholder="Pick an end date"
           />
           <Select
             label="Status"
@@ -301,7 +301,7 @@ export function CreateExperiment({ isOpen, status, experimentQR, selectedExperim
           />
         </SimpleGrid>
 
-        <Button disabled={false} fullWidth loading={false} onClick={() => {
+        <Button disabled={false} fullWidth loading={updateExperimentDetails.isPending || createExperiment.isPending} onClick={() => {
           handleCreateExperiment();
         }} mt="md">
           {selectedExperiment ? "Update" : "Create"} Experiment
