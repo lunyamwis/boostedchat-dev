@@ -1,27 +1,37 @@
 import React from "react";
 import { ColDef } from "../../../Components/Datagrid/datagrid.interface";
 import { DataGrid } from "../../../Components/Datagrid";
-import { Experiment } from "@/Interfaces/Instagram/Experiments/experiment.interface";
+import { Experiment, ExperimentStatus } from "@/Interfaces/Instagram/Experiments/experiment.interface";
 import { useCommonStateForExperimentAssignees, useCommonStateForExperiments, useCommonStateForExperimentStatus } from "./Hooks/common.hooks";
 import { useNavigate } from "react-router-dom";
 import { Row } from "@tanstack/react-table";
 import {
   ActionIcon, Group, Loader, Text, Tooltip,
   Button,
+  Popover,
+  TextInput,
+  Divider,
+  Box,
+  Radio,
+  Select,
 } from "@mantine/core";
-import { IconPencil, IconExternalLink, IconTrash, IconCopy, 
-  // IconPlayerPlayFilled 
+import { DatePicker } from "@mantine/dates";
+import {
+  IconPencil, IconExternalLink, IconTrash, IconCopy,
+  IconSearch
 } from "@tabler/icons-react";
 import { openConfirmModal } from "@mantine/modals";
-import { useDuplicateExperiment, useRemoveExperiment, 
+import {
+  useDuplicateExperiment, useRemoveExperiment,
   // useUpdateExperimentDetails 
 } from "./Hooks/experiments.hook";
 import { CreateExperiment } from "./CreateExperiment";
 import { Affix } from "@/Components/Widgets/Affix";
+import { useDebouncedValue } from "@mantine/hooks";
 export function Experiments() {
   const [page, setPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState(1000);
-  const { experimentQR } = useCommonStateForExperiments();
+  const { experimentQR, setFilterParams, filterParams } = useCommonStateForExperiments();
   const { experimentStatusQR } = useCommonStateForExperimentStatus();
   const { experimentAssigneeQR } = useCommonStateForExperimentAssignees();
   const navigate = useNavigate();
@@ -31,6 +41,12 @@ export function Experiments() {
   const duplicateExperiment = useDuplicateExperiment();
   // const updateExperimentDetails = useUpdateExperimentDetails();
   const [isCreateExperimentModalOpen, setIsCreateExperimentModalOpen] = React.useState(false);
+  const [opened, setOpened] = React.useState(false);
+  const [value, setValue] = React.useState<[Date | null, Date | null]>([null, null]);
+  const [experiment_type, setExperimentType] = React.useState('all');
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 700);
+  const [selectedExperimentStatus, setSelectedExperimentStatus,] = React.useState<ExperimentStatus | null>(null);
 
   const navigateToExperimentDetails = (rowData: Experiment) => {
     navigate(`/instagram/experiment/${rowData.id}`, { state: { list: 'all', outreach_success: 'true' } });
@@ -52,6 +68,55 @@ export function Experiments() {
   const handleNewExperiment = () => {
     setIsCreateExperimentModalOpen(true)
   }
+
+  const handleClearFilters = () => {
+    // Execute your query here with startDate and endDate
+    setOpened(false);
+    setExperimentType('all');
+    setValue([null, null]);
+
+    setFilterParams(
+      {
+        ...filterParams,
+        end_at_lt: "",
+        experiment_status: "",
+        name: "",
+        experiment_type: "",
+        start_at_gte: "",
+        primary_metric: "",
+        page: page,
+      }
+    );
+
+  };
+
+  const handleFilterClick = () => {
+    const formattedStartDate = value[0] ? `${value[0].getFullYear()}-${String(value[0].getMonth() + 1).padStart(2, '0')}-${String(value[0].getDate()).padStart(2, '0')}` : ''
+    const formattedEndDate = value[1] ? `${value[1].getFullYear()}-${String(value[1].getMonth() + 1).padStart(2, '0')}-${String(value[1].getDate()).padStart(2, '0')}` : ''//formattedStartDate
+
+    setOpened(false);
+    setFilterParams(
+      {
+        ...filterParams,
+        start_at_gte: formattedStartDate,
+        end_at_lt: formattedEndDate,
+        page: page,
+        name: searchQuery,
+        experiment_status: selectedExperimentStatus?.name || "",
+        experiment_type: experiment_type
+        // primary_metric
+      }
+    );
+  };
+
+  React.useEffect(() => {
+    console.log("searchQuery");
+    console.log(searchQuery);
+    setFilterParams({
+      ...filterParams,
+      name: searchQuery,
+    })
+  }, [debouncedSearchQuery]);
 
   React.useEffect(() => {
     if (experimentStatus !== null) {
@@ -257,12 +322,101 @@ export function Experiments() {
   ]);
 
   return (
-    <>
+    <>   <Group gap={"xs"}>
+      <Box px={24}>
+        <TextInput
+          variant="filled"
+          leftSection={<IconSearch size={17} />}
+          placeholder="Search by igname..."
+          value={searchQuery}
+          // rightSection={icon}
+          onChange={
+            (e) => setSearchQuery(e.target.value)
+          }
+        />
+      </Box>
+      <Popover
+        opened={opened}
+        onClose={() => setOpened(false)}
+        position="bottom-start"
+        withArrow
+        trapFocus
+      >
+        <Popover.Target>
+          <Button variant="outline" onClick={() => setOpened((prev) => !prev)}>Filter Data</Button>
+        </Popover.Target>
+        <Popover.Dropdown>
+          {/* Form with Start and End Date Inputs */}
+
+          <Box style={{ margin: "10px" }}>
+            <Radio.Group
+              value={experiment_type}
+              onChange={setExperimentType}
+              name="QualifedStatus"
+              label="Experiment type"
+            >
+              <Group>
+                <Radio value="all" label="All" />
+                <Radio value="manual" label="Manual" />
+                <Radio value="auto" label="Auto" />
+              </Group>
+
+
+            </Radio.Group>
+
+          </Box>
+          <Box title="Experiment stage" style={{ margin: "10px" }}>
+            <Select
+              clearable
+              label="Experiment stage"
+              placeholder="Select a stage"
+
+              data={experimentStatusQR.data?.results.map((status) => ({
+                value: status.id,
+                label: status.name,
+              })) ?? []}
+              value={selectedExperimentStatus?.id}
+              onChange={(event) => {
+                let getStatus = experimentStatusQR.data?.results.find((status) => {
+                  return status.id === event;
+                })
+                if (getStatus) {
+                  setSelectedExperimentStatus(getStatus)
+                }
+              }}
+              defaultValue={null}
+            />
+          </Box>
+
+          <Group gap="sm">
+            <TextInput label="Start Date" readOnly value={value[0]?.toLocaleDateString()} onClick={() => setOpened(true)} />
+            <TextInput label="End Date" readOnly value={value[1]?.toLocaleDateString()} onClick={() => setOpened(true)} />
+          </Group>
+
+          {/* Date Pickers for Selecting Dates */}
+          <Group gap="sm">
+            <DatePicker type="range" allowSingleDateInRange value={value} onChange={setValue} />
+          </Group>
+
+          {/* Filter Button */}
+          <Button onClick={handleFilterClick}>Apply Filter</Button>
+          {" "}
+          <Button onClick={handleClearFilters}>Clear filters</Button>
+        </Popover.Dropdown>
+      </Popover>
+      <Group>
+        <Text fw={700} size="xl" >Experiment type: </Text> <Text fw={500} size="xl" > {experiment_type} </Text>
+        <Text fw={700} size="xl" >Stage: </Text> <Text fw={500} size="xl" > {selectedExperimentStatus?.name} </Text>
+        <Text fw={700} size="xl" >Date: </Text>
+        <Text fw={500} size="xl" >{value[0]?.toLocaleDateString()}</Text> - <Text fw={500} size="xl">{value[1]?.toLocaleDateString()}</Text>
+      </Group>
+    </Group>
+      <Divider my="md" />
       <DataGrid
         fn={() => {
 
         }}
-        loading={false} //{accountsQR.isLoading || isLoading}
+        loading={experimentQR.isPending}
         tableName={"Experiments"}
         data={experimentQR.data?.results ?? []}
         columns={columnDefs}

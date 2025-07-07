@@ -16,11 +16,11 @@ export const useExperimentsWrapperApi = () => {
   };
 };
 
-export const useGetExperiments = () => {
+export const useGetExperiments = (filterParams:any) => {
   const { getExperiments } = useExperimentsApi();
   return useQuery({
-    queryKey: [queryKeys.instagram.experiments.getAll],
-    queryFn: () => getExperiments(),
+    queryKey: [queryKeys.instagram.experiments.getAll, filterParams],
+    queryFn: () => getExperiments(filterParams),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,

@@ -6,9 +6,9 @@ export const useExperimentsApi = () => {
   const axiosInstance = useAPIGlobalAxios("instagram/experiments");
 
   return {
-    getExperiments: (): Promise<PaginatedQuery<Experiment>> =>
+    getExperiments: (filterParams: any): Promise<PaginatedQuery<Experiment>> =>
       axiosInstance
-        .get('')
+        .get(`/?${filterParams}`)
         .then(handleRestResponse)
         .catch(handleRestError),
     getOneExperiment: (id: string): Promise<Experiment> =>
