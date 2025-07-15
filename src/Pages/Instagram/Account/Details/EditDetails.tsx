@@ -1,5 +1,5 @@
 import React from "react";
-import { AccountStatusParam, GetSingleAccount } from "../../../../Interfaces/Instagram/account.interface";
+import { AccountStatusParam, AccountAssignedTo, GetSingleAccount } from "../../../../Interfaces/Instagram/account.interface";
 import { EditDetailsContainer } from "../../../../Components/Containers/EditDetailsContainer";
 import { useLoadingDialog } from "../../../../Hooks/useLoadingDialog";
 import { Row } from "../../../../Components/Containers/Row";
@@ -48,6 +48,7 @@ export function EditDetails({ account }: Props) {
   const [qualified, setQualified] = React.useState<null | string>(null);
   const [outreach_success, setOutreachSuccess] = React.useState<null | string>(null)
   const [engagementVersion, setEngagementVersion] = React.useState("")
+  const [assignedTo, setAssignedTo] = React.useState<null | string>(null);
 
   const updateAccount = useUpdateAccount();
 
@@ -70,7 +71,6 @@ export function EditDetails({ account }: Props) {
     // }
 
     let stparam = AccountStatusParam.none;
-
     switch (accountStatusParam) {
       case 'Prequalified':
         stparam = AccountStatusParam.prequalified;
@@ -88,6 +88,19 @@ export function EditDetails({ account }: Props) {
         console.log("else", accountStatusParam);
         stparam = AccountStatusParam.none;
     }
+
+    let assignedToParam = AccountAssignedTo.robot
+    switch (assignedTo) {
+      case 'Human':
+        assignedToParam = AccountAssignedTo.human;
+        break;
+      case 'Robot':
+        assignedToParam = AccountAssignedTo.robot;
+        break;
+      default:
+        assignedToParam = AccountAssignedTo.robot;
+    }
+
 
     setIsDialogLoading(true);
     setIsLoadingDialogOpen(true);
@@ -107,7 +120,8 @@ export function EditDetails({ account }: Props) {
           call_scheduled_date: callScheduleDate == null ? null : dayjs(callScheduleDate).format('YYYY-MM-DD'),
           closing_date: closingDate == null ? null : dayjs(closingDate).format('YYYY-MM-DD'),
           outreach_success: outreach_success,
-          sales_qualified_date: salesQualifiedDate == null ? null : dayjs(outReachDate).format('YYYY-MM-DD')
+          sales_qualified_date: salesQualifiedDate == null ? null : dayjs(outReachDate).format('YYYY-MM-DD'),
+          assigned_to: assignedToParam,
         },
       },
       {
@@ -153,6 +167,7 @@ export function EditDetails({ account }: Props) {
     setOutreachSuccess(account?.outreach_success ? account.outreach_success.toString() : null);
     setEngagementVersion(account?.engagement_version ?? "")
     setSalesQualifiedDate(account?.sales_qualified_date ? new Date(account.sales_qualified_date) : null)
+    setAssignedTo(account?.assigned_to ?? null);
 
   }, [account]);
 
@@ -206,6 +221,20 @@ export function EditDetails({ account }: Props) {
             />
 
             <Select
+              title="Assigned To"
+              selectProps={{
+                value: assignedTo,
+                onChange: setAssignedTo,
+                data: [
+                  { value: AccountAssignedTo.human, label: AccountAssignedTo.human },
+                  { value: AccountAssignedTo.robot, label: AccountAssignedTo.robot },
+                  ],
+                placeholder: "Choose",
+                searchable: true,
+              }}
+            />
+
+            <Select
               title="Qualified"
               selectProps={{
                 value: qualified,
@@ -246,7 +275,7 @@ export function EditDetails({ account }: Props) {
               valueFormat="YYYY-MM-DD"
               value={respondedDate}
               setDate={setRespondedDate} />
-            
+
             <DateField
               title="Sales Qualified Date"
               valueFormat="YYYY-MM-DD"

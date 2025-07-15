@@ -27,7 +27,7 @@ export type CreateAccount = Pick<GetAccount,
 
 export type UpdateAccount = Pick<
   GetAccount,
-  | "igname" | "full_name" | "status_id" | "sales_qualified_date" | "responded_date" | "call_scheduled_date" | "closing_date" | "won_date" | "success_story_date" | "lost_date" | "outreach_time" | "status_param" | "outreach_success"
+  | "igname" | "full_name" | "status_id" | "sales_qualified_date" | "responded_date" | "call_scheduled_date" | "closing_date" | "won_date" | "success_story_date" | "lost_date" | "outreach_time" | "status_param" | "outreach_success" | "assigned_to"
 >;
 
 export type UpdateAccountParams = {
@@ -196,6 +196,11 @@ export enum AccountStatusParam {
   sales_qualified = "Sales Qualified",
   won = "Won",
   lost = "Lost",
+}
+
+export enum AccountAssignedTo {
+  human = "Human",
+  robot = "Robot",
 }
 
 export interface FullAccount {
