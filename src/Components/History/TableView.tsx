@@ -11,7 +11,7 @@ type ComponentProps = {
 export function TableView({ actions }: ComponentProps) {
   const groupedActions = actions.map((action) => ({
     ...action,
-    date: format(new Date(action.created_on ?? 2021), "dd MMM yyyy"),
+    date: format(new Date(action.created_on ?? 2021), "yyyy MMM dd"),
     time: format(new Date(action.created_on ?? 2021), "h:mm aaa"),
   }));
 

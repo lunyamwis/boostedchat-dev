@@ -50,7 +50,8 @@ export function ExportToCsv({
               ...newRow,
               [column.header as string]: format(
                 Date.parse(row[column.id]),
-                "dd/MMM/yyyy h:mm aaa"
+                // "dd/MMM/yyyy h:mm aaa"
+                "yyyy/MMM/dd"
               ),
             };
             return;
