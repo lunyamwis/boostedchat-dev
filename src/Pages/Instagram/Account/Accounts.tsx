@@ -11,7 +11,6 @@ import {
   Box,
   Radio,
   Flex,
-  Select,
   Tabs,
   Space
 } from "@mantine/core";
@@ -26,9 +25,6 @@ import { CreateAccount } from "./CreateAccount";
 import { showNotification } from "@mantine/notifications";
 import { DatePicker } from "@mantine/dates";
 import { useCommonStateForAccountList, useCommonStateForMonthlyReportList, useCommonStateForWeeklyReportList } from "./Hooks/common.hooks";
-import { StatsRingCard } from "@/Pages/Dashboard/StatsCard";
-import BokehChart from "./BokehCharts";
-import { ChartTypes } from "@/Utils/constants";
 import { IconPhoto, IconMessageCircle, IconSettings } from '@tabler/icons-react';
 import { useDebouncedValue } from "@mantine/hooks";
 
@@ -45,7 +41,6 @@ export function Accounts() {
   const { isLoading,
     accountsQR,
     filterParams,
-    outreachLineChart,
     setFilterParams } = useCommonStateForAccountList();
   const { weeklyReportQR } = useCommonStateForWeeklyReportList();
   const { monthlyReportQR } = useCommonStateForMonthlyReportList();

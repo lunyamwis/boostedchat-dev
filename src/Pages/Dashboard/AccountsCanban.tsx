@@ -23,8 +23,6 @@ import { useGetActiveStages, useGetMqttHealth, useGetMqttLoggedInAccounts } from
 import { useCreateMedia, useDownloadMedia } from "../LeadsGeneration/Media/hooks/media.hook";
 import { StageColumn2 } from "./StageColumn2";
 import { DatePicker } from "@mantine/dates";
-// import { StatsRingCard } from "./StatsCard";
-import { StatsRingCardsRow } from "./StatsHeader";
 import { useDebouncedValue } from "@mantine/hooks";
 import { Media } from "@/Interfaces/Instagram/media.interface";
 import { Link } from "react-router-dom";
