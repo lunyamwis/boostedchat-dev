@@ -170,7 +170,7 @@ export function AccountsCanban() {
   return (
 
     <Container fluid style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }} >
-      <StatsRingCardsRow stringEndDate={stringEndDate} stringStartDate={stringStartDate} />
+      {/* <StatsRingCardsRow stringEndDate={stringEndDate} stringStartDate={stringStartDate} /> */}
       <Space h="xl" />
       <Group style={{ justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
         {/* Left Section: Filter Popover */}

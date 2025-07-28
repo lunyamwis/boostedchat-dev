@@ -528,26 +528,6 @@ export function Accounts() {
         align="stretch"
       >
       </Flex>
-
-      <Flex
-        gap="md"
-        justify="center"
-        align="stretch"
-        wrap="wrap"
-      >
-
-        <StatsRingCard
-          status_param={'Scheduled'}
-          total_accounts={accountsQR.data?.total_scheduled ?? 0}
-          description={"Qualified, Scheduled but not reached out"}
-        />
-        <StatsRingCard
-          status_param={'Reached out'}
-          total_accounts={accountsQR.data?.total_outreach ?? 0}
-          description={"Qualifed Scheduled & reached out"}
-        />
-
-      </Flex>
       <Divider my="md" />
       <Group gap={"xs"}>
         <Box px={24}>
@@ -645,41 +625,11 @@ export function Accounts() {
           <Tabs.Tab value="scheduled" leftSection={<IconMessageCircle size={12} />}>
             Scheduled Today
           </Tabs.Tab>
-          <Tabs.Tab value="outreach_success" leftSection={<IconPhoto size={12} />}>
-            Successfully reached out
-          </Tabs.Tab>
           <Tabs.Tab value="all" leftSection={<IconSettings size={12} />}>
             All
           </Tabs.Tab>
         </Tabs.List>
         <Space h="md" />
-
-        <Tabs.Panel value="outreach_success">
-          <DataGrid
-            fn={() => {
-              removeDuplicateAccountsQR.mutate();
-              showNotification({
-                color: "red",
-                icon: <IconX />,
-                title: "Error",
-                message: "message",
-              });
-            }}
-            loading={accountsQR.isLoading || isLoading}
-            tableName="Outreach Tracker"
-            data={accountsQR.data?.outreach_success ?? []}
-            columns={columns}
-            paginationOptions={{
-              isManual: true,
-              pageIndex: page,
-              pageSize: pageSize,
-              setPageSize: setPageSize,
-              setPageIndex: setPage,
-              totalRows: accountsQR.data?.count ?? 0,
-            }}
-          />
-        </Tabs.Panel>
-
         <Tabs.Panel value="scheduled">
           <DataGrid
             fn={() => {
@@ -701,7 +651,7 @@ export function Accounts() {
               pageSize: pageSize,
               setPageSize: setPageSize,
               setPageIndex: setPage,
-              totalRows: accountsQR.data?.count ?? 0,
+              totalRows: accountsQR.data?.scheduled?.length ?? 0,
             }}
           />
         </Tabs.Panel>
