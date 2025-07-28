@@ -3,12 +3,9 @@ import {
   Icon,
   IconBrandInstagram,
   IconBrandMessenger,
-  IconCalendarCog,
   IconChartInfographic,
   IconTestPipe,
-  // IconClock,
   IconGraph,
-  // IconRouteSquare2,
   IconTerminal2,
   IconUsers,
   IconUsersGroup,
@@ -39,19 +36,11 @@ export type TPageData = PrimaryPageData & ({ level: "1" } & Level1);
 
 export type ParentKeys =
   | "AccountsCanban"
-  // | "Snapshot"
   | "Accounts"
   | "Experiments"
   | "AccountDetails"
   | "Threads"
-  | "Prompts"
-  | "Roles"
-  | "LikersCommenters"
-  // | "QualifyingAlgorithm"
-  | "OutreachList"
-  // | "LeadSources"
   | "ManageServices"
-  // | "SetupScraper";
   | "WeeklyReportDetails"
   | "ExperimentDetails";
 
@@ -64,7 +53,7 @@ export enum EGroup {
   instagram = "Instagram",
   userManagement = "User Management",
   scripts = "Scripts",
-  leadsManagement = "Leads Management",
+  leadsManagement = "Services",
 }
 
 export const GroupIcons: Record<EGroup, Icon> = {
@@ -72,7 +61,7 @@ export const GroupIcons: Record<EGroup, Icon> = {
   "User Management": IconUsers,
   Summaries: IconGraph,
   Scripts: IconTerminal2,
-  "Leads Management": IconWindmill,
+  "Services": IconWindmill,
 };
 
 export const componentData: {
@@ -87,22 +76,7 @@ export const componentData: {
         })),
       ),
     },
-    {
-      key: "LikersCommenters",
-      component: React.lazy(() =>
-        import("./Instagram/Comment/index").then(({ LikersCommenters }) => ({
-          default: LikersCommenters,
-        })),
-      ),
-    },
-    // {
-    //   key: "Snapshot",
-    //   component: React.lazy(() =>
-    //     import("./Dashboard/index").then(({ Summary }) => ({
-    //       default: Summary,
-    //     })),
-    //   ),
-    // },
+
     {
       key: "Threads",
       component: React.lazy(() =>
@@ -138,50 +112,6 @@ export const componentData: {
       ),
     },
     {
-      key: "Prompts",
-      component: React.lazy(() =>
-        import("./Scripts/Prompts/index").then(({ Prompts }) => ({
-          default: Prompts,
-        })),
-      ),
-    },
-    {
-      key: "Roles",
-      component: React.lazy(() =>
-        import("./Scripts/Roles/index").then(({ ScriptRoles }) => ({
-          default: ScriptRoles,
-        })),
-      ),
-    },
-    {
-      key: "OutreachList",
-      component: React.lazy(() =>
-        import("./Instagram/Outreach/index").then(
-          ({ OutreachList }) => ({
-            default: OutreachList,
-          }),
-        ),
-      ),
-    },
-    // {
-    //   key: "QualifyingAlgorithm",
-    //   component: React.lazy(() =>
-    //     import("./LeadsGeneration/QualifyingAlgorithm/").then(
-    //       ({ QualifyingAlgorithms }) => ({
-    //         default: QualifyingAlgorithms,
-    //       }),
-    //     ),
-    //   ),
-    // },
-    // {
-    //   key: "LeadSources",
-    //   component: React.lazy(() =>
-    //     import("./LeadsGeneration/LeadSources/").then(({ LeadSources }) => ({
-    //       default: LeadSources,
-    //     })),
-    //   ),
-    // },
-    {
       key: "ManageServices",
       component: React.lazy(() =>
         import("./LeadsGeneration/ManageServices/").then(({ ManageServices }) => ({
@@ -189,16 +119,6 @@ export const componentData: {
         })),
       ),
     },
-    // {
-    //   key: "SetupScraper",
-    //   component: React.lazy(() =>
-    //     import("./LeadsGeneration/Setup/Layout").then(
-    //       ({ SetupScraperLayout }) => ({
-    //         default: SetupScraperLayout,
-    //       }),
-    //     ),
-    //   ),
-    // },
     {
       key: "WeeklyReportDetails",
       component: React.lazy(() =>
@@ -249,16 +169,6 @@ export const pageData: TMPageData = {
     icon: IconTestPipe,
     url: "/instagram/experiments",
   },
-  LikersCommenters: {
-    level: "1",
-    group: EGroup.summaries,
-    hasChildren: false,
-    title: "Commenters & likers",
-    isNavItem: true,
-    icon: IconChartInfographic,
-    url: "/dashboard/likersCommenters",
-  },
-
   // Snapshot: {
   //   level: "1",
   //   group: EGroup.summaries,
@@ -287,24 +197,6 @@ export const pageData: TMPageData = {
     isNavItem: false,
     icon: IconUsersGroup,
   },
-  Prompts: {
-    level: "1",
-    group: EGroup.scripts,
-    hasChildren: false,
-    url: "/scripts/prompts",
-    title: "Prompts",
-    isNavItem: true,
-    icon: IconUsersGroup,
-  },
-  Roles: {
-    level: "1",
-    group: EGroup.scripts,
-    hasChildren: false,
-    url: "/scripts/roles",
-    title: "Roles",
-    isNavItem: true,
-    icon: IconUserShield,
-  },
   ManageServices: {
     level: "1",
     group: EGroup.leadsManagement,
@@ -314,42 +206,6 @@ export const pageData: TMPageData = {
     isNavItem: true,
     icon: IconUserShield,
   },
-  // LeadSources: {
-  //   level: "1",
-  //   group: EGroup.leadsManagement,
-  //   hasChildren: false,
-  //   url: "/leads-management/lead-sources",
-  //   title: "Lead Sources",
-  //   isNavItem: true,
-  //   icon: IconUserShield,
-  // },
-  OutreachList: {
-    level: "1",
-    group: EGroup.leadsManagement,
-    hasChildren: false,
-    url: "/leads-management/outreach-list",
-    title: "Outreach Scheduler",
-    isNavItem: true,
-    icon: IconCalendarCog,
-  },
-  // QualifyingAlgorithm: {
-  //   level: "1",
-  //   group: EGroup.leadsManagement,
-  //   hasChildren: false,
-  //   url: "/leads-management/qualifying-algorithm",
-  //   title: "Qualifying Algorithm",
-  //   isNavItem: true,
-  //   icon: IconRouteSquare2,
-  // },
-  // SetupScraper: {
-  //   level: "1",
-  //   group: EGroup.leadsManagement,
-  //   hasChildren: false,
-  //   url: "/leads-management/setup-scraper",
-  //   title: "Setup scraper",
-  //   isNavItem: true,
-  //   icon: IconClock,
-  // },
   WeeklyReportDetails: {
     level: "1",
     group: EGroup.summaries,
