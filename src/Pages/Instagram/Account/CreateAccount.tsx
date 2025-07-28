@@ -202,56 +202,48 @@ export function CreateAccount({ isOpen, setIsOpen }: Props) {
             />
             <DateField
               title="Outreach Date"
-              // date={outReachDate}
               value={outReachDate}
               valueFormat="YYYY-MM-DD"
               setDate={setoutReachDate} />
 
             <DateField
               title="Sales Qualified Date"
-              // date={respondedDate}
               valueFormat="YYYY-MM-DD"
               value={salesQualifiedDate}
               setDate={setSalesQualifiedDate} />
 
             <DateField
               title="Responded Date"
-              // date={respondedDate}
               valueFormat="YYYY-MM-DD"
               value={respondedDate}
               setDate={setRespondedDate} />
 
             <DateField
               title="Call scheduled Date"
-              // date={respondedDate}
               valueFormat="YYYY-MM-DD"
               value={callScheduleDate}
               setDate={setCallScheduleDate} />
 
             <DateField
               title="Closing Date"
-              // date={respondedDate}
               valueFormat="YYYY-MM-DD"
               value={closingDate}
               setDate={setClosingDate} />
 
             <DateField
               title="Won Date"
-              // date={respondedDate}
               valueFormat="YYYY-MM-DD"
               value={wonDate}
               setDate={setWonDate} />
 
             <DateField
               title="Success Story Date"
-              // date={respondedDate}
               valueFormat="YYYY-MM-DD"
               value={successDate}
               setDate={setSuccessDate} />
 
             <DateField
               title="Lost Date"
-              // date={respondedDate}
               valueFormat="YYYY-MM-DD"
               value={lostDate}
               setDate={setLostDate} />

@@ -45,13 +45,12 @@ export function Accounts() {
   const { isLoading,
     accountsQR,
     filterParams,
-    outreachLineChart, setChartType,
-    setFilterParams, outreachChartList } = useCommonStateForAccountList();
+    outreachLineChart,
+    setFilterParams } = useCommonStateForAccountList();
   const { weeklyReportQR } = useCommonStateForWeeklyReportList();
   const { monthlyReportQR } = useCommonStateForMonthlyReportList();
   const removeDuplicateAccountsQR = useRemoveDuplicateAccounts()
   const resetAccount = useResetAccount();
-  // const [dateError, setDateError] = useState(false);
   const [value, setValue] = useState<[Date | null, Date | null]>([null, null]);
   const [qualified_radio, setQualifiedRadio] = useState('all');
   const [outreach_radio, setOutreachRadio] = useState('all');
@@ -75,13 +74,6 @@ export function Accounts() {
   };
 
 
-  const getChartNames = (data: any[]) => {
-    return data.map(
-      (item: any) => {
-        return { "value": item.id.toString(), "label": item.name }
-      });
-  };
-
   const handleFilterClick = () => {
     const formattedStartDate = value[0] ? `${value[0].getFullYear()}-${String(value[0].getMonth() + 1).padStart(2, '0')}-${String(value[0].getDate()).padStart(2, '0')}` : ''
     const formattedEndDate = value[1] ? `${value[1].getFullYear()}-${String(value[1].getMonth() + 1).padStart(2, '0')}-${String(value[1].getDate()).padStart(2, '0')}` : ''//formattedStartDate
@@ -95,8 +87,6 @@ export function Accounts() {
         page: page,
         qualified: qualified_radio,
         outreach_success: outreach_radio,
-        // status: status,
-        // q: searchQuery,
       }
     );
   };
@@ -212,14 +202,14 @@ export function Accounts() {
           if (params.row.original.outreach_success) {
             // let formattedTime = new Date(params.row.original.created_at).toLocaleTimeString()
             let formattedDate = new Date(params.row.original.created_at).toLocaleDateString()
-            
+
             if (params.row.original.outreach_time == null) {
               return `${formattedDate} *`;
-            }else{
+            } else {
               let formattedOutreachDate = new Date(params.row.original.created_at).toLocaleDateString()
               return (
-              `${formattedOutreachDate}`
-            );
+                `${formattedOutreachDate}`
+              );
             }
           } else {
             return (<></>);
@@ -530,41 +520,6 @@ export function Accounts() {
 
   );
 
-
-  const renderChart = () => {
-
-    if (outreachLineChart.isLoading || isLoading) {
-      return <Loader color="blue" />;
-    }
-
-    if (outreachLineChart.isError) {
-      return null; // Or any fallback UI
-    }
-
-    switch (outreachLineChart.data?.charts.chart_type) {
-      case ChartTypes.MATPLOTLIB:
-        return (
-          <img
-            src={`data:image/png;base64,${outreachLineChart.data?.charts.mpl}`}
-            alt="Decoded"
-            style={{ maxWidth: "100%", height: "auto" }}
-          />
-        );
-
-      case ChartTypes.BOKEH:
-        return (
-          <BokehChart
-            chartData={{
-              bokeh_script: outreachLineChart.data?.charts.bokeh_script || '',
-              bokehDiv: outreachLineChart.data?.charts.bokeh_div || '',
-            }}
-          />
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
     <>
       <Flex
@@ -593,35 +548,6 @@ export function Accounts() {
         />
 
       </Flex>
-      <Divider my="md" />
-      <Flex
-        gap="md"
-        justify="center"
-        align="stretch"
-        wrap="wrap"
-      >
-        <Select
-          label="Choose chart"
-          placeholder="Choose chart.."
-          data={getChartNames(Array.isArray(outreachChartList.data) ? outreachChartList.data : [])}
-          onChange={(value) => {
-            setChartType(`id=${value}`)
-          }}
-
-        />
-      </Flex>
-      <Flex
-        gap="md"
-        justify="center"
-        align="stretch"
-      >
-        {
-
-          renderChart()
-
-        }
-      </Flex>
-
       <Divider my="md" />
       <Group gap={"xs"}>
         <Box px={24}>
@@ -758,15 +684,6 @@ export function Accounts() {
           <DataGrid
             fn={() => {
               removeDuplicateAccountsQR.mutate();
-              // notifications.update({
-              //   id: "REMOVE_DUPLICATES",
-              //   color: "teal",
-              //   // icon: <IconCheck />,
-              //   message: "duplicates cleared successfully.",
-              //   loading: false,
-              //   autoClose: 3000,
-
-              // });
               showNotification({
                 color: "red",
                 icon: <IconX />,
@@ -793,15 +710,6 @@ export function Accounts() {
           <DataGrid
             fn={() => {
               removeDuplicateAccountsQR.mutate();
-              // notifications.update({
-              //   id: "REMOVE_DUPLICATES",
-              //   color: "teal",
-              //   // icon: <IconCheck />,
-              //   message: "duplicates cleared successfully.",
-              //   loading: false,
-              //   autoClose: 3000,
-
-              // });
               showNotification({
                 color: "red",
                 icon: <IconX />,
@@ -869,8 +777,6 @@ export function Accounts() {
           />
         </Tabs.Panel>
       </Tabs>
-
-
     </>
   );
 }
