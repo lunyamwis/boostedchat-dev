@@ -64,27 +64,13 @@ jobs:
       run: |
         ssh ubuntu@84.247.184.136 '
           cd /home/ubuntu/booksy-boostedchat-deployment/boostedchat-site && \
-          # Get the image ID of the client service
           imageId=$(docker compose images client | awk "NR>1 {print \$4}") && \
-          
-          # Stop and remove the client service
           docker compose stop client && \
           docker compose rm -f client && \
-          
-          # Remove the Docker image
           docker rmi \$imageId -f || true && \
-          
-          # Bring down docker compose
-          docker compose down && \
-          
-          # Remove volumes matching _web-root pattern
-          docker volume rm $(docker volume ls --format "{{.Name}}" | grep "_web-root") -f || true && \
-          
-          # Pull the latest image
+          docker volume rm boostedchat-site_web-root -f || true && \
           docker pull lunyamwimages/boostedchatui-dev:latest && \
-          
-          # Start services
-          docker compose up -d
+          docker compose up -d client
         '
 
       env:
