@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+  client:
+    image: lunyamwimages/boostedchatui-dev:latest
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - api
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - web-root:/usr/share/nginx/html
+      - ./nginx-conf/:/etc/nginx/conf.d
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - ./dhparam:/etc/ssl/certs
+    networks:
+      - booksy
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/usr/share/nginx/html
+      - ./certbot-entrypoint.sh:/certbot-entrypoint.sh  # Mounting the script
+    entrypoint: ["/bin/sh", "-c"]
+    command: /certbot-entrypoint.sh
+    networks:
+      - booksy
+volumes:
+  web-django:
+  web-static:
+  certbot-etc:
+  certbot-var:
+  web-root:
+networks:
+  booksy:
+    external: true
+    name: booksy-talk
